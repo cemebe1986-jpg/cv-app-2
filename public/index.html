@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>CVerPro - Generador de CV Perú</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    
+    body {
+      font-family: 'Segoe UI', sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      padding: 40px 20px;
+    }
+
+    .hero {
+      text-align: center;
+      color: white;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 2.5rem;
+      font-weight: 800;
+      margin-bottom: 10px;
+    }
+
+    .hero p {
+      font-size: 1.1rem;
+      opacity: 0.9;
+    }
+
+    .badge {
+      display: inline-block;
+      background: rgba(255,255,255,0.2);
+      color: white;
+      padding: 6px 16px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+    }
+
+    .container {
+      max-width: 750px;
+      margin: 0 auto;
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.2);
+      overflow: hidden;
+    }
+
+    .form-header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 30px 40px;
+      color: white;
+    }
+
+    .form-header h2 {
+      font-size: 1.3rem;
+      font-weight: 600;
+    }
+
+    .form-header p {
+      opacity: 0.85;
+      font-size: 0.9rem;
+      margin-top: 5px;
+    }
+
+    .form-body {
+      padding: 40px;
+    }
+
+    .form-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .form-group.full {
+      grid-column: 1 / -1;
+    }
+
+    label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #4a5568;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    input, textarea {
+      padding: 12px 16px;
+      border: 2px solid #e2e8f0;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      color: #2d3748;
+      transition: border-color 0.2s;
+      font-family: 'Segoe UI', sans-serif;
+    }
+
+    input:focus, textarea:focus {
+      outline: none;
+      border-color: #667eea;
+    }
+
+    textarea {
+      height: 110px;
+      resize: vertical;
+    }
+
+    .btn {
+      width: 100%;
+      padding: 16px;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: white;
+      border: none;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      margin-top: 30px;
+      letter-spacing: 0.5px;
+      transition: opacity 0.2s, transform 0.1s;
+    }
+
+    .btn:hover { opacity: 0.92; transform: translateY(-1px); }
+    .btn:active { transform: translateY(0); }
+
+    .loading {
+      display: none;
+      text-align: center;
+      padding: 30px;
+      color: #667eea;
+      font-weight: 600;
+    }
+
+    .spinner {
+      width: 40px;
+      height: 40px;
+      border: 4px solid #e2e8f0;
+      border-top-color: #667eea;
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+      margin: 0 auto 15px;
+    }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .resultado {
+      display: none;
+      margin: 0 40px 40px;
+      border: 2px solid #667eea;
+      border-radius: 16px;
+      overflow: hidden;
+    }
+
+    .resultado-header {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      padding: 20px 25px;
+      color: white;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .resultado-header h3 { font-size: 1rem; }
+
+    .btn-copiar {
+      background: rgba(255,255,255,0.2);
+      color: white;
+      border: none;
+      padding: 8px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 0.85rem;
+      font-weight: 600;
+      transition: background 0.2s;
+    }
+
+    .btn-copiar:hover { background: rgba(255,255,255,0.3); }
+
+    .cv-texto {
+      padding: 25px;
+      white-space: pre-wrap;
+      line-height: 1.8;
+      color: #2d3748;
+      font-size: 0.95rem;
+      background: #fafbff;
+    }
+
+    .precio {
+      text-align: center;
+      padding: 20px;
+      background: #f0fff4;
+      border-top: 1px solid #c6f6d5;
+      color: #276749;
+      font-weight: 600;
+      font-size: 0.9rem;
+    }
+
+    @media (max-width: 600px) {
+      .form-grid { grid-template-columns: 1fr; }
+      .form-body { padding: 25px; }
+      .hero h1 { font-size: 1.8rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="hero">
+    <div class="badge">🇵🇪 Especializado para el mercado peruano</div>
+    <h1>Generador de CV con IA</h1>
+    <p>Crea tu CV profesional en segundos y consigue ese trabajo</p>
+  </div>
+
+  <div class="container">
+    <div class="form-header">
+      <h2>📋 Completa tu información</h2>
+      <p>Llena los campos y nuestra IA generará un CV optimizado para ti</p>
+    </div>
+
+    <div class="form-body">
+      <div class="form-grid">
+        <div class="form-group">
+          <label>Nombre completo</label>
+          <input type="text" id="nombre" placeholder="Juan Pérez García">
+        </div>
+        <div class="form-group">
+          <label>Teléfono</label>
+          <input type="text" id="telefono" placeholder="999 888 777">
+        </div>
+        <div class="form-group full">
+          <label>Email</label>
+          <input type="email" id="email" placeholder="juan@gmail.com">
+        </div>
+        <div class="form-group full">
+          <label>Experiencia laboral</label>
+          <textarea id="experiencia" placeholder="Ej: 2 años como asistente contable en empresa ABC. Manejo de planillas, facturación..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Educación</label>
+          <textarea id="educacion" placeholder="Ej: Bachiller en Administración, PUCP 2020. Técnico en Computación, SENATI 2018..."></textarea>
+        </div>
+        <div class="form-group full">
+          <label>Habilidades</label>
+          <textarea id="habilidades" placeholder="Ej: Excel avanzado, Word, atención al cliente, trabajo en equipo, inglés básico..."></textarea>
+        </div>
+      </div>
+
+      <button class="btn" onclick="generarCV()">✨ Generar mi CV profesional</button>
+
+      <div class="loading" id="loading">
+        <div class="spinner"></div>
+        Generando tu CV con IA, espera un momento...
+      </div>
+    </div>
+
+    <div class="resultado" id="resultado">
+      <div class="resultado-header">
+        <h3>✅ Tu CV está listo</h3>
+        <button class="btn-copiar" onclick="copiarCV()">📋 Copiar CV</button>
+        <button class="btn-copiar" onclick="descargarPDF()">📄 Descargar PDF</button>
+      </div>
+      <div class="cv-texto" id="cv-texto"></div>
+      <div class="precio">🎉 ¡CV generado exitosamente!</div>
+    </div>
+  </div>
+
+  <script>
+    async function generarCV() {
+      const nombre = document.getElementById('nombre').value;
+      const email = document.getElementById('email').value;
+      const telefono = document.getElementById('telefono').value;
+      const experiencia = document.getElementById('experiencia').value;
+      const educacion = document.getElementById('educacion').value;
+      const habilidades = document.getElementById('habilidades').value;
+
+      if (!nombre || !email || !experiencia) {
+        alert('Por favor completa al menos nombre, email y experiencia');
+        return;
+      }
+
+      document.getElementById('loading').style.display = 'block';
+      document.getElementById('resultado').style.display = 'none';
+
+      try {
+        const response = await fetch('/generar-cv', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ nombre, email, telefono, experiencia, educacion, habilidades })
+        });
+
+        const data = await response.json();
+        document.getElementById('cv-texto').textContent = data.cv;
+        document.getElementById('resultado').style.display = 'block';
+      } catch (error) {
+        alert('Error generando el CV, intenta de nuevo');
+      } finally {
+        document.getElementById('loading').style.display = 'none';
+      }
+    }
+
+    async function descargarPDF() {
+  const texto = document.getElementById('cv-texto').textContent;
+  
+  try {
+    const response = await fetch('/descargar-pdf', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ contenido: texto })
+    });
+
+    const blob = await response.blob();
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = 'mi-cv.pdf';
+    a.click();
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    alert('Error descargando el PDF, intenta de nuevo');
+  }
+}
+
+    function copiarCV() {
+      const texto = document.getElementById('cv-texto').textContent;
+      navigator.clipboard.writeText(texto);
+      alert('¡CV copiado al portapapeles!');
+    }
+  </script>
+
+</body>
+</html>
