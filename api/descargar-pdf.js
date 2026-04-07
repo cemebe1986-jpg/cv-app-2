@@ -2,42 +2,19 @@ module.exports = async (req, res) => {
   const { contenido } = req.body;
 
   try {
-    const puppeteer = require('puppeteer');
+    const { jsPDF } = require('jspdf');
     
-    const browser = await puppeteer.launch({ headless: 'new' });
-    const page = await browser.newPage();
+    const doc = new jsPDF();
     
-    const htmlContent = `
-      <!DOCTYPE html>
-      <html>
-      <head>
-        <meta charset="UTF-8">
-        <style>
-          body { 
-            font-family: Arial, sans-serif; 
-            padding: 40px; 
-            color: #2d3748; 
-            line-height: 1.8;
-            font-size: 13px;
-          }
-          pre { white-space: pre-wrap; font-family: Arial, sans-serif; }
-        </style>
-      </head>
-      <body><pre>${contenido}</pre></body>
-      </html>
-    `;
-
-    await page.setContent(htmlContent);
-    const pdf = await page.pdf({
-      format: 'A4',
-      margin: { top: '20mm', bottom: '20mm', left: '20mm', right: '20mm' }
-    });
+    const lineas = doc.splitTextToSize(contenido, 180);
+    doc.setFontSize(11);
+    doc.text(lineas, 15, 20);
     
-    await browser.close();
+    const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
     
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', 'attachment; filename=mi-cv.pdf');
-    res.send(pdf);
+    res.send(pdfBuffer);
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
