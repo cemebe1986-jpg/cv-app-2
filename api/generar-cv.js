@@ -12,20 +12,21 @@ module.exports = async (req, res) => {
       messages: [
         {
           role: 'user',
-          content: `Genera un CV profesional en español para el mercado peruano con la siguiente información:
-          Nombre: ${nombre}
-          Email: ${email}
-          Teléfono: ${telefono}
-          Experiencia: ${experiencia}
-          Educación: ${educacion}
-          Habilidades: ${habilidades}
-          
-          INSTRUCCIONES ESTRICTAS:
-          - Incluye ÚNICAMENTE estas 5 secciones: DATOS PERSONALES, PERFIL PROFESIONAL, EXPERIENCIA LABORAL, EDUCACIÓN, HABILIDADES
-          - NO agregues recomendaciones, consejos, tips, notas, ni comentarios adicionales
-          - NO agregues secciones extras
-          - NO hagas preguntas al final
-          - Termina el CV después de la sección HABILIDADES`
+          content: `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos que te doy abajo. NO uses placeholders como [Completa...] ni dejes campos vacíos. USA los datos tal como están.
+
+DATOS DEL USUARIO:
+- Nombre: ${nombre}
+- Email: ${email}
+- Teléfono: ${telefono}
+- Experiencia: ${experiencia}
+- Educación: ${educacion}
+- Habilidades: ${habilidades}
+
+INSTRUCCIONES:
+- Usa EXACTAMENTE los datos proporcionados arriba
+- NO inventes ni dejes campos vacíos
+- Solo estas 5 secciones: DATOS PERSONALES, PERFIL PROFESIONAL, EXPERIENCIA LABORAL, EDUCACIÓN, HABILIDADES
+- NO agregues consejos, recomendaciones ni preguntas al final`
         }
       ]
     });
