@@ -1,8 +1,27 @@
 {
   "version": 2,
-  "rewrites": [
-    { "source": "/generar-cv", "destination": "/api/generar-cv" },
-    { "source": "/descargar-pdf", "destination": "/api/descargar-pdf" },
-    { "source": "/(.*)", "destination": "/public/$1" }
+  "builds": [
+    {
+      "src": "api/*.js",
+      "use": "@vercel/node"
+    },
+    {
+      "src": "public/**",
+      "use": "@vercel/static"
+    }
+  ],
+  "routes": [
+    {
+      "src": "/generar-cv",
+      "dest": "/api/generar-cv.js"
+    },
+    {
+      "src": "/descargar-pdf",
+      "dest": "/api/descargar-pdf.js"
+    },
+    {
+      "src": "/(.*)",
+      "dest": "/public/$1"
+    }
   ]
 }
