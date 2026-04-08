@@ -20,7 +20,7 @@
     .form-group { display: flex; flex-direction: column; }
     .form-group.full { grid-column: 1 / -1; }
     label { font-size: 0.8rem; font-weight: 700; color: #4a5568; margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.5px; }
-    input, textarea { padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; color: #2d3748; transition: border-color 0.2s; font-family: 'Segoe UI', sans-serif; }
+    input[type="text"], input[type="email"], input[type="file"], textarea { padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; color: #2d3748; transition: border-color 0.2s; font-family: 'Segoe UI', sans-serif; width: 100%; }
     input:focus, textarea:focus { outline: none; border-color: #0f3460; }
     textarea { height: 110px; resize: vertical; }
     .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #0f3460; display: none; margin-top: 10px; }
@@ -30,24 +30,31 @@
     .spinner { width: 40px; height: 40px; border: 4px solid #e2e8f0; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 15px; }
     @keyframes spin { to { transform: rotate(360deg); } }
 
+    /* HABILIDAD ITEM EN FORMULARIO */
+    .habilidad-item { display: flex; align-items: center; gap: 12px; background: #f8faff; border: 1px solid #e2e8f0; border-radius: 10px; padding: 10px 14px; }
+    .habilidad-nombre { font-size: 0.9rem; font-weight: 600; color: #2d3748; min-width: 100px; flex: 1; }
+    .habilidad-dots { display: flex; gap: 6px; }
+    .habilidad-dot { width: 14px; height: 14px; border-radius: 50%; background: #e2e8f0; cursor: pointer; transition: transform 0.1s, background 0.2s; border: 1px solid #cbd5e0; }
+    .habilidad-dot.filled { background: #0f3460; border-color: #0f3460; }
+    .habilidad-dot:hover { transform: scale(1.3); }
+    .habilidad-delete { background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 1.1rem; padding: 0 4px; }
+
     /* CV PREVIEW */
     .cv-preview { display: none; max-width: 800px; margin: 40px auto 0; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
     .cv-document { display: grid; grid-template-columns: 280px 1fr; min-height: 900px; }
     .cv-sidebar { background: #1a1a2e; color: white; padding: 40px 25px; }
     .cv-foto-container { text-align: center; margin-bottom: 25px; }
-    .cv-foto { width: 120px; height: 120px; border-radius: 50%; object-fit: cover; border: 4px solid #0f3460; background: #0f3460; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 40px; overflow: hidden; }
+    .cv-foto { width: 120px; height: 120px; border-radius: 50%; background: #0f3460; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 40px; overflow: hidden; border: 4px solid #0f3460; }
     .cv-foto img { width: 100%; height: 100%; border-radius: 50%; object-fit: cover; }
-    .cv-nombre { font-size: 1.1rem; font-weight: 700; text-align: center; margin-bottom: 5px; }
+    .cv-nombre-sidebar { font-size: 1.1rem; font-weight: 700; text-align: center; margin-bottom: 5px; }
     .cv-contacto { margin-bottom: 25px; }
     .cv-contacto p { font-size: 0.8rem; opacity: 0.8; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
     .cv-section-title { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1.5px; color: #60a5fa; margin-bottom: 12px; padding-bottom: 6px; border-bottom: 1px solid rgba(255,255,255,0.2); }
-    .skill-bar { margin-bottom: 12px; }
-    .skill-name { font-size: 0.82rem; margin-bottom: 5px; opacity: 0.9; }
-    .skill-dots { display: flex; gap: 5px; }
-    .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); cursor: pointer; transition: transform 0.1s, background 0.2s; border: 1px solid rgba(255,255,255,0.3); }
-    .dot.filled { background: #60a5fa; border-color: #60a5fa; }
-    .dot:hover { transform: scale(1.3); }
-    .skill-hint { font-size: 0.7rem; opacity: 0.6; margin-top: 4px; font-style: italic; }
+    .cv-skill-bar { margin-bottom: 12px; }
+    .cv-skill-name { font-size: 0.82rem; margin-bottom: 5px; opacity: 0.9; }
+    .cv-skill-dots { display: flex; gap: 5px; }
+    .cv-dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.3); }
+    .cv-dot.filled { background: #60a5fa; border-color: #60a5fa; }
     .soft-skill { display: inline-block; background: rgba(255,255,255,0.1); color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.75rem; margin: 3px 2px; }
     .cv-main { padding: 40px 35px; background: #fafbff; }
     .cv-main-nombre { font-size: 1.8rem; font-weight: 800; color: #1a1a2e; }
@@ -69,7 +76,6 @@
     .btn-action { flex: 1; padding: 14px; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; transition: opacity 0.2s; text-align: center; }
     .btn-pagar { background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; text-decoration: none; display: flex; align-items: center; justify-content: center; }
     .btn-pagar:hover { opacity: 0.9; }
-    .skills-editing-hint { background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 8px; padding: 10px 15px; margin-bottom: 15px; font-size: 0.8rem; color: #1e40af; }
 
     @media (max-width: 600px) {
       .form-grid { grid-template-columns: 1fr; }
@@ -94,35 +100,52 @@
   </div>
   <div class="form-body">
     <div class="form-grid">
+
       <div class="form-group">
         <label>Nombre completo</label>
         <input type="text" id="nombre" placeholder="Juan Pérez García">
       </div>
+
       <div class="form-group">
         <label>Teléfono</label>
         <input type="text" id="telefono" placeholder="999 888 777">
       </div>
+
       <div class="form-group full">
         <label>Email</label>
         <input type="email" id="email" placeholder="juan@gmail.com">
       </div>
+
       <div class="form-group full">
         <label>Foto de perfil (opcional)</label>
         <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)">
         <img id="foto-preview" class="foto-preview">
       </div>
+
       <div class="form-group full">
         <label>Experiencia laboral</label>
         <textarea id="experiencia" placeholder="Ej: 3 años como analista de sistemas en BCP. Desarrollé dashboards, reduje tiempos de proceso en 30%..."></textarea>
       </div>
+
       <div class="form-group full">
         <label>Educación</label>
         <textarea id="educacion" placeholder="Ej: Ingeniería de Sistemas, UPC 2020. Certificación AWS Cloud Practitioner 2022..."></textarea>
       </div>
+
       <div class="form-group full">
-        <label>Habilidades</label>
-        <textarea id="habilidades" placeholder="Ej: Python, SQL, Excel avanzado, liderazgo, trabajo en equipo, inglés intermedio..."></textarea>
+        <label>Habilidades técnicas</label>
+        <div style="display:flex; gap:10px; margin-bottom:12px;">
+          <input type="text" id="nueva-habilidad" placeholder="Ej: Excel, Python, SQL..." onkeydown="if(event.key==='Enter'){event.preventDefault(); agregarHabilidad();}">
+          <button type="button" onclick="agregarHabilidad()" style="padding: 12px 20px; background: #0f3460; color: white; border: none; border-radius: 10px; cursor: pointer; font-weight: 700; white-space: nowrap;">+ Agregar</button>
+        </div>
+        <div id="lista-habilidades" style="display:flex; flex-direction:column; gap:8px;"></div>
       </div>
+
+      <div class="form-group full">
+        <label>Habilidades blandas</label>
+        <textarea id="habilidades-blandas" placeholder="Ej: liderazgo, trabajo en equipo, comunicación, adaptabilidad..."></textarea>
+      </div>
+
     </div>
     <button class="btn" onclick="generarCV()">✨ Generar mi CV profesional</button>
     <div class="loading" id="loading">
@@ -135,12 +158,11 @@
 <!-- CV PREVIEW -->
 <div class="cv-preview" id="cv-preview">
   <div class="cv-document">
-    <!-- SIDEBAR -->
     <div class="cv-sidebar">
       <div class="cv-foto-container">
         <div class="cv-foto" id="cv-foto">👤</div>
       </div>
-      <div class="cv-nombre" id="cv-nombre-sidebar"></div>
+      <div class="cv-nombre-sidebar" id="cv-nombre-sidebar"></div>
       <br>
       <div class="cv-contacto">
         <div class="cv-section-title">Contacto</div>
@@ -150,7 +172,6 @@
       </div>
       <div style="margin-bottom: 25px;">
         <div class="cv-section-title">Habilidades Técnicas</div>
-        <div class="skills-editing-hint">💡 Haz clic en los círculos para ajustar tu nivel</div>
         <div id="cv-skills-tecnicas"></div>
       </div>
       <div>
@@ -158,7 +179,6 @@
         <div id="cv-skills-blandas"></div>
       </div>
     </div>
-    <!-- MAIN -->
     <div class="cv-main">
       <div class="cv-main-nombre" id="cv-nombre-main"></div>
       <div class="cv-divider"></div>
@@ -180,6 +200,7 @@
 
 <script>
   let fotoBase64 = null;
+  let habilidadesData = []; // [{nombre, nivel}]
 
   function previewFoto(input) {
     if (input.files && input.files[0]) {
@@ -193,27 +214,78 @@
     }
   }
 
+  function agregarHabilidad() {
+    const input = document.getElementById('nueva-habilidad');
+    const nombre = input.value.trim();
+    if (!nombre) return;
+
+    const habilidad = { nombre, nivel: 3 };
+    habilidadesData.push(habilidad);
+    input.value = '';
+    renderListaHabilidades();
+    input.focus();
+  }
+
+  function setNivelFormulario(index, nivel) {
+    habilidadesData[index].nivel = nivel;
+    renderListaHabilidades();
+  }
+
+  function eliminarHabilidad(index) {
+    habilidadesData.splice(index, 1);
+    renderListaHabilidades();
+  }
+
+  function renderListaHabilidades() {
+    const lista = document.getElementById('lista-habilidades');
+    lista.innerHTML = habilidadesData.map((h, i) => `
+      <div class="habilidad-item">
+        <span class="habilidad-nombre">${h.nombre}</span>
+        <div class="habilidad-dots">
+          ${[1,2,3,4,5].map(d => `
+            <div class="habilidad-dot ${d <= h.nivel ? 'filled' : ''}"
+                 onclick="setNivelFormulario(${i}, ${d})"
+                 title="Nivel ${d}"></div>
+          `).join('')}
+        </div>
+        <button class="habilidad-delete" onclick="eliminarHabilidad(${i})" title="Eliminar">✕</button>
+      </div>
+    `).join('');
+  }
+
   async function generarCV() {
     const nombre = document.getElementById('nombre').value;
     const email = document.getElementById('email').value;
     const telefono = document.getElementById('telefono').value;
     const experiencia = document.getElementById('experiencia').value;
     const educacion = document.getElementById('educacion').value;
-    const habilidades = document.getElementById('habilidades').value;
+    const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
 
     if (!nombre || !email || !experiencia) {
       alert('Por favor completa al menos nombre, email y experiencia');
       return;
     }
 
+    if (habilidadesData.length === 0) {
+      alert('Por favor agrega al menos una habilidad técnica');
+      return;
+    }
+
     document.getElementById('loading').style.display = 'block';
     document.getElementById('cv-preview').style.display = 'none';
+
+    const habilidadesTexto = habilidadesData.map(h => h.nombre).join(', ');
 
     try {
       const response = await fetch('/generar-cv', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre, email, telefono, experiencia, educacion, habilidades, foto: fotoBase64 })
+        body: JSON.stringify({
+          nombre, email, telefono, experiencia, educacion,
+          habilidades: habilidadesTexto,
+          habilidadesBlandas,
+          foto: fotoBase64
+        })
       });
 
       const data = await response.json();
@@ -225,21 +297,10 @@
     }
   }
 
-  function setNivel(skillId, nivel) {
-    const dots = document.querySelectorAll(`#${skillId} .dot`);
-    dots.forEach((dot, i) => {
-      dot.classList.toggle('filled', i < nivel);
-    });
-  }
-
   function renderCV(cv, foto) {
     // Foto
     const fotoEl = document.getElementById('cv-foto');
-    if (foto) {
-      fotoEl.innerHTML = `<img src="${foto}" alt="foto">`;
-    } else {
-      fotoEl.innerHTML = '👤';
-    }
+    fotoEl.innerHTML = foto ? `<img src="${foto}" alt="foto">` : '👤';
 
     // Datos básicos
     document.getElementById('cv-nombre-sidebar').textContent = cv.nombre || '';
@@ -248,47 +309,41 @@
     document.getElementById('cv-telefono').textContent = cv.telefono || '';
     document.getElementById('cv-perfil').textContent = cv.perfil || '';
 
-    // Habilidades técnicas con dots editables
+    // Habilidades técnicas — usa los datos del formulario (con niveles elegidos por el usuario)
     const skillsTecnicas = document.getElementById('cv-skills-tecnicas');
-    skillsTecnicas.innerHTML = '';
-    (cv.habilidades_tecnicas || []).forEach((skill, i) => {
-      const nivel = 3;
-      const skillId = `skill-${i}`;
-      skillsTecnicas.innerHTML += `
-        <div class="skill-bar">
-          <div class="skill-name">${skill}</div>
-          <div class="skill-dots" id="${skillId}">
-            ${[1,2,3,4,5].map(d => `
-              <div class="dot ${d <= nivel ? 'filled' : ''}"
-                   onclick="setNivel('${skillId}', ${d})"
-                   title="Nivel ${d}">
-              </div>`).join('')}
-          </div>
-        </div>`;
-    });
+    skillsTecnicas.innerHTML = habilidadesData.map(h => `
+      <div class="cv-skill-bar">
+        <div class="cv-skill-name">${h.nombre}</div>
+        <div class="cv-skill-dots">
+          ${[1,2,3,4,5].map(d => `<div class="cv-dot ${d <= h.nivel ? 'filled' : ''}"></div>`).join('')}
+        </div>
+      </div>
+    `).join('');
 
     // Habilidades blandas
-    const skillsBlandas = document.getElementById('cv-skills-blandas');
-    skillsBlandas.innerHTML = (cv.habilidades_blandas || []).map(s => `<span class="soft-skill">${s}</span>`).join('');
+    const blandas = document.getElementById('habilidades-blandas').value
+      .split(',').map(s => s.trim()).filter(Boolean);
+    document.getElementById('cv-skills-blandas').innerHTML =
+      blandas.map(s => `<span class="soft-skill">${s}</span>`).join('');
 
     // Experiencia
-    const expEl = document.getElementById('cv-experiencia');
-    expEl.innerHTML = (cv.experiencia || []).map(exp => `
-      <div class="exp-item">
-        <div class="exp-cargo">${exp.cargo}</div>
-        <div class="exp-empresa">${exp.empresa}</div>
-        <div class="exp-periodo">${exp.periodo}</div>
-        ${(exp.logros || []).map(l => `<div class="exp-logro">${l}</div>`).join('')}
-      </div>`).join('');
+    document.getElementById('cv-experiencia').innerHTML =
+      (cv.experiencia || []).map(exp => `
+        <div class="exp-item">
+          <div class="exp-cargo">${exp.cargo}</div>
+          <div class="exp-empresa">${exp.empresa}</div>
+          <div class="exp-periodo">${exp.periodo}</div>
+          ${(exp.logros || []).map(l => `<div class="exp-logro">${l}</div>`).join('')}
+        </div>`).join('');
 
     // Educación
-    const eduEl = document.getElementById('cv-educacion');
-    eduEl.innerHTML = (cv.educacion || []).map(edu => `
-      <div class="edu-item">
-        <div class="edu-titulo">${edu.titulo}</div>
-        <div class="edu-institucion">${edu.institucion}</div>
-        <div class="edu-año">${edu.año}</div>
-      </div>`).join('');
+    document.getElementById('cv-educacion').innerHTML =
+      (cv.educacion || []).map(edu => `
+        <div class="edu-item">
+          <div class="edu-titulo">${edu.titulo}</div>
+          <div class="edu-institucion">${edu.institucion}</div>
+          <div class="edu-año">${edu.año}</div>
+        </div>`).join('');
 
     document.getElementById('cv-preview').style.display = 'block';
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
