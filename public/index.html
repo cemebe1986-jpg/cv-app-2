@@ -221,7 +221,8 @@
         2. Completa el pago con tu tarjeta o Yape<br>
         3. Envíanos tu comprobante a <strong>cvproperu@gmail.com</strong> y te enviamos el PDF en menos de 1 hora ⚡
       </div>
-      <a href="https://express.culqi.com/pago/45BC5837F0" target="_blank" class="btn-action btn-pagar">💳 Pagar S/10 y recibir mi CV en PDF</a>
+      <a href="#" target="_blank" class="btn-action btn-pagar" id="btn-pagar">💳 Pagar S/10 y recibir mi CV en PDF</a>
+      <a href="#" class="btn-action btn-pagar" id="link-descarga" style="display:none; margin-top:10px; background: #22c55e;">✅ Descargar mi CV en PDF</a>
     </div>
   </div>
 </div>
@@ -340,6 +341,27 @@
       const data = await response.json();
       renderCV(data.cv, fotoBase64);
       hacerEditable('.exp-cargo, .exp-empresa, .exp-periodo, .exp-logro, .edu-titulo, .edu-institucion, .edu-año, .cv-perfil');
+
+      // Guardar CV en Upstash y obtener ID
+      const guardarRes = await fetch('/guardar-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          cvData: data.cv,
+          foto: fotoBase64,
+          habilidades: habilidadesData
+        })
+      });
+      const guardarData = await guardarRes.json();
+      const cvId = guardarData.id;
+
+      // Actualizar botón de pago con el ID
+      const btnPagar = document.getElementById('btn-pagar');
+      btnPagar.href = `https://express.culqi.com/pago/45BC5837F0?cv_id=${cvId}`;
+      btnPagar.setAttribute('data-cv-id', cvId);
+
+      // Mostrar link de descarga (se activará tras el pago)
+      document.getElementById('link-descarga').href = `/descargar-cv?id=${cvId}`;
     } catch (error) {
       alert('Error generando el CV, intenta de nuevo');
     } finally {

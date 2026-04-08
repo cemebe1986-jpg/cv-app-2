@@ -12,6 +12,7 @@
   "type": "commonjs",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.82.0",
+    "@upstash/redis": "^1.37.0",
     "anthropic": "^0.0.0",
     "dotenv": "^17.4.1",
     "express": "^5.2.1",

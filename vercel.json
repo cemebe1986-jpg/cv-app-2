@@ -16,6 +16,18 @@
       "dest": "/api/generar-cv.js"
     },
     {
+      "src": "/guardar-cv",
+      "dest": "/api/guardar-cv.js"
+    },
+    {
+      "src": "/webhook-culqi",
+      "dest": "/api/webhook-culqi.js"
+    },
+    {
+      "src": "/descargar-cv",
+      "dest": "/api/descargar-cv.js"
+    },
+    {
       "src": "/descargar-pdf",
       "dest": "/api/descargar-pdf.js"
     },
