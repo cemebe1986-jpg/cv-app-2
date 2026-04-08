@@ -162,6 +162,10 @@
       </div>
 
     </div>
+    <div class="form-group full" style="margin-top:20px;">
+      <label>Oferta de trabajo (opcional)</label>
+      <textarea id="oferta" placeholder="Pega aquí la descripción del trabajo al que quieres postular. La IA analizará qué tan compatible es tu perfil..."></textarea>
+    </div>
     <button class="btn" onclick="generarCV()">✨ Generar mi CV profesional</button>
     <div class="loading" id="loading">
       <div class="spinner"></div>
@@ -172,6 +176,33 @@
 
 <!-- CV PREVIEW -->
 <div class="cv-preview" id="cv-preview">
+  <!-- ANÁLISIS DE COMPATIBILIDAD -->
+  <div id="analisis-compatibilidad" style="display:none; padding: 25px 40px; background: #f8faff; border-bottom: 2px solid #e2e8f0;">
+    <h3 style="color: #1a1a2e; margin-bottom: 15px; font-size: 1rem;">🎯 Análisis de compatibilidad con la oferta</h3>
+    <div style="display: flex; align-items: center; gap: 15px; margin-bottom: 15px;">
+      <div style="font-size: 2.5rem; font-weight: 900;" id="comp-score">0%</div>
+      <div style="flex: 1;">
+        <div style="background: #e2e8f0; border-radius: 10px; height: 12px; overflow: hidden;">
+          <div id="comp-barra" style="height: 100%; border-radius: 10px; transition: width 1s ease; width: 0%;"></div>
+        </div>
+        <div style="font-size: 0.8rem; color: #718096; margin-top: 5px;">Compatibilidad con la oferta de trabajo</div>
+      </div>
+    </div>
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 15px;">
+      <div style="background: #f0fff4; border: 1px solid #c6f6d5; border-radius: 10px; padding: 12px;">
+        <div style="font-size: 0.75rem; font-weight: 700; color: #276749; margin-bottom: 6px;">✅ KEYWORDS ENCONTRADAS</div>
+        <div style="font-size: 0.85rem; color: #2d3748;" id="comp-keywords"></div>
+      </div>
+      <div style="background: #fff5f5; border: 1px solid #fed7d7; border-radius: 10px; padding: 12px;">
+        <div style="font-size: 0.75rem; font-weight: 700; color: #c53030; margin-bottom: 6px;">❌ KEYWORDS FALTANTES</div>
+        <div style="font-size: 0.85rem; color: #2d3748;" id="comp-faltantes"></div>
+      </div>
+    </div>
+    <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 12px;">
+      <div style="font-size: 0.75rem; font-weight: 700; color: #1e40af; margin-bottom: 8px;">💡 RECOMENDACIONES PARA MEJORAR</div>
+      <ul style="font-size: 0.85rem; color: #2d3748; padding-left: 18px; line-height: 1.8;" id="comp-recomendaciones"></ul>
+    </div>
+  </div>
   <div class="cv-document">
     <div class="cv-sidebar">
       <div class="cv-foto-container">
@@ -428,6 +459,22 @@
         </div>`).join('');
 
     document.getElementById('cv-preview').style.display = 'block';
+    // Mostrar análisis de compatibilidad si hay oferta
+    if (cv.compatibilidad) {
+      const comp = cv.compatibilidad;
+      const color = comp.score >= 80 ? '#22c55e' : comp.score >= 60 ? '#f59e0b' : '#ef4444';
+      
+      document.getElementById('analisis-compatibilidad').style.display = 'block';
+      document.getElementById('comp-score').textContent = comp.score + '%';
+      document.getElementById('comp-score').style.color = color;
+      document.getElementById('comp-barra').style.width = comp.score + '%';
+      document.getElementById('comp-barra').style.background = color;
+      document.getElementById('comp-keywords').textContent = (comp.keywords_encontradas || []).join(', ') || 'Ninguna';
+      document.getElementById('comp-faltantes').textContent = (comp.keywords_faltantes || []).join(', ') || 'Ninguna';
+      document.getElementById('comp-recomendaciones').innerHTML = (comp.recomendaciones || []).map(r => `<li>${r}</li>`).join('');
+    } else {
+      document.getElementById('analisis-compatibilidad').style.display = 'none';
+    }
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
   }
 </script>
