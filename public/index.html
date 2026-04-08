@@ -101,6 +101,9 @@
     <p>Nuestra IA generará un CV optimizado y profesional para ti</p>
   </div>
   <div class="form-body">
+    <div style="background:#f0fff4; border:1px solid #c6f6d5; border-radius:10px; padding:12px 16px; margin-bottom:25px; font-size:0.85rem; color:#276749;">
+      <strong>💡 Tip:</strong> Mientras más detalles pongas en experiencia y educación, mejor será tu CV.
+    </div>
     <div class="form-grid">
 
       <div class="form-group">
@@ -121,6 +124,7 @@
       <div class="form-group full">
         <label>Foto de perfil (opcional)</label>
         <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)">
+        <div style="font-size:0.75rem; color:#718096; margin-top:5px;">📷 Recomendado en Perú · Fondo neutro · Máximo 2MB</div>
         <img id="foto-preview" class="foto-preview">
       </div>
 
@@ -214,13 +218,19 @@
 
   function previewFoto(input) {
     if (input.files && input.files[0]) {
+      const file = input.files[0];
+      if (file.size > 2 * 1024 * 1024) {
+        alert('La foto no debe pesar más de 2MB. Por favor elige otra.');
+        input.value = '';
+        return;
+      }
       const reader = new FileReader();
       reader.onload = e => {
         fotoBase64 = e.target.result;
         document.getElementById('foto-preview').src = fotoBase64;
         document.getElementById('foto-preview').style.display = 'block';
       };
-      reader.readAsDataURL(input.files[0]);
+      reader.readAsDataURL(file);
     }
   }
 
