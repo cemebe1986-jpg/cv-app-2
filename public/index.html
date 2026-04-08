@@ -115,6 +115,10 @@
         <label>Teléfono</label>
         <input type="text" id="telefono" placeholder="999 888 777">
       </div>
+      <div class="form-group">
+        <label>Ciudad</label>
+        <input type="text" id="ciudad" placeholder="Ej: Lima, Arequipa, Trujillo...">
+      </div>
 
       <div class="form-group full">
         <label>Email</label>
@@ -174,7 +178,7 @@
         <div class="cv-section-title">Contacto</div>
         <p>📧 <span id="cv-email"></span></p>
         <p>📱 <span id="cv-telefono"></span></p>
-        <p>📍 Lima, Perú</p>
+        <p>📍 <span id="cv-ciudad"></span></p>
       </div>
       <div style="margin-bottom: 25px;">
         <div class="cv-section-title">Habilidades Técnicas</div>
@@ -328,7 +332,8 @@
     document.getElementById('cv-email').textContent = cv.email || '';
     document.getElementById('cv-telefono').textContent = cv.telefono || '';
     document.getElementById('cv-perfil').textContent = cv.perfil || '';
-
+    document.getElementById('cv-ciudad').textContent = document.getElementById('ciudad').value || 'Perú';
+    
     // Habilidades técnicas — usa los datos del formulario (con niveles elegidos por el usuario)
     const skillsTecnicas = document.getElementById('cv-skills-tecnicas');
     skillsTecnicas.innerHTML = habilidadesData.map(h => `
