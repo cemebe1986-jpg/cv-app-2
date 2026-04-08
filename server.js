@@ -96,6 +96,77 @@ app.post('/descargar-pdf', async (req, res) => {
   }
 });
 
+app.post('/guardar-cv', async (req, res) => {
+  const { Redis } = require('@upstash/redis');
+  const { cvData, foto, habilidades } = req.body;
+
+  try {
+    const redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+
+    const id = Math.random().toString(36).substring(2, 10).toUpperCase();
+    await redis.set(`cv:${id}`, JSON.stringify({ cvData, foto, habilidades }), { ex: 3600 });
+
+    res.json({ id });
+  } catch (error) {
+    console.log('ERROR guardar:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
+app.get('/descargar-cv', async (req, res) => {
+  const { Redis } = require('@upstash/redis');
+  const { jsPDF } = require('jspdf');
+  const { id } = req.query;
+
+  try {
+    const redis = new Redis({
+      url: process.env.KV_REST_API_URL,
+      token: process.env.KV_REST_API_TOKEN,
+    });
+
+    const pagado = await redis.get(`pagado:${id}`);
+    if (!pagado) return res.status(403).json({ error: 'Pago no verificado' });
+
+    const cvRaw = await redis.get(`cv:${id}`);
+    if (!cvRaw) return res.status(404).json({ error: 'CV no encontrado' });
+
+    const { cvData, habilidades } = typeof cvRaw === 'string' ? JSON.parse(cvRaw) : cvRaw;
+
+    const doc = new jsPDF();
+    const pageWidth = doc.internal.pageSize.getWidth();
+
+    doc.setFillColor(26, 26, 46);
+    doc.rect(0, 0, pageWidth, 35, 'F');
+    doc.setTextColor(255, 255, 255);
+    doc.setFontSize(22);
+    doc.setFont('helvetica', 'bold');
+    doc.text(cvData.nombre || 'CV', pageWidth / 2, 18, { align: 'center' });
+    doc.setFontSize(10);
+    doc.setFont('helvetica', 'normal');
+    doc.text(`${cvData.email || ''} | ${cvData.telefono || ''}`, pageWidth / 2, 28, { align: 'center' });
+
+    let y = 50;
+    doc.setTextColor(45, 55, 72);
+    doc.setFont('helvetica', 'normal');
+    doc.setFontSize(9);
+
+    const perfilLines = doc.splitTextToSize(cvData.perfil || '', 175);
+    perfilLines.forEach(l => { doc.text(l, 15, y); y += 6; });
+
+    const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
+    res.setHeader('Content-Type', 'application/pdf');
+    res.setHeader('Content-Disposition', 'attachment; filename=mi-cv.pdf');
+    res.send(pdfBuffer);
+
+  } catch (error) {
+    console.log('ERROR descarga:', error.message);
+    res.status(500).json({ error: error.message });
+  }
+});
+
 app.listen(3000, () => {
   console.log('Servidor corriendo en http://localhost:3000');
 });
