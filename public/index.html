@@ -341,6 +341,7 @@
     const experiencia = document.getElementById('experiencia').value;
     const educacion = document.getElementById('educacion').value;
     const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
+    const oferta = document.getElementById('oferta').value;
 
     if (!nombre || !email || !experiencia) {
       alert('Por favor completa al menos nombre, email y experiencia');
@@ -365,6 +366,7 @@
           nombre, email, telefono, experiencia, educacion,
           habilidades: habilidadesTexto,
           habilidadesBlandas,
+          oferta,
           foto: fotoBase64
         })
       });
