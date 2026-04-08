@@ -41,7 +41,7 @@
 
     /* CV PREVIEW */
     .cv-preview { display: none; max-width: 800px; margin: 40px auto 0; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
-    .cv-document { display: grid; grid-template-columns: 280px 1fr; min-height: 900px; }
+    .cv-document { display: grid; grid-template-columns: 280px 1fr; min-height: 900px; position: relative; }
     .cv-sidebar { background: #1a1a2e; color: white; padding: 40px 25px; }
     .cv-foto-container { text-align: center; margin-bottom: 25px; }
     .cv-foto { width: 120px; height: 120px; border-radius: 50%; background: #0f3460; display: flex; align-items: center; justify-content: center; margin: 0 auto; font-size: 40px; overflow: hidden; border: 4px solid #0f3460; }
@@ -190,6 +190,11 @@
       </div>
     </div>
     <div class="cv-main">
+      <div style="position:absolute; top:0; left:0; width:100%; height:100%; display:flex; align-items:center; justify-content:center; pointer-events:none; z-index:10;">
+        <div style="transform:rotate(-35deg); font-size:2.5rem; font-weight:900; color:rgba(15,52,96,0.12); white-space:nowrap; letter-spacing:4px; user-select:none;">
+          CVPro Perú · Sin licencia · CVPro Perú · Sin licencia
+        </div>
+      </div>
       <div class="cv-main-nombre" id="cv-nombre-main"></div>
       <div class="cv-divider"></div>
       <div class="cv-perfil" id="cv-perfil"></div>
@@ -333,7 +338,7 @@
     document.getElementById('cv-telefono').textContent = cv.telefono || '';
     document.getElementById('cv-perfil').textContent = cv.perfil || '';
     document.getElementById('cv-ciudad').textContent = document.getElementById('ciudad').value || 'Perú';
-    
+
     // Habilidades técnicas — usa los datos del formulario (con niveles elegidos por el usuario)
     const skillsTecnicas = document.getElementById('cv-skills-tecnicas');
     skillsTecnicas.innerHTML = habilidadesData.map(h => `
