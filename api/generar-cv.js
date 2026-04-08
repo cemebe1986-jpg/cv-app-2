@@ -1,7 +1,7 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
 module.exports = async (req, res) => {
-  const { nombre, email, telefono, experiencia, educacion, habilidades } = req.body;
+  const { nombre, email, telefono, experiencia, educacion, habilidades, foto } = req.body;
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
@@ -12,26 +12,40 @@ module.exports = async (req, res) => {
       messages: [
         {
           role: 'user',
-          content: `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos que te doy abajo. NO uses placeholders como [Completa...] ni dejes campos vacíos. USA los datos tal como están.
+          content: `Eres un experto en CVs peruanos. Genera SOLO el contenido en formato JSON con estos campos exactos, sin explicaciones ni texto adicional:
+{
+  "nombre": "${nombre}",
+  "email": "${email}",
+  "telefono": "${telefono}",
+  "perfil": "párrafo de 3 líneas sobre el candidato",
+  "experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}],
+  "educacion": [{"titulo": "...", "institucion": "...", "año": "..."}],
+  "habilidades_tecnicas": ["...", "...", "..."],
+  "habilidades_blandas": ["...", "...", "..."]
+}
 
-DATOS DEL USUARIO:
-- Nombre: ${nombre}
-- Email: ${email}
-- Teléfono: ${telefono}
-- Experiencia: ${experiencia}
-- Educación: ${educacion}
-- Habilidades: ${habilidades}
+USA EXACTAMENTE estos datos del usuario:
+Nombre: ${nombre}
+Email: ${email}
+Teléfono: ${telefono}
+Experiencia: ${experiencia}
+Educación: ${educacion}
+Habilidades: ${habilidades}
 
-INSTRUCCIONES:
-- Usa EXACTAMENTE los datos proporcionados arriba
-- NO inventes ni dejes campos vacíos
-- Solo estas 5 secciones: DATOS PERSONALES, PERFIL PROFESIONAL, EXPERIENCIA LABORAL, EDUCACIÓN, HABILIDADES
-- NO agregues consejos, recomendaciones ni preguntas al final`
+Responde SOLO con el JSON, sin markdown ni explicaciones.`
         }
       ]
     });
 
-    res.json({ cv: message.content[0].text });
+    let cvData;
+    try {
+      const text = message.content[0].text.replace(/```json|```/g, '').trim();
+      cvData = JSON.parse(text);
+    } catch (e) {
+      cvData = { error: 'Error parseando respuesta' };
+    }
+
+    res.json({ cv: cvData, foto: foto || null });
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
