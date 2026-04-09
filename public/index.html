@@ -53,7 +53,7 @@
   <title>CVPro Perú - Generador de CV Profesional</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 40px 20px; }
+    body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 40px 20px 40px 100px; }
     .hero { text-align: center; color: white; margin-bottom: 40px; }
     .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
     .hero p { font-size: 1.1rem; opacity: 0.85; }
@@ -161,10 +161,44 @@
     pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
   </script>
 </head>
-
-
-</head>
 <body>
+
+  <!-- ÍNDICE LATERAL -->
+<div id="indice-lateral" style="position:fixed; left:0; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:4px; padding:8px;">
+  
+  <a href="#seccion-formulario" onclick="scrollTo('seccion-formulario')" title="Formulario"
+    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2);"
+    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+    id="idx-formulario">
+    ✍️
+  </a>
+
+  <a href="#seccion-cv" onclick="scrollTo('seccion-cv')" title="Mi CV"
+    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
+    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+    id="idx-cv">
+    📄
+  </a>
+
+  <a href="#seccion-analisis" onclick="scrollTo('seccion-analisis')" title="Análisis"
+    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
+    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+    id="idx-analisis">
+    🎯
+  </a>
+
+  <a href="#seccion-descarga" onclick="scrollTo('seccion-descarga')" title="Descargar"
+    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
+    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+    id="idx-descarga">
+    ⬇️
+  </a>
+
+</div>
 
 <div class="hero">
   <div class="badge">🇵🇪 Especializado para el mercado peruano</div>
@@ -636,6 +670,7 @@
     } else {
       document.getElementById('analisis-compatibilidad').style.display = 'none';
     }
+    activarIndice();
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
   }
 
@@ -657,6 +692,17 @@
       document.getElementById('estado-sin-login').style.display = 'block';
       document.getElementById('estado-con-login').style.display = 'none';
     }
+  }
+
+  function activarIndice() {
+    document.getElementById('idx-cv').style.display = 'flex';
+    document.getElementById('idx-analisis').style.display = 'flex';
+    document.getElementById('idx-descarga').style.display = 'flex';
+  }
+
+  function irA(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
 async function procesarCVSubido(input) {
