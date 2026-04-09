@@ -137,7 +137,7 @@ module.exports = async (req, res) => {
     doc.rect(0, 285, pageWidth, 12, 'F');
     doc.setTextColor(255, 255, 255);
     doc.setFontSize(8);
-    doc.text('CVPro Perú | cv-app-2-steel.vercel.app', pageWidth / 2, 292, { align: 'center' });
+    doc.text('TalentIA | Tu CV profesional con IA', pageWidth / 2, 292, { align: 'center' });
 
     const pdfBuffer = Buffer.from(doc.output('arraybuffer'));
     res.setHeader('Content-Type', 'application/pdf');
