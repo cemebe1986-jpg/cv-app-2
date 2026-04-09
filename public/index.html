@@ -631,26 +631,6 @@
     }
   }
 
-  function verificarLoginParaComprar(plan) {
-    if (!window.usuarioActual) {
-      loginGoogle();
-      return;
-    }
-    // Por ahora alerta, cuando lleguen llaves de Culqi se conecta
-    alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');
-  }
-
-  function mostrarEstadoLogin(user) {
-    if (user) {
-      document.getElementById('estado-sin-login').style.display = 'none';
-      document.getElementById('estado-con-login').style.display = 'block';
-      document.getElementById('nombre-usuario-cv').textContent = user.displayName?.split(' ')[0] || 'usuario';
-    } else {
-      document.getElementById('estado-sin-login').style.display = 'block';
-      document.getElementById('estado-con-login').style.display = 'none';
-    }
-  }
-
 async function procesarCVSubido(input) {
     if (!input.files || !input.files[0]) return;
     
@@ -704,7 +684,7 @@ async function procesarCVSubido(input) {
     };
     reader.readAsDataURL(file);
   }
-  
+
 </script>
 </body>
 </html>
