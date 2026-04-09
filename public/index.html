@@ -241,9 +241,22 @@
         <label>Teléfono</label>
         <input type="text" id="telefono" placeholder="999 888 777">
       </div>
+      <div class="form-group">
+        <label>País</label>
+        <select id="pais" onchange="actualizarCiudades()" style="padding: 12px 16px; border: 2px solid #e2e8f0; border-radius: 10px; font-size: 0.95rem; color: #2d3748; font-family: 'Segoe UI', sans-serif; width: 100%; background:white;">
+          <option value="">Selecciona tu país</option>
+          <option value="PE">🇵🇪 Perú</option>
+          <option value="CO">🇨🇴 Colombia</option>
+          <option value="MX">🇲🇽 México</option>
+          <option value="AR">🇦🇷 Argentina</option>
+          <option value="CL">🇨🇱 Chile</option>
+          <option value="EC">🇪🇨 Ecuador</option>
+          <option value="BO">🇧🇴 Bolivia</option>
+        </select>
+      </div>
       <div class="form-group ciudad-wrapper">
         <label>Ciudad</label>
-        <input type="text" id="ciudad" placeholder="Ej: Lima, Arequipa, Trujillo..." 
+        <input type="text" id="ciudad" placeholder="Escribe tu ciudad..." 
                autocomplete="off" oninput="filtrarCiudades(this.value)">
         <div id="ciudades-dropdown" class="ciudades-dropdown"></div>
       </div>
@@ -421,13 +434,43 @@
   let habilidadesData = [];
 
   // AUTOCOMPLETE CIUDADES
-  const ciudadesPeru = [
-    'Lima', 'Arequipa', 'Trujillo', 'Chiclayo', 'Piura', 'Iquitos', 'Cusco',
-    'Chimbote', 'Huancayo', 'Tacna', 'Juliaca', 'Ica', 'Pucallpa', 'Sullana',
-    'Ayacucho', 'Cajamarca', 'Tarapoto', 'Puno', 'Tumbes', 'Moquegua',
-    'Huaraz', 'Huánuco', 'Abancay', 'Cerro de Pasco', 'Moyobamba',
-    'Puerto Maldonado', 'Chachapoyas', 'Huancavelica', 'Bagua', 'Barranca'
-  ];
+  const ciudadesPorPais = {
+    PE: ['Lima', 'Arequipa', 'Trujillo', 'Chiclayo', 'Piura', 'Iquitos', 'Cusco', 'Huancayo', 'Tacna', 'Juliaca', 'Ica', 'Pucallpa', 'Ayacucho', 'Cajamarca', 'Tarapoto', 'Puno', 'Tumbes', 'Huaraz', 'Huánuco'],
+    CO: ['Bogotá', 'Medellín', 'Cali', 'Barranquilla', 'Cartagena', 'Cúcuta', 'Bucaramanga', 'Pereira', 'Manizales', 'Santa Marta'],
+    MX: ['Ciudad de México', 'Guadalajara', 'Monterrey', 'Puebla', 'Tijuana', 'León', 'Juárez', 'Mérida', 'Cancún', 'Querétaro'],
+    AR: ['Buenos Aires', 'Córdoba', 'Rosario', 'Mendoza', 'Tucumán', 'La Plata', 'Mar del Plata', 'Salta', 'Santa Fe', 'San Juan'],
+    CL: ['Santiago', 'Valparaíso', 'Concepción', 'La Serena', 'Antofagasta', 'Temuco', 'Rancagua', 'Talca', 'Arica', 'Iquique'],
+    EC: ['Quito', 'Guayaquil', 'Cuenca', 'Ambato', 'Machala', 'Manta', 'Portoviejo', 'Loja', 'Esmeraldas', 'Riobamba'],
+    BO: ['La Paz', 'Santa Cruz', 'Cochabamba', 'Sucre', 'Oruro', 'Potosí', 'Tarija', 'Beni', 'Trinidad', 'Cobija']
+  };
+
+  function actualizarCiudades() {
+    document.getElementById('ciudad').value = '';
+    document.getElementById('ciudades-dropdown').style.display = 'none';
+  }
+
+  function filtrarCiudades(valor) {
+    const pais = document.getElementById('pais').value;
+    const dropdown = document.getElementById('ciudades-dropdown');
+    if (!pais) { dropdown.style.display = 'none'; return; }
+    if (!valor || valor.length < 1) { dropdown.style.display = 'none'; return; }
+    const ciudades = ciudadesPorPais[pais] || [];
+    const filtradas = ciudades.filter(c => c.toLowerCase().includes(valor.toLowerCase()));
+    if (filtradas.length === 0) { dropdown.style.display = 'none'; return; }
+    dropdown.innerHTML = filtradas.map(c => `<div class="ciudad-item" onclick="seleccionarCiudad('${c}')">📍 ${c}</div>`).join('');
+    dropdown.style.display = 'block';
+  }
+
+  function seleccionarCiudad(ciudad) {
+    document.getElementById('ciudad').value = ciudad;
+    document.getElementById('ciudades-dropdown').style.display = 'none';
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.ciudad-wrapper')) {
+      document.getElementById('ciudades-dropdown').style.display = 'none';
+    }
+  });
 
   function filtrarCiudades(valor) {
     const dropdown = document.getElementById('ciudades-dropdown');
