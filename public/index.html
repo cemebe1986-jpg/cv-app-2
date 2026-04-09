@@ -555,6 +555,55 @@
     `).join('');
   }
 
+  function validarCampos() {
+    let valido = true;
+    const errores = {};
+
+    const nombre = document.getElementById('nombre').value.trim();
+    const email = document.getElementById('email').value.trim();
+    const telefono = document.getElementById('telefono').value.trim();
+    const experiencia = document.getElementById('experiencia').value.trim();
+
+    if (nombre.length < 3 || !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(nombre)) {
+      errores.nombre = 'Ingresa tu nombre completo (solo letras)';
+      valido = false;
+    }
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      errores.email = 'Ingresa un email válido';
+      valido = false;
+    }
+    if (telefono && !/^\d{7,15}$/.test(telefono.replace(/\s/g, ''))) {
+      errores.telefono = 'El teléfono debe tener entre 7 y 15 dígitos';
+      valido = false;
+    }
+    if (experiencia.length < 30) {
+      errores.experiencia = 'Describe tu experiencia con más detalle (mínimo 30 caracteres)';
+      valido = false;
+    }
+
+    ['nombre', 'email', 'telefono', 'experiencia'].forEach(campo => {
+      const input = document.getElementById(campo);
+      const errorId = `error-${campo}`;
+      let errorEl = document.getElementById(errorId);
+      
+      if (errores[campo]) {
+        input.style.borderColor = '#e53e3e';
+        if (!errorEl) {
+          errorEl = document.createElement('div');
+          errorEl.id = errorId;
+          errorEl.style.cssText = 'color:#e53e3e; font-size:0.78rem; margin-top:4px;';
+          input.parentNode.appendChild(errorEl);
+        }
+        errorEl.textContent = '⚠️ ' + errores[campo];
+      } else {
+        input.style.borderColor = '#48bb78';
+        if (errorEl) errorEl.remove();
+      }
+    });
+
+    return valido;
+  }
+
   async function generarCV() {
     const nombre = document.getElementById('nombre').value;
     const email = document.getElementById('email').value;
@@ -564,8 +613,12 @@
     const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
     const oferta = document.getElementById('oferta').value;
 
-    if (!nombre || !email || !experiencia) { alert('Por favor completa al menos nombre, email y experiencia'); return; }
-    if (habilidadesData.length === 0) { alert('Por favor agrega al menos una habilidad técnica'); return; }
+    if (!validarCampos()) return;
+
+    if (habilidadesData.length === 0) {
+      alert('Por favor agrega al menos una habilidad técnica');
+      return;
+    }
 
     document.getElementById('loading').style.display = 'block';
     document.getElementById('cv-preview').style.display = 'none';
