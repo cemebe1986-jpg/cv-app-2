@@ -42,23 +42,6 @@
   });
 
   function actualizarUI(user) {
-    const btnLogin = document.getElementById('btn-login');
-    const btnLogout = document.getElementById('btn-logout');
-    const userInfo = document.getElementById('user-info');
-    const userName = document.getElementById('user-name');
-
-    if (user) {
-      btnLogin.style.display = 'none';
-      btnLogout.style.display = 'inline-block';
-      userInfo.style.display = 'flex';
-      userName.textContent = user.displayName || user.email;
-    } else {
-      btnLogin.style.display = 'inline-block';
-      btnLogout.style.display = 'none';
-      userInfo.style.display = 'none';
-    }
-
-    // Actualizar estado en el CV si está visible
     if (document.getElementById('cv-preview') && 
         document.getElementById('cv-preview').style.display !== 'none') {
       mostrarEstadoLogin(user);
@@ -176,19 +159,7 @@
 </head>
 <body>
 
-<div style="position:fixed; top:0; left:0; right:0; z-index:100; background:rgba(26,26,46,0.95); backdrop-filter:blur(10px); padding:12px 30px; display:flex; justify-content:space-between; align-items:center;">
-  <div style="color:white; font-weight:800; font-size:1.1rem;">CVPro Perú</div>
-  <div style="display:flex; align-items:center; gap:12px;">
-    <div id="user-info" style="display:none; align-items:center; gap:10px;">
-      <span id="user-name" style="color:white; font-size:0.85rem;"></span>
-      <span id="user-tokens" style="background:#0f3460; color:white; padding:4px 12px; border-radius:20px; font-size:0.8rem; font-weight:700;">0 tokens</span>
-    </div>
-    <button id="btn-login" onclick="loginGoogle()" style="background:white; color:#1a1a2e; border:none; padding:8px 20px; border-radius:20px; font-weight:700; cursor:pointer; font-size:0.85rem;">🔑 Iniciar con Google</button>
-    <button id="btn-logout" onclick="cerrarSesion()" style="display:none; background:rgba(255,255,255,0.15); color:white; border:none; padding:8px 20px; border-radius:20px; font-weight:700; cursor:pointer; font-size:0.85rem;">Cerrar sesión</button>
-  </div>
-</div>
-
-<div class="hero" style="margin-top:80px;">
+<div class="hero">
   <div class="badge">🇵🇪 Especializado para el mercado peruano</div>
   <h1>CVPro Perú</h1>
   <p>Crea tu CV profesional con IA en segundos</p>
@@ -267,49 +238,6 @@
       <div class="spinner"></div>
       Generando tu CV con IA...
     </div>
-  </div>
-</div>
-
-<!-- SECCIÓN TOKENS -->
-<div class="tokens-section">
-  <h2>Compra tokens</h2>
-  <p class="tokens-sub">Genera tu CV gratis y descárgalo sin marca de agua usando un token</p>
-  <div class="tokens-grid">
-
-    <div class="token-card">
-      <div class="token-icon">🎯</div>
-      <div class="token-name">Prueba</div>
-      <div class="token-qty">1 token</div>
-      <div class="token-price"><span>S/</span>9.90</div>
-      <div class="token-unit">S/9.90 por token</div>
-      <div class="token-savings"></div>
-      <a href="#" class="token-btn">Comprar</a>
-    </div>
-
-    <div class="token-card popular">
-      <div class="token-badge">MÁS POPULAR</div>
-      <div class="token-icon">⭐</div>
-      <div class="token-name">Popular</div>
-      <div class="token-qty">5 tokens</div>
-      <div class="token-price"><span>S/</span>35</div>
-      <div class="token-unit">S/7 por token</div>
-      <div class="token-savings">Ahorra 30%</div>
-      <a href="#" class="token-btn">Comprar</a>
-    </div>
-
-    <div class="token-card">
-      <div class="token-icon">💼</div>
-      <div class="token-name">Pro</div>
-      <div class="token-qty">12 tokens</div>
-      <div class="token-price"><span>S/</span>70</div>
-      <div class="token-unit">S/5.83 por token</div>
-      <div class="token-savings">Ahorra 41%</div>
-      <a href="#" class="token-btn">Comprar</a>
-    </div>
-
-  </div>
-  <div style="text-align:center; margin-top:18px; font-size:0.82rem; color:rgba(255,255,255,0.65);">
-    ¿Ya tienes un token? <a href="#" onclick="mostrarIngresarCodigo(); return false;" style="color:white; font-weight:700;">Ingresa tu código aquí</a>
   </div>
 </div>
 
