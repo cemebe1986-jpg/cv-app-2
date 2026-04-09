@@ -82,11 +82,31 @@
     .btn-pagar { background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; text-decoration: none; display: flex; align-items: center; justify-content: center; }
     .btn-pagar:hover { opacity: 0.9; }
 
+    /* SECCIÓN TOKENS */
+    .tokens-section { max-width: 800px; margin: 40px auto 0; }
+    .tokens-section h2 { text-align: center; color: white; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
+    .tokens-section .tokens-sub { text-align: center; color: rgba(255,255,255,0.75); font-size: 0.95rem; margin-bottom: 30px; }
+    .tokens-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
+    .token-card { background: white; border-radius: 16px; padding: 28px 20px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.2s; }
+    .token-card:hover { transform: translateY(-4px); }
+    .token-card.popular { border: 3px solid #0f3460; }
+    .token-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f3460; color: white; padding: 3px 16px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; letter-spacing: 0.5px; }
+    .token-icon { font-size: 2rem; margin-bottom: 10px; }
+    .token-name { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+    .token-qty { font-size: 0.82rem; color: #718096; margin-bottom: 12px; }
+    .token-price { font-size: 2rem; font-weight: 900; color: #0f3460; line-height: 1; }
+    .token-price span { font-size: 1rem; font-weight: 600; vertical-align: super; }
+    .token-unit { font-size: 0.75rem; color: #718096; margin-top: 4px; margin-bottom: 6px; }
+    .token-savings { font-size: 0.8rem; color: #22c55e; font-weight: 700; margin-bottom: 16px; min-height: 1.2em; }
+    .token-btn { display: block; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; transition: opacity 0.2s; }
+    .token-btn:hover { opacity: 0.88; }
+
     @media (max-width: 600px) {
       .form-grid { grid-template-columns: 1fr; }
       .cv-document { grid-template-columns: 1fr; }
       .cv-sidebar { padding: 25px; }
       .hero h1 { font-size: 1.8rem; }
+      .tokens-grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -171,6 +191,49 @@
       <div class="spinner"></div>
       Generando tu CV con IA...
     </div>
+  </div>
+</div>
+
+<!-- SECCIÓN TOKENS -->
+<div class="tokens-section">
+  <h2>Compra tokens</h2>
+  <p class="tokens-sub">Genera tu CV gratis y descárgalo sin marca de agua usando un token</p>
+  <div class="tokens-grid">
+
+    <div class="token-card">
+      <div class="token-icon">🎯</div>
+      <div class="token-name">Prueba</div>
+      <div class="token-qty">1 token</div>
+      <div class="token-price"><span>S/</span>9.90</div>
+      <div class="token-unit">S/9.90 por token</div>
+      <div class="token-savings"></div>
+      <a href="#" class="token-btn">Comprar</a>
+    </div>
+
+    <div class="token-card popular">
+      <div class="token-badge">MÁS POPULAR</div>
+      <div class="token-icon">⭐</div>
+      <div class="token-name">Popular</div>
+      <div class="token-qty">5 tokens</div>
+      <div class="token-price"><span>S/</span>35</div>
+      <div class="token-unit">S/7 por token</div>
+      <div class="token-savings">Ahorra 30%</div>
+      <a href="#" class="token-btn">Comprar</a>
+    </div>
+
+    <div class="token-card">
+      <div class="token-icon">💼</div>
+      <div class="token-name">Pro</div>
+      <div class="token-qty">12 tokens</div>
+      <div class="token-price"><span>S/</span>70</div>
+      <div class="token-unit">S/5.83 por token</div>
+      <div class="token-savings">Ahorra 41%</div>
+      <a href="#" class="token-btn">Comprar</a>
+    </div>
+
+  </div>
+  <div style="text-align:center; margin-top:18px; font-size:0.82rem; color:rgba(255,255,255,0.65);">
+    ¿Ya tienes un token? <a href="#" onclick="mostrarIngresarCodigo(); return false;" style="color:white; font-weight:700;">Ingresa tu código aquí</a>
   </div>
 </div>
 
