@@ -345,7 +345,7 @@
         <div class="cv-section-title">Contacto</div>
         <p>📧 <span id="cv-email"></span></p>
         <p>📱 <span id="cv-telefono"></span></p>
-        <p>📍 <span id="cv-ciudad"></span></p>
+        <p>📍 <span id="cv-ciudad"></span>, <span id="cv-pais"></span></p>
       </div>
       <div style="margin-bottom: 25px;">
         <div class="cv-section-title">Habilidades Técnicas</div>
@@ -450,9 +450,14 @@
   }
 
   function filtrarCiudades(valor) {
-    const pais = document.getElementById('pais').value;
+    const paisSelect = document.getElementById('pais');
+    const pais = paisSelect.value;
     const dropdown = document.getElementById('ciudades-dropdown');
-    if (!pais) { dropdown.style.display = 'none'; return; }
+    if (!pais) { 
+      dropdown.innerHTML = '<div class="ciudad-item" style="color:#718096;">Primero selecciona un país</div>';
+      dropdown.style.display = 'block';
+      return; 
+    }
     if (!valor || valor.length < 1) { dropdown.style.display = 'none'; return; }
     const ciudades = ciudadesPorPais[pais] || [];
     const filtradas = ciudades.filter(c => c.toLowerCase().includes(valor.toLowerCase()));
@@ -607,7 +612,10 @@
     document.getElementById('cv-perfil').setAttribute('contenteditable', 'false');
     document.getElementById('cv-perfil').onclick = function() { this.setAttribute('contenteditable', 'true'); this.focus(); };
     document.getElementById('cv-perfil').onblur = function() { this.setAttribute('contenteditable', 'false'); };
-    document.getElementById('cv-ciudad').textContent = document.getElementById('ciudad').value || 'Perú';
+    document.getElementById('cv-ciudad').textContent = document.getElementById('ciudad').value || '';
+    const paisSelect = document.getElementById('pais');
+    const paisTexto = paisSelect.options[paisSelect.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g, '').trim() || '';
+    document.getElementById('cv-pais').textContent = paisTexto;
 
     document.getElementById('cv-skills-tecnicas').innerHTML = habilidadesData.map(h => `
       <div class="cv-skill-bar">
