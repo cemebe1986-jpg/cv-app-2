@@ -50,7 +50,7 @@
 </script>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>CVPro Perú - Generador de CV Profesional</title>
+  <title>TalentIA - Generador de CV Profesional</title>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
     body { font-family: 'Segoe UI', sans-serif; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; padding: 40px 20px 40px 100px; }
@@ -131,24 +131,19 @@
 
     /* SECCIÓN TOKENS */
     .tokens-section { max-width: 800px; margin: 40px auto 0; }
-    .tokens-section h2 { text-align: center; color: white; font-size: 1.6rem; font-weight: 800; margin-bottom: 8px; }
-    .tokens-section .tokens-sub { text-align: center; color: rgba(255,255,255,0.75); font-size: 0.95rem; margin-bottom: 30px; }
     .tokens-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; }
-    .token-card { background: white; border-radius: 16px; padding: 28px 20px; text-align: center; position: relative; box-shadow: 0 10px 30px rgba(0,0,0,0.2); transition: transform 0.2s; }
-    .token-card:hover { transform: translateY(-4px); }
-    .token-card.popular { border: 3px solid #0f3460; }
-    .token-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f3460; color: white; padding: 3px 16px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; letter-spacing: 0.5px; }
-    .token-icon { font-size: 2rem; margin-bottom: 10px; }
-    .token-name { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
-    .token-qty { font-size: 0.82rem; color: #718096; margin-bottom: 12px; }
-    .token-price { font-size: 2rem; font-weight: 900; color: #0f3460; line-height: 1; }
-    .token-price span { font-size: 1rem; font-weight: 600; vertical-align: super; }
-    .token-unit { font-size: 0.75rem; color: #718096; margin-top: 4px; margin-bottom: 6px; }
-    .token-savings { font-size: 0.8rem; color: #22c55e; font-weight: 700; margin-bottom: 16px; min-height: 1.2em; }
     .token-btn { display: block; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 12px; border-radius: 10px; text-decoration: none; font-size: 0.9rem; font-weight: 700; transition: opacity 0.2s; }
     .token-btn:hover { opacity: 0.88; }
 
+    /* AUTOCOMPLETE CIUDADES */
+    .ciudad-wrapper { position: relative; }
+    .ciudades-dropdown { display: none; position: absolute; background: white; border: 2px solid #e2e8f0; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.1); z-index: 50; width: 100%; max-height: 200px; overflow-y: auto; top: 100%; margin-top: 4px; }
+    .ciudad-item { padding: 10px 16px; cursor: pointer; font-size: 0.9rem; color: #2d3748; border-bottom: 1px solid #f0f0f0; }
+    .ciudad-item:hover { background: #f0f4ff; }
+    .ciudad-item:last-child { border-bottom: none; }
+
     @media (max-width: 600px) {
+      body { padding: 40px 20px; }
       .form-grid { grid-template-columns: 1fr; }
       .cv-document { grid-template-columns: 1fr; }
       .cv-sidebar { padding: 25px; }
@@ -164,41 +159,28 @@
 <body>
 
   <!-- ÍNDICE LATERAL -->
-<div id="indice-lateral" style="position:fixed; left:0; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:4px; padding:8px;">
-  
-  <a href="#seccion-formulario" onclick="scrollTo('seccion-formulario')" title="Formulario"
-    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2);"
-    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
-    id="idx-formulario">
-    ✍️
-  </a>
-
-  <a href="#seccion-cv" onclick="scrollTo('seccion-cv')" title="Mi CV"
-    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
-    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
-    id="idx-cv">
-    📄
-  </a>
-
-  <a href="#seccion-analisis" onclick="scrollTo('seccion-analisis')" title="Análisis"
-    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
-    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
-    id="idx-analisis">
-    🎯
-  </a>
-
-  <a href="#seccion-descarga" onclick="scrollTo('seccion-descarga')" title="Descargar"
-    style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; transition: background 0.2s; border: 1px solid rgba(255,255,255,0.2); display:none;"
-    onmouseover="this.style.background='rgba(255,255,255,0.25)'"
-    onmouseout="this.style.background='rgba(255,255,255,0.1)'"
-    id="idx-descarga">
-    ⬇️
-  </a>
-
-</div>
+  <div id="indice-lateral" style="position:fixed; left:0; top:50%; transform:translateY(-50%); z-index:100; display:flex; flex-direction:column; gap:4px; padding:8px;">
+    <a href="#seccion-formulario" onclick="irA('seccion-formulario'); return false;" title="Formulario"
+      style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:flex; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; border: 1px solid rgba(255,255,255,0.2);"
+      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+      id="idx-formulario">✍️</a>
+    <a href="#cv-preview" onclick="irA('cv-preview'); return false;" title="Mi CV"
+      style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:none; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; border: 1px solid rgba(255,255,255,0.2);"
+      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+      id="idx-cv">📄</a>
+    <a href="#analisis-compatibilidad" onclick="irA('analisis-compatibilidad'); return false;" title="Análisis"
+      style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:none; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; border: 1px solid rgba(255,255,255,0.2);"
+      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+      id="idx-analisis">🎯</a>
+    <a href="#estado-sin-login" onclick="irA('estado-sin-login'); return false;" title="Descargar"
+      style="width:44px; height:44px; background:rgba(255,255,255,0.1); border-radius:12px; display:none; align-items:center; justify-content:center; text-decoration:none; font-size:1.2rem; border: 1px solid rgba(255,255,255,0.2);"
+      onmouseover="this.style.background='rgba(255,255,255,0.25)'"
+      onmouseout="this.style.background='rgba(255,255,255,0.1)'"
+      id="idx-descarga">⬇️</a>
+  </div>
 
 <div class="hero">
   <div class="badge">⚡ Tu CV profesional en segundos · Potenciado con IA</div>
@@ -207,29 +189,25 @@
 
   <!-- 3 PASOS -->
   <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:16px; max-width:750px; margin:0 auto 40px;">
-    
     <div style="background: rgba(255,255,255,0.12); padding: 24px 16px; border-radius:16px; text-align:center; border: 1px solid rgba(255,255,255,0.2);">
-      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem;">1</div>
-      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px;">Ingresa tu información</div>
-      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5;">Llena el formulario o sube tu CV actual en PDF</div>
+      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem; color:white;">1</div>
+      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px; color:white;">Ingresa tu información</div>
+      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5; color:white;">Llena el formulario o sube tu CV actual en PDF</div>
     </div>
-
     <div style="background: rgba(255,255,255,0.12); padding: 24px 16px; border-radius:16px; text-align:center; border: 1px solid rgba(255,255,255,0.2);">
-      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem;">2</div>
-      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px;">La IA analiza tu perfil</div>
-      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5;">Optimiza tu CV y analiza compatibilidad con la oferta</div>
+      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem; color:white;">2</div>
+      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px; color:white;">La IA analiza tu perfil</div>
+      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5; color:white;">Optimiza tu CV y analiza compatibilidad con la oferta</div>
     </div>
-
     <div style="background: rgba(255,255,255,0.12); padding: 24px 16px; border-radius:16px; text-align:center; border: 1px solid rgba(255,255,255,0.2);">
-      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem;">3</div>
-      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px;">Descarga tu CV</div>
-      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5;">Obtén tu CV con diseño profesional listo para postular</div>
+      <div style="background:rgba(255,255,255,0.2); width:40px; height:40px; border-radius:50%; display:flex; align-items:center; justify-content:center; margin:0 auto 12px; font-weight:900; font-size:1.1rem; color:white;">3</div>
+      <div style="font-weight:800; font-size:0.95rem; margin-bottom:8px; color:white;">Descarga tu CV</div>
+      <div style="font-size:0.8rem; opacity:0.8; line-height:1.5; color:white;">Obtén tu CV con diseño profesional listo para postular</div>
     </div>
-
   </div>
 </div>
 
-<div class="form-container">
+<div class="form-container" id="seccion-formulario">
   <div class="form-header">
     <h2>📋 Completa tu información</h2>
     <p>Nuestra IA generará un CV optimizado y profesional para ti</p>
@@ -253,44 +231,40 @@
         Analizando tu CV con IA...
       </div>
     </div>
-    <div class="form-grid">
 
+    <div class="form-grid">
       <div class="form-group">
         <label>Nombre completo</label>
         <input type="text" id="nombre" placeholder="Juan Pérez García">
       </div>
-
       <div class="form-group">
         <label>Teléfono</label>
         <input type="text" id="telefono" placeholder="999 888 777">
       </div>
-      <div class="form-group">
+      <div class="form-group ciudad-wrapper">
         <label>Ciudad</label>
-        <input type="text" id="ciudad" placeholder="Ej: Lima, Arequipa, Trujillo...">
+        <input type="text" id="ciudad" placeholder="Ej: Lima, Arequipa, Trujillo..." 
+               autocomplete="off" oninput="filtrarCiudades(this.value)">
+        <div id="ciudades-dropdown" class="ciudades-dropdown"></div>
       </div>
-
       <div class="form-group full">
         <label>Email</label>
         <input type="email" id="email" placeholder="juan@gmail.com">
       </div>
-
       <div class="form-group full">
         <label>Foto de perfil (opcional)</label>
         <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)">
         <div style="font-size:0.75rem; color:#718096; margin-top:5px;">📷 Recomendado en Perú · Fondo neutro · Máximo 2MB</div>
         <img id="foto-preview" class="foto-preview">
       </div>
-
       <div class="form-group full">
         <label>Experiencia laboral</label>
         <textarea id="experiencia" placeholder="Ej: 3 años como analista de sistemas en BCP. Desarrollé dashboards, reduje tiempos de proceso en 30%..."></textarea>
       </div>
-
       <div class="form-group full">
         <label>Educación</label>
         <textarea id="educacion" placeholder="Ej: Ingeniería de Sistemas, UPC 2020. Certificación AWS Cloud Practitioner 2022..."></textarea>
       </div>
-
       <div class="form-group full">
         <label>Habilidades técnicas</label>
         <div style="display:flex; gap:10px; margin-bottom:12px;">
@@ -299,13 +273,12 @@
         </div>
         <div id="lista-habilidades" style="display:flex; flex-direction:column; gap:8px;"></div>
       </div>
-
       <div class="form-group full">
         <label>Habilidades blandas</label>
         <textarea id="habilidades-blandas" placeholder="Ej: liderazgo, trabajo en equipo, comunicación, adaptabilidad..."></textarea>
       </div>
-
     </div>
+
     <div class="form-group full" style="margin-top:20px;">
       <label>Oferta de trabajo (opcional)</label>
       <textarea id="oferta" placeholder="Pega aquí la descripción del trabajo al que quieres postular. La IA analizará qué tan compatible es tu perfil..."></textarea>
@@ -347,6 +320,7 @@
       <ul style="font-size: 0.85rem; color: #2d3748; padding-left: 18px; line-height: 1.8;" id="comp-recomendaciones"></ul>
     </div>
   </div>
+
   <div class="cv-document">
     <div class="cv-sidebar">
       <div class="cv-foto-container">
@@ -388,18 +362,18 @@
       </div>
     </div>
   </div>
+
   <div class="cv-actions" style="display:block; padding:30px 40px;">
-    
     <!-- ESTADO 1: Sin login -->
     <div id="estado-sin-login">
       <div style="text-align:center; padding:20px; background: linear-gradient(135deg, #f0f4ff, #e8f0ff); border-radius:16px; border: 2px solid #bfdbfe;">
         <div style="font-size:2rem; margin-bottom:10px;">🎉</div>
         <h3 style="color:#1a1a2e; margin-bottom:8px; font-size:1.2rem;">¡Tu CV profesional está listo!</h3>
-        <p style="color:#4a5568; font-size:0.9rem; margin-bottom:20px;">Inicia sesión para descargar tu CV sin marca de agua usando un token.</p>
+        <p style="color:#4a5568; font-size:0.9rem; margin-bottom:20px;">Inicia sesión para descargar tu CV sin marca de agua.</p>
         <button onclick="loginGoogle()" style="background: linear-gradient(135deg, #1a1a2e, #0f3460); color:white; border:none; padding:14px 32px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:10px;">
           <img src="https://www.google.com/favicon.ico" style="width:18px; height:18px;"> Iniciar sesión con Google
         </button>
-        <p style="color:#718096; font-size:0.8rem; margin-top:12px;">✅ Gratis · Sin spam · Solo para gestionar tus tokens</p>
+        <p style="color:#718096; font-size:0.8rem; margin-top:12px;">✅ Gratis · Sin spam · Solo para gestionar tus descargas</p>
       </div>
     </div>
 
@@ -411,69 +385,86 @@
         <p style="color:#4a5568; font-size:0.9rem;">Elige un plan para descargar tu CV sin marca de agua</p>
       </div>
       <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:20px;">
-        
         <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center;">
           <div style="font-size:1.5rem; margin-bottom:5px;">🎯</div>
           <div style="font-weight:700; color:#1a1a2e;">Prueba</div>
-          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">1 token</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">1 descarga</div>
           <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/9.90</div>
-          <div style="font-size:0.75rem; color:#718096; margin-bottom:10px;">S/9.90 por token</div>
+          <div style="font-size:0.75rem; color:#718096; margin-bottom:10px;">S/9.90 por descarga</div>
           <a href="#" onclick="verificarLoginParaComprar('prueba'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
         </div>
-
         <div style="border: 3px solid #0f3460; border-radius:12px; padding:16px; text-align:center; background:#f0f4ff; position:relative;">
           <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#0f3460; color:white; padding:2px 12px; border-radius:10px; font-size:0.7rem; font-weight:700; white-space:nowrap;">⭐ MÁS POPULAR</div>
           <div style="font-size:1.5rem; margin-bottom:5px; margin-top:8px;">⭐</div>
           <div style="font-weight:700; color:#1a1a2e;">Popular</div>
-          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">5 tokens</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">5 descargas</div>
           <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/35</div>
           <div style="font-size:0.75rem; color:#22c55e; font-weight:600; margin-bottom:10px;">Ahorra 30%</div>
           <a href="#" onclick="verificarLoginParaComprar('popular'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
         </div>
-
         <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center;">
           <div style="font-size:1.5rem; margin-bottom:5px;">💼</div>
           <div style="font-weight:700; color:#1a1a2e;">Pro</div>
-          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">12 tokens</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">12 descargas</div>
           <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/70</div>
           <div style="font-size:0.75rem; color:#22c55e; font-weight:600; margin-bottom:10px;">Ahorra 41%</div>
           <a href="#" onclick="verificarLoginParaComprar('pro'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
         </div>
-
       </div>
       <a href="#" id="link-descarga" style="display:none; width:100%; padding:14px; background:#22c55e; color:white; border-radius:12px; text-align:center; text-decoration:none; font-weight:700; font-size:1rem;">✅ Descargar mi CV en PDF</a>
     </div>
-
   </div>
 </div>
 
 <script>
   let fotoBase64 = null;
-  let habilidadesData = []; // [{nombre, nivel}]
+  let habilidadesData = [];
+
+  // AUTOCOMPLETE CIUDADES
+  const ciudadesPeru = [
+    'Lima', 'Arequipa', 'Trujillo', 'Chiclayo', 'Piura', 'Iquitos', 'Cusco',
+    'Chimbote', 'Huancayo', 'Tacna', 'Juliaca', 'Ica', 'Pucallpa', 'Sullana',
+    'Ayacucho', 'Cajamarca', 'Tarapoto', 'Puno', 'Tumbes', 'Moquegua',
+    'Huaraz', 'Huánuco', 'Abancay', 'Cerro de Pasco', 'Moyobamba',
+    'Puerto Maldonado', 'Chachapoyas', 'Huancavelica', 'Bagua', 'Barranca'
+  ];
+
+  function filtrarCiudades(valor) {
+    const dropdown = document.getElementById('ciudades-dropdown');
+    if (!valor || valor.length < 2) { dropdown.style.display = 'none'; return; }
+    const filtradas = ciudadesPeru.filter(c => c.toLowerCase().includes(valor.toLowerCase()));
+    if (filtradas.length === 0) { dropdown.style.display = 'none'; return; }
+    dropdown.innerHTML = filtradas.map(c => `
+      <div class="ciudad-item" onclick="seleccionarCiudad('${c}')">📍 ${c}</div>
+    `).join('');
+    dropdown.style.display = 'block';
+  }
+
+  function seleccionarCiudad(ciudad) {
+    document.getElementById('ciudad').value = ciudad;
+    document.getElementById('ciudades-dropdown').style.display = 'none';
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('.ciudad-wrapper')) {
+      document.getElementById('ciudades-dropdown').style.display = 'none';
+    }
+  });
 
   function hacerEditable(selector) {
     document.querySelectorAll(selector).forEach(el => {
       el.classList.add('editable');
       el.setAttribute('contenteditable', 'false');
       el.setAttribute('title', 'Haz clic para editar');
-      el.onclick = function() {
-        this.setAttribute('contenteditable', 'true');
-        this.focus();
-      };
-      el.onblur = function() {
-        this.setAttribute('contenteditable', 'false');
-      };
+      el.onclick = function() { this.setAttribute('contenteditable', 'true'); this.focus(); };
+      el.onblur = function() { this.setAttribute('contenteditable', 'false'); };
     });
   }
 
   function previewFoto(input) {
     if (input.files && input.files[0]) {
       const file = input.files[0];
-      if (file.size > 2 * 1024 * 1024) {
-        alert('La foto no debe pesar más de 2MB. Por favor elige otra.');
-        input.value = '';
-        return;
-      }
+      if (file.size > 2 * 1024 * 1024) { alert('La foto no debe pesar más de 2MB.'); input.value = ''; return; }
       const reader = new FileReader();
       reader.onload = e => {
         fotoBase64 = e.target.result;
@@ -488,9 +479,7 @@
     const input = document.getElementById('nueva-habilidad');
     const nombre = input.value.trim();
     if (!nombre) return;
-
-    const habilidad = { nombre, nivel: 3 };
-    habilidadesData.push(habilidad);
+    habilidadesData.push({ nombre, nivel: 3 });
     input.value = '';
     renderListaHabilidades();
     input.focus();
@@ -507,16 +496,11 @@
   }
 
   function renderListaHabilidades() {
-    const lista = document.getElementById('lista-habilidades');
-    lista.innerHTML = habilidadesData.map((h, i) => `
+    document.getElementById('lista-habilidades').innerHTML = habilidadesData.map((h, i) => `
       <div class="habilidad-item">
         <span class="habilidad-nombre">${h.nombre}</span>
         <div class="habilidad-dots">
-          ${[1,2,3,4,5].map(d => `
-            <div class="habilidad-dot ${d <= h.nivel ? 'filled' : ''}"
-                 onclick="setNivelFormulario(${i}, ${d})"
-                 title="Nivel ${d}"></div>
-          `).join('')}
+          ${[1,2,3,4,5].map(d => `<div class="habilidad-dot ${d <= h.nivel ? 'filled' : ''}" onclick="setNivelFormulario(${i}, ${d})" title="Nivel ${d}"></div>`).join('')}
         </div>
         <button class="habilidad-delete" onclick="eliminarHabilidad(${i})" title="Eliminar">✕</button>
       </div>
@@ -532,20 +516,11 @@
     const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
     const oferta = document.getElementById('oferta').value;
 
-    if (!nombre || !email || !experiencia) {
-      alert('Por favor completa al menos nombre, email y experiencia');
-      return;
-    }
-
-    if (habilidadesData.length === 0) {
-      alert('Por favor agrega al menos una habilidad técnica');
-      return;
-    }
+    if (!nombre || !email || !experiencia) { alert('Por favor completa al menos nombre, email y experiencia'); return; }
+    if (habilidadesData.length === 0) { alert('Por favor agrega al menos una habilidad técnica'); return; }
 
     document.getElementById('loading').style.display = 'block';
     document.getElementById('cv-preview').style.display = 'none';
-
-    const habilidadesTexto = habilidadesData.map(h => h.nombre).join(', ');
 
     try {
       const response = await fetch('/generar-cv', {
@@ -553,10 +528,8 @@
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           nombre, email, telefono, experiencia, educacion,
-          habilidades: habilidadesTexto,
-          habilidadesBlandas,
-          oferta,
-          foto: fotoBase64
+          habilidades: habilidadesData.map(h => h.nombre).join(', '),
+          habilidadesBlandas, oferta, foto: fotoBase64
         })
       });
 
@@ -564,30 +537,15 @@
       renderCV(data.cv, fotoBase64);
       hacerEditable('.exp-cargo, .exp-empresa, .exp-periodo, .exp-logro, .edu-titulo, .edu-institucion, .edu-año, .cv-perfil');
 
-      // Guardar CV en Upstash y obtener ID
       const guardarRes = await fetch('/guardar-cv', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          cvData: data.cv,
-          foto: fotoBase64,
-          habilidades: habilidadesData
-        })
+        body: JSON.stringify({ cvData: data.cv, foto: fotoBase64, habilidades: habilidadesData })
       });
       const guardarData = await guardarRes.json();
       const cvId = guardarData.id;
-
-      // Actualizar links de compra con el ID
-      document.querySelectorAll('.token-btn').forEach(btn => {
-        const href = btn.getAttribute('href');
-        if (href && href !== '#') {
-          btn.href = href + `?cv_id=${cvId}`;
-        }
-        btn.setAttribute('data-cv-id', cvId);
-      });
-
-      // Mostrar link de descarga (se activará tras el pago)
       document.getElementById('link-descarga').href = `/descargar-cv?id=${cvId}`;
+
     } catch (error) {
       alert('Error generando el CV, intenta de nuevo');
     } finally {
@@ -596,11 +554,7 @@
   }
 
   function renderCV(cv, foto) {
-    // Foto
-    const fotoEl = document.getElementById('cv-foto');
-    fotoEl.innerHTML = foto ? `<img src="${foto}" alt="foto">` : '👤';
-
-    // Datos básicos
+    document.getElementById('cv-foto').innerHTML = foto ? `<img src="${foto}" alt="foto">` : '👤';
     document.getElementById('cv-nombre-sidebar').textContent = cv.nombre || '';
     document.getElementById('cv-nombre-main').textContent = cv.nombre || '';
     document.getElementById('cv-email').textContent = cv.email || '';
@@ -608,18 +562,11 @@
     document.getElementById('cv-perfil').textContent = cv.perfil || '';
     document.getElementById('cv-perfil').classList.add('editable');
     document.getElementById('cv-perfil').setAttribute('contenteditable', 'false');
-    document.getElementById('cv-perfil').onclick = function() {
-      this.setAttribute('contenteditable', 'true');
-      this.focus();
-    };
-    document.getElementById('cv-perfil').onblur = function() {
-      this.setAttribute('contenteditable', 'false');
-    };
+    document.getElementById('cv-perfil').onclick = function() { this.setAttribute('contenteditable', 'true'); this.focus(); };
+    document.getElementById('cv-perfil').onblur = function() { this.setAttribute('contenteditable', 'false'); };
     document.getElementById('cv-ciudad').textContent = document.getElementById('ciudad').value || 'Perú';
 
-    // Habilidades técnicas — usa los datos del formulario (con niveles elegidos por el usuario)
-    const skillsTecnicas = document.getElementById('cv-skills-tecnicas');
-    skillsTecnicas.innerHTML = habilidadesData.map(h => `
+    document.getElementById('cv-skills-tecnicas').innerHTML = habilidadesData.map(h => `
       <div class="cv-skill-bar">
         <div class="cv-skill-name">${h.nombre}</div>
         <div class="cv-skill-dots">
@@ -628,37 +575,29 @@
       </div>
     `).join('');
 
-    // Habilidades blandas
-    const blandas = document.getElementById('habilidades-blandas').value
-      .split(',').map(s => s.trim()).filter(Boolean);
-    document.getElementById('cv-skills-blandas').innerHTML =
-      blandas.map(s => `<span class="soft-skill">${s}</span>`).join('');
+    const blandas = document.getElementById('habilidades-blandas').value.split(',').map(s => s.trim()).filter(Boolean);
+    document.getElementById('cv-skills-blandas').innerHTML = blandas.map(s => `<span class="soft-skill">${s}</span>`).join('');
 
-    // Experiencia
-    document.getElementById('cv-experiencia').innerHTML =
-      (cv.experiencia || []).map(exp => `
-        <div class="exp-item">
-          <div class="exp-cargo">${exp.cargo}</div>
-          <div class="exp-empresa">${exp.empresa}</div>
-          <div class="exp-periodo">${exp.periodo}</div>
-          ${(exp.logros || []).map(l => `<div class="exp-logro">${l}</div>`).join('')}
-        </div>`).join('');
+    document.getElementById('cv-experiencia').innerHTML = (cv.experiencia || []).map(exp => `
+      <div class="exp-item">
+        <div class="exp-cargo">${exp.cargo}</div>
+        <div class="exp-empresa">${exp.empresa}</div>
+        <div class="exp-periodo">${exp.periodo}</div>
+        ${(exp.logros || []).map(l => `<div class="exp-logro">${l}</div>`).join('')}
+      </div>`).join('');
 
-    // Educación
-    document.getElementById('cv-educacion').innerHTML =
-      (cv.educacion || []).map(edu => `
-        <div class="edu-item">
-          <div class="edu-titulo">${edu.titulo}</div>
-          <div class="edu-institucion">${edu.institucion}</div>
-          <div class="edu-año">${edu.año}</div>
-        </div>`).join('');
+    document.getElementById('cv-educacion').innerHTML = (cv.educacion || []).map(edu => `
+      <div class="edu-item">
+        <div class="edu-titulo">${edu.titulo}</div>
+        <div class="edu-institucion">${edu.institucion}</div>
+        <div class="edu-año">${edu.año}</div>
+      </div>`).join('');
 
     document.getElementById('cv-preview').style.display = 'block';
-    // Mostrar análisis de compatibilidad si hay oferta
+
     if (cv.compatibilidad) {
       const comp = cv.compatibilidad;
       const color = comp.score >= 80 ? '#22c55e' : comp.score >= 60 ? '#f59e0b' : '#ef4444';
-      
       document.getElementById('analisis-compatibilidad').style.display = 'block';
       document.getElementById('comp-score').textContent = comp.score + '%';
       document.getElementById('comp-score').style.color = color;
@@ -670,16 +609,25 @@
     } else {
       document.getElementById('analisis-compatibilidad').style.display = 'none';
     }
+
     activarIndice();
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
+    mostrarEstadoLogin(window.usuarioActual);
+  }
+
+  function activarIndice() {
+    document.getElementById('idx-cv').style.display = 'flex';
+    document.getElementById('idx-analisis').style.display = 'flex';
+    document.getElementById('idx-descarga').style.display = 'flex';
+  }
+
+  function irA(id) {
+    const el = document.getElementById(id);
+    if (el) el.scrollIntoView({ behavior: 'smooth' });
   }
 
   function verificarLoginParaComprar(plan) {
-    if (!window.usuarioActual) {
-      loginGoogle();
-      return;
-    }
-    // Por ahora alerta, cuando lleguen llaves de Culqi se conecta
+    if (!window.usuarioActual) { loginGoogle(); return; }
     alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');
   }
 
@@ -694,35 +642,16 @@
     }
   }
 
-  function activarIndice() {
-    document.getElementById('idx-cv').style.display = 'flex';
-    document.getElementById('idx-analisis').style.display = 'flex';
-    document.getElementById('idx-descarga').style.display = 'flex';
-  }
-
-  function irA(id) {
-    const el = document.getElementById(id);
-    if (el) el.scrollIntoView({ behavior: 'smooth' });
-  }
-
-async function procesarCVSubido(input) {
+  async function procesarCVSubido(input) {
     if (!input.files || !input.files[0]) return;
-    
     const file = input.files[0];
-    if (file.size > 5 * 1024 * 1024) {
-      alert('El archivo no debe pesar más de 5MB');
-      return;
-    }
+    if (file.size > 5 * 1024 * 1024) { alert('El archivo no debe pesar más de 5MB'); return; }
 
     document.getElementById('estado-subida').style.display = 'block';
 
     try {
-      // Extraer texto del PDF en el navegador
-      const pdfjsLib = window['pdfjs-dist/build/pdf'];
-      
       const arrayBuffer = await file.arrayBuffer();
       const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
-      
       let textoCompleto = '';
       for (let i = 1; i <= pdf.numPages; i++) {
         const page = await pdf.getPage(i);
@@ -746,7 +675,6 @@ async function procesarCVSubido(input) {
       if (d.experiencia) document.getElementById('experiencia').value = d.experiencia;
       if (d.educacion) document.getElementById('educacion').value = d.educacion;
       if (d.habilidades_blandas) document.getElementById('habilidades-blandas').value = d.habilidades_blandas;
-
       if (d.habilidades_tecnicas && d.habilidades_tecnicas.length > 0) {
         habilidadesData = d.habilidades_tecnicas.map(h => ({ nombre: h, nivel: 3 }));
         renderListaHabilidades();
@@ -761,7 +689,6 @@ async function procesarCVSubido(input) {
       alert('Error procesando el CV. Intenta de nuevo.');
     }
   }
-
 </script>
 </body>
 </html>
