@@ -235,11 +235,11 @@
     <div class="form-grid">
       <div class="form-group">
         <label>Nombre completo</label>
-        <input type="text" id="nombre" placeholder="Juan Pérez García">
+        <input type="text" id="nombre" placeholder="Juan Pérez García" oninput="validarCampo(this)">
       </div>
       <div class="form-group">
         <label>Teléfono</label>
-        <input type="text" id="telefono" placeholder="999 888 777">
+        <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampo(this)">
       </div>
       <div class="form-group">
         <label>País</label>
@@ -262,7 +262,7 @@
       </div>
       <div class="form-group full">
         <label>Email</label>
-        <input type="email" id="email" placeholder="juan@gmail.com">
+        <input type="email" id="email" placeholder="juan@gmail.com" oninput="validarCampo(this)">
       </div>
       <div class="form-group full">
         <label>Foto de perfil (opcional)</label>
@@ -272,7 +272,7 @@
       </div>
       <div class="form-group full">
         <label>Experiencia laboral</label>
-        <textarea id="experiencia" placeholder="Ej: 3 años como analista de sistemas en BCP. Desarrollé dashboards, reduje tiempos de proceso en 30%..."></textarea>
+        <textarea id="experiencia" placeholder="Ej: 3 años como analista..." oninput="validarCampo(this)"></textarea>
       </div>
       <div class="form-group full">
         <label>Educación</label>
@@ -553,6 +553,49 @@
         <button class="habilidad-delete" onclick="eliminarHabilidad(${i})" title="Eliminar">✕</button>
       </div>
     `).join('');
+  }
+
+  function validarCampo(input) {
+    const id = input.id;
+    const valor = input.value.trim();
+    let error = '';
+
+    if (id === 'nombre' && valor.length > 0) {
+      if (valor.length < 3 || !/^[a-zA-ZáéíóúÁÉÍÓÚñÑ\s]+$/.test(valor))
+        error = 'Solo letras, mínimo 3 caracteres';
+    }
+    if (id === 'email' && valor.length > 0) {
+      if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor))
+        error = 'Email no válido';
+    }
+    if (id === 'telefono' && valor.length > 0) {
+      if (!/^\d{7,15}$/.test(valor.replace(/\s/g, '')))
+        error = 'Solo números, entre 7 y 15 dígitos';
+    }
+    if (id === 'experiencia' && valor.length > 0) {
+      if (valor.length < 30)
+        error = `Mínimo 30 caracteres (${valor.length}/30)`;
+    }
+
+    const errorId = `error-${id}`;
+    let errorEl = document.getElementById(errorId);
+
+    if (error) {
+      input.style.borderColor = '#e53e3e';
+      if (!errorEl) {
+        errorEl = document.createElement('div');
+        errorEl.id = errorId;
+        errorEl.style.cssText = 'color:#e53e3e; font-size:0.78rem; margin-top:4px;';
+        input.parentNode.appendChild(errorEl);
+      }
+      errorEl.textContent = '⚠️ ' + error;
+    } else if (valor.length > 0) {
+      input.style.borderColor = '#48bb78';
+      if (errorEl) errorEl.remove();
+    } else {
+      input.style.borderColor = '#e2e8f0';
+      if (errorEl) errorEl.remove();
+    }
   }
 
   function validarCampos() {
