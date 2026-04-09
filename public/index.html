@@ -246,14 +246,52 @@
   </div>
   <div class="cv-actions">
     <div style="width:100%;">
+      <div style="text-align:center; margin-bottom:20px;">
+        <div style="font-size:0.85rem; color:#718096; margin-bottom:15px;">Para descargar tu CV sin marca de agua necesitas un token</div>
+        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
+          
+          <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#e2e8f0'">
+            <div style="font-size:1.5rem; margin-bottom:5px;">🎯</div>
+            <div style="font-weight:700; color:#1a1a2e;">Prueba</div>
+            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">1 token</div>
+            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/9.90</div>
+            <div style="font-size:0.75rem; color:#718096;">S/9.90 por token</div>
+            <a href="#" target="_blank" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
+          </div>
+
+          <div style="border: 2px solid #0f3460; border-radius:12px; padding:16px; text-align:center; background:#f0f4ff; position:relative;">
+            <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#0f3460; color:white; padding:2px 12px; border-radius:10px; font-size:0.7rem; font-weight:700;">MÁS POPULAR</div>
+            <div style="font-size:1.5rem; margin-bottom:5px;">⭐</div>
+            <div style="font-weight:700; color:#1a1a2e;">Popular</div>
+            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">5 tokens</div>
+            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/35</div>
+            <div style="font-size:0.75rem; color:#22c55e; font-weight:600;">Ahorra 30%</div>
+            <a href="#" target="_blank" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
+          </div>
+
+          <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#e2e8f0'">
+            <div style="font-size:1.5rem; margin-bottom:5px;">💼</div>
+            <div style="font-weight:700; color:#1a1a2e;">Pro</div>
+            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">12 tokens</div>
+            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/70</div>
+            <div style="font-size:0.75rem; color:#22c55e; font-weight:600;">Ahorra 41%</div>
+            <a href="#" target="_blank" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
+          </div>
+
+        </div>
+      </div>
+      <div style="text-align:center; font-size:0.8rem; color:#718096;">
+        ¿Ya tienes tokens? <a href="#" onclick="mostrarIngresarCodigo()" style="color:#0f3460; font-weight:700;">Ingresa tu código aquí</a>
+      </div>
+    </div>
+    <div style="width:100%;">
       <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 18px; margin-bottom: 15px; font-size: 0.85rem; color: #1e40af; line-height: 1.6;">
         <strong>¿Cómo funciona?</strong><br>
         1. Revisa tu CV y edita lo que necesites<br>
         2. Paga S/10 con tarjeta o Yape<br>
         3. Descarga tu PDF automáticamente ⚡
       </div>
-      <a href="#" target="_blank" class="btn-action btn-pagar" id="btn-pagar">💳 Pagar S/10 y recibir mi CV en PDF</a>
-      <a href="#" class="btn-action btn-pagar" id="link-descarga" style="display:none; margin-top:10px; background: #22c55e;">✅ Descargar mi CV en PDF</a>
+      <a href="#" class="btn-action btn-pagar" id="link-descarga" style="display:none; margin-top:15px; background: #22c55e; text-align:center;">✅ Descargar mi CV en PDF</a>
     </div>
   </div>
 </div>
