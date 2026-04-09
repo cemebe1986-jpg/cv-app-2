@@ -57,6 +57,12 @@
       btnLogout.style.display = 'none';
       userInfo.style.display = 'none';
     }
+
+    // Actualizar estado en el CV si está visible
+    if (document.getElementById('cv-preview') && 
+        document.getElementById('cv-preview').style.display !== 'none') {
+      mostrarEstadoLogin(user);
+    }
   }
 </script>
   <meta charset="UTF-8">
@@ -377,55 +383,62 @@
       </div>
     </div>
   </div>
-  <div class="cv-actions">
-    <div style="width:100%;">
+  <div class="cv-actions" style="display:block; padding:30px 40px;">
+    
+    <!-- ESTADO 1: Sin login -->
+    <div id="estado-sin-login">
+      <div style="text-align:center; padding:20px; background: linear-gradient(135deg, #f0f4ff, #e8f0ff); border-radius:16px; border: 2px solid #bfdbfe;">
+        <div style="font-size:2rem; margin-bottom:10px;">🎉</div>
+        <h3 style="color:#1a1a2e; margin-bottom:8px; font-size:1.2rem;">¡Tu CV profesional está listo!</h3>
+        <p style="color:#4a5568; font-size:0.9rem; margin-bottom:20px;">Inicia sesión para descargar tu CV sin marca de agua usando un token.</p>
+        <button onclick="loginGoogle()" style="background: linear-gradient(135deg, #1a1a2e, #0f3460); color:white; border:none; padding:14px 32px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:10px;">
+          <img src="https://www.google.com/favicon.ico" style="width:18px; height:18px;"> Iniciar sesión con Google
+        </button>
+        <p style="color:#718096; font-size:0.8rem; margin-top:12px;">✅ Gratis · Sin spam · Solo para gestionar tus tokens</p>
+      </div>
+    </div>
+
+    <!-- ESTADO 2: Con login, mostrar planes -->
+    <div id="estado-con-login" style="display:none;">
       <div style="text-align:center; margin-bottom:20px;">
-        <div style="font-size:0.85rem; color:#718096; margin-bottom:15px;">✨ Tu CV está listo. Inicia sesión y compra un token para descargarlo sin marca de agua.</div>
-        <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px;">
-          
-          <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#e2e8f0'">
-            <div style="font-size:1.5rem; margin-bottom:5px;">🎯</div>
-            <div style="font-weight:700; color:#1a1a2e;">Prueba</div>
-            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">1 token</div>
-            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/9.90</div>
-            <div style="font-size:0.75rem; color:#718096;">S/9.90 por token</div>
-            <a href="#" onclick="verificarLoginParaComprar(this); return false;" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
-          </div>
-
-          <div style="border: 2px solid #0f3460; border-radius:12px; padding:16px; text-align:center; background:#f0f4ff; position:relative;">
-            <div style="position:absolute; top:-10px; left:50%; transform:translateX(-50%); background:#0f3460; color:white; padding:2px 12px; border-radius:10px; font-size:0.7rem; font-weight:700;">MÁS POPULAR</div>
-            <div style="font-size:1.5rem; margin-bottom:5px;">⭐</div>
-            <div style="font-weight:700; color:#1a1a2e;">Popular</div>
-            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">5 tokens</div>
-            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/35</div>
-            <div style="font-size:0.75rem; color:#22c55e; font-weight:600;">Ahorra 30%</div>
-            <a href="#" onclick="verificarLoginParaComprar(this); return false;" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
-          </div>
-
-          <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center; cursor:pointer; transition: all 0.2s;" onmouseover="this.style.borderColor='#0f3460'" onmouseout="this.style.borderColor='#e2e8f0'">
-            <div style="font-size:1.5rem; margin-bottom:5px;">💼</div>
-            <div style="font-weight:700; color:#1a1a2e;">Pro</div>
-            <div style="font-size:0.8rem; color:#718096; margin:5px 0;">12 tokens</div>
-            <div style="font-size:1.3rem; font-weight:900; color:#0f3460;">S/70</div>
-            <div style="font-size:0.75rem; color:#22c55e; font-weight:600;">Ahorra 41%</div>
-            <a href="#" onclick="verificarLoginParaComprar(this); return false;" style="display:block; margin-top:10px; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
-          </div>
-
+        <div style="font-size:2rem; margin-bottom:8px;">🎉</div>
+        <h3 style="color:#1a1a2e; font-size:1.2rem; margin-bottom:5px;">¡Hola <span id="nombre-usuario-cv"></span>!</h3>
+        <p style="color:#4a5568; font-size:0.9rem;">Elige un plan para descargar tu CV sin marca de agua</p>
+      </div>
+      <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; margin-bottom:20px;">
+        
+        <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center;">
+          <div style="font-size:1.5rem; margin-bottom:5px;">🎯</div>
+          <div style="font-weight:700; color:#1a1a2e;">Prueba</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">1 token</div>
+          <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/9.90</div>
+          <div style="font-size:0.75rem; color:#718096; margin-bottom:10px;">S/9.90 por token</div>
+          <a href="#" onclick="verificarLoginParaComprar('prueba'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
         </div>
+
+        <div style="border: 3px solid #0f3460; border-radius:12px; padding:16px; text-align:center; background:#f0f4ff; position:relative;">
+          <div style="position:absolute; top:-12px; left:50%; transform:translateX(-50%); background:#0f3460; color:white; padding:2px 12px; border-radius:10px; font-size:0.7rem; font-weight:700; white-space:nowrap;">⭐ MÁS POPULAR</div>
+          <div style="font-size:1.5rem; margin-bottom:5px; margin-top:8px;">⭐</div>
+          <div style="font-weight:700; color:#1a1a2e;">Popular</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">5 tokens</div>
+          <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/35</div>
+          <div style="font-size:0.75rem; color:#22c55e; font-weight:600; margin-bottom:10px;">Ahorra 30%</div>
+          <a href="#" onclick="verificarLoginParaComprar('popular'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
+        </div>
+
+        <div style="border: 2px solid #e2e8f0; border-radius:12px; padding:16px; text-align:center;">
+          <div style="font-size:1.5rem; margin-bottom:5px;">💼</div>
+          <div style="font-weight:700; color:#1a1a2e;">Pro</div>
+          <div style="font-size:0.8rem; color:#718096; margin:4px 0;">12 tokens</div>
+          <div style="font-size:1.4rem; font-weight:900; color:#0f3460;">S/70</div>
+          <div style="font-size:0.75rem; color:#22c55e; font-weight:600; margin-bottom:10px;">Ahorra 41%</div>
+          <a href="#" onclick="verificarLoginParaComprar('pro'); return false;" style="display:block; background:#0f3460; color:white; padding:8px; border-radius:8px; text-decoration:none; font-size:0.85rem; font-weight:700;">Comprar</a>
+        </div>
+
       </div>
-      <div style="text-align:center; font-size:0.8rem; color:#718096;">
-        ¿Ya tienes tokens? <a href="#" onclick="mostrarIngresarCodigo()" style="color:#0f3460; font-weight:700;">Ingresa tu código aquí</a>
-      </div>
+      <a href="#" id="link-descarga" style="display:none; width:100%; padding:14px; background:#22c55e; color:white; border-radius:12px; text-align:center; text-decoration:none; font-weight:700; font-size:1rem;">✅ Descargar mi CV en PDF</a>
     </div>
-    <div style="width:100%;">
-      <div style="background: #eff6ff; border: 1px solid #bfdbfe; border-radius: 10px; padding: 14px 18px; margin-bottom: 15px; font-size: 0.85rem; color: #1e40af; line-height: 1.6;">
-        <strong>¿Cómo funciona?</strong><br>
-        1. Revisa tu CV y edita lo que necesites<br>
-        2. Paga S/10 con tarjeta o Yape<br>
-        3. Descarga tu PDF automáticamente ⚡
-      </div>
-      <a href="#" class="btn-action btn-pagar" id="link-descarga" style="display:none; margin-top:15px; background: #22c55e; text-align:center;">✅ Descargar mi CV en PDF</a>
-    </div>
+
   </div>
 </div>
 
@@ -654,6 +667,47 @@
     }
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
   }
+
+  function verificarLoginParaComprar(plan) {
+    if (!window.usuarioActual) {
+      loginGoogle();
+      return;
+    }
+    // Por ahora alerta, cuando lleguen llaves de Culqi se conecta
+    alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');
+  }
+
+  function mostrarEstadoLogin(user) {
+    if (user) {
+      document.getElementById('estado-sin-login').style.display = 'none';
+      document.getElementById('estado-con-login').style.display = 'block';
+      document.getElementById('nombre-usuario-cv').textContent = user.displayName?.split(' ')[0] || 'usuario';
+    } else {
+      document.getElementById('estado-sin-login').style.display = 'block';
+      document.getElementById('estado-con-login').style.display = 'none';
+    }
+  }
+
+  function verificarLoginParaComprar(plan) {
+    if (!window.usuarioActual) {
+      loginGoogle();
+      return;
+    }
+    // Por ahora alerta, cuando lleguen llaves de Culqi se conecta
+    alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');
+  }
+
+  function mostrarEstadoLogin(user) {
+    if (user) {
+      document.getElementById('estado-sin-login').style.display = 'none';
+      document.getElementById('estado-con-login').style.display = 'block';
+      document.getElementById('nombre-usuario-cv').textContent = user.displayName?.split(' ')[0] || 'usuario';
+    } else {
+      document.getElementById('estado-sin-login').style.display = 'block';
+      document.getElementById('estado-con-login').style.display = 'none';
+    }
+  }
+
 </script>
 </body>
 </html>
