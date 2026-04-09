@@ -156,6 +156,13 @@
       .tokens-grid { grid-template-columns: 1fr; }
     }
   </style>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+  <script>
+    pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+  </script>
+</head>
+
+
 </head>
 <body>
 
@@ -642,47 +649,50 @@ async function procesarCVSubido(input) {
 
     document.getElementById('estado-subida').style.display = 'block';
 
-    const reader = new FileReader();
-    reader.onload = async e => {
-      const base64 = e.target.result.split(',')[1];
+    try {
+      // Extraer texto del PDF en el navegador
+      const pdfjsLib = window['pdfjs-dist/build/pdf'];
       
-      try {
-        const response = await fetch('/extraer-cv', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            archivoBase64: base64,
-            tipoArchivo: file.type
-          })
-        });
-
-        const data = await response.json();
-        const d = data.datos;
-
-        // Rellenar formulario automáticamente
-        if (d.nombre) document.getElementById('nombre').value = d.nombre;
-        if (d.email) document.getElementById('email').value = d.email;
-        if (d.telefono) document.getElementById('telefono').value = d.telefono;
-        if (d.ciudad) document.getElementById('ciudad').value = d.ciudad;
-        if (d.experiencia) document.getElementById('experiencia').value = d.experiencia;
-        if (d.educacion) document.getElementById('educacion').value = d.educacion;
-        if (d.habilidades_blandas) document.getElementById('habilidades-blandas').value = d.habilidades_blandas;
-
-        // Agregar habilidades técnicas
-        if (d.habilidades_tecnicas && d.habilidades_tecnicas.length > 0) {
-          habilidadesData = d.habilidades_tecnicas.map(h => ({ nombre: h, nivel: 3 }));
-          renderListaHabilidades();
-        }
-
-        document.getElementById('estado-subida').style.display = 'none';
-        alert('✅ ¡Datos extraídos! Revisa y ajusta si es necesario, luego genera tu CV.');
-
-      } catch (error) {
-        document.getElementById('estado-subida').style.display = 'none';
-        alert('Error procesando el CV. Intenta de nuevo.');
+      const arrayBuffer = await file.arrayBuffer();
+      const pdf = await pdfjsLib.getDocument({ data: arrayBuffer }).promise;
+      
+      let textoCompleto = '';
+      for (let i = 1; i <= pdf.numPages; i++) {
+        const page = await pdf.getPage(i);
+        const content = await page.getTextContent();
+        textoCompleto += content.items.map(item => item.str).join(' ') + '\n';
       }
-    };
-    reader.readAsDataURL(file);
+
+      const response = await fetch('/extraer-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ textoCV: textoCompleto })
+      });
+
+      const data = await response.json();
+      const d = data.datos;
+
+      if (d.nombre) document.getElementById('nombre').value = d.nombre;
+      if (d.email) document.getElementById('email').value = d.email;
+      if (d.telefono) document.getElementById('telefono').value = d.telefono;
+      if (d.ciudad) document.getElementById('ciudad').value = d.ciudad;
+      if (d.experiencia) document.getElementById('experiencia').value = d.experiencia;
+      if (d.educacion) document.getElementById('educacion').value = d.educacion;
+      if (d.habilidades_blandas) document.getElementById('habilidades-blandas').value = d.habilidades_blandas;
+
+      if (d.habilidades_tecnicas && d.habilidades_tecnicas.length > 0) {
+        habilidadesData = d.habilidades_tecnicas.map(h => ({ nombre: h, nivel: 3 }));
+        renderListaHabilidades();
+      }
+
+      document.getElementById('estado-subida').style.display = 'none';
+      alert('✅ ¡Datos extraídos! Revisa y ajusta si es necesario, luego genera tu CV.');
+
+    } catch (error) {
+      console.log('Error:', error);
+      document.getElementById('estado-subida').style.display = 'none';
+      alert('Error procesando el CV. Intenta de nuevo.');
+    }
   }
 
 </script>
