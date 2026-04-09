@@ -489,10 +489,14 @@
       const guardarData = await guardarRes.json();
       const cvId = guardarData.id;
 
-      // Actualizar botón de pago con el ID
-      const btnPagar = document.getElementById('btn-pagar');
-      btnPagar.href = `https://express.culqi.com/pago/45BC5837F0?cv_id=${cvId}`;
-      btnPagar.setAttribute('data-cv-id', cvId);
+      // Actualizar links de compra con el ID
+      document.querySelectorAll('.token-btn').forEach(btn => {
+        const href = btn.getAttribute('href');
+        if (href && href !== '#') {
+          btn.href = href + `?cv_id=${cvId}`;
+        }
+        btn.setAttribute('data-cv-id', cvId);
+      });
 
       // Mostrar link de descarga (se activará tras el pago)
       document.getElementById('link-descarga').href = `/descargar-cv?id=${cvId}`;
