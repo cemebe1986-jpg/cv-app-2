@@ -160,7 +160,7 @@
     </div>
 
     <a href="/crear" class="hero-cta">✨ Crear mi CV gratis</a>
-    <div class="hero-cta-sub">100% gratis para empezar · Listo en 5 minutos</div>
+    <div class="hero-cta-sub">Sin tarjeta de crédito · Listo en 5 minutos</div>
   </div>
 </section>
 
@@ -385,45 +385,36 @@
 </footer>
 
 <script>
-  // DEMO ANIMADA
   const demos = [
     { cargo: 'Contador', texto: 'Contador con sólida experiencia en gestión financiera, análisis de estados contables y cumplimiento tributario. Orientado a resultados con capacidad para optimizar procesos y reducir costos operativos en un 25%.' },
     { cargo: 'Desarrollador Web', texto: 'Desarrollador Web Full Stack con experiencia en React, Node.js y bases de datos relacionales. Especializado en crear aplicaciones escalables y de alto rendimiento para empresas del sector financiero.' },
     { cargo: 'Enfermera', texto: 'Profesional de enfermería con sólida formación clínica y experiencia en atención al paciente crítico. Comprometida con la excelencia en el cuidado y la seguridad del paciente.' },
-    { cargo: 'Ingeniero Civil', texto: 'Ingeniero Civil con experiencia en supervisión de obras, gestión de proyectos de infraestructura y control de calidad. Especializado en proyectos de construcción con presupuestos superiores a S/2M.' },
-    { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas de aprendizaje que aumentaron el rendimiento estudiantil en un 40%.' }
+    { cargo: 'Ingeniero Civil', texto: 'Ingeniero Civil con experiencia en supervisión de obras, gestión de proyectos de infraestructura y control de calidad. Especializado en proyectos con presupuestos superiores a S/2M.' },
+    { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas que aumentaron el rendimiento estudiantil en un 40%.' }
   ];
 
   let demoIdx = 0;
   let charIdx = 0;
-  let borrando = false;
   let pausando = false;
 
   function animarDemo() {
+    if (pausando) return;
     const el = document.getElementById('demo-texto');
     const cargoEl = document.getElementById('demo-cargo-texto');
     const demo = demos[demoIdx];
 
-    if (pausando) return;
+    charIdx++;
+    el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
 
-    if (!borrando) {
-      charIdx++;
-      el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
-      if (charIdx === demo.texto.length) {
-        borrando = true;
-        pausando = true;
-        setTimeout(() => { pausando = false; }, 2500);
-      }
-    } else {
-      charIdx--;
-      el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
-      if (charIdx === 0) {
-        borrando = false;
+    if (charIdx === demo.texto.length) {
+      pausando = true;
+      setTimeout(() => {
         demoIdx = (demoIdx + 1) % demos.length;
         cargoEl.textContent = demos[demoIdx].cargo;
-        pausando = true;
-        setTimeout(() => { pausando = false; }, 500);
-      }
+        charIdx = 0;
+        el.innerHTML = '<span class="demo-cursor"></span>';
+        pausando = false;
+      }, 2500);
     }
   }
 
