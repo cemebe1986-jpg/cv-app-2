@@ -806,6 +806,7 @@
     } else { document.getElementById('analisis-compatibilidad').style.display = 'none'; }
     mostrarEstadoLogin(window.usuarioActual);
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
+    iniciarContador();
   }
 
   function verificarLoginParaComprar(plan) {
@@ -944,6 +945,20 @@
   function limpiarProgreso() {
     localStorage.removeItem('talentia_progreso');
     location.reload();
+  }
+
+  function iniciarContador() {
+    let minutos = 59;
+    let segundos = 59;
+    const el = document.querySelector('.contador-tiempo');
+    if (!el) return;
+    if (window.contadorIntervalo) clearInterval(window.contadorIntervalo);
+    window.contadorIntervalo = setInterval(() => {
+      segundos--;
+      if (segundos < 0) { segundos = 59; minutos--; }
+      if (minutos < 0) { clearInterval(window.contadorIntervalo); el.textContent = 'Tu CV ha expirado — inicia sesión para guardarlo'; return; }
+      el.textContent = `Tu CV se eliminará en ${minutos}:${segundos.toString().padStart(2,'0')} minutos`;
+    }, 1000);
   }
 
 </script>
