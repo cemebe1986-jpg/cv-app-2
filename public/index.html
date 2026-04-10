@@ -363,7 +363,18 @@
 
     <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
       style="width:100%; padding:12px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px;">
-      ✨ Mejorar mi exper
+      ✨ Mejorar mi experiencia con IA
+    </button>
+
+    <div id="mejora-box" style="display:none; background:#f0f4ff; border:2px solid #6366f1; border-radius:12px; padding:16px; margin-bottom:16px;">
+      <div style="font-size:0.8rem; font-weight:700; color:#6366f1; margin-bottom:8px;">✨ Versión mejorada por IA:</div>
+      <div id="mejora-texto" style="font-size:0.88rem; color:#2d3748; line-height:1.8; margin-bottom:12px; white-space:pre-wrap;"></div>
+      <div style="display:flex; gap:8px;">
+        <button onclick="usarMejora()" style="flex:1; padding:10px; background:#6366f1; color:white; border:none; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.85rem;">✅ Usar esta versión</button>
+        <button onclick="document.getElementById('mejora-box').style.display='none'" style="flex:1; padding:10px; background:white; color:#6366f1; border:2px solid #6366f1; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.85rem;">✏️ Mantener la mía</button>
+      </div>
+    </div>
+  </div>
   </div>
 
   <!-- PASO 3: EDUCACIÓN -->
@@ -1060,7 +1071,22 @@
       ).join('\n\n') || experiencia;
 
       document.getElementById('mejora-texto').textContent = mejora;
-      document.getEleme
+      document.getElementById('mejora-box').style.display = 'block';
+
+    } catch (error) {
+      alert('Error mejorando la experiencia. Intenta de nuevo.');
+    } finally {
+      btn.textContent = '✨ Mejorar mi experiencia con IA';
+      btn.disabled = false;
+    }
+  }
+
+  function usarMejora() {
+    const texto = document.getElementById('mejora-texto').textContent;
+    document.getElementById('experiencia').value = texto;
+    actualizarContador('experiencia', 'contador-exp', 50);
+    document.getElementById('mejora-box').style.display = 'none';
+  }
 
 </script>
 </body>
