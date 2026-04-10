@@ -167,7 +167,7 @@
 <div class="hero">
   <div class="badge">⚡ Tu CV profesional en segundos · Potenciado con IA</div>
   <h1>TalentIA</h1>
-  <p style="font-size:1.1rem; opacity:0.9; margin-bottom:30px;">El CV profesional que te abre puertas. Generado con IA en segundos.</p>
+  <p style="font-size:1.1rem; opacity:0.9; margin-bottom:30px;" id="hero-texto"></p>
   <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap:12px; max-width:600px; margin:0 auto;">
     <div style="background:rgba(255,255,255,0.12); padding:16px; border-radius:12px; border:1px solid rgba(255,255,255,0.2); color:white;">
       <div style="font-weight:800; font-size:0.9rem; margin-bottom:4px;">① Ingresa tu info</div>
@@ -195,6 +195,13 @@
 
   <!-- PASO 0: ELEGIR -->
   <div class="step active" id="step-0">
+    <div style="background:linear-gradient(135deg,#f0f4ff,#e8f0ff); border-radius:16px; padding:20px; margin-bottom:24px; display:flex; align-items:flex-start; gap:14px;">
+      <div style="font-size:2rem; flex-shrink:0;">🤖</div>
+      <div>
+        <div style="font-weight:700; color:#1a1a2e; font-size:0.95rem; margin-bottom:6px;">Hola, soy TalentIA</div>
+        <div style="font-size:0.88rem; color:#4a5568; line-height:1.6;" id="mensaje-ia">He analizado miles de CVs exitosos en Perú. En menos de 5 minutos voy a crear el tuyo optimizado para pasar los filtros de los reclutadores. ¿Empezamos?</div>
+      </div>
+    </div>
     <p style="color:#718096; font-size:0.9rem; margin-bottom:20px;">Elige cómo quieres empezar:</p>
     <div class="choice-cards">
       <div class="choice-card" onclick="elegirCamino('manual')">
@@ -1120,6 +1127,41 @@
     const codigoSelect = document.getElementById('codigo-pais');
     if (codigos[pais]) codigoSelect.value = codigos[pais];
   }
+
+  const frasesHero = [
+    'El CV profesional que te abre puertas.',
+    'Optimizado con IA para el mercado peruano.',
+    'Generado en segundos, resultados duraderos.',
+    'Tu próxima entrevista empieza aquí.'
+  ];
+
+  function animarTextoHero() {
+    const el = document.getElementById('hero-texto');
+    let fraseIdx = 0;
+    let charIdx = 0;
+    let borrando = false;
+
+    setInterval(() => {
+      const frase = frasesHero[fraseIdx];
+      if (!borrando) {
+        el.textContent = frase.substring(0, charIdx + 1);
+        charIdx++;
+        if (charIdx === frase.length) {
+          borrando = true;
+          setTimeout(() => {}, 1500);
+        }
+      } else {
+        el.textContent = frase.substring(0, charIdx - 1);
+        charIdx--;
+        if (charIdx === 0) {
+          borrando = false;
+          fraseIdx = (fraseIdx + 1) % frasesHero.length;
+        }
+      }
+    }, 80);
+  }
+
+  animarTextoHero();
 
 </script>
 </body>
