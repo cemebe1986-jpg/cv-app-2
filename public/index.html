@@ -331,7 +331,8 @@
     <label>Tu experiencia laboral *</label>
     <p style="font-size:0.82rem; color:#718096; margin-bottom:12px;">Edita la sugerencia o escribe desde cero.</p>
     <textarea id="experiencia" placeholder="Describe tu experiencia laboral aquí..." oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
-    <div class="char-count" id="contador
+    <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
+  </div>
 
   <!-- PASO 3: EDUCACIÓN -->
   <div class="step" id="step-3">
@@ -850,7 +851,7 @@
     actualizarContador('experiencia', 'contador-exp', 50);
     document.getElementById('sugerencia-box').style.display = 'none';
   }
-  
+
 </script>
 </body>
 </html>
