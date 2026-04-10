@@ -229,24 +229,15 @@
   <div class="step" id="step-1">
     <label>Nombre completo *</label>
     <input type="text" id="nombre" placeholder="Juan Pérez García" oninput="validarCampoLive(this)">
+
     <label>Email *</label>
-    <div style="display:flex; gap:8px; margin-bottom:20px;">
-      <input type="text" id="email-usuario" placeholder="juan" 
-             oninput="actualizarEmailCompleto()" 
-             style="margin-bottom:0; flex:1;">
-      <select id="email-dominio" onchange="actualizarEmailCompleto()"
-              style="margin-bottom:0; width:160px; flex-shrink:0;">
-        <option value="gmail.com">@gmail.com</option>
-        <option value="hotmail.com">@hotmail.com</option>
-        <option value="outlook.com">@outlook.com</option>
-        <option value="yahoo.com">@yahoo.com</option>
-        <option value="icloud.com">@icloud.com</option>
-        <option value="live.com">@live.com</option>
-      </select>
-    </div>
-    <input type="hidden" id="email">
+    <input type="email" id="email" placeholder="juan@gmail.com" oninput="validarCampoLive(this)" autocomplete="off">
+    <div style="font-size:0.75rem; color:#718096; margin-top:-14px; margin-bottom:16px;">📩 Solo para enviarte tu CV, nunca spam</div>
+
     <label>Teléfono</label>
     <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)">
+    <div style="font-size:0.75rem; color:#718096; margin-top:-14px; margin-bottom:16px;">📱 Para que el reclutador pueda contactarte directamente</div>
+
     <label>País</label>
     <select id="pais" onchange="actualizarCiudades()">
       <option value="">Selecciona tu país</option>
@@ -258,6 +249,7 @@
       <option value="EC">🇪🇨 Ecuador</option>
       <option value="BO">🇧🇴 Bolivia</option>
     </select>
+
     <label>Ciudad</label>
     <div class="ciudad-wrapper">
       <input type="text" id="ciudad" placeholder="Escribe tu ciudad..." autocomplete="off" oninput="filtrarCiudades(this.value)" style="margin-bottom:0;">
@@ -977,13 +969,7 @@
     localStorage.removeItem('talentia_progreso');
     location.reload();
   }
-
-  function actualizarEmailCompleto() {
-    const usuario = document.getElementById('email-usuario').value.trim();
-    const dominio = document.getElementById('email-dominio').value;
-    document.getElementById('email').value = usuario ? `${usuario}@${dominio}` : '';
-  }
-
+  
   function iniciarMensajesCarga() {
     const mensajes = [
       'Analizando tu perfil...',
