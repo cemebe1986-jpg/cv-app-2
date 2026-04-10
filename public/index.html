@@ -844,6 +844,17 @@
       const sugerencia = data.cv?.perfil || 
         `Profesional con experiencia como ${cargo}. He trabajado en [empresa] desde [año] hasta [año], donde me desempeñé en [funciones principales]. Logré [logro principal] y contribuí a [impacto en la empresa].`;
 
+      document.getElementById('sugerencia-texto').textContent = sugerencia;
+      document.getElementById('sugerencia-box').style.display = 'block';
+
+    } catch (error) {
+      alert('Error generando sugerencia. Intenta de nuevo.');
+    } finally {
+      btn.textContent = '✨ Sugerir';
+      btn.disabled = false;
+    }
+  }
+
   function usarSugerencia() {
     const texto = document.getElementById('sugerencia-texto').textContent;
     document.getElementById('experiencia').value = texto;
