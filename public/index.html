@@ -143,6 +143,14 @@
       .step { padding: 25px; }
       .wizard-nav { padding: 15px 25px; }
     }
+
+    .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin-top:20px; }
+    .error-toast.visible { display:flex; align-items:center; gap:12px; }
+    .error-toast-icono { font-size:1.5rem; }
+    .error-toast-texto { flex:1; }
+    .error-toast-titulo { font-size:0.9rem; font-weight:700; color:#c53030; margin-bottom:4px; }
+    .error-toast-desc { font-size:0.82rem; color:#718096; }
+
   </style>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <script>
@@ -380,6 +388,14 @@
   <div class="wizard-nav" id="wizard-nav" style="display:none;">
     <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Anterior</button>
     <button class="btn-next" id="btn-next" onclick="pasoSiguiente()">Siguiente →</button>
+  </div>
+  <div class="error-toast" id="error-toast">
+    <div class="error-toast-icono">⚠️</div>
+    <div class="error-toast-texto">
+      <div class="error-toast-titulo" id="error-toast-titulo"></div>
+      <div class="error-toast-desc" id="error-toast-desc"></div>
+    </div>
+    <button onclick="cerrarError()" style="background:none; border:none; cursor:pointer; color:#718096; font-size:1.2rem;">✕</button>
   </div>
 </div>
 
@@ -732,7 +748,7 @@
       alert('✅ ¡Datos extraídos! Revisa y ajusta si es necesario.');
     } catch (error) {
       document.getElementById('estado-subida').style.display = 'none';
-      alert('Error procesando el CV. Intenta de nuevo.');
+      mostrarError('Error al procesar tu PDF', 'No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');
     }
   }
 
@@ -759,7 +775,7 @@
       const guardarData = await guardarRes.json();
       document.getElementById('link-descarga').href = `/descargar-cv?id=${guardarData.id}`;
     } catch (error) {
-      alert('Error generando el CV, intenta de nuevo');
+      mostrarError('Error al generar tu CV', 'Hubo un problema con la IA. Intenta de nuevo en unos segundos.');
     } finally {
       document.getElementById('loading-overlay').classList.remove('active');
     }
