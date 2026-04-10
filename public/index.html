@@ -161,7 +161,8 @@
 
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
-  <div class="loading-text">Generando tu CV con IA...</div>
+  <div class="loading-text" id="loading-text">Analizando tu perfil...</div>
+  <div style="color:rgba(255,255,255,0.6); font-size:0.85rem; margin-top:8px;">Esto toma unos segundos</div>
 </div>
 
 <div class="hero">
@@ -773,6 +774,7 @@
     const paisTexto = paisSelect.options[paisSelect.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim() || '';
 
     document.getElementById('loading-overlay').classList.add('active');
+    iniciarMensajesCarga();
     try {
       const response = await fetch('/generar-cv', { method: 'POST', headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ nombre, email, telefono, experiencia, educacion, habilidades: habilidadesData.map(h => h.nombre).join(', '), habilidadesBlandas, oferta, foto: fotoBase64 }) });
@@ -980,6 +982,25 @@
     const usuario = document.getElementById('email-usuario').value.trim();
     const dominio = document.getElementById('email-dominio').value;
     document.getElementById('email').value = usuario ? `${usuario}@${dominio}` : '';
+  }
+
+  function iniciarMensajesCarga() {
+    const mensajes = [
+      'Analizando tu perfil...',
+      'Optimizando palabras clave...',
+      'Redactando tu experiencia...',
+      'Diseñando tu CV...',
+      'Aplicando formato profesional...',
+      'Casi listo...'
+    ];
+    let i = 0;
+    const el = document.getElementById('loading-text');
+    if (window.mensajeIntervalo) clearInterval(window.mensajeIntervalo);
+    window.mensajeIntervalo = setInterval(() => {
+      i++;
+      if (i < mensajes.length) el.textContent = mensajes[i];
+      else clearInterval(window.mensajeIntervalo);
+    }, 2000);
   }
 
 </script>
