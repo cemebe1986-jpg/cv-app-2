@@ -233,10 +233,6 @@
     <input type="email" id="email" placeholder="juan@gmail.com" oninput="validarCampoLive(this)" autocomplete="off">
     <div style="font-size:0.75rem; color:#718096; margin-top:-14px; margin-bottom:16px;">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
 
-    <label>Teléfono</label>
-    <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)">
-    <div style="font-size:0.75rem; color:#718096; margin-top:-14px; margin-bottom:16px;">📱 Para que el reclutador pueda contactarte directamente</div>
-
     <label>País</label>
     <select id="pais" onchange="actualizarCiudades()">
       <option value="">Selecciona tu país</option>
@@ -253,6 +249,22 @@
     <select id="ciudad" style="margin-bottom:0;">
       <option value="">Primero selecciona tu país</option>
     </select>
+
+    <label>Teléfono</label>
+    <div style="display:flex; gap:8px; margin-bottom:0;">
+      <select id="codigo-pais" style="width:140px; margin-bottom:0; flex-shrink:0;">
+        <option value="+51">🇵🇪 +51</option>
+        <option value="+57">🇨🇴 +57</option>
+        <option value="+52">🇲🇽 +52</option>
+        <option value="+54">🇦🇷 +54</option>
+        <option value="+56">🇨🇱 +56</option>
+        <option value="+593">🇪🇨 +593</option>
+        <option value="+591">🇧🇴 +591</option>
+      </select>
+      <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)" style="margin-bottom:0; flex:1;">
+    </div>
+    <div style="font-size:0.75rem; color:#718096; margin-top:6px; margin-bottom:16px;">📱 Para que el reclutador pueda contactarte directamente</div>
+  
   </div>
 
   <!-- PASO 2: EXPERIENCIA -->
@@ -558,8 +570,20 @@
   };
 
   function actualizarCiudades() {
-    document.getElementById('ciudad').value = '';
-    document.getElementById('ciudades-dropdown').style.display = 'none';
+    const pais = document.getElementById('pais').value;
+    const ciudadSelect = document.getElementById('ciudad');
+    ciudadSelect.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+    if (!pais) return;
+    const ciudades = ciudadesPorPais[pais] || [];
+    ciudades.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      ciudadSelect.appendChild(opt);
+    });
+    const codigos = { PE:'+51', CO:'+57', MX:'+52', AR:'+54', CL:'+56', EC:'+593', BO:'+591' };
+    const codigoSelect = document.getElementById('codigo-pais');
+    if (codigos[pais]) codigoSelect.value = codigos[pais];
   }
   
 
@@ -756,7 +780,8 @@
   async function generarCV() {
     const nombre = document.getElementById('nombre').value;
     const email = document.getElementById('email').value;
-    const telefono = document.getElementById('telefono').value;
+    const codigoPais = document.getElementById('codigo-pais').value;
+    const telefono = document.getElementById('telefono').value ? `${codigoPais} ${document.getElementById('telefono').value}` : '';
     const experiencia = document.getElementById('experiencia').value;
     const educacion = document.getElementById('educacion').value;
     const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
@@ -1081,6 +1106,11 @@
       opt.textContent = c;
       ciudadSelect.appendChild(opt);
     });
+
+    // Actualizar código de teléfono automáticamente
+    const codigos = { PE:'+51', CO:'+57', MX:'+52', AR:'+54', CL:'+56', EC:'+593', BO:'+591' };
+    const codigoSelect = document.getElementById('codigo-pais');
+    if (codigos[pais]) codigoSelect.value = codigos[pais];
   }
 
 </script>
