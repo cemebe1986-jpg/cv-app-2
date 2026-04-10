@@ -559,9 +559,10 @@
     document.getElementById('wizard-titulo').textContent = TITULOS[idx];
     document.getElementById('progress-fill').style.width = ((idx + 1) / PASOS.length * 100) + '%';
     document.getElementById('progress-text').textContent = `Paso ${idx + 1} de ${PASOS.length}`;
-    document.getElementById('btn-prev').style.display = idx === 0 ? 'none' : 'block';
+    document.getElementById('btn-prev').style.display = idx === 0 ? 'none' : 'flex';
+    document.getElementById('btn-next').style.display = 'flex';
     document.getElementById('btn-next').textContent = idx === PASOS.length - 1 ? '✨ Generar CV' : 'Siguiente →';
-    document.getElementById('btn-next').style.display = 'block';
+    document.getElementById('btn-next').disabled = false;
   }
 
   function pasoAnterior() {
