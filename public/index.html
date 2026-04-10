@@ -90,10 +90,10 @@
     .upload-zone:hover { background: #e8f0ff; }
     .spinner { width: 30px; height: 30px; border: 3px solid #e2e8f0; border-top-color: #0f3460; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 10px auto; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .wizard-nav { display: flex; gap: 12px; padding: 20px 40px; background: #f8faff; border-top: 1px solid #e2e8f0; border-radius: 0 0 20px 20px; }
-    .btn-prev { flex: 1; padding: 14px; background: white; color: #0f3460; border: 2px solid #0f3460; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+    .wizard-nav { display: flex; gap: 12px; padding: 20px 40px; background: #f8faff; border-top: 1px solid #e2e8f0; border-radius: 0 0 20px 20px; justify-content: center; }
+    .btn-prev { padding: 14px 24px; background: white; color: #0f3460; border: 2px solid #0f3460; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; min-width: 120px; }
     .btn-prev:hover { background: #f0f4ff; }
-    .btn-next { flex: 2; padding: 14px; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; }
+    .btn-next { padding: 14px 32px; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; border: none; border-radius: 10px; font-size: 0.95rem; font-weight: 700; cursor: pointer; min-width: 160px; }
     .btn-next:hover { opacity: 0.9; }
     .cv-preview { display: none; max-width: 800px; margin: 40px auto 0; background: white; border-radius: 20px; overflow: hidden; box-shadow: 0 25px 60px rgba(0,0,0,0.3); }
     .cv-document { display: grid; grid-template-columns: 280px 1fr; min-height: 900px; position: relative; }
