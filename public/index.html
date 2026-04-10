@@ -360,6 +360,10 @@
     </div>
     <textarea id="experiencia" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
     <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
+
+    <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
+      style="width:100%; padding:12px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:10px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px;">
+      ✨ Mejorar mi exper
   </div>
 
   <!-- PASO 3: EDUCACIÓN -->
@@ -886,9 +890,6 @@
     if (!cargo) { alert('Selecciona o escribe tu profesión primero'); return; }
 
     const esEstudiante = cargo === 'estudiante' || cargo === 'practicante';
-    const promptExperiencia = esEstudiante
-      ? `Soy ${cargo} sin experiencia laboral formal. Tengo proyectos académicos y habilidades desarrolladas en mi carrera.`
-      : `Soy ${cargo}`;
 
     const btn = document.getElementById('btn-sugerir');
     btn.textContent = '⏳ Generando...';
@@ -902,18 +903,28 @@
           nombre: 'Profesional',
           email: 'ejemplo@email.com',
           telefono: '',
-          experiencia: promptExperiencia,
+          experiencia: esEstudiante 
+            ? `Soy ${cargo} sin experiencia laboral formal`
+            : `Soy ${cargo} con experiencia laboral`,
           educacion: 'Profesional universitario',
           habilidades: cargo,
           habilidadesBlandas: '',
           oferta: '',
-          soloExperiencia: true
+          formatoExperiencia: true,
+          cargo: cargo
         })
       });
 
       const data = await response.json();
-      const sugerencia = data.cv?.perfil || 
-        `Profesional con experiencia como ${cargo}. He trabajado en [empresa] desde [año] hasta [año], donde me desempeñé en [funciones principales]. Logré [logro principal] y contribuí a [impacto en la empresa].`;
+      
+      let sugerencia = '';
+      if (esEstudiante) {
+        sugerencia = `[Proyecto o práctica] — [Institución/Empresa] ([año])\n• [Actividad o logro principal]\n• [Otra actividad relevante]\n\n[Voluntariado o curso] — [Organización] ([año])\n• [Lo que aprendiste o lograste]`;
+      } else {
+        sugerencia = data.cv?.perfil 
+          ? `[Cargo similar a ${cargo}] — [Empresa] (20XX - 20XX)\n• ${data.cv.perfil.split('.')[0]}\n• [Otro logro importante con número o impacto]\n• [Responsabilidad principal]\n\n[Cargo anterior] — [Empresa] (20XX - 20XX)\n• [Actividad principal]\n• [Logro o resultado]`
+          : `${cargo} — [Empresa] (20XX - 20XX)\n• [Función o logro principal]\n• [Otro logro con impacto medible]\n• [Responsabilidad clave]\n\n[Cargo anterior] — [Empresa] (20XX - 20XX)\n• [Actividad principal]\n• [Logro o resultado]`;
+      }
 
       document.getElementById('sugerencia-texto').textContent = sugerencia;
       document.getElementById('sugerencia-box').style.display = 'block';
@@ -1014,6 +1025,42 @@
   function esMobil() {
     return window.innerWidth < 768;
   }
+
+  async function mejorarExperiencia() {
+    const experiencia = document.getElementById('experiencia').value.trim();
+    if (experiencia.length < 20) { 
+      alert('Escribe tu experiencia primero (mínimo 20 caracteres)'); 
+      return; 
+    }
+
+    const btn = document.getElementById('btn-mejorar');
+    btn.textContent = '⏳ Mejorando...';
+    btn.disabled = true;
+
+    try {
+      const response = await fetch('/generar-cv', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          nombre: 'Profesional',
+          email: 'ejemplo@email.com',
+          telefono: '',
+          experiencia: experiencia,
+          educacion: 'Profesional universitario',
+          habilidades: document.getElementById('cargo-select').value || 'profesional',
+          habilidadesBlandas: '',
+          oferta: '',
+          mejorarExperiencia: true
+        })
+      });
+
+      const data = await response.json();
+      const mejora = data.cv?.experiencia?.map(exp => 
+        `${exp.cargo} — ${exp.empresa} (${exp.periodo})\n${exp.logros?.map(l => `• ${l}`).join('\n') || ''}`
+      ).join('\n\n') || experiencia;
+
+      document.getElementById('mejora-texto').textContent = mejora;
+      document.getEleme
 
 </script>
 </body>
