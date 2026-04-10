@@ -247,6 +247,10 @@
     <label>¿Cuál es tu cargo o profesión?</label>
     <div style="display:flex; gap:10px; margin-bottom:20px;">
       <select id="cargo-select" onchange="manejarCargo(this)" style="flex:2; margin-bottom:0;">
+        <optgroup label="🎓 Sin experiencia">
+          <option value="estudiante">Estudiante / Recién egresado</option>
+          <option value="practicante">Practicante / Pasante</option>
+        </optgroup>
         <option value="">Selecciona tu profesión...</option>
         <optgroup label="💻 Tecnología">
           <option>Analista de sistemas</option>
@@ -809,6 +813,11 @@
 
     if (!cargo) { alert('Selecciona o escribe tu profesión primero'); return; }
 
+    const esEstudiante = cargo === 'estudiante' || cargo === 'practicante';
+    const promptExperiencia = esEstudiante
+      ? `Soy ${cargo} sin experiencia laboral formal. Tengo proyectos académicos y habilidades desarrolladas en mi carrera.`
+      : `Soy ${cargo}`;
+
     const btn = document.getElementById('btn-sugerir');
     btn.textContent = '⏳ Generando...';
     btn.disabled = true;
@@ -821,7 +830,7 @@
           nombre: 'Profesional',
           email: 'ejemplo@email.com',
           telefono: '',
-          experiencia: `Soy ${cargo}`,
+          experiencia: promptExperiencia,
           educacion: 'Profesional universitario',
           habilidades: cargo,
           habilidadesBlandas: '',
@@ -833,17 +842,6 @@
       const data = await response.json();
       const sugerencia = data.cv?.perfil || 
         `Profesional con experiencia como ${cargo}. He trabajado en [empresa] desde [año] hasta [año], donde me desempeñé en [funciones principales]. Logré [logro principal] y contribuí a [impacto en la empresa].`;
-
-      document.getElementById('sugerencia-texto').textContent = sugerencia;
-      document.getElementById('sugerencia-box').style.display = 'block';
-
-    } catch (error) {
-      alert('Error generando sugerencia. Intenta de nuevo.');
-    } finally {
-      btn.textContent = '✨ Sugerir';
-      btn.disabled = false;
-    }
-  }
 
   function usarSugerencia() {
     const texto = document.getElementById('sugerencia-texto').textContent;
