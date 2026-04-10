@@ -825,6 +825,13 @@
       document.getElementById('comp-faltantes').textContent = (comp.keywords_faltantes||[]).join(', ') || 'Ninguna';
       document.getElementById('comp-recomendaciones').innerHTML = (comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');
     } else { document.getElementById('analisis-compatibilidad').style.display = 'none'; }
+    if (esMobil()) {
+      const msgMovil = document.createElement('div');
+      msgMovil.style.cssText = 'background:#fffbeb; border:1px solid #fcd34d; border-radius:10px; padding:12px 16px; margin-bottom:16px; font-size:0.82rem; color:#92400e; text-align:center;';
+      msgMovil.textContent = '📱 La vista previa puede verse comprimida en móvil — el PDF descargado se ve perfecto en cualquier dispositivo.';
+      const cvActions = document.getElementById('cv-preview');
+      cvActions.insertBefore(msgMovil, cvActions.firstChild);
+    }
     mostrarEstadoLogin(window.usuarioActual);
     document.getElementById('cv-preview').scrollIntoView({ behavior: 'smooth' });
   
@@ -996,6 +1003,10 @@
 
   function cerrarError() {
     document.getElementById('error-toast').classList.remove('visible');
+  }
+
+  function esMobil() {
+    return window.innerWidth < 768;
   }
 
 </script>
