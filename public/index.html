@@ -482,12 +482,7 @@
         <h3 style="color:#1a1a2e; margin-bottom:8px; font-size:1.3rem;">¡Tu CV está listo para impresionar!</h3>
         <p style="color:#4a5568; font-size:0.95rem; margin-bottom:8px;">Miles de reclutadores reciben CVs mediocres cada día.</p>
         <p style="color:#0f3460; font-size:0.95rem; font-weight:700; margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p>
-        
-          <div style="text-align:left;">
-            <div class="contador-tiempo" style="font-size:0.8rem; font-weight:700; color:#e53e3e;">Tu CV se eliminará en 59:59 minutos</div>
-            <div style="font-size:0.75rem; color:#718096;">Inicia sesión para guardarlo permanentemente</div>
-          </div>
-        </div>
+               
         <button onclick="loginGoogle()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460); color:white; border:none; padding:16px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:10px; width:100%;">
           <img src="https://www.google.com/favicon.ico" style="width:18px; height:18px;"> Guardar y descargar mi CV
         </button>
@@ -990,6 +985,17 @@
       if (i < mensajes.length) el.textContent = mensajes[i];
       else clearInterval(window.mensajeIntervalo);
     }, 2000);
+  }
+
+  function mostrarError(titulo, desc) {
+    document.getElementById('error-toast-titulo').textContent = titulo;
+    document.getElementById('error-toast-desc').textContent = desc;
+    document.getElementById('error-toast').classList.add('visible');
+    setTimeout(() => cerrarError(), 6000);
+  }
+
+  function cerrarError() {
+    document.getElementById('error-toast').classList.remove('visible');
   }
 
 </script>
