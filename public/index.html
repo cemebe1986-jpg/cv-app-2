@@ -80,11 +80,7 @@
     .habilidad-dot { width: 14px; height: 14px; border-radius: 50%; background: #e2e8f0; cursor: pointer; transition: transform 0.1s, background 0.2s; border: 1px solid #cbd5e0; }
     .habilidad-dot.filled { background: #0f3460; border-color: #0f3460; }
     .habilidad-dot:hover { transform: scale(1.3); }
-    .habilidad-delete { background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 1.1rem; }
-    .ciudad-wrapper { position: relative; }
-    .ciudades-dropdown { display: none; position: absolute; background: white; border: 2px solid #0f3460; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); z-index: 9999; width: 100%; max-height: 180px; overflow-y: auto; top: 100%; margin-top: -15px; left: 0; }
-    .ciudad-item { padding: 10px 16px; cursor: pointer; font-size: 0.9rem; color: #2d3748; border-bottom: 1px solid #f0f0f0; }
-    .ciudad-item:hover { background: #f0f4ff; }
+    .habilidad-delete { background: none; border: none; color: #e53e3e; cursor: pointer; font-size: 1.1rem; }    
     .foto-preview { width: 80px; height: 80px; border-radius: 50%; object-fit: cover; border: 3px solid #0f3460; display: none; margin-top: 10px; }
     .upload-zone { background: linear-gradient(135deg, #f0f4ff, #e8f0ff); border: 2px dashed #0f3460; border-radius: 16px; padding: 30px; text-align: center; cursor: pointer; }
     .upload-zone:hover { background: #e8f0ff; }
@@ -254,10 +250,9 @@
     </select>
 
     <label>Ciudad</label>
-    <div class="ciudad-wrapper">
-      <input type="text" id="ciudad" placeholder="Escribe tu ciudad..." autocomplete="off" oninput="filtrarCiudades(this.value)" style="margin-bottom:0;">
-      <div id="ciudades-dropdown" class="ciudades-dropdown"></div>
-    </div>
+    <select id="ciudad" style="margin-bottom:0;">
+      <option value="">Primero selecciona tu país</option>
+    </select>
   </div>
 
   <!-- PASO 2: EXPERIENCIA -->
@@ -566,21 +561,7 @@
     document.getElementById('ciudad').value = '';
     document.getElementById('ciudades-dropdown').style.display = 'none';
   }
-
-  function filtrarCiudades(valor) {
-    const pais = document.getElementById('pais').value;
-    const dropdown = document.getElementById('ciudades-dropdown');
-    if (!pais || !valor || valor.length < 1) { dropdown.style.display = 'none'; return; }
-    const filtradas = (ciudadesPorPais[pais] || []).filter(c => c.toLowerCase().includes(valor.toLowerCase()));
-    if (!filtradas.length) { dropdown.style.display = 'none'; return; }
-    dropdown.innerHTML = filtradas.map(c => `<div class="ciudad-item" onclick="seleccionarCiudad('${c}')">📍 ${c}</div>`).join('');
-    dropdown.style.display = 'block';
-  }
-
-  function seleccionarCiudad(ciudad) {
-    document.getElementById('ciudad').value = ciudad;
-    document.getElementById('ciudades-dropdown').style.display = 'none';
-  }
+  
 
   document.addEventListener('click', e => {
     if (!e.target.closest('.ciudad-wrapper')) {
@@ -1086,6 +1067,20 @@
     document.getElementById('experiencia').value = texto;
     actualizarContador('experiencia', 'contador-exp', 50);
     document.getElementById('mejora-box').style.display = 'none';
+  }
+
+  function actualizarCiudades() {
+    const pais = document.getElementById('pais').value;
+    const ciudadSelect = document.getElementById('ciudad');
+    ciudadSelect.innerHTML = '<option value="">Selecciona tu ciudad</option>';
+    if (!pais) return;
+    const ciudades = ciudadesPorPais[pais] || [];
+    ciudades.forEach(c => {
+      const opt = document.createElement('option');
+      opt.value = c;
+      opt.textContent = c;
+      ciudadSelect.appendChild(opt);
+    });
   }
 
 </script>
