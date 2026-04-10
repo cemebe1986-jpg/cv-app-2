@@ -552,6 +552,7 @@
     } else {
       pasoActual = 0;
       mostrarPaso(0);
+      setTimeout(cargarProgreso, 100);
     }
   }
 
@@ -644,6 +645,7 @@
       input.style.borderColor = '#e2e8f0';
       if (errorEl) errorEl.remove();
     }
+    guardarProgreso();
   }
 
   function agregarHabilidad() {
@@ -883,6 +885,54 @@
     document.getElementById('experiencia').value = texto;
     actualizarContador('experiencia', 'contador-exp', 50);
     document.getElementById('sugerencia-box').style.display = 'none';
+  }
+
+  function guardarProgreso() {
+    const datos = {
+      nombre: document.getElementById('nombre').value,
+      email: document.getElementById('email').value,
+      telefono: document.getElementById('telefono').value,
+      pais: document.getElementById('pais').value,
+      ciudad: document.getElementById('ciudad').value,
+      experiencia: document.getElementById('experiencia').value,
+      educacion: document.getElementById('educacion').value,
+      habilidadesBlandas: document.getElementById('habilidades-blandas').value,
+      oferta: document.getElementById('oferta').value,
+      habilidadesData: habilidadesData
+    };
+    localStorage.setItem('talentia_progreso', JSON.stringify(datos));
+  }
+
+  function cargarProgreso() {
+    const guardado = localStorage.getItem('talentia_progreso');
+    if (!guardado) return;
+    try {
+      const datos = JSON.parse(guardado);
+      if (datos.nombre) document.getElementById('nombre').value = datos.nombre;
+      if (datos.email) document.getElementById('email').value = datos.email;
+      if (datos.telefono) document.getElementById('telefono').value = datos.telefono;
+      if (datos.pais) { document.getElementById('pais').value = datos.pais; actualizarCiudades(); }
+      if (datos.ciudad) document.getElementById('ciudad').value = datos.ciudad;
+      if (datos.experiencia) document.getElementById('experiencia').value = datos.experiencia;
+      if (datos.educacion) document.getElementById('educacion').value = datos.educacion;
+      if (datos.habilidadesBlandas) document.getElementById('habilidades-blandas').value = datos.habilidadesBlandas;
+      if (datos.oferta) document.getElementById('oferta').value = datos.oferta;
+      if (datos.habilidadesData?.length) {
+        habilidadesData = datos.habilidadesData;
+        renderListaHabilidades();
+      }
+      if (datos.nombre) {
+        const banner = document.createElement('div');
+        banner.style.cssText = 'background:#f0fff4; border:1px solid #c6f6d5; border-radius:10px; padding:12px 16px; margin-bottom:20px; font-size:0.85rem; color:#276749; display:flex; justify-content:space-between; align-items:center;';
+        banner.innerHTML = `<span>✅ Recuperamos tu progreso anterior</span><button onclick="limpiarProgreso()" style="background:none; border:none; color:#e53e3e; cursor:pointer; font-size:0.8rem; font-weight:700;">✕ Limpiar</button>`;
+        document.getElementById('step-1').insertBefore(banner, document.getElementById('step-1').firstChild);
+      }
+    } catch(e) { localStorage.removeItem('talentia_progreso'); }
+  }
+
+  function limpiarProgreso() {
+    localStorage.removeItem('talentia_progreso');
+    location.reload();
   }
 
 </script>
