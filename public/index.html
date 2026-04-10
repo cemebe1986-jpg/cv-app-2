@@ -50,14 +50,7 @@
     .hero { text-align: center; color: white; margin-bottom: 40px; }
     .hero h1 { font-size: 2.5rem; font-weight: 800; margin-bottom: 10px; }
     .badge { display: inline-block; background: rgba(255,255,255,0.15); color: white; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; margin-bottom: 15px; }
-    .wizard { max-width: 650px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.3); overflow: visible; transition: max-width 0.4s ease; }
-    .wizard.con-preview { max-width: 100%; }
-    .layout-dos-columnas { display: grid; grid-template-columns: 1fr 1fr; gap: 30px; max-width: 1200px; margin: 0 auto; align-items: start; }
-    .columna-wizard { }
-    .columna-preview-live { background: white; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.3); overflow: hidden; position: sticky; top: 20px; display: none; }
-    .columna-preview-live.visible { display: block; }
-    .preview-live-mini { transform: scale(0.65); transform-origin: top left; width: 154%; }
-    @media (max-width: 900px) { .layout-dos-columnas { grid-template-columns: 1fr; } .columna-preview-live { display: none !important; } }
+    .wizard { max-width: 650px; margin: 0 auto; background: white; border-radius: 20px; box-shadow: 0 25px 60px rgba(0,0,0,0.3); overflow: visible; transition: max-width 0.4s ease; }    
     .wizard-header { background: linear-gradient(135deg, #1a1a2e, #0f3460); padding: 25px 40px; color: white; border-radius: 20px 20px 0 0; }
     .wizard-header h2 { font-size: 1.2rem; margin-bottom: 15px; }
     .progress-bar { background: rgba(255,255,255,0.2); border-radius: 10px; height: 6px; margin-bottom: 8px; }
@@ -183,9 +176,7 @@
   </div>
 </div>
 
-<div class="layout-dos-columnas" id="layout-principal">
-  <div class="columna-wizard">
-    <div class="wizard" id="wizard-box">
+<div class="wizard" id="wizard-box">
   <div class="wizard-header">
     <h2 id="wizard-titulo">¿Cómo quieres crear tu CV?</h2>
     <div class="progress-bar" id="progress-bar-container" style="display:none;">
@@ -383,34 +374,6 @@
   <div class="wizard-nav" id="wizard-nav" style="display:none;">
     <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Anterior</button>
     <button class="btn-next" id="btn-next" onclick="pasoSiguiente()">Siguiente →</button>
-  </div>
-</div>
-  </div>
-  <div class="columna-preview-live" id="preview-live">
-    <div style="background:linear-gradient(135deg,#1a1a2e,#0f3460); padding:12px 20px; color:white; font-size:0.8rem; font-weight:700;">
-      👁️ Vista previa en tiempo real
-    </div>
-    <div class="preview-live-mini" id="preview-live-contenido">
-      <div style="display:grid; grid-template-columns:180px 1fr; min-height:400px;">
-        <div style="background:#1a1a2e; color:white; padding:25px 15px;">
-          <div style="width:70px; height:70px; border-radius:50%; background:#0f3460; margin:0 auto 15px; display:flex; align-items:center; justify-content:center; font-size:24px;" id="live-foto">👤</div>
-          <div style="font-size:0.75rem; font-weight:700; text-align:center; margin-bottom:15px;" id="live-nombre-sidebar"></div>
-          <div style="font-size:0.6rem; opacity:0.6; margin-bottom:4px;">📧</div>
-          <div style="font-size:0.65rem; opacity:0.8; margin-bottom:8px;" id="live-email"></div>
-          <div style="font-size:0.6rem; opacity:0.6; margin-bottom:4px;">📱</div>
-          <div style="font-size:0.65rem; opacity:0.8; margin-bottom:8px;" id="live-telefono"></div>
-          <div style="font-size:0.6rem; opacity:0.6; margin-bottom:4px;">📍</div>
-          <div style="font-size:0.65rem; opacity:0.8;" id="live-ciudad"></div>
-        </div>
-        <div style="padding:25px 20px; background:#fafbff;">
-          <div style="font-size:1rem; font-weight:800; color:#1a1a2e;" id="live-nombre-main"></div>
-          <div style="width:40px; height:3px; background:#0f3460; margin:6px 0 12px;"></div>
-          <div style="font-size:0.65rem; color:#4a5568; line-height:1.5; margin-bottom:15px;" id="live-experiencia"></div>
-          <div style="font-size:0.6rem; font-weight:700; color:#0f3460; text-transform:uppercase; letter-spacing:1px; margin-bottom:8px;">Educación</div>
-          <div style="font-size:0.65rem; color:#4a5568;" id="live-educacion"></div>
-        </div>
-      </div>
-    </div>
   </div>
 </div>
 
@@ -683,7 +646,6 @@
       if (errorEl) errorEl.remove();
     }
     guardarProgreso();
-    actualizarPreviewLive();
   }
 
   function agregarHabilidad() {
