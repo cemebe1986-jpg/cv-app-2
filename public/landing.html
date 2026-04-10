@@ -1,0 +1,433 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>TalentIA — El CV que te consigue la entrevista</title>
+  <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Segoe UI', sans-serif; background: white; color: #1a1a2e; }
+
+    /* NAV */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(26,26,46,0.95); backdrop-filter: blur(10px); }
+    .nav-logo { font-size: 1.3rem; font-weight: 900; color: white; letter-spacing: -0.5px; }
+    .nav-logo span { color: #60a5fa; }
+    .nav-cta { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; padding: 10px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: opacity 0.2s; }
+    .nav-cta:hover { opacity: 0.9; }
+
+    /* HERO */
+    .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; }
+    .hero-content { max-width: 800px; }
+    .hero-badge { display: inline-block; background: rgba(96,165,250,0.2); color: #60a5fa; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(96,165,250,0.3); }
+    .hero h1 { font-size: 3.5rem; font-weight: 900; color: white; line-height: 1.15; margin-bottom: 20px; }
+    .hero h1 span { color: #60a5fa; }
+    .hero-sub { font-size: 1.2rem; color: rgba(255,255,255,0.75); margin-bottom: 40px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
+
+    /* DEMO ANIMADA */
+    .demo-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; max-width: 600px; margin: 0 auto 40px; text-align: left; }
+    .demo-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
+    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
+    .demo-cargo { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
+    .demo-cargo span { color: #60a5fa; font-weight: 700; }
+    .demo-texto { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; min-height: 80px; }
+    .demo-cursor { display: inline-block; width: 2px; height: 1em; background: #60a5fa; margin-left: 2px; animation: blink 0.8s infinite; vertical-align: text-bottom; }
+    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
+
+    .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; transition: transform 0.2s, opacity 0.2s; margin-bottom: 16px; }
+    .hero-cta:hover { transform: translateY(-2px); opacity: 0.95; }
+    .hero-cta-sub { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
+
+    /* COMO FUNCIONA */
+    .section { padding: 100px 40px; }
+    .section-label { font-size: 0.82rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; text-align: center; }
+    .section-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 16px; color: #1a1a2e; }
+    .section-sub { font-size: 1rem; color: #718096; text-align: center; margin-bottom: 60px; max-width: 500px; margin-left: auto; margin-right: auto; }
+
+    .pasos { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto; }
+    .paso { text-align: center; padding: 30px 20px; }
+    .paso-num { width: 56px; height: 56px; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 900; margin: 0 auto 20px; }
+    .paso h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
+    .paso p { font-size: 0.88rem; color: #718096; line-height: 1.6; }
+
+    /* CV DEMO */
+    .cv-demo-section { background: #f8faff; padding: 100px 40px; }
+    .cv-demo-container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
+    .cv-demo-texto h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.3; }
+    .cv-demo-texto p { color: #718096; line-height: 1.7; margin-bottom: 20px; }
+    .cv-feature { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    .cv-feature-icon { width: 32px; height: 32px; background: #eff6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
+    .cv-feature-text { font-size: 0.9rem; color: #4a5568; line-height: 1.5; }
+    .cv-feature-text strong { color: #1a1a2e; display: block; margin-bottom: 2px; }
+    .cv-preview-mini { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); overflow: hidden; }
+    .cv-mini-sidebar { background: #1a1a2e; padding: 20px; }
+    .cv-mini-foto { width: 60px; height: 60px; border-radius: 50%; background: #0f3460; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
+    .cv-mini-nombre { color: white; font-weight: 700; font-size: 0.85rem; text-align: center; margin-bottom: 16px; }
+    .cv-mini-label { font-size: 0.6rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
+    .cv-mini-contacto { font-size: 0.7rem; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
+    .cv-mini-skill { display: flex; align-items: center; gap: 6px; margin-bottom: 6px; }
+    .cv-mini-skill-name { font-size: 0.7rem; color: rgba(255,255,255,0.8); flex: 1; }
+    .cv-mini-dots { display: flex; gap: 3px; }
+    .cv-mini-dot { width: 8px; height: 8px; border-radius: 50%; background: rgba(255,255,255,0.2); }
+    .cv-mini-dot.filled { background: #60a5fa; }
+    .cv-mini-main { padding: 20px; }
+    .cv-mini-main-nombre { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+    .cv-mini-divider { width: 30px; height: 3px; background: #0f3460; margin-bottom: 12px; }
+    .cv-mini-perfil { font-size: 0.72rem; color: #4a5568; line-height: 1.6; margin-bottom: 14px; }
+    .cv-mini-section-title { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #0f3460; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0; }
+    .cv-mini-exp { margin-bottom: 10px; }
+    .cv-mini-cargo { font-size: 0.72rem; font-weight: 700; color: #1a1a2e; }
+    .cv-mini-empresa { font-size: 0.65rem; color: #0f3460; }
+    .cv-mini-logro { font-size: 0.65rem; color: #718096; margin-left: 8px; position: relative; }
+    .cv-mini-logro::before { content: '▸'; position: absolute; left: -8px; color: #0f3460; font-size: 0.55rem; }
+    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-35deg); font-size: 0.9rem; font-weight: 900; color: rgba(15,52,96,0.08); white-space: nowrap; pointer-events: none; }
+
+    /* TESTIMONIOS */
+    .testimonios { padding: 100px 40px; background: white; }
+    .testimonios-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
+    .testimonio { background: #f8faff; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; }
+    .testimonio-estrellas { color: #f59e0b; font-size: 1rem; margin-bottom: 14px; }
+    .testimonio-texto { font-size: 0.9rem; color: #4a5568; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
+    .testimonio-autor { display: flex; align-items: center; gap: 12px; }
+    .testimonio-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #1a1a2e, #0f3460); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+    .testimonio-nombre { font-weight: 700; font-size: 0.88rem; color: #1a1a2e; }
+    .testimonio-cargo { font-size: 0.78rem; color: #718096; }
+    .testimonio-placeholder { opacity: 0.4; filter: blur(3px); }
+
+    /* PRECIOS */
+    .precios { padding: 100px 40px; background: #f8faff; }
+    .precios-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 900px; margin: 0 auto; }
+    .precio-card { background: white; border-radius: 20px; padding: 32px 24px; text-align: center; border: 2px solid #e2e8f0; position: relative; transition: transform 0.2s; }
+    .precio-card:hover { transform: translateY(-4px); }
+    .precio-card.popular { border-color: #0f3460; }
+    .precio-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f3460; color: white; padding: 3px 16px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
+    .precio-icono { font-size: 2rem; margin-bottom: 12px; }
+    .precio-nombre { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
+    .precio-desc { font-size: 0.8rem; color: #718096; margin-bottom: 16px; }
+    .precio-monto { font-size: 2.5rem; font-weight: 900; color: #0f3460; line-height: 1; margin-bottom: 4px; }
+    .precio-monto span { font-size: 1rem; font-weight: 600; vertical-align: super; }
+    .precio-ahorro { font-size: 0.8rem; color: #22c55e; font-weight: 700; margin-bottom: 24px; min-height: 1.2em; }
+    .precio-features { text-align: left; margin-bottom: 24px; }
+    .precio-feature { font-size: 0.85rem; color: #4a5568; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
+    .precio-feature::before { content: '✓'; color: #22c55e; font-weight: 700; flex-shrink: 0; }
+    .precio-btn { display: block; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: opacity 0.2s; }
+    .precio-btn:hover { opacity: 0.9; }
+
+    /* CTA FINAL */
+    .cta-final { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 100px 40px; text-align: center; }
+    .cta-final h2 { font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 16px; }
+    .cta-final p { color: rgba(255,255,255,0.75); font-size: 1.1rem; margin-bottom: 40px; }
+    .cta-final-btn { display: inline-flex; align-items: center; gap: 10px; background: white; color: #0f3460; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; transition: transform 0.2s; }
+    .cta-final-btn:hover { transform: translateY(-2px); }
+
+    /* FOOTER */
+    footer { background: #1a1a2e; padding: 30px 40px; text-align: center; color: rgba(255,255,255,0.4); font-size: 0.82rem; }
+
+    @media (max-width: 768px) {
+      .hero h1 { font-size: 2.2rem; }
+      .pasos { grid-template-columns: 1fr; }
+      .cv-demo-container { grid-template-columns: 1fr; }
+      .testimonios-grid { grid-template-columns: 1fr; }
+      .precios-grid { grid-template-columns: 1fr; }
+      nav { padding: 16px 20px; }
+      .section { padding: 60px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <div class="nav-logo">Talent<span>IA</span></div>
+  <a href="/crear" class="nav-cta">Crear mi CV gratis →</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-content">
+    <div class="hero-badge">⚡ Potenciado con Inteligencia Artificial</div>
+    <h1>El CV que te consigue<br><span>la entrevista</span></h1>
+    <p class="hero-sub">La IA analiza tu perfil y genera un CV profesional optimizado para los reclutadores de Perú y Latinoamérica.</p>
+
+    <div class="demo-box">
+      <div class="demo-header">
+        <div class="demo-dot" style="background:#ef4444;"></div>
+        <div class="demo-dot" style="background:#f59e0b;"></div>
+        <div class="demo-dot" style="background:#22c55e;"></div>
+        <div class="demo-cargo" style="margin-left:8px;">TalentIA generando CV para: <span id="demo-cargo-texto">Contador</span></div>
+      </div>
+      <div class="demo-texto" id="demo-texto"><span class="demo-cursor"></span></div>
+    </div>
+
+    <a href="/crear" class="hero-cta">✨ Crear mi CV gratis</a>
+    <div class="hero-cta-sub">Sin tarjeta de crédito · Listo en 5 minutos</div>
+  </div>
+</section>
+
+<!-- COMO FUNCIONA -->
+<section class="section">
+  <div class="section-label">Proceso simple</div>
+  <h2 class="section-title">Tres pasos para tu CV perfecto</h2>
+  <p class="section-sub">Sin complicaciones. La IA hace el trabajo duro por ti.</p>
+  <div class="pasos">
+    <div class="paso">
+      <div class="paso-num">1</div>
+      <h3>Ingresa tu información</h3>
+      <p>Completa el formulario paso a paso o sube tu CV actual en PDF. La IA extrae tus datos automáticamente.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">2</div>
+      <h3>La IA optimiza tu perfil</h3>
+      <p>Analizamos tu experiencia, la mejoramos con lenguaje profesional y la adaptamos al formato que prefieren los reclutadores.</p>
+    </div>
+    <div class="paso">
+      <div class="paso-num">3</div>
+      <h3>Descarga tu CV</h3>
+      <p>Obtén tu CV con diseño profesional en PDF, listo para postular a cualquier empresa.</p>
+    </div>
+  </div>
+</section>
+
+<!-- CV DEMO -->
+<section class="cv-demo-section">
+  <div class="cv-demo-container">
+    <div class="cv-demo-texto">
+      <div class="section-label" style="text-align:left;">Resultado real</div>
+      <h2>Un CV que habla por ti antes de la entrevista</h2>
+      <p>La IA no solo cambia el diseño — reescribe tu experiencia con el lenguaje que los reclutadores quieren ver.</p>
+      <div class="cv-feature">
+        <div class="cv-feature-icon">🎯</div>
+        <div class="cv-feature-text">
+          <strong>Optimizado para ATS</strong>
+          Pasa los filtros automáticos de las grandes empresas
+        </div>
+      </div>
+      <div class="cv-feature">
+        <div class="cv-feature-icon">✍️</div>
+        <div class="cv-feature-text">
+          <strong>Redacción profesional</strong>
+          La IA convierte tu experiencia en logros con impacto
+        </div>
+      </div>
+      <div class="cv-feature">
+        <div class="cv-feature-icon">📊</div>
+        <div class="cv-feature-text">
+          <strong>Análisis de compatibilidad</strong>
+          Compara tu CV con la oferta de trabajo y te dice cómo mejorar
+        </div>
+      </div>
+      <div class="cv-feature">
+        <div class="cv-feature-icon">🇵🇪</div>
+        <div class="cv-feature-text">
+          <strong>Formato peruano</strong>
+          Diseñado para el mercado laboral de Perú y Latinoamérica
+        </div>
+      </div>
+    </div>
+    <div style="position:relative;">
+      <div class="cv-preview-mini">
+        <div style="display:grid; grid-template-columns:140px 1fr;">
+          <div class="cv-mini-sidebar">
+            <div class="cv-mini-foto">👤</div>
+            <div class="cv-mini-nombre">Juan Pérez García</div>
+            <div class="cv-mini-label">Contacto</div>
+            <div class="cv-mini-contacto">📧 juan@gmail.com</div>
+            <div class="cv-mini-contacto">📱 +51 999 888 777</div>
+            <div class="cv-mini-contacto">📍 Lima, Perú</div>
+            <br>
+            <div class="cv-mini-label">Habilidades</div>
+            <div class="cv-mini-skill">
+              <div class="cv-mini-skill-name">Excel</div>
+              <div class="cv-mini-dots">
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot"></div>
+              </div>
+            </div>
+            <div class="cv-mini-skill">
+              <div class="cv-mini-skill-name">SAP</div>
+              <div class="cv-mini-dots">
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot"></div>
+                <div class="cv-mini-dot"></div>
+              </div>
+            </div>
+          </div>
+          <div class="cv-mini-main" style="position:relative; overflow:hidden;">
+            <div class="watermark">TalentIA · Sin licencia</div>
+            <div class="cv-mini-main-nombre">Juan Pérez García</div>
+            <div class="cv-mini-divider"></div>
+            <div class="cv-mini-perfil">Contador con sólida experiencia en gestión financiera y cumplimiento tributario. Orientado a resultados con capacidad para optimizar procesos contables.</div>
+            <div class="cv-mini-section-title">Experiencia Laboral</div>
+            <div class="cv-mini-exp">
+              <div class="cv-mini-cargo">Analista Contable Senior</div>
+              <div class="cv-mini-empresa">BCP · 2021 - 2024</div>
+              <div class="cv-mini-logro">Gestioné cartera de 200+ clientes con 99% de precisión</div>
+              <div class="cv-mini-logro">Reduje errores contables en 30% mediante automatización</div>
+            </div>
+            <div class="cv-mini-section-title">Educación</div>
+            <div class="cv-mini-cargo">Lic. Contabilidad — PUCP 2020</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section class="testimonios">
+  <div class="section-label">Lo que dicen nuestros usuarios</div>
+  <h2 class="section-title">Historias reales de éxito</h2>
+  <p class="section-sub">Próximamente — estamos recopilando testimonios de nuestros primeros usuarios.</p>
+  <div class="testimonios-grid">
+    <div class="testimonio testimonio-placeholder">
+      <div class="testimonio-estrellas">★★★★★</div>
+      <p class="testimonio-texto">"Generé mi CV en 5 minutos y a la semana me llamaron de tres empresas. La IA mejoró muchísimo cómo describía mi experiencia."</p>
+      <div class="testimonio-autor">
+        <div class="testimonio-avatar">M</div>
+        <div>
+          <div class="testimonio-nombre">María García</div>
+          <div class="testimonio-cargo">Analista de Marketing · Lima</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio testimonio-placeholder">
+      <div class="testimonio-estrellas">★★★★★</div>
+      <p class="testimonio-texto">"Llevaba meses buscando trabajo con mi CV de Word. Con TalentIA conseguí entrevista en menos de dos semanas."</p>
+      <div class="testimonio-autor">
+        <div class="testimonio-avatar">C</div>
+        <div>
+          <div class="testimonio-nombre">Carlos Mendoza</div>
+          <div class="testimonio-cargo">Ingeniero de Sistemas · Arequipa</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio testimonio-placeholder">
+      <div class="testimonio-estrellas">★★★★★</div>
+      <p class="testimonio-texto">"Como recién egresada no sabía cómo presentar mis proyectos universitarios. TalentIA los convirtió en logros reales."</p>
+      <div class="testimonio-autor">
+        <div class="testimonio-avatar">L</div>
+        <div>
+          <div class="testimonio-nombre">Lucía Torres</div>
+          <div class="testimonio-cargo">Recién egresada · Trujillo</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PRECIOS -->
+<section class="precios">
+  <div class="section-label">Planes</div>
+  <h2 class="section-title">Simple y transparente</h2>
+  <p class="section-sub">Genera tu CV gratis. Descárgalo cuando estés listo.</p>
+  <div class="precios-grid">
+    <div class="precio-card">
+      <div class="precio-icono">🎯</div>
+      <div class="precio-nombre">Prueba</div>
+      <div class="precio-desc">1 descarga</div>
+      <div class="precio-monto"><span>S/</span>9.90</div>
+      <div class="precio-ahorro">&nbsp;</div>
+      <div class="precio-features">
+        <div class="precio-feature">1 CV sin marca de agua</div>
+        <div class="precio-feature">Análisis de compatibilidad</div>
+        <div class="precio-feature">Diseño profesional</div>
+      </div>
+      <a href="/crear" class="precio-btn">Empezar gratis</a>
+    </div>
+    <div class="precio-card popular">
+      <div class="precio-badge">⭐ MÁS POPULAR</div>
+      <div class="precio-icono">⭐</div>
+      <div class="precio-nombre">Popular</div>
+      <div class="precio-desc">5 descargas</div>
+      <div class="precio-monto"><span>S/</span>35</div>
+      <div class="precio-ahorro">Ahorra 30%</div>
+      <div class="precio-features">
+        <div class="precio-feature">5 CVs sin marca de agua</div>
+        <div class="precio-feature">Análisis de compatibilidad</div>
+        <div class="precio-feature">Diseño profesional</div>
+        <div class="precio-feature">Adapta tu CV por oferta</div>
+      </div>
+      <a href="/crear" class="precio-btn">Empezar gratis</a>
+    </div>
+    <div class="precio-card">
+      <div class="precio-icono">💼</div>
+      <div class="precio-nombre">Pro</div>
+      <div class="precio-desc">12 descargas</div>
+      <div class="precio-monto"><span>S/</span>70</div>
+      <div class="precio-ahorro">Ahorra 41%</div>
+      <div class="precio-features">
+        <div class="precio-feature">12 CVs sin marca de agua</div>
+        <div class="precio-feature">Análisis de compatibilidad</div>
+        <div class="precio-feature">Diseño profesional</div>
+        <div class="precio-feature">Adapta tu CV por oferta</div>
+        <div class="precio-feature">Prioridad en soporte</div>
+      </div>
+      <a href="/crear" class="precio-btn">Empezar gratis</a>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<section class="cta-final">
+  <h2>Tu próxima entrevista<br>empieza aquí</h2>
+  <p>Únete a los profesionales que ya confían en TalentIA para destacar.</p>
+  <a href="/crear" class="cta-final-btn">✨ Crear mi CV gratis ahora</a>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <p>© 2025 TalentIA · Generador de CV con IA para Latinoamérica</p>
+</footer>
+
+<script>
+  // DEMO ANIMADA
+  const demos = [
+    { cargo: 'Contador', texto: 'Contador con sólida experiencia en gestión financiera, análisis de estados contables y cumplimiento tributario. Orientado a resultados con capacidad para optimizar procesos y reducir costos operativos en un 25%.' },
+    { cargo: 'Desarrollador Web', texto: 'Desarrollador Web Full Stack con experiencia en React, Node.js y bases de datos relacionales. Especializado en crear aplicaciones escalables y de alto rendimiento para empresas del sector financiero.' },
+    { cargo: 'Enfermera', texto: 'Profesional de enfermería con sólida formación clínica y experiencia en atención al paciente crítico. Comprometida con la excelencia en el cuidado y la seguridad del paciente.' },
+    { cargo: 'Ingeniero Civil', texto: 'Ingeniero Civil con experiencia en supervisión de obras, gestión de proyectos de infraestructura y control de calidad. Especializado en proyectos de construcción con presupuestos superiores a S/2M.' },
+    { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas de aprendizaje que aumentaron el rendimiento estudiantil en un 40%.' }
+  ];
+
+  let demoIdx = 0;
+  let charIdx = 0;
+  let borrando = false;
+  let pausando = false;
+
+  function animarDemo() {
+    const el = document.getElementById('demo-texto');
+    const cargoEl = document.getElementById('demo-cargo-texto');
+    const demo = demos[demoIdx];
+
+    if (pausando) return;
+
+    if (!borrando) {
+      charIdx++;
+      el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
+      if (charIdx === demo.texto.length) {
+        borrando = true;
+        pausando = true;
+        setTimeout(() => { pausando = false; }, 2500);
+      }
+    } else {
+      charIdx--;
+      el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
+      if (charIdx === 0) {
+        borrando = false;
+        demoIdx = (demoIdx + 1) % demos.length;
+        cargoEl.textContent = demos[demoIdx].cargo;
+        pausando = true;
+        setTimeout(() => { pausando = false; }, 500);
+      }
+    }
+  }
+
+  setInterval(animarDemo, 30);
+</script>
+</body>
+</html>

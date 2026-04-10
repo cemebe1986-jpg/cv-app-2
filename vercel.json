@@ -31,12 +31,18 @@
       "src": "/descargar-pdf",
       "dest": "/api/descargar-pdf.js"
     },
-
     {
       "src": "/extraer-cv",
       "dest": "/api/extraer-cv.js"
     },
-    
+    {
+      "src": "/crear",
+      "dest": "/public/index.html"
+    },
+    {
+      "src": "/",
+      "dest": "/public/landing.html"
+    },
     {
       "src": "/(.*)",
       "dest": "/public/$1"
