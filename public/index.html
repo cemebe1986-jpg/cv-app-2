@@ -616,7 +616,8 @@
     document.getElementById('progress-text').textContent = `Paso ${idx + 1} de ${PASOS.length}`;
     document.getElementById('btn-prev').style.display = idx === 0 ? 'none' : 'flex';
     document.getElementById('btn-next').style.display = 'flex';
-    document.getElementById('btn-next').textContent = idx === PASOS.length - 1 ? '✨ Generar CV' : 'Siguiente →';
+    document.getElementById('btn-next').textContent = idx === PASOS.length - 1 ? '✨ Generar CV' : 'Continuar →';
+    document.getElementById('btn-prev').textContent = '← Volver';
     document.getElementById('btn-next').disabled = false;
   }
 
