@@ -449,17 +449,27 @@
   </div>
 
   <div class="cv-actions">
+    
     <div id="estado-sin-login">
-      <div style="text-align:center; padding:20px; background:linear-gradient(135deg,#f0f4ff,#e8f0ff); border-radius:16px; border:2px solid #bfdbfe;">
-        <div style="font-size:2rem; margin-bottom:10px;">🎉</div>
-        <h3 style="color:#1a1a2e; margin-bottom:8px; font-size:1.2rem;">¡Tu CV profesional está listo!</h3>
-        <p style="color:#4a5568; font-size:0.9rem; margin-bottom:20px;">Inicia sesión para descargarlo sin marca de agua.</p>
-        <button onclick="loginGoogle()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460); color:white; border:none; padding:14px 32px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; gap:10px;">
-          <img src="https://www.google.com/favicon.ico" style="width:18px; height:18px;"> Iniciar sesión con Google
+      <div style="text-align:center; padding:25px; background:linear-gradient(135deg,#f0f4ff,#e8f0ff); border-radius:16px; border:2px solid #bfdbfe;">
+        <div style="font-size:2.5rem; margin-bottom:10px;">🎉</div>
+        <h3 style="color:#1a1a2e; margin-bottom:8px; font-size:1.3rem;">¡Tu CV está listo para impresionar!</h3>
+        <p style="color:#4a5568; font-size:0.95rem; margin-bottom:8px;">Miles de reclutadores reciben CVs mediocres cada día.</p>
+        <p style="color:#0f3460; font-size:0.95rem; font-weight:700; margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p>
+        <div style="background:white; border-radius:12px; padding:12px 16px; margin-bottom:20px; display:flex; align-items:center; gap:10px;">
+          <div style="font-size:1.5rem;">⏰</div>
+          <div style="text-align:left;">
+            <div class="contador-tiempo" style="font-size:0.8rem; font-weight:700; color:#e53e3e;">Tu CV se eliminará en 59:59 minutos</div>
+            <div style="font-size:0.75rem; color:#718096;">Inicia sesión para guardarlo permanentemente</div>
+          </div>
+        </div>
+        <button onclick="loginGoogle()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460); color:white; border:none; padding:16px; border-radius:12px; font-size:1rem; font-weight:700; cursor:pointer; display:inline-flex; align-items:center; justify-content:center; gap:10px; width:100%;">
+          <img src="https://www.google.com/favicon.ico" style="width:18px; height:18px;"> Guardar y descargar mi CV
         </button>
-        <p style="color:#718096; font-size:0.8rem; margin-top:12px;">✅ Gratis · Sin spam</p>
+        <p style="color:#718096; font-size:0.78rem; margin-top:12px;">✅ Gratis · Sin spam · Solo toma 10 segundos</p>
       </div>
     </div>
+
     <div id="estado-con-login" style="display:none;">
       <div style="text-align:center; margin-bottom:20px;">
         <h3 style="color:#1a1a2e; font-size:1.1rem;">¡Hola <span id="nombre-usuario-cv"></span>! Elige tu plan para descargar</h3>
@@ -933,31 +943,6 @@
   function limpiarProgreso() {
     localStorage.removeItem('talentia_progreso');
     location.reload();
-  }
-
-  function actualizarPreviewLive() {
-    const nombre = document.getElementById('nombre').value;
-    const email = document.getElementById('email').value;
-    const telefono = document.getElementById('telefono').value;
-    const ciudad = document.getElementById('ciudad').value;
-    const pais = document.getElementById('pais');
-    const paisTexto = pais.options[pais.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim() || '';
-    const experiencia = document.getElementById('experiencia').value;
-    const educacion = document.getElementById('educacion').value;
-
-    if (nombre) document.getElementById('preview-live').classList.add('visible');
-
-    document.getElementById('live-nombre-sidebar').textContent = nombre || '';
-    document.getElementById('live-nombre-main').textContent = nombre || '';
-    document.getElementById('live-email').textContent = email || '';
-    document.getElementById('live-telefono').textContent = telefono || '';
-    document.getElementById('live-ciudad').textContent = [ciudad, paisTexto].filter(Boolean).join(', ') || '';
-    document.getElementById('live-experiencia').textContent = experiencia ? experiencia.substring(0, 150) + (experiencia.length > 150 ? '...' : '') : '';
-    document.getElementById('live-educacion').textContent = educacion ? educacion.substring(0, 100) + (educacion.length > 100 ? '...' : '') : '';
-
-    if (fotoBase64) {
-      document.getElementById('live-foto').innerHTML = `<img src="${fotoBase64}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
-    }
   }
 
 </script>
