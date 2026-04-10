@@ -352,8 +352,13 @@
     </div>
 
     <label>Tu experiencia laboral *</label>
-    <p style="font-size:0.82rem; color:#718096; margin-bottom:12px;">Edita la sugerencia o escribe desde cero.</p>
-    <textarea id="experiencia" placeholder="Describe tu experiencia laboral aquí..." oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
+    <p style="font-size:0.82rem; color:#718096; margin-bottom:8px;">Lista tus últimos trabajos con este formato:</p>
+    <div style="background:#f8faff; border:1px solid #e2e8f0; border-radius:8px; padding:10px 14px; margin-bottom:12px; font-size:0.8rem; color:#4a5568; line-height:1.8;">
+      <strong>Cargo</strong> — Empresa (2022 - 2024)<br>
+      • Logro o actividad principal<br>
+      • Otro logro importante
+    </div>
+    <textarea id="experiencia" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
     <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
   </div>
 
