@@ -683,6 +683,7 @@
       if (errorEl) errorEl.remove();
     }
     guardarProgreso();
+    actualizarPreviewLive();
   }
 
   function agregarHabilidad() {
@@ -970,6 +971,31 @@
   function limpiarProgreso() {
     localStorage.removeItem('talentia_progreso');
     location.reload();
+  }
+
+  function actualizarPreviewLive() {
+    const nombre = document.getElementById('nombre').value;
+    const email = document.getElementById('email').value;
+    const telefono = document.getElementById('telefono').value;
+    const ciudad = document.getElementById('ciudad').value;
+    const pais = document.getElementById('pais');
+    const paisTexto = pais.options[pais.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim() || '';
+    const experiencia = document.getElementById('experiencia').value;
+    const educacion = document.getElementById('educacion').value;
+
+    if (nombre) document.getElementById('preview-live').classList.add('visible');
+
+    document.getElementById('live-nombre-sidebar').textContent = nombre || '';
+    document.getElementById('live-nombre-main').textContent = nombre || '';
+    document.getElementById('live-email').textContent = email || '';
+    document.getElementById('live-telefono').textContent = telefono || '';
+    document.getElementById('live-ciudad').textContent = [ciudad, paisTexto].filter(Boolean).join(', ') || '';
+    document.getElementById('live-experiencia').textContent = experiencia ? experiencia.substring(0, 150) + (experiencia.length > 150 ? '...' : '') : '';
+    document.getElementById('live-educacion').textContent = educacion ? educacion.substring(0, 100) + (educacion.length > 100 ? '...' : '') : '';
+
+    if (fotoBase64) {
+      document.getElementById('live-foto').innerHTML = `<img src="${fotoBase64}" style="width:100%; height:100%; border-radius:50%; object-fit:cover;">`;
+    }
   }
 
 </script>
