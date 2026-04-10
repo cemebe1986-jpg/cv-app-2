@@ -229,13 +229,21 @@
     <label>Nombre completo *</label>
     <input type="text" id="nombre" placeholder="Juan Pérez García" oninput="validarCampoLive(this)">
     <label>Email *</label>
-    <div style="position:relative;">
-      <input type="text" id="email" placeholder="juan@gmail.com" 
-             autocomplete="off" oninput="autocompletarEmail(this)" 
-             style="margin-bottom:0;">
-      <div id="email-dropdown" style="display:none; position:absolute; background:white; border:2px solid #0f3460; border-radius:10px; box-shadow:0 10px 30px rgba(0,0,0,0.15); z-index:9999; width:100%; top:100%; margin-top:4px; left:0;">
-      </div>
+    <div style="display:flex; gap:8px; margin-bottom:20px;">
+      <input type="text" id="email-usuario" placeholder="juan" 
+             oninput="actualizarEmailCompleto()" 
+             style="margin-bottom:0; flex:1;">
+      <select id="email-dominio" onchange="actualizarEmailCompleto()"
+              style="margin-bottom:0; width:160px; flex-shrink:0;">
+        <option value="gmail.com">@gmail.com</option>
+        <option value="hotmail.com">@hotmail.com</option>
+        <option value="outlook.com">@outlook.com</option>
+        <option value="yahoo.com">@yahoo.com</option>
+        <option value="icloud.com">@icloud.com</option>
+        <option value="live.com">@live.com</option>
+      </select>
     </div>
+    <input type="hidden" id="email">
     <label>Teléfono</label>
     <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)">
     <label>País</label>
@@ -970,27 +978,7 @@
 
   const dominiosEmail = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'live.com'];
 
-  function autocompletarEmail(input) {
-    validarCampoLive(input);
-    const valor = input.value;
-    const dropdown = document.getElementById('email-dropdown');
-    const arroba = valor.indexOf('@');
-    if (arroba === -1 || valor.endsWith('@')) {
-      if (valor.endsWith('@')) {
-        const usuario = valor.slice(0, arroba);
-        dropdown.innerHTML = dominiosEmail.map(d => `
-          <div onclick="seleccionarDominio('${usuario}@${d}')" 
-               style="padding:10px 16px; cursor:pointer; font-size:0.9rem; color:#2d3748; border-bottom:1px solid #f0f0f0;"
-               onmouseover="this.style.background='#f0f4ff'"
-               onmouseout="this.style.background='white'">
-            ${usuario}@${d}
-          </div>`).join('');
-        dropdown.style.display = 'block';
-      } else {
-        dropdown.style.display = 'none';
-      }
-      return;
-    }
+  
     const dominioParcial = valor.slice(arroba + 1);
     const filtrados = dominiosEmail.filter(d => d.startsWith(dominioParcial));
     const usuario = valor.slice(0, arroba);
@@ -1007,19 +995,19 @@
       dropdown.style.display = 'none';
     }
   }
-
-  function seleccionarDominio(email) {
-    document.getElementById('email').value = email;
-    document.getElementById('email-dropdown').style.display = 'none';
-    validarCampoLive(document.getElementById('email'));
-  }
-
+  
   document.addEventListener('click', e => {
     if (!e.target.closest('#email') && !e.target.closest('#email-dropdown')) {
       const dd = document.getElementById('email-dropdown');
       if (dd) dd.style.display = 'none';
     }
   });
+
+  function actualizarEmailCompleto() {
+    const usuario = document.getElementById('email-usuario').value.trim();
+    const dominio = document.getElementById('email-dominio').value;
+    document.getElementById('email').value = usuario ? `${usuario}@${dominio}` : '';
+  }
 
 </script>
 </body>
