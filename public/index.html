@@ -976,33 +976,6 @@
     location.reload();
   }
 
-  const dominiosEmail = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'live.com'];
-
-  
-    const dominioParcial = valor.slice(arroba + 1);
-    const filtrados = dominiosEmail.filter(d => d.startsWith(dominioParcial));
-    const usuario = valor.slice(0, arroba);
-    if (filtrados.length && dominioParcial.length > 0) {
-      dropdown.innerHTML = filtrados.map(d => `
-        <div onclick="seleccionarDominio('${usuario}@${d}')"
-             style="padding:10px 16px; cursor:pointer; font-size:0.9rem; color:#2d3748; border-bottom:1px solid #f0f0f0;"
-             onmouseover="this.style.background='#f0f4ff'"
-             onmouseout="this.style.background='white'">
-          ${usuario}@${d}
-        </div>`).join('');
-      dropdown.style.display = 'block';
-    } else {
-      dropdown.style.display = 'none';
-    }
-  }
-  
-  document.addEventListener('click', e => {
-    if (!e.target.closest('#email') && !e.target.closest('#email-dropdown')) {
-      const dd = document.getElementById('email-dropdown');
-      if (dd) dd.style.display = 'none';
-    }
-  });
-
   function actualizarEmailCompleto() {
     const usuario = document.getElementById('email-usuario').value.trim();
     const dominio = document.getElementById('email-dominio').value;
