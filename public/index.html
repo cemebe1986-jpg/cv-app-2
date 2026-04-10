@@ -56,8 +56,9 @@
     .progress-bar { background: rgba(255,255,255,0.2); border-radius: 10px; height: 6px; margin-bottom: 8px; }
     .progress-fill { background: #60a5fa; border-radius: 10px; height: 100%; transition: width 0.4s ease; }
     .progress-text { font-size: 0.8rem; opacity: 0.8; }
-    .step { display: none; padding: 40px; }
-    .step.active { display: block; }
+    .step { display: none; padding: 40px; opacity: 0; transform: translateX(30px); transition: opacity 0.3s ease, transform 0.3s ease; }
+    .step.active { display: block; opacity: 1; transform: translateX(0); }
+    .step.saliendo { opacity: 0; transform: translateX(-30px); }
     .choice-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-top: 20px; }
     .choice-card { border: 2px solid #e2e8f0; border-radius: 16px; padding: 30px 20px; text-align: center; cursor: pointer; transition: all 0.2s; }
     .choice-card:hover { border-color: #0f3460; background: #f0f4ff; transform: translateY(-2px); }
@@ -555,7 +556,29 @@
   }
 
   function mostrarPaso(idx) {
-    PASOS.forEach((id, i) => document.getElementById(id).classList.toggle('active', i === idx));
+    const pasoActivo = document.querySelector('.step.active');
+    if (pasoActivo) {
+      pasoActivo.classList.add('saliendo');
+      setTimeout(() => {
+        pasoActivo.classList.remove('active', 'saliendo');
+        activarPaso(idx);
+      }, 250);
+    } else {
+      activarPaso(idx);
+    }
+  }
+
+  function activarPaso(idx) {
+    PASOS.forEach((id, i) => {
+      const el = document.getElementById(id);
+      el.classList.remove('active', 'saliendo');
+      if (i === idx) {
+        el.style.display = 'block';
+        setTimeout(() => el.classList.add('active'), 10);
+      } else {
+        el.style.display = 'none';
+      }
+    });
     document.getElementById('wizard-titulo').textContent = TITULOS[idx];
     document.getElementById('progress-fill').style.width = ((idx + 1) / PASOS.length * 100) + '%';
     document.getElementById('progress-text').textContent = `Paso ${idx + 1} de ${PASOS.length}`;
