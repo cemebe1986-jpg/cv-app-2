@@ -263,6 +263,7 @@
           <input type="email" id="email" placeholder="juan@gmail.com" 
                  onblur="validarCampoLive(this)" 
                  oninput="marcarProgreso(this); mostrarDominios(this)"
+                 onkeydown="navegarDominios(event)"
                  autocomplete="off"
                  style="margin-bottom:0;">
           <div id="email-dropdown" style="display:none; position:absolute; background:white; border:2px solid #0f3460; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:9999; width:100%; top:calc(100% + 4px); left:0; overflow:hidden;">
@@ -1053,11 +1054,11 @@
     const dominioParcial = valor.slice(arroba + 1).toLowerCase();
     const filtrados = dominios.filter(d => d.startsWith(dominioParcial));
     if (!filtrados.length) { dropdown.style.display = 'none'; return; }
-    dropdown.innerHTML = filtrados.map(d => `
-      <div onclick="seleccionarDominio('${usuario}@${d}')"
+    dropdown.innerHTML = filtrados.map((d, i) => `
+      <div id="email-opcion-${i}" onclick="seleccionarDominio('${usuario}@${d}')"
            style="padding:11px 16px; cursor:pointer; font-size:0.9rem; color:#2d3748; border-bottom:1px solid #f0f0f0; transition:background 0.15s;"
            onmouseover="this.style.background='#f0f4ff'"
-           onmouseout="this.style.background='white'">
+           onmouseout="if(!this.classList.contains('activo')) this.style.background='white'">
         ${usuario}<strong>@${d}</strong>
       </div>`).join('');
     dropdown.style.display = 'block';
