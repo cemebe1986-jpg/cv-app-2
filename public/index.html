@@ -404,11 +404,11 @@
           • Logro o actividad principal<br>
           • Otro logro importante
         </div>
-        <textarea id="experiencia" style="height:200px;" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
+        <textarea id="experiencia" style="height:200px;" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50); mostrarBtnMejorar()"></textarea>
         <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
 
         <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
-          style="width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px;">
+          style="width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px; display:none;">
           ✨ Mejorar mi experiencia con IA
         </button>
 
