@@ -398,18 +398,13 @@
         </div>
 
         <label>Tu experiencia laboral *</label>
-        <p style="font-size:0.82rem; color:#718096; margin-bottom:8px;">Lista tus últimos trabajos con este formato:</p>
-        <div style="background:#f8faff; border:1px solid #e2e8f0; border-radius:10px; padding:12px 16px; margin-bottom:12px; font-size:0.8rem; color:#4a5568; line-height:1.8;">
-          <strong>Cargo</strong> — Empresa (2022 - 2024)<br>
-          • Logro o actividad principal<br>
-          • Otro logro importante
-        </div>
-        <textarea id="experiencia" style="height:200px;" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50); mostrarBtnMejorar()"></textarea>
-        <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
-
-        <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
-          style="width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px; display:none;">
-          ✨ Mejorar mi experiencia con IA
+        <p style="font-size:0.82rem; color:#718096; margin-bottom:16px;">Agrega cada trabajo por separado. La IA lo convertirá en texto profesional.</p>
+        
+        <div id="lista-trabajos"></div>
+        
+        <button type="button" onclick="agregarTrabajo()" 
+          style="width:100%; padding:12px; background:white; color:#0f3460; border:2px dashed #0f3460; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.88rem; margin-bottom:16px;">
+          + Agregar trabajo
         </button>
 
         <div id="mejora-box" style="display:none; background:#f5f3ff; border:2px solid #6366f1; border-radius:12px; padding:16px; margin-bottom:16px;">
@@ -420,6 +415,11 @@
             <button onclick="document.getElementById('mejora-box').style.display='none'" style="flex:1; padding:10px; background:white; color:#6366f1; border:2px solid #6366f1; border-radius:8px; font-weight:700; cursor:pointer; font-size:0.82rem;">✏️ Mantener la mía</button>
           </div>
         </div>
+
+        <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
+          style="width:100%; padding:13px; background:linear-gradient(135deg,#6366f1,#8b5cf6); color:white; border:none; border-radius:12px; font-weight:700; cursor:pointer; font-size:0.9rem; margin-bottom:16px; display:none;">
+          ✨ Mejorar mi experiencia con IA
+        </button>
       </div>
 
       <!-- PASO 3: EDUCACIÓN -->
@@ -712,7 +712,10 @@
       if (document.getElementById('nombre').value.trim().length < 3) { mostrarError('Nombre incompleto', 'Ingresa tu nombre completo.'); return false; }
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())) { mostrarError('Email inválido', 'Ingresa un email válido.'); return false; }
     }
-    if (pasoActual === 1 && document.getElementById('experiencia').value.trim().length < 30) { mostrarError('Experiencia muy corta', 'Describe tu experiencia con más detalle (mínimo 30 caracteres).'); return false; }
+    if (pasoActual === 1 && !trabajosData.some(t => t.cargo.trim() && t.empresa.trim())) { 
+      mostrarError('Experiencia incompleta', 'Agrega al menos un trabajo con cargo y empresa.'); 
+      return false; 
+    }
     if (pasoActual === 2 && document.getElementById('educacion').value.trim().length < 20) { mostrarError('Educación incompleta', 'Agrega al menos tu nivel de estudios o una certificación.'); return false; }
     if (pasoActual === 3 && habilidadesData.length === 0) { mostrarError('Sin habilidades', 'Agrega al menos una habilidad técnica.'); return false; }
     return true;
@@ -824,7 +827,9 @@
     const email = document.getElementById('email').value;
     const codigoPais = document.getElementById('codigo-pais').value;
     const telefono = document.getElementById('telefono').value ? `${codigoPais} ${document.getElementById('telefono').value}` : '';
-    const experiencia = document.getElementById('experiencia').value;
+    const experiencia = trabajosData.length 
+      ? trabajosData.map(t => `${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n')
+      : '';
     const educacion = document.getElementById('educacion').value;
     const habilidadesBlandas = document.getElementById('habilidades-blandas').value;
     const oferta = document.getElementById('oferta').value;
@@ -956,15 +961,24 @@
   }
 
   async function mejorarExperiencia() {
-    const experiencia = document.getElementById('experiencia').value.trim();
-    if (experiencia.length < 20) { alert('Escribe tu experiencia primero (mínimo 20 caracteres)'); return; }
+    if (!trabajosData.some(t => t.cargo.trim() && t.empresa.trim())) {
+      mostrarError('Faltan datos', 'Completa al menos cargo y empresa de tu trabajo.');
+      return;
+    }
+
+    const experienciaTexto = trabajosData.map(t =>
+      `${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l => l.trim()).map(l => `• ${l}`).join('\n')}`
+    ).join('\n\n');
+
     const btn = document.getElementById('btn-mejorar');
     btn.textContent = '⏳ Mejorando...'; btn.disabled = true;
     try {
       const response = await fetch('/generar-cv', { method: 'POST', headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ nombre: 'Profesional', email: 'ejemplo@email.com', telefono: '', experiencia, educacion: 'Profesional universitario', habilidades: document.getElementById('cargo-select').value || 'profesional', habilidadesBlandas: '', oferta: '', mejorarExperiencia: true }) });
+        body: JSON.stringify({ nombre: 'Profesional', email: 'ejemplo@email.com', telefono: '', experiencia: experienciaTexto, educacion: 'Profesional universitario', habilidades: document.getElementById('cargo-select').value || 'profesional', habilidadesBlandas: '', oferta: '', mejorarExperiencia: true }) });
       const data = await response.json();
-      const mejora = data.cv?.experiencia?.map(exp => `${exp.cargo} — ${exp.empresa} (${exp.periodo})\n${exp.logros?.map(l => `• ${l}`).join('\n') || ''}`).join('\n\n') || experiencia;
+      const mejora = data.cv?.experiencia?.map(exp =>
+        `${exp.cargo} — ${exp.empresa} (${exp.periodo})\n${exp.logros?.map(l => `• ${l}`).join('\n') || ''}`
+      ).join('\n\n') || experienciaTexto;
       document.getElementById('mejora-texto').textContent = mejora;
       document.getElementById('mejora-box').style.display = 'block';
     } catch (error) {
@@ -972,6 +986,9 @@
     } finally { btn.textContent = '✨ Mejorar mi experiencia con IA'; btn.disabled = false; }
   }
 
+  function usarMejora() {
+    document.getElementById('mejora-box').style.display = 'none';
+  }
   function usarMejora() {
     document.getElementById('experiencia').value = document.getElementById('mejora-texto').textContent;
     actualizarContador('experiencia', 'contador-exp', 50);
@@ -1085,6 +1102,85 @@
       if (dd) dd.style.display = 'none';
     }
   });
+
+  let trabajosData = [];
+
+  function agregarTrabajo() {
+    const id = Date.now();
+    trabajosData.push({ id, cargo: '', empresa: '', desde: '', hasta: '', logros: ['', ''] });
+    renderTabajos();
+    document.getElementById('btn-mejorar').style.display = 'none';
+    document.getElementById('mejora-box').style.display = 'none';
+  }
+
+  function eliminarTrabajo(id) {
+    trabajosData = trabajosData.filter(t => t.id !== id);
+    renderTabajos();
+    verificarMostrarBtnMejorar();
+  }
+
+  function actualizarTrabajo(id, campo, valor) {
+    const t = trabajosData.find(t => t.id === id);
+    if (t) { t[campo] = valor; verificarMostrarBtnMejorar(); }
+  }
+
+  function actualizarLogro(id, idx, valor) {
+    const t = trabajosData.find(t => t.id === id);
+    if (t) { t.logros[idx] = valor; verificarMostrarBtnMejorar(); }
+  }
+
+  function agregarLogro(id) {
+    const t = trabajosData.find(t => t.id === id);
+    if (t) { t.logros.push(''); renderTabajos(); }
+  }
+
+  function verificarMostrarBtnMejorar() {
+    const tiene = trabajosData.some(t => t.cargo.trim() && t.empresa.trim());
+    document.getElementById('btn-mejorar').style.display = tiene ? 'block' : 'none';
+  }
+
+  function renderTabajos() {
+    const container = document.getElementById('lista-trabajos');
+    if (!trabajosData.length) { container.innerHTML = ''; return; }
+    container.innerHTML = trabajosData.map((t, idx) => `
+      <div style="background:#f8faff; border:2px solid #e2e8f0; border-radius:14px; padding:20px; margin-bottom:14px;">
+        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:14px;">
+          <span style="font-size:0.82rem; font-weight:700; color:#0f3460;">Trabajo ${idx + 1}</span>
+          <button onclick="eliminarTrabajo(${t.id})" style="background:none; border:none; color:#e53e3e; cursor:pointer; font-size:0.82rem; font-weight:700;">✕ Eliminar</button>
+        </div>
+        <label style="margin-bottom:6px;">Cargo *</label>
+        <input type="text" placeholder="Ej: Analista Contable" value="${t.cargo}"
+          oninput="actualizarTrabajo(${t.id}, 'cargo', this.value)"
+          style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Empresa *</label>
+        <input type="text" placeholder="Ej: BCP, BBVA, Interbank..." value="${t.empresa}"
+          oninput="actualizarTrabajo(${t.id}, 'empresa', this.value)"
+          style="margin-bottom:12px;">
+        <div style="display:grid; grid-template-columns:1fr 1fr; gap:10px; margin-bottom:12px;">
+          <div>
+            <label style="margin-bottom:6px;">Desde</label>
+            <input type="text" placeholder="2021" value="${t.desde}"
+              oninput="actualizarTrabajo(${t.id}, 'desde', this.value)"
+              style="margin-bottom:0;">
+          </div>
+          <div>
+            <label style="margin-bottom:6px;">Hasta</label>
+            <input type="text" placeholder="2024 o Actualidad" value="${t.hasta}"
+              oninput="actualizarTrabajo(${t.id}, 'hasta', this.value)"
+              style="margin-bottom:0;">
+          </div>
+        </div>
+        <label style="margin-bottom:6px;">Funciones o logros principales</label>
+        ${t.logros.map((l, i) => `
+          <input type="text" placeholder="Ej: Gestioné cartera de 200 clientes" value="${l}"
+            oninput="actualizarLogro(${t.id}, ${i}, this.value)"
+            style="margin-bottom:8px;">`).join('')}
+        <button onclick="agregarLogro(${t.id})" 
+          style="background:none; border:none; color:#0f3460; cursor:pointer; font-size:0.82rem; font-weight:700; padding:0;">
+          + Agregar otro logro
+        </button>
+      </div>`).join('');
+  }
 
 
 </script>
