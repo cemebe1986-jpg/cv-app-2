@@ -256,10 +256,10 @@
       <!-- PASO 1: DATOS PERSONALES -->
       <div class="step" id="step-1">
         <label>Nombre completo *</label>
-        <input type="text" id="nombre" placeholder="Juan Pérez García" oninput="validarCampoLive(this)">
+        <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)">
 
         <label>Email *</label>
-        <input type="email" id="email" placeholder="juan@gmail.com" oninput="validarCampoLive(this)" autocomplete="off">
+        <input type="email" id="email" placeholder="juan@gmail.com" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" autocomplete="off">
         <div class="microcopy" style="margin-top:-12px; margin-bottom:20px;">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
 
         <label>Teléfono</label>
@@ -273,7 +273,7 @@
             <option value="+593">🇪🇨 +593</option>
             <option value="+591">🇧🇴 +591</option>
           </select>
-          <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)" style="margin-bottom:0; flex:1;">
+          <input type="text" id="telefono" placeholder="999 888 777" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="margin-bottom:0; flex:1;">
         </div>
         <div class="microcopy" style="margin-top:10px; margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
 
@@ -1013,8 +1013,18 @@
     document.getElementById('error-toast').classList.add('visible');
     setTimeout(() => cerrarError(), 6000);
   }
-
+  
   function cerrarError() { document.getElementById('error-toast').classList.remove('visible'); }
+
+  function marcarProgreso(input) {
+    if (input.value.trim().length > 0) {
+      input.style.borderColor = '#48bb78';
+    } else {
+      input.style.borderColor = '#e2e8f0';
+    }
+    guardarProgreso();
+  }
+  
 </script>
 </body>
 </html>
