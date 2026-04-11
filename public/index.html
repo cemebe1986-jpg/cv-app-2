@@ -657,43 +657,236 @@
   }
 
   const sugerenciasPorCargo = {
-    'analista': ['Gestioné cartera de [N] clientes con [%] de satisfacción','Elaboré reportes mensuales para gerencia','Reduje tiempos de proceso en [%] mediante automatización','Identifiqué oportunidades de mejora en [área]','Coordiné con equipos multidisciplinarios'],
-    'contador': ['Gestioné contabilidad de [N] cuentas con 99% de precisión','Elaboré declaraciones tributarias mensuales y anuales','Reduje errores contables en [%] mediante controles','Preparé estados financieros para auditorías externas','Optimicé procesos contables reduciendo tiempos en [%]'],
-    'vendedor': ['Superé cuota de ventas en [%] durante [N] trimestres','Gestioné cartera de [N] clientes generando S/[monto] anuales','Captué [N] clientes nuevos mediante prospección activa','Mantuve tasa de retención de clientes del [%]','Desarrollé estrategias comerciales para nuevos mercados'],
-    'ejecutivo': ['Lideré equipo de [N] personas logrando [resultado]','Negocié contratos por S/[monto] con clientes corporativos','Implementé estrategia comercial incrementando ventas en [%]','Gestioné presupuesto de S/[monto] con [%] de eficiencia'],
-    'desarrollador': ['Desarrollé [N] aplicaciones con [tecnología] usadas por [N] usuarios','Reduje tiempos de carga en [%] mediante optimización','Implementé metodología ágil reduciendo bugs en [%]','Lideré migraciones de sistemas críticos sin downtime'],
-    'ingeniero': ['Supervisé proyectos valorizados en S/[monto]','Lideré equipo de [N] personas en [proyecto]','Reduje costos en [%] mediante optimización de procesos','Implementé controles de calidad mejorando estándares en [%]'],
-    'docente': ['Enseñé a [N] estudiantes con aprobación del [%]','Desarrollé material didáctico mejorando rendimiento en [%]','Implementé metodologías activas aumentando participación en [%]','Coordiné proyectos académicos con [N] instituciones'],
-    'medico': ['Atendí [N] pacientes diarios en [especialidad/servicio]','Implementé protocolo reduciendo complicaciones en [%]','Coordiné con equipo multidisciplinario mejorando tiempos','Participé en [N] procedimientos o cirugías especializadas'],
-    'enfermero': ['Brindé atención a [N] pacientes diarios en [servicio]','Administré medicación con [%] de precisión','Coordiné con equipo médico mejorando tiempos de respuesta','Implementé protocolos de bioseguridad en el servicio'],
-    'marketing': ['Gestioné campañas digitales con presupuesto de S/[monto]','Aumenté tráfico orgánico en [%] mediante estrategia SEO','Incrementé conversiones en [%] optimizando landing pages','Gestioné redes sociales aumentando seguidores en [%]'],
-    'recursos humanos': ['Gestioné selección de [N] posiciones anuales','Implementé programa de onboarding reduciendo rotación en [%]','Administré planilla de [N] colaboradores','Desarrollé programa de capacitación para [N] personas'],
-    'administrador': ['Gestioné operaciones administrativas de [N] personas','Optimicé procesos reduciendo costos en [%]','Coordiné con proveedores logrando ahorro de S/[monto]','Implementé sistema de control mejorando eficiencia en [%]'],
-    'abogado': ['Gestioné [N] casos en materia [especialidad] con [%] éxito','Redacté contratos y documentos legales para clientes corporativos','Representé a clientes en [N] audiencias judiciales','Asesoré en cumplimiento normativo a [N] empresas'],
-    'diseñador': ['Diseñé [N] piezas gráficas para campañas de [resultado]','Reduje tiempos de entrega en [%] optimizando flujos','Desarrollé identidad visual para [N] marcas','Aumenté engagement en [%] con contenido visual estratégico'],
-    'logistica': ['Gestioné inventario de [N] SKUs con [%] de exactitud','Reduje costos logísticos en [%] optimizando rutas','Coordiné despacho de [N] pedidos diarios con [%] puntualidad','Implementé sistema de trazabilidad mejorando control en [%]'],
+    'vendedor': [
+      'Superé cuota de ventas en 127% durante 3 trimestres consecutivos generando S/450,000 en ingresos',
+      'Captué 45 clientes nuevos mediante prospección activa en ferias y eventos del sector',
+      'Reduje el ciclo de venta de 21 a 12 días optimizando el proceso de seguimiento',
+      'Mantuve tasa de retención de clientes del 94% mediante estrategia de postventa',
+      'Negocié contratos corporativos con empresas como [empresa] por S/[monto] anuales'
+    ],
+    'contador': [
+      'Gestioné contabilidad de 3 empresas del grupo con facturación anual de S/8M sin observaciones de auditoría',
+      'Reduje tiempo de cierre contable mensual de 5 días a 2 días automatizando procesos en Excel',
+      'Identifiqué contingencias tributarias por S/120,000 evitando multas de SUNAT',
+      'Implementé control de gastos reduciendo costos operativos en 18% en el primer año',
+      'Preparé estados financieros para due diligence de empresa valorizada en S/2.5M'
+    ],
+    'analista': [
+      'Desarrollé modelo de análisis que redujo el tiempo de evaluación de expedientes en 40%',
+      'Procesé 200+ solicitudes mensuales manteniendo tasa de error menor al 0.5%',
+      'Identifiqué patrones de riesgo que evitaron pérdidas por S/380,000 en el año',
+      'Elaboré dashboards ejecutivos que mejoraron la toma de decisiones de la gerencia',
+      'Automaticé reportes semanales ahorrando 8 horas de trabajo manual por semana'
+    ],
+    'desarrollador': [
+      'Desarrollé aplicación web con React y Node.js usada por 15,000 usuarios activos mensuales',
+      'Reduje tiempo de carga de plataforma en 65% mediante optimización de queries y caché',
+      'Implementé CI/CD con GitHub Actions reduciendo errores en producción en 80%',
+      'Migré sistema legacy a microservicios logrando 99.9% de disponibilidad',
+      'Lideré equipo de 4 developers entregando 3 sprints consecutivos sin deuda técnica'
+    ],
+    'ingeniero': [
+      'Supervisé construcción de edificio de 12 pisos valorizados en S/4.2M con entrega en plazo',
+      'Reduje costos de materiales en 22% mediante optimización de metrados y negociación con proveedores',
+      'Implementé plan de seguridad logrando 18 meses sin accidentes en obra',
+      'Gestioné equipo de 35 obreros y 8 subcontratistas coordinando 3 frentes de trabajo simultáneos',
+      'Elaboré expedientes técnicos para proyectos de infraestructura aprobados por [entidad]'
+    ],
+    'marketing': [
+      'Incrementé tráfico orgánico en 340% en 6 meses mediante estrategia SEO y contenido',
+      'Gestioné campañas de Google Ads con presupuesto de S/25,000 mensuales logrando ROAS de 4.2x',
+      'Aumenté seguidores de Instagram de 8,000 a 45,000 en 8 meses con contenido orgánico',
+      'Reduje costo por adquisición de cliente de S/85 a S/32 optimizando embudos de conversión',
+      'Lancé campaña de email marketing con 38% de tasa de apertura superando benchmark del sector'
+    ],
+    'recursos humanos': [
+      'Reduje tiempo de reclutamiento de 45 a 18 días implementando ATS y proceso estructurado',
+      'Gestioné proceso de selección de 120 posiciones anuales con 91% de satisfacción de jefaturas',
+      'Implementé programa de onboarding reduciendo rotación en los primeros 3 meses en 35%',
+      'Diseñé programa de capacitación para 200 colaboradores con 94% de aprobación',
+      'Reduje ausentismo de 8.5% a 3.2% implementando programa de bienestar y clima laboral'
+    ],
+    'administrador': [
+      'Reduje costos administrativos en S/180,000 anuales renegociando contratos con 12 proveedores',
+      'Implementé sistema de gestión documental reduciendo tiempos de búsqueda en 70%',
+      'Coordiné mudanza de oficina para 150 personas sin interrumpir operaciones',
+      'Gestioné presupuesto administrativo de S/2.4M con ejecución del 98.5%',
+      'Optimicé proceso de compras reduciendo tiempo de aprobación de 7 días a 48 horas'
+    ],
+    'abogado': [
+      'Gané 87% de los 45 casos litigados en materia laboral y civil durante el año',
+      'Redacté 120+ contratos comerciales y laborales sin observaciones de la contraparte',
+      'Asesoré a empresa en proceso de fusión valorizado en S/12M gestionando todos los aspectos legales',
+      'Recuperé S/340,000 en acreencias mediante proceso de cobranza judicial y extrajudicial',
+      'Implementé programa de compliance reduciendo contingencias legales en 60%'
+    ],
+    'docente': [
+      'Mejoré tasa de aprobación de 68% a 89% implementando metodología de aprendizaje activo',
+      'Desarrollé 3 módulos de enseñanza virtual adoptados por [N] docentes de la institución',
+      'Preparé a 12 estudiantes para olimpiadas nacionales obteniendo 3 medallas',
+      'Diseñé programa de nivelación que redujo deserción escolar en 28% en mi sección',
+      'Obtuve calificación de 4.8/5.0 en encuestas de satisfacción estudiantil durante 2 años consecutivos'
+    ],
+    'medico': [
+      'Atendí 35 pacientes diarios en consulta externa manteniendo tiempo de espera menor a 20 min',
+      'Reduje tasa de reinternamiento en 31% implementando protocolo de seguimiento post-alta',
+      'Participé en 200+ procedimientos quirúrgicos con tasa de complicaciones del 0.8%',
+      'Implementé guía clínica para manejo de [patología] adoptada por todo el servicio',
+      'Capacité a 15 internos y residentes en procedimientos diagnósticos y terapéuticos'
+    ],
+    'enfermero': [
+      'Brindé atención a 40 pacientes diarios en [servicio] con cero eventos adversos en 12 meses',
+      'Implementé protocolo de prevención de úlceras por presión reduciendo incidencia en 45%',
+      'Capacité a 20 técnicos en enfermería en procedimientos de UCI y emergencias',
+      'Reduje errores de medicación en 90% implementando doble verificación sistematizada',
+      'Coordiné traslado de 300+ pacientes críticos con 100% de seguridad clínica'
+    ],
+    'psicolog': [
+      'Atendí 25 pacientes semanales logrando 78% de alta terapéutica en procesos de 6 meses',
+      'Implementé programa de salud mental para 350 colaboradores reduciendo ausentismo en 22%',
+      'Realicé 80 evaluaciones psicológicas para procesos de selección con 95% de validez predictiva',
+      'Diseñé taller de manejo del estrés con 4.9/5.0 de satisfacción entre 120 participantes',
+      'Intervine en 15 casos de crisis organizacional restaurando clima laboral en área crítica'
+    ],
+    'diseñador': [
+      'Diseñé identidad visual para 8 marcas logrando incremento promedio de 35% en reconocimiento',
+      'Creé campaña gráfica que generó 2.3M de impresiones orgánicas en redes sociales',
+      'Reduje tiempo de producción de piezas en 40% implementando sistema de plantillas en Figma',
+      'Desarrollé UI/UX de app móvil que aumentó conversión en 28% tras rediseño',
+      'Gestioné producción de 150+ piezas mensuales cumpliendo 100% de plazos de entrega'
+    ],
+    'logistica': [
+      'Reduje costos de distribución en 24% optimizando rutas con software de ruteo',
+      'Gestioné inventario de 3,500 SKUs con exactitud del 99.2% en toma física trimestral',
+      'Coordiné importaciones desde China y EEUU por US$1.2M sin demoras aduaneras',
+      'Implementé sistema WMS reduciendo errores de picking en 85%',
+      'Coordiné despacho de 800 pedidos diarios logrando 98.5% de entregas a tiempo'
+    ],
+    'ejecutivo': [
+      'Lideré equipo de 25 personas superando meta anual en 23% generando S/3.8M en ventas',
+      'Implementé estrategia de expansión abriendo 3 nuevas sucursales en 18 meses',
+      'Negocié alianzas estratégicas con 5 empresas incrementando cartera en 40%',
+      'Reduje rotación del equipo de 45% a 12% implementando programa de desarrollo y retención',
+      'Presenté plan de negocio aprobado por directorio para inversión de S/5M'
+    ],
+    'tecnico': [
+      'Mantuve disponibilidad de equipos al 97.8% mediante plan de mantenimiento preventivo',
+      'Reduje tiempo promedio de reparación de 4 horas a 1.5 horas estandarizando procedimientos',
+      'Atendí 120 órdenes de servicio mensuales con 96% de resolución en primera visita',
+      'Implementé checklist de inspección reduciendo fallas críticas en 65%',
+      'Capacité a 8 técnicos junior en procedimientos de mantenimiento y seguridad'
+    ],
+    'financiero': [
+      'Gestioné portafolio de inversiones de S/15M logrando rendimiento del 14.2% anual',
+      'Elaboré modelo financiero para expansión que sustentó inversión de US$2M ante directorio',
+      'Reduje costo financiero de deuda en 180 bps renegociando líneas de crédito con 3 bancos',
+      'Implementé sistema de control presupuestal reduciendo desviaciones de 12% a 3%',
+      'Estructuré financiamiento de proyecto por S/8M con plazo de 5 años a tasa preferencial'
+    ],
+    'sistemas': [
+      'Administré infraestructura de 300 usuarios logrando 99.95% de disponibilidad anual',
+      'Reduje incidencias críticas en 72% implementando monitoreo proactivo con Zabbix',
+      'Migré servidores on-premise a AWS reduciendo costos de TI en 35%',
+      'Implementé política de seguridad informática eliminando brechas de vulnerabilidad crítica',
+      'Gestioné proyecto de digitalización para 5 áreas ahorrando 40 horas de trabajo manual semanales'
+    ],
+    'recepcion': [
+      'Atendí 150+ llamadas y visitas diarias con tiempo de respuesta menor a 30 segundos',
+      'Gestioné agenda de 8 ejecutivos coordinando 200+ reuniones mensuales sin conflictos',
+      'Implementé sistema de registro digital reduciendo tiempos de acceso en 60%',
+      'Mantuve satisfacción de visitantes en 4.9/5.0 según encuestas trimestrales',
+      'Coordiné eventos corporativos para hasta 300 personas con logística completa'
+    ],
+    'cajero': [
+      'Procesé S/2.8M en transacciones mensuales con cuadre de caja perfecto durante 18 meses',
+      'Atendí 200+ clientes diarios con tiempo promedio de atención de 3 minutos',
+      'Detecté 12 billetes falsos aplicando correctamente protocolos de seguridad bancaria',
+      'Obtuve calificación de 4.8/5.0 en encuestas de satisfacción al cliente',
+      'Capacité a 3 cajeros nuevos en procedimientos operativos y atención al cliente'
+    ],
+    'almacen': [
+      'Gestioné ingreso y salida de 500+ ítems diarios con exactitud del 99.5%',
+      'Reduje tiempo de despacho de 45 a 18 minutos reorganizando layout del almacén',
+      'Realicé inventarios mensuales con diferencial menor al 0.3% del valor total',
+      'Implementé sistema FIFO reduciendo vencimientos y mermas en 80%',
+      'Coordiné recepción de 3 contenedores semanales sin retrasos en los procesos'
+    ],
+    'cocinero': [
+      'Preparé 300+ platos diarios manteniendo estándares de calidad y temperatura',
+      'Reduje merma de alimentos de 18% a 7% optimizando pedidos y aprovechamiento',
+      'Desarrollé 15 nuevos platos para la carta aumentando ticket promedio en S/18',
+      'Capacité a 6 ayudantes de cocina en técnicas culinarias y normas de higiene',
+      'Implementé sistema HACCP logrando cero observaciones en inspecciones sanitarias'
+    ],
+    'seguridad': [
+      'Supervisé seguridad de instalación con tráfico de 2,000 personas diarias sin incidentes',
+      'Reduje intentos de robo en 70% implementando rondas estratégicas y cámaras',
+      'Gestioné accesos de 500 colaboradores con control biométrico al 100%',
+      'Elaboré plan de evacuación y capacité a 200 personas en procedimientos de emergencia',
+      'Mantuve record de 24 meses sin incidentes de seguridad en las instalaciones'
+    ],
+    'chofer': [
+      'Transporté mercancías/pasajeros recorriendo 8,000 km mensuales con 0 accidentes en 3 años',
+      'Mantuve puntualidad del 98.5% en 1,200 viajes realizados en el último año',
+      'Reduje consumo de combustible en 15% mediante técnicas de manejo eficiente',
+      'Gestioné documentación de transporte y cumplí 100% con regulaciones de tránsito',
+      'Realicé mantenimiento preventivo del vehículo reduciendo fallas en ruta en 90%'
+    ],
+    'nutricion': [
+      'Atendí 30 pacientes semanales logrando 82% de adherencia al plan nutricional',
+      'Reduje índice de obesidad en 28% en programa de 6 meses para empresa de 200 trabajadores',
+      'Desarrollé menú institucional balanceado para 500 comensales diarios reduciendo costos en 15%',
+      'Dicté 20 talleres de educación alimentaria alcanzando a 600 personas en la comunidad',
+      'Implementé programa de nutrición deportiva para equipo de [N] atletas mejorando rendimiento'
+    ],
+    'arquitect': [
+      'Diseñé 12 proyectos residenciales y comerciales con inversión total de S/18M',
+      'Obtuve aprobación de 100% de expedientes municipales en primer trámite',
+      'Reduje costos de construcción en 19% mediante optimización de diseño y materiales',
+      'Supervisé obra de edificio de 8 pisos entregado 3 semanas antes del plazo',
+      'Gestioné proyecto de remodelación de 2,500 m² para cliente corporativo en 4 meses'
+    ],
+    'electricist': [
+      'Instalé sistemas eléctricos en 45 proyectos residenciales e industriales sin observaciones',
+      'Reduje tiempo de instalación en 30% estandarizando procedimientos y herramientas',
+      'Diagnostiqué y reparé 200+ fallas eléctricas con tiempo promedio de atención de 2 horas',
+      'Mantuve record de cero accidentes eléctricos en 4 años de trabajo en campo',
+      'Implementé sistema eléctrico trifásico para planta industrial de 5,000 m²'
+    ],
   };
 
   function obtenerSugerencias(cargo) {
     if (!cargo) return [];
     const c = cargo.toLowerCase();
-    if (c.includes('venta') || c.includes('comercial') || c.includes('vendedor') || c.includes('ejecutivo de')) return sugerenciasPorCargo['vendedor'];
-    if (c.includes('contab') || c.includes('contador')) return sugerenciasPorCargo['contador'];
-    if (c.includes('audit')) return sugerenciasPorCargo['contador'];
-    if (c.includes('analista')) return sugerenciasPorCargo['analista'];
-    if (c.includes('desarroll') || c.includes('programad') || c.includes('software') || c.includes('web') || c.includes('frontend') || c.includes('backend')) return sugerenciasPorCargo['desarrollador'];
-    if (c.includes('ingenier') || c.includes('supervisor') || c.includes('obra')) return sugerenciasPorCargo['ingeniero'];
-    if (c.includes('market') || c.includes('community') || c.includes('digital') || c.includes('seo') || c.includes('content')) return sugerenciasPorCargo['marketing'];
-    if (c.includes('rrhh') || c.includes('recursos humanos') || c.includes('seleccion') || c.includes('talento')) return sugerenciasPorCargo['recursos humanos'];
-    if (c.includes('admin') || c.includes('asistente') || c.includes('secretar') || c.includes('oficin')) return sugerenciasPorCargo['administrador'];
-    if (c.includes('abogad') || c.includes('legal') || c.includes('jurid')) return sugerenciasPorCargo['abogado'];
-    if (c.includes('docente') || c.includes('profesor') || c.includes('maestro') || c.includes('enseñ')) return sugerenciasPorCargo['docente'];
-    if (c.includes('medic') || c.includes('doctor') || c.includes('cirujano')) return sugerenciasPorCargo['medico'];
-    if (c.includes('enfermer') || c.includes('tecnico en salud') || c.includes('obstetr')) return sugerenciasPorCargo['enfermero'];
-    if (c.includes('diseñ') || c.includes('graphic') || c.includes('ux') || c.includes('ui') || c.includes('creativ')) return sugerenciasPorCargo['diseñador'];
-    if (c.includes('logistic') || c.includes('almacen') || c.includes('supply') || c.includes('despacho') || c.includes('transport')) return sugerenciasPorCargo['logistica'];
-    if (c.includes('gerente') || c.includes('director') || c.includes('jefe') || c.includes('lider') || c.includes('manager')) return sugerenciasPorCargo['ejecutivo'];
-    return ['Gestioné [actividad principal] logrando [resultado]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro]','Lideré [proyecto/proceso] con [N] personas','Optimicé [proceso] mejorando eficiencia en [%]'];
+    if (c.includes('venta') || c.includes('comercial') || c.includes('vendedor') || c.includes('ejecutivo de venta')) return sugerenciasPorCargo['vendedor'];
+    if (c.includes('contab') || c.includes('contador') || c.includes('audit')) return sugerenciasPorCargo['contador'];
+    if (c.includes('analista') || c.includes('analisis')) return sugerenciasPorCargo['analista'];
+    if (c.includes('desarroll') || c.includes('programad') || c.includes('software') || c.includes('web') || c.includes('frontend') || c.includes('backend') || c.includes('fullstack')) return sugerenciasPorCargo['desarrollador'];
+    if (c.includes('ingenier') || c.includes('supervisor de obra') || c.includes('residente')) return sugerenciasPorCargo['ingeniero'];
+    if (c.includes('market') || c.includes('community') || c.includes('seo') || c.includes('content') || c.includes('digital')) return sugerenciasPorCargo['marketing'];
+    if (c.includes('rrhh') || c.includes('recursos humanos') || c.includes('seleccion') || c.includes('talento') || c.includes('people')) return sugerenciasPorCargo['recursos humanos'];
+    if (c.includes('admin') || c.includes('asistente') || c.includes('secretar') || c.includes('oficin') || c.includes('coordinador')) return sugerenciasPorCargo['administrador'];
+    if (c.includes('abogad') || c.includes('legal') || c.includes('jurid') || c.includes('asesor legal')) return sugerenciasPorCargo['abogado'];
+    if (c.includes('docente') || c.includes('profesor') || c.includes('maestro') || c.includes('tutor') || c.includes('catedrat')) return sugerenciasPorCargo['docente'];
+    if (c.includes('medic') || c.includes('doctor') || c.includes('cirujano') || c.includes('clinico')) return sugerenciasPorCargo['medico'];
+    if (c.includes('enfermer') || c.includes('obstetr') || c.includes('tecnico en salud')) return sugerenciasPorCargo['enfermero'];
+    if (c.includes('psicolog')) return sugerenciasPorCargo['psicolog'];
+    if (c.includes('nutricion') || c.includes('nutricion') || c.includes('dietist')) return sugerenciasPorCargo['nutricion'];
+    if (c.includes('diseñ') || c.includes('graphic') || c.includes('ux') || c.includes('ui') || c.includes('creativ') || c.includes('visual')) return sugerenciasPorCargo['diseñador'];
+    if (c.includes('logistic') || c.includes('almacen') || c.includes('supply') || c.includes('despacho') || c.includes('distribucion')) return sugerenciasPorCargo['logistica'];
+    if (c.includes('gerente') || c.includes('director') || c.includes('jefe de') || c.includes('manager') || c.includes('lider')) return sugerenciasPorCargo['ejecutivo'];
+    if (c.includes('tecnico') || c.includes('mecanico') || c.includes('mantenimiento')) return sugerenciasPorCargo['tecnico'];
+    if (c.includes('financier') || c.includes('tesorero') || c.includes('finanzas')) return sugerenciasPorCargo['financiero'];
+    if (c.includes('sistem') || c.includes('infraestructura') || c.includes('redes') || c.includes('soporte') || c.includes('helpdesk')) return sugerenciasPorCargo['sistemas'];
+    if (c.includes('recepcion') || c.includes('recepcionista') || c.includes('atencion al cliente')) return sugerenciasPorCargo['recepcion'];
+    if (c.includes('cajer') || c.includes('cajera')) return sugerenciasPorCargo['cajero'];
+    if (c.includes('almacen') || c.includes('deposito') || c.includes('bodega')) return sugerenciasPorCargo['almacen'];
+    if (c.includes('cociner') || c.includes('chef') || c.includes('gastronomia') || c.includes('pastelero')) return sugerenciasPorCargo['cocinero'];
+    if (c.includes('seguridad') || c.includes('vigilante') || c.includes('guardia')) return sugerenciasPorCargo['seguridad'];
+    if (c.includes('chofer') || c.includes('conductor') || c.includes('transport')) return sugerenciasPorCargo['chofer'];
+    if (c.includes('arquitect')) return sugerenciasPorCargo['arquitect'];
+    if (c.includes('electricist') || c.includes('electrico') || c.includes('electronico')) return sugerenciasPorCargo['electricist'];
+    return ['Gestioné [actividad principal] logrando [resultado medible]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro concreto]','Lideré [proyecto/proceso] con [N] personas logrando [resultado]','Optimicé [proceso] mejorando eficiencia en [%] y ahorrando S/[monto]'];
   }
 
   function toggleSugerencia(trabajoId, idx) {
