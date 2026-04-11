@@ -679,6 +679,13 @@
     document.getElementById('btn-next').textContent = idx === PASOS.length - 1 ? '✨ Generar CV' : 'Continuar →';
     document.getElementById('btn-next').disabled = false;
     actualizarNavPasos(idx);
+    if (idx > 0) {
+      const feedback = document.createElement('div');
+      feedback.style.cssText = 'position:fixed; top:80px; left:50%; transform:translateX(-50%); background:#22c55e; color:white; padding:10px 24px; border-radius:20px; font-size:0.85rem; font-weight:700; z-index:999; opacity:1; transition:opacity 0.5s;';
+      feedback.textContent = '✅ ¡Perfecto, sigamos!';
+      document.body.appendChild(feedback);
+      setTimeout(() => { feedback.style.opacity = '0'; setTimeout(() => feedback.remove(), 500); }, 1500);
+    }
   }
 
   function pasoAnterior() {
@@ -706,6 +713,7 @@
       if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())) { mostrarError('Email inválido', 'Ingresa un email válido.'); return false; }
     }
     if (pasoActual === 1 && document.getElementById('experiencia').value.trim().length < 30) { mostrarError('Experiencia muy corta', 'Describe tu experiencia con más detalle (mínimo 30 caracteres).'); return false; }
+    if (pasoActual === 2 && document.getElementById('educacion').value.trim().length < 20) { mostrarError('Educación incompleta', 'Agrega al menos tu nivel de estudios o una certificación.'); return false; }
     if (pasoActual === 3 && habilidadesData.length === 0) { mostrarError('Sin habilidades', 'Agrega al menos una habilidad técnica.'); return false; }
     return true;
   }
