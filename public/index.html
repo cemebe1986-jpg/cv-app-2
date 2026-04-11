@@ -91,7 +91,7 @@
     width: 100%; margin-bottom: 20px; background: white;
   }
   input:focus, textarea:focus, select:focus { outline: none; border-color: #0f3460; box-shadow: 0 0 0 3px rgba(15,52,96,0.08); }
-  textarea { height: 130px; resize: vertical; }
+  textarea { height: 160px; resize: vertical; }
   .microcopy { font-size: 0.75rem; color: #a0aec0; margin-top: -10px; margin-bottom: 16px; }
   .error-msg { color: #e53e3e; font-size: 0.78rem; margin-top: -14px; margin-bottom: 16px; }
   .char-count { font-size: 0.75rem; color: #a0aec0; text-align: right; margin-top: -14px; margin-bottom: 16px; }
@@ -255,6 +255,7 @@
 
       <!-- PASO 1: DATOS PERSONALES -->
       <div class="step" id="step-1">
+        <p style="font-size:0.75rem; color:#a0aec0; margin-bottom:20px;">* Campos obligatorios</p>
         <label>Nombre completo *</label>
         <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)">
 
@@ -403,7 +404,7 @@
           • Logro o actividad principal<br>
           • Otro logro importante
         </div>
-        <textarea id="experiencia" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
+        <textarea id="experiencia" style="height:200px;" placeholder="Ej: Analista Contable — BCP (2021-2024)&#10;• Gestioné cartera de 200 clientes&#10;• Reduje errores contables en 30%&#10;&#10;Asistente — BBVA (2019-2021)&#10;• Elaboré reportes mensuales&#10;• Apoyé en auditorías internas" oninput="actualizarContador('experiencia','contador-exp',50)"></textarea>
         <div class="char-count" id="contador-exp">0 / 50 mínimo</div>
 
         <button type="button" onclick="mejorarExperiencia()" id="btn-mejorar"
