@@ -120,7 +120,7 @@
   .btn-next:hover { opacity: 0.92; transform: translateY(-1px); }
 
   /* ERROR TOAST */
-  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin: 16px 36px 36px; }
+  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:0 0 24px 24px; padding:16px 24px 24px; margin: 0; }
   .error-toast.visible { display:flex; align-items:center; gap:12px; }
   .error-toast-icono { font-size:1.3rem; }
   .error-toast-texto { flex:1; }
@@ -260,7 +260,7 @@
 
         <label>Email *</label>
         <input type="email" id="email" placeholder="juan@gmail.com" oninput="validarCampoLive(this)" autocomplete="off">
-        <div class="microcopy">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
+        <div class="microcopy" style="margin-top:-12px; margin-bottom:20px;">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
 
         <label>Teléfono</label>
         <div style="display:flex; gap:8px; margin-bottom:6px;">
