@@ -281,8 +281,7 @@
         <div class="microcopy" style="margin-top:10px; margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
 
         <label>País</label>
-        <select id="pais" onchange="actualizarCiudades()">
-          <option value="">Se detecta por el código de teléfono</option>
+        <select id="pais" onchange="actualizarCiudades()">          
           <option value="PE">🇵🇪 Perú</option>
           <option value="CO">🇨🇴 Colombia</option>
           <option value="MX">🇲🇽 México</option>
@@ -1032,6 +1031,8 @@
     }
     guardarProgreso();
   }
+
+  detectarPaisPorCodigo();
 
 </script>
 </body>
