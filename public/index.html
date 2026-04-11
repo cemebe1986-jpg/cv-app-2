@@ -638,27 +638,164 @@
   function agregarLogro(id) { const t=trabajosData.find(t=>t.id===id); if(t){t.logros.push('');renderTrabajoss();} }
   function verificarBtnMejorar() { document.getElementById('btn-mejorar').style.display=trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())?'block':'none'; }
 
+  const sugerenciasPorCargo = {
+    'analista': ['Gestioné cartera de [N] clientes con [%] de satisfacción','Elaboré reportes mensuales para gerencia','Reduje tiempos de proceso en [%] mediante automatización','Identifiqué oportunidades de mejora en [área]','Coordiné con equipos multidisciplinarios'],
+    'contador': ['Gestioné contabilidad de [N] cuentas con 99% de precisión','Elaboré declaraciones tributarias mensuales y anuales','Reduje errores contables en [%] mediante controles','Preparé estados financieros para auditorías externas','Optimicé procesos contables reduciendo tiempos en [%]'],
+    'vendedor': ['Superé cuota de ventas en [%] durante [N] trimestres','Gestioné cartera de [N] clientes generando S/[monto] anuales','Captué [N] clientes nuevos mediante prospección activa','Mantuve tasa de retención de clientes del [%]','Desarrollé estrategias comerciales para nuevos mercados'],
+    'ejecutivo': ['Lideré equipo de [N] personas logrando [resultado]','Negocié contratos por S/[monto] con clientes corporativos','Implementé estrategia comercial incrementando ventas en [%]','Gestioné presupuesto de S/[monto] con [%] de eficiencia'],
+    'desarrollador': ['Desarrollé [N] aplicaciones con [tecnología] usadas por [N] usuarios','Reduje tiempos de carga en [%] mediante optimización','Implementé metodología ágil reduciendo bugs en [%]','Lideré migraciones de sistemas críticos sin downtime'],
+    'ingeniero': ['Supervisé proyectos valorizados en S/[monto]','Lideré equipo de [N] personas en [proyecto]','Reduje costos en [%] mediante optimización de procesos','Implementé controles de calidad mejorando estándares en [%]'],
+    'docente': ['Enseñé a [N] estudiantes con aprobación del [%]','Desarrollé material didáctico mejorando rendimiento en [%]','Implementé metodologías activas aumentando participación en [%]','Coordiné proyectos académicos con [N] instituciones'],
+    'medico': ['Atendí [N] pacientes diarios en [especialidad/servicio]','Implementé protocolo reduciendo complicaciones en [%]','Coordiné con equipo multidisciplinario mejorando tiempos','Participé en [N] procedimientos o cirugías especializadas'],
+    'enfermero': ['Brindé atención a [N] pacientes diarios en [servicio]','Administré medicación con [%] de precisión','Coordiné con equipo médico mejorando tiempos de respuesta','Implementé protocolos de bioseguridad en el servicio'],
+    'marketing': ['Gestioné campañas digitales con presupuesto de S/[monto]','Aumenté tráfico orgánico en [%] mediante estrategia SEO','Incrementé conversiones en [%] optimizando landing pages','Gestioné redes sociales aumentando seguidores en [%]'],
+    'recursos humanos': ['Gestioné selección de [N] posiciones anuales','Implementé programa de onboarding reduciendo rotación en [%]','Administré planilla de [N] colaboradores','Desarrollé programa de capacitación para [N] personas'],
+    'administrador': ['Gestioné operaciones administrativas de [N] personas','Optimicé procesos reduciendo costos en [%]','Coordiné con proveedores logrando ahorro de S/[monto]','Implementé sistema de control mejorando eficiencia en [%]'],
+    'abogado': ['Gestioné [N] casos en materia [especialidad] con [%] éxito','Redacté contratos y documentos legales para clientes corporativos','Representé a clientes en [N] audiencias judiciales','Asesoré en cumplimiento normativo a [N] empresas'],
+    'diseñador': ['Diseñé [N] piezas gráficas para campañas de [resultado]','Reduje tiempos de entrega en [%] optimizando flujos','Desarrollé identidad visual para [N] marcas','Aumenté engagement en [%] con contenido visual estratégico'],
+    'logistica': ['Gestioné inventario de [N] SKUs con [%] de exactitud','Reduje costos logísticos en [%] optimizando rutas','Coordiné despacho de [N] pedidos diarios con [%] puntualidad','Implementé sistema de trazabilidad mejorando control en [%]'],
+  };
+
+  function obtenerSugerencias(cargo) {
+    if (!cargo) return [];
+    const cargoLower = cargo.toLowerCase();
+    for (const [key, sugerencias] of Object.entries(sugerenciasPorCargo)) {
+      if (cargoLower.includes(key)) return sugerencias;
+    }
+    return ['Gestioné [actividad principal] logrando [resultado]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro]','Lideré [proyecto/proceso] con [N] personas','Optimicé [proceso] mejorando eficiencia en [%]'];
+  }
+
+  function toggleSugerencia(trabajoId, idx) {
+    const btn = document.getElementById(`sug-${trabajoId}-${idx}`);
+    btn.classList.toggle('seleccionado');
+  }
+
+  function agregarSugerenciasSeleccionadas(trabajoId) {
+    const t = trabajosData.find(t => t.id === trabajoId);
+    if (!t) return;
+    const btns = document.querySelectorAll(`[id^="sug-${trabajoId}-"].seleccionado`);
+    btns.forEach(btn => {
+      const texto = btn.getAttribute('data-texto');
+      if (!t.logros.includes(texto)) t.logros.push(texto);
+    });
+    t.logros = t.logros.filter(l => l.trim());
+    renderTrabajoss();
+    verificarBtnMejorar();
+  }
+
+  const sugerenciasPorCargo = {
+    'analista': ['Gestioné cartera de [N] clientes con [%] de satisfacción','Elaboré reportes mensuales para gerencia','Reduje tiempos de proceso en [%] mediante automatización','Identifiqué oportunidades de mejora en [área]','Coordiné con equipos multidisciplinarios'],
+    'contador': ['Gestioné contabilidad de [N] cuentas con 99% de precisión','Elaboré declaraciones tributarias mensuales y anuales','Reduje errores contables en [%] mediante controles','Preparé estados financieros para auditorías externas','Optimicé procesos contables reduciendo tiempos en [%]'],
+    'vendedor': ['Superé cuota de ventas en [%] durante [N] trimestres','Gestioné cartera de [N] clientes generando S/[monto] anuales','Captué [N] clientes nuevos mediante prospección activa','Mantuve tasa de retención de clientes del [%]','Desarrollé estrategias comerciales para nuevos mercados'],
+    'ejecutivo': ['Lideré equipo de [N] personas logrando [resultado]','Negocié contratos por S/[monto] con clientes corporativos','Implementé estrategia comercial incrementando ventas en [%]','Gestioné presupuesto de S/[monto] con [%] de eficiencia'],
+    'desarrollador': ['Desarrollé [N] aplicaciones con [tecnología] usadas por [N] usuarios','Reduje tiempos de carga en [%] mediante optimización','Implementé metodología ágil reduciendo bugs en [%]','Lideré migraciones de sistemas críticos sin downtime'],
+    'ingeniero': ['Supervisé proyectos valorizados en S/[monto]','Lideré equipo de [N] personas en [proyecto]','Reduje costos en [%] mediante optimización de procesos','Implementé controles de calidad mejorando estándares en [%]'],
+    'docente': ['Enseñé a [N] estudiantes con aprobación del [%]','Desarrollé material didáctico mejorando rendimiento en [%]','Implementé metodologías activas aumentando participación en [%]','Coordiné proyectos académicos con [N] instituciones'],
+    'medico': ['Atendí [N] pacientes diarios en [especialidad/servicio]','Implementé protocolo reduciendo complicaciones en [%]','Coordiné con equipo multidisciplinario mejorando tiempos','Participé en [N] procedimientos o cirugías especializadas'],
+    'enfermero': ['Brindé atención a [N] pacientes diarios en [servicio]','Administré medicación con [%] de precisión','Coordiné con equipo médico mejorando tiempos de respuesta','Implementé protocolos de bioseguridad en el servicio'],
+    'marketing': ['Gestioné campañas digitales con presupuesto de S/[monto]','Aumenté tráfico orgánico en [%] mediante estrategia SEO','Incrementé conversiones en [%] optimizando landing pages','Gestioné redes sociales aumentando seguidores en [%]'],
+    'recursos humanos': ['Gestioné selección de [N] posiciones anuales','Implementé programa de onboarding reduciendo rotación en [%]','Administré planilla de [N] colaboradores','Desarrollé programa de capacitación para [N] personas'],
+    'administrador': ['Gestioné operaciones administrativas de [N] personas','Optimicé procesos reduciendo costos en [%]','Coordiné con proveedores logrando ahorro de S/[monto]','Implementé sistema de control mejorando eficiencia en [%]'],
+    'abogado': ['Gestioné [N] casos en materia [especialidad] con [%] éxito','Redacté contratos y documentos legales para clientes corporativos','Representé a clientes en [N] audiencias judiciales','Asesoré en cumplimiento normativo a [N] empresas'],
+    'diseñador': ['Diseñé [N] piezas gráficas para campañas de [resultado]','Reduje tiempos de entrega en [%] optimizando flujos','Desarrollé identidad visual para [N] marcas','Aumenté engagement en [%] con contenido visual estratégico'],
+    'logistica': ['Gestioné inventario de [N] SKUs con [%] de exactitud','Reduje costos logísticos en [%] optimizando rutas','Coordiné despacho de [N] pedidos diarios con [%] puntualidad','Implementé sistema de trazabilidad mejorando control en [%]'],
+  };
+
+  function obtenerSugerencias(cargo) {
+    if (!cargo) return [];
+    const cargoLower = cargo.toLowerCase();
+    for (const [key, sugerencias] of Object.entries(sugerenciasPorCargo)) {
+      if (cargoLower.includes(key)) return sugerencias;
+    }
+    return ['Gestioné [actividad principal] logrando [resultado]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro]','Lideré [proyecto/proceso] con [N] personas','Optimicé [proceso] mejorando eficiencia en [%]'];
+  }
+
+  function toggleSugerencia(trabajoId, idx) {
+    const btn = document.getElementById(`sug-${trabajoId}-${idx}`);
+    btn.classList.toggle('seleccionado');
+  }
+
+  function agregarSugerenciasSeleccionadas(trabajoId) {
+    const t = trabajosData.find(t => t.id === trabajoId);
+    if (!t) return;
+    const btns = document.querySelectorAll(`[id^="sug-${trabajoId}-"].seleccionado`);
+    btns.forEach(btn => {
+      const texto = btn.getAttribute('data-texto');
+      if (!t.logros.includes(texto)) t.logros.push(texto);
+    });
+    t.logros = t.logros.filter(l => l.trim());
+    renderTrabajoss();
+    verificarBtnMejorar();
+  }
+
   function renderTrabajoss() {
-    const c=document.getElementById('lista-trabajos');
-    if (!trabajosData.length){c.innerHTML='';return;}
-    c.innerHTML=trabajosData.map((t,idx)=>`
+    const container = document.getElementById('lista-trabajos');
+    if (!trabajosData.length) { container.innerHTML = ''; return; }
+    container.innerHTML = trabajosData.map((t, idx) => {
+      const sugerencias = obtenerSugerencias(t.cargo);
+      return `
       <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
           <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Trabajo ${idx+1}</span>
           <button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
         </div>
         <label style="margin-bottom:6px;">Cargo *</label>
-        <input type="text" placeholder="Ej: Analista Contable" value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value)" style="margin-bottom:12px;">
+        <input type="text" placeholder="Ej: Analista Contable" value="${t.cargo}"
+          oninput="actualizarTrabajo(${t.id},'cargo',this.value);actualizarSugerencias(${t.id},this.value)"
+          style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Empresa *</label>
-        <input type="text" placeholder="Ej: BCP, BBVA, Interbank..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
+        <input type="text" placeholder="Ej: BCP, BBVA, Interbank..." value="${t.empresa}"
+          oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
           <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2021" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div>
           <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div>
         </div>
         <label style="margin-bottom:6px;">Funciones o logros principales</label>
-        ${t.logros.map((l,i)=>`<input type="text" placeholder="Ej: Gestioné cartera de 200 clientes" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:8px;">`).join('')}
-        <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
-      </div>`).join('');
+        ${t.logros.map((l,i) => `<input type="text" placeholder="Ej: Gestioné cartera de 200 clientes" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:8px;">`).join('')}
+        <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:16px;">+ Agregar otro logro</button>
+
+        <div id="sugerencias-box-${t.id}" style="${t.cargo.trim() ? '' : 'display:none;'}">
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:8px;">💡 Sugerencias para ${t.cargo||'este cargo'} — selecciona las que aplican:</div>
+          <div style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;" id="chips-${t.id}">
+            ${sugerencias.map((s,i) => `
+              <button id="sug-${t.id}-${i}" data-texto="${s}"
+                onclick="toggleSugerencia(${t.id},${i})"
+                style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;">
+                ${s}
+              </button>`).join('')}
+          </div>
+          <button onclick="agregarSugerenciasSeleccionadas(${t.id})"
+            style="padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">
+            ✅ Agregar seleccionados
+          </button>
+        </div>
+      </div>`;
+    }).join('');
+
+    // Estilos para chips seleccionados
+    if (!document.getElementById('chip-styles')) {
+      const style = document.createElement('style');
+      style.id = 'chip-styles';
+      style.textContent = '.seleccionado { background:#0f3460 !important; color:white !important; border-color:#0f3460 !important; }';
+      document.head.appendChild(style);
+    }
+  }
+
+  function actualizarSugerencias(trabajoId, cargo) {
+    actualizarTrabajo(trabajoId, 'cargo', cargo);
+    const box = document.getElementById(`sugerencias-box-${trabajoId}`);
+    const chipsContainer = document.getElementById(`chips-${trabajoId}`);
+    if (!box || !chipsContainer) return;
+    if (!cargo.trim()) { box.style.display = 'none'; return; }
+    const sugerencias = obtenerSugerencias(cargo);
+    box.style.display = 'block';
+    box.querySelector('div').textContent = `💡 Sugerencias para ${cargo} — selecciona las que aplican:`;
+    chipsContainer.innerHTML = sugerencias.map((s,i) => `
+      <button id="sug-${trabajoId}-${i}" data-texto="${s}"
+        onclick="toggleSugerencia(${trabajoId},${i})"
+        style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;">
+        ${s}
+      </button>`).join('');
   }
   
   async function mejorarExperiencia() {
