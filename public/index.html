@@ -637,34 +637,7 @@
   function actualizarLogro(id,idx,valor) { const t=trabajosData.find(t=>t.id===id); if(t){t.logros[idx]=valor;verificarBtnMejorar();} }
   function agregarLogro(id) { const t=trabajosData.find(t=>t.id===id); if(t){t.logros.push('');renderTrabajoss();} }
   function verificarBtnMejorar() { document.getElementById('btn-mejorar').style.display=trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())?'block':'none'; }
-
-  const sugerenciasPorCargo = {
-    'analista': ['Gestioné cartera de [N] clientes con [%] de satisfacción','Elaboré reportes mensuales para gerencia','Reduje tiempos de proceso en [%] mediante automatización','Identifiqué oportunidades de mejora en [área]','Coordiné con equipos multidisciplinarios'],
-    'contador': ['Gestioné contabilidad de [N] cuentas con 99% de precisión','Elaboré declaraciones tributarias mensuales y anuales','Reduje errores contables en [%] mediante controles','Preparé estados financieros para auditorías externas','Optimicé procesos contables reduciendo tiempos en [%]'],
-    'vendedor': ['Superé cuota de ventas en [%] durante [N] trimestres','Gestioné cartera de [N] clientes generando S/[monto] anuales','Captué [N] clientes nuevos mediante prospección activa','Mantuve tasa de retención de clientes del [%]','Desarrollé estrategias comerciales para nuevos mercados'],
-    'ejecutivo': ['Lideré equipo de [N] personas logrando [resultado]','Negocié contratos por S/[monto] con clientes corporativos','Implementé estrategia comercial incrementando ventas en [%]','Gestioné presupuesto de S/[monto] con [%] de eficiencia'],
-    'desarrollador': ['Desarrollé [N] aplicaciones con [tecnología] usadas por [N] usuarios','Reduje tiempos de carga en [%] mediante optimización','Implementé metodología ágil reduciendo bugs en [%]','Lideré migraciones de sistemas críticos sin downtime'],
-    'ingeniero': ['Supervisé proyectos valorizados en S/[monto]','Lideré equipo de [N] personas en [proyecto]','Reduje costos en [%] mediante optimización de procesos','Implementé controles de calidad mejorando estándares en [%]'],
-    'docente': ['Enseñé a [N] estudiantes con aprobación del [%]','Desarrollé material didáctico mejorando rendimiento en [%]','Implementé metodologías activas aumentando participación en [%]','Coordiné proyectos académicos con [N] instituciones'],
-    'medico': ['Atendí [N] pacientes diarios en [especialidad/servicio]','Implementé protocolo reduciendo complicaciones en [%]','Coordiné con equipo multidisciplinario mejorando tiempos','Participé en [N] procedimientos o cirugías especializadas'],
-    'enfermero': ['Brindé atención a [N] pacientes diarios en [servicio]','Administré medicación con [%] de precisión','Coordiné con equipo médico mejorando tiempos de respuesta','Implementé protocolos de bioseguridad en el servicio'],
-    'marketing': ['Gestioné campañas digitales con presupuesto de S/[monto]','Aumenté tráfico orgánico en [%] mediante estrategia SEO','Incrementé conversiones en [%] optimizando landing pages','Gestioné redes sociales aumentando seguidores en [%]'],
-    'recursos humanos': ['Gestioné selección de [N] posiciones anuales','Implementé programa de onboarding reduciendo rotación en [%]','Administré planilla de [N] colaboradores','Desarrollé programa de capacitación para [N] personas'],
-    'administrador': ['Gestioné operaciones administrativas de [N] personas','Optimicé procesos reduciendo costos en [%]','Coordiné con proveedores logrando ahorro de S/[monto]','Implementé sistema de control mejorando eficiencia en [%]'],
-    'abogado': ['Gestioné [N] casos en materia [especialidad] con [%] éxito','Redacté contratos y documentos legales para clientes corporativos','Representé a clientes en [N] audiencias judiciales','Asesoré en cumplimiento normativo a [N] empresas'],
-    'diseñador': ['Diseñé [N] piezas gráficas para campañas de [resultado]','Reduje tiempos de entrega en [%] optimizando flujos','Desarrollé identidad visual para [N] marcas','Aumenté engagement en [%] con contenido visual estratégico'],
-    'logistica': ['Gestioné inventario de [N] SKUs con [%] de exactitud','Reduje costos logísticos en [%] optimizando rutas','Coordiné despacho de [N] pedidos diarios con [%] puntualidad','Implementé sistema de trazabilidad mejorando control en [%]'],
-  };
-
-  function obtenerSugerencias(cargo) {
-    if (!cargo) return [];
-    const cargoLower = cargo.toLowerCase();
-    for (const [key, sugerencias] of Object.entries(sugerenciasPorCargo)) {
-      if (cargoLower.includes(key)) return sugerencias;
-    }
-    return ['Gestioné [actividad principal] logrando [resultado]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro]','Lideré [proyecto/proceso] con [N] personas','Optimicé [proceso] mejorando eficiencia en [%]'];
-  }
-
+  
   function toggleSugerencia(trabajoId, idx) {
     const btn = document.getElementById(`sug-${trabajoId}-${idx}`);
     btn.classList.toggle('seleccionado');
@@ -804,7 +777,7 @@
     const btn=document.getElementById('btn-mejorar');
     btn.textContent='⏳ Mejorando...'; btn.disabled=true;
     try {
-      const response=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:'Profesional',email:'ejemplo@email.com',telefono:'',experiencia:experienciaTexto,educacion:'Profesional universitario',habilidades:document.getElementById('cargo-select').value||'profesional',habilidadesBlandas:'',oferta:'',mejorarExperiencia:true})});
+      const response=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre:'Profesional',email:'ejemplo@email.com',telefono:'',experiencia:experienciaTexto,educacion:'Profesional universitario',habilidades:'profesional',habilidadesBlandas:'',oferta:'',mejorarExperiencia:true})});
       const data=await response.json();
       const mejora=data.cv?.experiencia?.map(exp=>`${exp.cargo} — ${exp.empresa} (${exp.periodo})\n${exp.logros?.map(l=>`• ${l}`).join('\n')||''}`).join('\n\n')||experienciaTexto;
       document.getElementById('mejora-texto').textContent=mejora;
