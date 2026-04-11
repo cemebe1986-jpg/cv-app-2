@@ -273,7 +273,10 @@
             <option value="+593">🇪🇨 +593</option>
             <option value="+591">🇧🇴 +591</option>
           </select>
-          <input type="text" id="telefono" placeholder="999 888 777" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="margin-bottom:0; flex:1;">
+          <input type="text" id="telefono" placeholder="999 888 777" 
+               onblur="validarCampoLive(this)" 
+               oninput="this.value=this.value.replace(/[^\d\s]/g,''); marcarProgreso(this)" 
+               style="margin-bottom:0; flex:1;">
         </div>
         <div class="microcopy" style="margin-top:10px; margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
 
@@ -711,7 +714,12 @@
     let error = '';
     if (id === 'nombre' && valor.length > 0 && valor.length < 3) error = 'Mínimo 3 caracteres';
     if (id === 'email' && valor.length > 3 && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(valor)) error = 'Email no válido';
-    if (id === 'telefono' && valor.length > 0 && !/^\d{7,15}$/.test(valor.replace(/\s/g,''))) error = 'Solo números, 7-15 dígitos';
+    if (id === 'telefono' && valor.length > 0) {
+      const soloNumeros = valor.replace(/\s/g,'');
+      if (!/^\d+$/.test(soloNumeros)) error = 'Solo se permiten números';
+      else if (soloNumeros.length < 7) error = 'Número muy corto (mínimo 7 dígitos)';
+      else if (soloNumeros.length > 15) error = 'Número muy largo (máximo 15 dígitos)';
+    }
     let errorEl = document.getElementById(`error-${id}`);
     if (error) {
       input.style.borderColor = '#e53e3e';
@@ -1024,7 +1032,7 @@
     }
     guardarProgreso();
   }
-  
+
 </script>
 </body>
 </html>
