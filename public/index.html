@@ -248,58 +248,7 @@
 
       <!-- PASO 2: EXPERIENCIA -->
       <div class="step" id="step-2">
-        <label>¿Cuál es tu cargo o profesión?</label>
-        <div style="display:flex;gap:10px;margin-bottom:20px;">
-          <select id="cargo-select" onchange="manejarCargo(this)" style="flex:2;margin-bottom:0;">
-            <option value="">Selecciona tu profesión...</option>
-            <optgroup label="🎓 Sin experiencia">
-              <option value="estudiante">Estudiante / Recién egresado</option>
-              <option value="practicante">Practicante / Pasante</option>
-            </optgroup>
-            <optgroup label="💻 Tecnología">
-              <option>Analista de sistemas</option><option>Desarrollador web</option><option>Desarrollador móvil</option>
-              <option>Analista de datos</option><option>Soporte técnico</option><option>Ciberseguridad</option>
-              <option>Diseñador UX/UI</option><option>DevOps / Infraestructura</option>
-            </optgroup>
-            <optgroup label="📊 Administración y Finanzas">
-              <option>Contador</option><option>Administrador de empresas</option><option>Asistente administrativo</option>
-              <option>Recursos humanos</option><option>Analista financiero</option><option>Auditor</option>
-            </optgroup>
-            <optgroup label="🏥 Salud">
-              <option>Médico</option><option>Enfermero/a</option><option>Psicólogo/a</option>
-              <option>Nutricionista</option><option>Técnico en salud</option><option>Odontólogo</option>
-            </optgroup>
-            <optgroup label="📚 Educación">
-              <option>Docente</option><option>Director/a de institución</option><option>Tutor/a</option><option>Coordinador educativo</option>
-            </optgroup>
-            <optgroup label="🏗️ Ingeniería y Construcción">
-              <option>Ingeniero civil</option><option>Ingeniero industrial</option><option>Arquitecto/a</option>
-              <option>Técnico en construcción</option><option>Supervisor de obras</option>
-            </optgroup>
-            <optgroup label="📢 Marketing y Ventas">
-              <option>Marketing digital</option><option>Community manager</option><option>Vendedor / Ejecutivo comercial</option>
-              <option>Analista de marketing</option><option>Diseñador gráfico</option>
-            </optgroup>
-            <optgroup label="⚖️ Legal y Social">
-              <option>Abogado/a</option><option>Trabajador/a social</option><option>Asistente legal</option>
-            </optgroup>
-            <optgroup label="🔧 Técnico y Operaciones">
-              <option>Técnico electricista</option><option>Técnico mecánico</option><option>Operario de producción</option>
-              <option>Logística y almacén</option><option>Conductor / Chofer</option>
-            </optgroup>
-            <option value="otra">✏️ Otra profesión...</option>
-          </select>
-          <button type="button" onclick="sugerirTemplate()" id="btn-sugerir"
-            style="flex:1;padding:13px;background:#0f3460;color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;white-space:nowrap;display:none;font-size:0.85rem;">
-            📋 Template
-          </button>
-        </div>
-
-        <div id="cargo-otro-wrapper" style="display:none;margin-bottom:20px;">
-          <label>Escribe tu profesión</label>
-          <input type="text" id="cargo-otro" placeholder="Ej: Piloto, Chef, Fotógrafo..." style="margin-bottom:0;">
-        </div>
-
+        
         <label>Tu experiencia laboral *</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
 
@@ -711,26 +660,7 @@
         <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
       </div>`).join('');
   }
-
-  function manejarCargo(select) {
-    const valor=select.value;
-    document.getElementById('cargo-otro-wrapper').style.display=valor==='otra'?'block':'none';
-    document.getElementById('btn-sugerir').style.display=valor?'block':'none';
-  }
-
-  function sugerirTemplate() {
-    const select=document.getElementById('cargo-select');
-    const cargo=select.value==='otra'?document.getElementById('cargo-otro').value.trim():select.value;
-    if (!cargo){mostrarError('Sin cargo','Selecciona o escribe tu profesión primero.');return;}
-    const esEstudiante=cargo==='estudiante'||cargo==='practicante';
-    const t=esEstudiante
-      ?{id:Date.now(),cargo:'Practicante',empresa:'[Empresa/Institución]',desde:'[año]',hasta:'[año]',logros:['[Actividad o logro principal]','[Otra actividad relevante]']}
-      :{id:Date.now(),cargo:cargo,empresa:'[Empresa]',desde:'20XX',hasta:'20XX',logros:['[Función o logro principal con impacto]','[Responsabilidad clave]','[Otro logro importante]']};
-    trabajosData.push(t);
-    renderTrabajoss();
-    verificarBtnMejorar();
-  }
-
+  
   async function mejorarExperiencia() {
     if (!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())) { mostrarError('Faltan datos','Completa al menos cargo y empresa de tu trabajo.'); return; }
     const experienciaTexto=trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
