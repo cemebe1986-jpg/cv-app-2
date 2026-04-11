@@ -259,7 +259,15 @@
         <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)">
 
         <label>Email *</label>
-        <input type="email" id="email" placeholder="juan@gmail.com" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" autocomplete="off">
+        <div style="position:relative;">
+          <input type="email" id="email" placeholder="juan@gmail.com" 
+                 onblur="validarCampoLive(this)" 
+                 oninput="marcarProgreso(this); mostrarDominios(this)"
+                 autocomplete="off"
+                 style="margin-bottom:0;">
+          <div id="email-dropdown" style="display:none; position:absolute; background:white; border:2px solid #0f3460; border-radius:12px; box-shadow:0 8px 24px rgba(0,0,0,0.12); z-index:9999; width:100%; top:calc(100% + 4px); left:0; overflow:hidden;">
+          </div>
+        </div>
         <div class="microcopy" style="margin-top:-12px; margin-bottom:20px;">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
 
         <label>Teléfono</label>
@@ -1033,6 +1041,41 @@
   }
 
   detectarPaisPorCodigo();
+
+  const dominios = ['gmail.com', 'hotmail.com', 'outlook.com', 'yahoo.com', 'icloud.com', 'live.com'];
+
+  function mostrarDominios(input) {
+    const valor = input.value;
+    const dropdown = document.getElementById('email-dropdown');
+    const arroba = valor.indexOf('@');
+    if (arroba === -1) { dropdown.style.display = 'none'; return; }
+    const usuario = valor.slice(0, arroba);
+    const dominioParcial = valor.slice(arroba + 1).toLowerCase();
+    const filtrados = dominios.filter(d => d.startsWith(dominioParcial));
+    if (!filtrados.length) { dropdown.style.display = 'none'; return; }
+    dropdown.innerHTML = filtrados.map(d => `
+      <div onclick="seleccionarDominio('${usuario}@${d}')"
+           style="padding:11px 16px; cursor:pointer; font-size:0.9rem; color:#2d3748; border-bottom:1px solid #f0f0f0; transition:background 0.15s;"
+           onmouseover="this.style.background='#f0f4ff'"
+           onmouseout="this.style.background='white'">
+        ${usuario}<strong>@${d}</strong>
+      </div>`).join('');
+    dropdown.style.display = 'block';
+  }
+
+  function seleccionarDominio(email) {
+    document.getElementById('email').value = email;
+    document.getElementById('email-dropdown').style.display = 'none';
+    validarCampoLive(document.getElementById('email'));
+  }
+
+  document.addEventListener('click', e => {
+    if (!e.target.closest('#email') && !e.target.closest('#email-dropdown')) {
+      const dd = document.getElementById('email-dropdown');
+      if (dd) dd.style.display = 'none';
+    }
+  });
+
 
 </script>
 </body>
