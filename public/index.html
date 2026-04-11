@@ -676,10 +676,23 @@
 
   function obtenerSugerencias(cargo) {
     if (!cargo) return [];
-    const cargoLower = cargo.toLowerCase();
-    for (const [key, sugerencias] of Object.entries(sugerenciasPorCargo)) {
-      if (cargoLower.includes(key)) return sugerencias;
-    }
+    const c = cargo.toLowerCase();
+    if (c.includes('venta') || c.includes('comercial') || c.includes('vendedor') || c.includes('ejecutivo de')) return sugerenciasPorCargo['vendedor'];
+    if (c.includes('contab') || c.includes('contador')) return sugerenciasPorCargo['contador'];
+    if (c.includes('audit')) return sugerenciasPorCargo['contador'];
+    if (c.includes('analista')) return sugerenciasPorCargo['analista'];
+    if (c.includes('desarroll') || c.includes('programad') || c.includes('software') || c.includes('web') || c.includes('frontend') || c.includes('backend')) return sugerenciasPorCargo['desarrollador'];
+    if (c.includes('ingenier') || c.includes('supervisor') || c.includes('obra')) return sugerenciasPorCargo['ingeniero'];
+    if (c.includes('market') || c.includes('community') || c.includes('digital') || c.includes('seo') || c.includes('content')) return sugerenciasPorCargo['marketing'];
+    if (c.includes('rrhh') || c.includes('recursos humanos') || c.includes('seleccion') || c.includes('talento')) return sugerenciasPorCargo['recursos humanos'];
+    if (c.includes('admin') || c.includes('asistente') || c.includes('secretar') || c.includes('oficin')) return sugerenciasPorCargo['administrador'];
+    if (c.includes('abogad') || c.includes('legal') || c.includes('jurid')) return sugerenciasPorCargo['abogado'];
+    if (c.includes('docente') || c.includes('profesor') || c.includes('maestro') || c.includes('enseñ')) return sugerenciasPorCargo['docente'];
+    if (c.includes('medic') || c.includes('doctor') || c.includes('cirujano')) return sugerenciasPorCargo['medico'];
+    if (c.includes('enfermer') || c.includes('tecnico en salud') || c.includes('obstetr')) return sugerenciasPorCargo['enfermero'];
+    if (c.includes('diseñ') || c.includes('graphic') || c.includes('ux') || c.includes('ui') || c.includes('creativ')) return sugerenciasPorCargo['diseñador'];
+    if (c.includes('logistic') || c.includes('almacen') || c.includes('supply') || c.includes('despacho') || c.includes('transport')) return sugerenciasPorCargo['logistica'];
+    if (c.includes('gerente') || c.includes('director') || c.includes('jefe') || c.includes('lider') || c.includes('manager')) return sugerenciasPorCargo['ejecutivo'];
     return ['Gestioné [actividad principal] logrando [resultado]','Implementé [mejora] reduciendo [problema] en [%]','Coordiné con [equipo/área] para [logro]','Lideré [proyecto/proceso] con [N] personas','Optimicé [proceso] mejorando eficiencia en [%]'];
   }
 
