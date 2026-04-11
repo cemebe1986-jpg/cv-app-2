@@ -275,7 +275,7 @@
           </select>
           <input type="text" id="telefono" placeholder="999 888 777" oninput="validarCampoLive(this)" style="margin-bottom:0; flex:1;">
         </div>
-        <div class="microcopy" style="margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
+        <div class="microcopy" style="margin-top:10px; margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
 
         <label>País</label>
         <select id="pais" onchange="actualizarCiudades()">
@@ -720,9 +720,11 @@
     } else if (valor.length > 0) {
       input.style.borderColor = '#48bb78';
       if (errorEl) errorEl.remove();
+      cerrarError();
     } else {
       input.style.borderColor = '#e2e8f0';
       if (errorEl) errorEl.remove();
+      cerrarError();
     }
     guardarProgreso();
   }
