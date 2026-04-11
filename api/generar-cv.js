@@ -1,11 +1,61 @@
 const Anthropic = require('@anthropic-ai/sdk');
 
 module.exports = async (req, res) => {
-  const { nombre, email, telefono, experiencia, educacion, habilidades, habilidadesBlandas, oferta } = req.body;
+  const {
+    nombre, email, telefono, experiencia, educacion,
+    habilidades, habilidadesBlandas, oferta, mejorarExperiencia
+  } = req.body;
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   try {
+
+    // ── MEJORAR EXPERIENCIA ──────────────────────────────────────────────
+    if (mejorarExperiencia) {
+      const promptMejora = `Eres un experto en CVs profesionales para el mercado peruano.
+El usuario te da su experiencia laboral en formato simple. Tu tarea es mejorarla con lenguaje profesional e impactante.
+
+EXPERIENCIA DEL USUARIO:
+${experiencia}
+
+INSTRUCCIONES:
+- Mantén los mismos cargos, empresas y fechas exactas que dio el usuario
+- Reescribe los logros con verbos de acción fuertes: gestioné, implementé, reduje, aumenté, lideré, optimicé
+- Agrega impacto medible cuando sea posible (%, números, montos en soles)
+- Usa lenguaje profesional del mercado peruano
+- Cada trabajo debe tener mínimo 3 logros
+- Responde SOLO con JSON válido sin markdown ni texto adicional
+
+Formato JSON requerido:
+{
+  "experiencia": [
+    {
+      "cargo": "cargo exacto del usuario",
+      "empresa": "empresa exacta del usuario",
+      "periodo": "fechas exactas del usuario",
+      "logros": ["logro mejorado 1", "logro mejorado 2", "logro mejorado 3"]
+    }
+  ]
+}`;
+
+      const message = await client.messages.create({
+        model: 'claude-haiku-4-5',
+        max_tokens: 1000,
+        messages: [{ role: 'user', content: promptMejora }]
+      });
+
+      let mejoraData;
+      try {
+        const text = message.content[0].text.replace(/```json|```/g, '').trim();
+        mejoraData = JSON.parse(text);
+      } catch(e) {
+        mejoraData = { error: 'Error parseando respuesta' };
+      }
+
+      return res.json({ cv: mejoraData });
+    }
+
+    // ── GENERAR CV COMPLETO ──────────────────────────────────────────────
     const tieneOferta = oferta && oferta.trim().length > 0;
 
     const promptBase = `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos que te doy abajo. NO uses placeholders ni dejes campos vacíos.
@@ -53,6 +103,7 @@ Formato JSON requerido:
     }
 
     res.json({ cv: cvData });
+
   } catch (error) {
     console.log('ERROR:', error.message);
     res.status(500).json({ error: error.message });
