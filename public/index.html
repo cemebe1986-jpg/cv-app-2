@@ -838,12 +838,12 @@
         </div>
         <label style="margin-bottom:6px;">Cargo *</label>
         <input type="text" placeholder="Ej: Analista Contable" value="${t.cargo}"
-          onblur="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)"
-          oninput="actualizarTrabajo(${t.id},'cargo',this.value)"
+          oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)"
           style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Empresa *</label>
         <input type="text" placeholder="Ej: BCP, BBVA, Interbank..." value="${t.empresa}"
-          oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
+          oninput="actualizarTrabajo(${t.id},'empresa',this.value)"
+          style="margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
           <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2021" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div>
           <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div>
