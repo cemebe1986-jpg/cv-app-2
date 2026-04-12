@@ -3,64 +3,106 @@ const Anthropic = require('@anthropic-ai/sdk');
 module.exports = async (req, res) => {
   const {
     nombre, email, telefono, experiencia, educacion,
-    habilidades, habilidadesBlandas, oferta, mejorarExperiencia
+    habilidades, habilidadesBlandas, oferta,
+    mejorarExperiencia, sugerenciasLogros, cargo, empresa,
+    sugerenciasHabilidades, mejorarPerfil, perfil
   } = req.body;
 
   const client = new Anthropic({ apiKey: process.env.ANTHROPIC_API_KEY });
 
   try {
 
-    // ── MEJORAR EXPERIENCIA ──────────────────────────────────────────────
-    if (mejorarExperiencia) {
-      const promptMejora = `Eres un experto en CVs profesionales para el mercado peruano.
-El usuario te da su experiencia laboral en formato simple. Tu tarea es mejorarla con lenguaje profesional e impactante.
+    // SUGERENCIAS DE LOGROS POR CARGO
+    if (sugerenciasLogros) {
+      if (!cargo) return res.status(400).json({ error: 'Cargo requerido' });
+      const prompt = `Eres un experto en CVs profesionales para el mercado peruano y latinoamericano.
+Genera exactamente 6 logros profesionales específicos y medibles para el cargo: "${cargo}"${empresa ? ` en ${empresa}` : ''}.
 
-EXPERIENCIA DEL USUARIO:
+REGLAS:
+- Usa verbos de acción: gestioné, implementé, reduje, aumenté, lideré, optimicé, desarrollé, supervisé
+- Incluye números concretos, porcentajes o montos en soles cuando sea relevante
+- Cada logro máximo 15 palabras
+- Sé específico para este cargo exacto
+- Lenguaje profesional del mercado peruano
+- Responde SOLO con JSON sin markdown
+
+{"sugerencias": ["logro 1", "logro 2", "logro 3", "logro 4", "logro 5", "logro 6"]}`;
+
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:600, messages:[{role:'user',content:prompt}] });
+      try { return res.json(JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim())); }
+      catch(e) { return res.json({ sugerencias: [] }); }
+    }
+
+    // SUGERENCIAS DE HABILIDADES
+    if (sugerenciasHabilidades) {
+      if (!cargo) return res.status(400).json({ error: 'Cargo requerido' });
+      const prompt = `Eres un experto en RRHH y CVs para el mercado peruano.
+Lista exactamente 8 habilidades técnicas más demandadas para el cargo: "${cargo}".
+
+REGLAS:
+- Solo habilidades técnicas (herramientas, software, metodologías)
+- No incluyas habilidades blandas
+- Ordena de mayor a menor importancia
+- Máximo 3 palabras por habilidad
+- Responde SOLO con JSON sin markdown
+
+{"sugerencias": ["hab 1", "hab 2", "hab 3", "hab 4", "hab 5", "hab 6", "hab 7", "hab 8"]}`;
+
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:400, messages:[{role:'user',content:prompt}] });
+      try { return res.json(JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim())); }
+      catch(e) { return res.json({ sugerencias: [] }); }
+    }
+
+    // MEJORAR PERFIL PROFESIONAL
+    if (mejorarPerfil) {
+      const prompt = `Eres un experto en CVs profesionales para el mercado peruano.
+Reescribe este perfil profesional haciéndolo más impactante para reclutadores.
+
+CARGO: ${cargo || 'Profesional'}
+EXPERIENCIA EN: ${experiencia || 'diversas áreas'}
+PERFIL ACTUAL: ${perfil || ''}
+
+REGLAS:
+- Máximo 3 oraciones potentes
+- Empieza con el cargo o especialidad
+- Destaca el valor que aporta al empleador
+- Lenguaje activo y profesional para el mercado peruano
+- Responde SOLO con JSON sin markdown
+
+{"perfil": "párrafo mejorado aquí"}`;
+
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:400, messages:[{role:'user',content:prompt}] });
+      try { return res.json(JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim())); }
+      catch(e) { return res.json({ perfil: perfil || '' }); }
+    }
+
+    // MEJORAR EXPERIENCIA
+    if (mejorarExperiencia) {
+      const prompt = `Eres un experto en CVs profesionales para el mercado peruano.
+Mejora esta experiencia laboral con lenguaje profesional e impactante.
+
+EXPERIENCIA:
 ${experiencia}
 
 INSTRUCCIONES:
-- Mantén los mismos cargos, empresas y fechas exactas que dio el usuario
-- Reescribe los logros con verbos de acción fuertes: gestioné, implementé, reduje, aumenté, lideré, optimicé
-- Agrega impacto medible cuando sea posible (%, números, montos en soles)
-- Usa lenguaje profesional del mercado peruano
-- Cada trabajo debe tener mínimo 3 logros
-- Responde SOLO con JSON válido sin markdown ni texto adicional
+- Mantén cargos, empresas y fechas exactas
+- Reescribe logros con verbos de acción: gestioné, implementé, reduje, aumenté, lideré
+- Agrega impacto medible (%, números, soles) cuando sea posible
+- Mínimo 3 logros por trabajo
+- Responde SOLO con JSON sin markdown
 
-Formato JSON requerido:
-{
-  "experiencia": [
-    {
-      "cargo": "cargo exacto del usuario",
-      "empresa": "empresa exacta del usuario",
-      "periodo": "fechas exactas del usuario",
-      "logros": ["logro mejorado 1", "logro mejorado 2", "logro mejorado 3"]
-    }
-  ]
-}`;
+{"experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}]}`;
 
-      const message = await client.messages.create({
-        model: 'claude-haiku-4-5',
-        max_tokens: 1000,
-        messages: [{ role: 'user', content: promptMejora }]
-      });
-
-      let mejoraData;
-      try {
-        const text = message.content[0].text.replace(/```json|```/g, '').trim();
-        mejoraData = JSON.parse(text);
-      } catch(e) {
-        mejoraData = { error: 'Error parseando respuesta' };
-      }
-
-      return res.json({ cv: mejoraData });
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:1000, messages:[{role:'user',content:prompt}] });
+      try { return res.json({ cv: JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim()) }); }
+      catch(e) { return res.json({ cv: { experiencia: [] } }); }
     }
 
-    // ── GENERAR CV COMPLETO ──────────────────────────────────────────────
+    // GENERAR CV COMPLETO
     const tieneOferta = oferta && oferta.trim().length > 0;
+    const promptBase = `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
-    const promptBase = `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos que te doy abajo. NO uses placeholders ni dejes campos vacíos.
-
-DATOS DEL USUARIO:
+DATOS:
 - Nombre: ${nombre}
 - Email: ${email}
 - Teléfono: ${telefono}
@@ -68,43 +110,32 @@ DATOS DEL USUARIO:
 - Educación: ${educacion}
 - Habilidades técnicas: ${habilidades}
 - Habilidades blandas: ${habilidadesBlandas}
-${tieneOferta ? `\nOFERTA DE TRABAJO:\n${oferta}` : ''}
+${tieneOferta ? `\nOFERTA:\n${oferta}` : ''}
 
 INSTRUCCIONES:
-- Usa EXACTAMENTE los datos proporcionados
-- NO inventes ni dejes campos vacíos
-- Solo estas secciones en el JSON: perfil, experiencia, educacion
-${tieneOferta ? '- Optimiza el perfil profesional para que resalte las habilidades que pide la oferta de trabajo' : ''}
+- Usa EXACTAMENTE los datos, NO inventes nada
+- Perfil: 3 líneas impactantes basadas en la experiencia real
+- Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
+${tieneOferta ? '- Analiza compatibilidad con la oferta' : ''}
 - Responde SOLO con JSON válido sin markdown
 
-Formato JSON requerido:
 {
   "nombre": "${nombre}",
   "email": "${email}",
   "telefono": "${telefono}",
-  "perfil": "párrafo de 3 líneas optimizado",
+  "perfil": "párrafo de 3 líneas",
   "experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}],
   "educacion": [{"titulo": "...", "institucion": "...", "año": "..."}]
-  ${tieneOferta ? ',"compatibilidad": {"score": 85, "keywords_encontradas": ["palabra1", "palabra2"], "keywords_faltantes": ["palabra3"], "recomendaciones": ["recomendacion1", "recomendacion2"]}' : ''}
+  ${tieneOferta ? ',"compatibilidad": {"score": 85, "keywords_encontradas": ["kw1"], "keywords_faltantes": ["kw2"], "recomendaciones": ["rec1"]}' : ''}
 }`;
 
-    const message = await client.messages.create({
-      model: 'claude-haiku-4-5',
-      max_tokens: 1500,
-      messages: [{ role: 'user', content: promptBase }]
-    });
-
+    const message = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:1500, messages:[{role:'user',content:promptBase}] });
     let cvData;
-    try {
-      const text = message.content[0].text.replace(/```json|```/g, '').trim();
-      cvData = JSON.parse(text);
-    } catch (e) {
-      cvData = { error: 'Error parseando respuesta' };
-    }
-
+    try { cvData = JSON.parse(message.content[0].text.replace(/```json|```/g,'').trim()); }
+    catch(e) { cvData = { error: 'Error parseando respuesta' }; }
     res.json({ cv: cvData });
 
-  } catch (error) {
+  } catch(error) {
     console.log('ERROR:', error.message);
     res.status(500).json({ error: error.message });
   }
