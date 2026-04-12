@@ -143,7 +143,7 @@
   .btn-prev:hover { border-color:#0f3460; background:#f0f4ff; }
   .btn-next { padding:13px 32px; background:linear-gradient(135deg,#1a1a2e,#0f3460); color:white; border:none; border-radius:12px; font-size:0.95rem; font-weight:700; cursor:pointer; min-width:160px; transition:opacity 0.2s,transform 0.2s; }
   .btn-next:hover { opacity:0.92; transform:translateY(-1px); }
-  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin:0 36px 20px; }
+  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin:12px 36px 16px; }
   .error-toast.visible { display:flex; align-items:center; gap:12px; }
   .error-toast-icono { font-size:1.3rem; }
   .error-toast-texto { flex:1; }
@@ -365,17 +365,6 @@
         <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">
           + Agregar trabajo
         </button>
-        <button type="button" onclick="pedirIAConLogin(mejorarExperiencia)" id="btn-mejorar" style="width:100%;padding:13px;background:linear-gradient(135deg,#6366f1,#8b5cf6);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.9rem;margin-bottom:16px;display:none;">
-          ✨ Mejorar mi experiencia con IA
-        </button>
-        <div id="mejora-box" style="display:none;background:#f5f3ff;border:2px solid #6366f1;border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#6366f1;margin-bottom:8px;">✨ Versión mejorada por IA:</div>
-          <div id="mejora-texto" style="font-size:0.85rem;color:#2d3748;line-height:1.8;margin-bottom:12px;white-space:pre-wrap;"></div>
-          <div style="display:flex;gap:8px;">
-            <button onclick="usarMejora()" style="flex:1;padding:10px;background:#6366f1;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;">✅ Usar esta versión</button>
-            <button onclick="document.getElementById('mejora-box').style.display='none'" style="flex:1;padding:10px;background:white;color:#6366f1;border:2px solid #6366f1;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;">✏️ Mantener la mía</button>
-          </div>
-        </div>
       </div>
 
       <!-- PASO 3: EDUCACIÓN -->
@@ -425,7 +414,7 @@
         <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Volver</button>
         <button class="btn-next" id="btn-next" onclick="pasoSiguiente()">Continuar →</button>
       </div>
-      <div class="error-toast" id="error-toast">
+      <div class="error-toast" id="error-toast" style="margin-top:8px;">
         <div class="error-toast-icono">⚠️</div>
         <div class="error-toast-texto">
           <div class="error-toast-titulo" id="error-toast-titulo"></div>
