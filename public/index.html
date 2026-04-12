@@ -837,10 +837,10 @@
     return t?t.cargo:'';
   }
 
-  function renderTrabajoss(){
-    const container=document.getElementById('lista-trabajos');
-    if(!trabajosData.length){container.innerHTML='';return;}
-    container.innerHTML=trabajosData.map((t,idx)=>`
+  function renderTrabajoss() {
+    const container = document.getElementById('lista-trabajos');
+    if (!trabajosData.length) { container.innerHTML = ''; return; }
+    container.innerHTML = trabajosData.map((t, idx) => `
       <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
           <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Trabajo ${idx+1}</span>
@@ -858,24 +858,27 @@
           <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2021" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div>
           <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div>
         </div>
-        <label style="margin-bottom:6px;">Funciones o logros principales</label>
-        ${t.logros.map((l,i)=>`<input type="text" placeholder="Ej: Gestioné cartera de 200 clientes" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:8px;">`).join('')}
-        <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:${t.cargo.trim()?'12':'0'}px;">+ Agregar otro logro</button>
-        
-        <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};">
+
+        <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;">
           <button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))"
-            style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;margin-top:4px;">
+            style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
             💡 Ver sugerencias de logros con IA <span style="font-size:0.72rem;opacity:0.7;">(${quedanLlamadasIA()} restantes)</span>
           </button>
         </div>
-        <div id="sug-ia-box-${t.id}" style="display:none;margin-top:12px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:8px;" id="sug-ia-titulo-${t.id}">✨ Sugerencias para ${t.cargo}:</div>
-          <div id="chips-ia-${t.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+
+        <div id="sug-ia-box-${t.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:14px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;" id="sug-ia-titulo-${t.id}">✨ Sugerencias para ${t.cargo}:</div>
+          <div id="chips-ia-${t.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
           <button onclick="agregarSugerenciasIASeleccionadas(${t.id})"
             style="padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">
             ✅ Agregar seleccionados
           </button>
         </div>
+
+        <label style="margin-bottom:6px;">Tus logros adicionales</label>
+        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Agrega logros específicos que la IA no mencionó</p>
+        ${t.logros.map((l,i) => `<input type="text" placeholder="Ej: Reduje errores en 30% usando nueva metodología" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:8px;">`).join('')}
+        <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
       </div>`).join('');
   }
 
