@@ -143,7 +143,7 @@
   .btn-prev:hover { border-color:#0f3460; background:#f0f4ff; }
   .btn-next { padding:13px 32px; background:linear-gradient(135deg,#1a1a2e,#0f3460); color:white; border:none; border-radius:12px; font-size:0.95rem; font-weight:700; cursor:pointer; min-width:160px; transition:opacity 0.2s,transform 0.2s; }
   .btn-next:hover { opacity:0.92; transform:translateY(-1px); }
-  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin:12px 36px 16px; }
+  .error-toast { display:none; background:#fff5f5; border:2px solid #fed7d7; border-radius:12px; padding:16px 20px; margin:0 36px 16px; }
   .error-toast.visible { display:flex; align-items:center; gap:12px; }
   .error-toast-icono { font-size:1.3rem; }
   .error-toast-texto { flex:1; }
@@ -410,17 +410,18 @@
         <textarea id="oferta" placeholder="Pega la descripción del trabajo al que quieres postular..."></textarea>
       </div>
 
-      <div class="wizard-nav" id="wizard-nav" style="display:none;">
-        <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Volver</button>
-        <button class="btn-next" id="btn-next" onclick="pasoSiguiente()">Continuar →</button>
-      </div>
-      <div class="error-toast" id="error-toast" style="margin-top:8px;">
+      <div class="error-toast" id="error-toast">
         <div class="error-toast-icono">⚠️</div>
         <div class="error-toast-texto">
           <div class="error-toast-titulo" id="error-toast-titulo"></div>
           <div class="error-toast-desc" id="error-toast-desc"></div>
         </div>
         <button onclick="cerrarError()" style="background:none;border:none;cursor:pointer;color:#a0aec0;font-size:1.1rem;">✕</button>
+      </div>
+
+      <div class="wizard-nav" id="wizard-nav" style="display:none;">
+        <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Volver</button>
+        <button class="btn-next" id="btn-next" onclick="pasoSiguiente()">Continuar →</button>
       </div>
     </div>
   </div>
