@@ -892,7 +892,9 @@
     const box = document.getElementById(`sug-ia-box-${trabajoId}`);
     const chips = document.getElementById(`chips-ia-${trabajoId}`);
     const titulo = document.getElementById(`sug-ia-titulo-${trabajoId}`);
-    chips.innerHTML = '<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para '+t.cargo+'...</div>';
+    if (!box||!chips) return;
+
+    chips.innerHTML = `<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${t.cargo}...</div>`;
     box.style.display = 'block';
 
     try {
@@ -903,16 +905,16 @@
       const data = await response.json();
       const sugerencias = data.sugerencias || [];
       incrementarLlamadasIA();
-      titulo.textContent = `✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
+      if (titulo) titulo.textContent = `✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
       chips.innerHTML = sugerencias.map((s,i) => `
-        <button id="sug-ia-${trabajoId}-${i}" data-texto="${s.replace(/"/g,'&quot;')}"
+        <button id="sug-ia-${trabajoId}-${i}" data-texto="${s.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}"
           onclick="this.classList.toggle('seleccionado')"
-          style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;">
+          style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:4px;">
           ${s}
         </button>`).join('');
-      // Actualizar contador en botones
-      renderTrabajoss();
-    } catch(e) { chips.innerHTML = '<div style="color:#e53e3e;font-size:0.82rem;">Error generando sugerencias. Intenta de nuevo.</div>'; }
+    } catch(e) {
+      chips.innerHTML = '<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error generando sugerencias. Intenta de nuevo.</div>';
+    }
   }
 
   function agregarSugerenciasIASeleccionadas(trabajoId) {
