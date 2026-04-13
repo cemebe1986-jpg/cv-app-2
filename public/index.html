@@ -164,11 +164,9 @@
   .estilos-selector { background:white; padding:20px 28px; border-bottom:2px solid #f0f0f0; }
   .estilos-selector-titulo { font-size:0.78rem; font-weight:700; color:#718096; text-transform:uppercase; letter-spacing:0.6px; margin-bottom:14px; }
   .estilos-grid { display:flex; gap:12px; }
-  .estilo-opcion { flex:1; border:2px solid #e2e8f0; border-radius:12px; padding:10px; cursor:pointer; transition:all 0.2s; text-align:center; }
-  .estilo-opcion:hover { border-color:#0f3460; transform:translateY(-2px); }
-  .estilo-opcion.activo { border-color:#0f3460; background:#f0f4ff; }
-  .estilo-mini { width:100%; height:60px; border-radius:6px; margin-bottom:8px; overflow:hidden; display:flex; }
-  .estilo-nombre { font-size:0.75rem; font-weight:700; color:#1a1a2e; }
+  .estilo-btn { flex:1; padding:12px 16px; border:2px solid #e2e8f0; border-radius:12px; background:white; font-size:0.88rem; font-weight:700; color:#4a5568; cursor:pointer; transition:all 0.2s; }
+  .estilo-btn:hover { border-color:#0f3460; color:#0f3460; transform:translateY(-1px); }
+  .estilo-btn.activo { border-color:#0f3460; background:#f0f4ff; color:#0f3460; }
 
   /* CV PREVIEW */
   .cv-preview { display:none; max-width:800px; margin:32px auto 0; background:white; border-radius:20px; overflow:hidden; box-shadow:0 8px 40px rgba(0,0,0,0.12); }
@@ -467,39 +465,18 @@
     <div class="estilos-selector">
       <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
       <div class="estilos-grid">
-        <div class="estilo-opcion activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico">
-          <div class="estilo-mini" style="background:#f0f0f0;">
-            <div style="width:35%;background:#1a1a2e;"></div>
-            <div style="flex:1;background:white;padding:4px;">
-              <div style="height:3px;background:#0f3460;width:60%;margin-bottom:3px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:90%;margin-bottom:2px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:75%;"></div>
-            </div>
-          </div>
-          <div class="estilo-nombre">Clásico</div>
-        </div>
-        <div class="estilo-opcion" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno">
-          <div class="estilo-mini" style="background:#f0f0f0;">
-            <div style="width:35%;background:linear-gradient(160deg,#065f46,#047857);"></div>
-            <div style="flex:1;background:white;padding:4px;">
-              <div style="height:3px;background:#059669;width:60%;margin-bottom:3px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:90%;margin-bottom:2px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:75%;"></div>
-            </div>
-          </div>
-          <div class="estilo-nombre">Moderno</div>
-        </div>
-        <div class="estilo-opcion" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal">
-          <div class="estilo-mini" style="background:white;border:1px solid #e2e8f0;">
-            <div style="width:100%;padding:4px 6px;">
-              <div style="height:4px;background:#1a1a2e;width:50%;margin-bottom:3px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:80%;margin-bottom:2px;"></div>
-              <div style="height:1px;background:#1a1a2e;width:100%;margin-bottom:3px;"></div>
-              <div style="height:2px;background:#e2e8f0;width:90%;"></div>
-            </div>
-          </div>
-          <div class="estilo-nombre">Minimalista</div>
-        </div>
+        <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>
+          Clásico
+        </button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#047857;margin-right:6px;vertical-align:middle;"></span>
+          Moderno
+        </button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal">
+          <span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>
+          Minimalista
+        </button>
       </div>
     </div>
 
