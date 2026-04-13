@@ -880,6 +880,7 @@
 
   function mostrarBotonSugerenciasIA(trabajoId, cargo) {
     const btn = document.getElementById(`btn-sug-ia-${trabajoId}`);
+    console.log('buscando btn-sug-ia-'+trabajoId, btn, cargo);
     if (!btn) return;
     btn.style.display = cargo.trim() ? 'block' : 'none';
   }
