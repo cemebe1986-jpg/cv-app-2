@@ -1212,6 +1212,13 @@
 
   // INIT
   detectarPaisPorCodigo();
+
+  function mostrarBotonSugerenciasIA(trabajoId, cargo) {
+    const btn = document.getElementById(`btn-sug-ia-${trabajoId}`);
+    if (!btn) return;
+    btn.style.display = cargo.trim() ? 'block' : 'none';
+  }
+  
 </script>
 </body>
 </html>
