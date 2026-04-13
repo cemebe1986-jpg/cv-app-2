@@ -80,7 +80,6 @@
     .cv-mini-empresa { font-size: 0.65rem; color: #0f3460; }
     .cv-mini-logro { font-size: 0.65rem; color: #718096; margin-left: 8px; position: relative; }
     .cv-mini-logro::before { content: '▸'; position: absolute; left: -8px; color: #0f3460; font-size: 0.55rem; }
-    .watermark { position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%) rotate(-35deg); font-size: 0.9rem; font-weight: 900; color: rgba(15,52,96,0.08); white-space: nowrap; pointer-events: none; }
 
     /* TESTIMONIOS */
     .testimonios { padding: 100px 40px; background: white; }
@@ -92,7 +91,6 @@
     .testimonio-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #1a1a2e, #0f3460); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
     .testimonio-nombre { font-weight: 700; font-size: 0.88rem; color: #1a1a2e; }
     .testimonio-cargo { font-size: 0.78rem; color: #718096; }
-    .testimonio-placeholder { opacity: 0.4; filter: blur(3px); }
 
     /* PRECIOS */
     .precios { padding: 100px 40px; background: #f8faff; }
@@ -148,7 +146,6 @@
     <div class="hero-badge">⚡ Potenciado con Inteligencia Artificial</div>
     <h1>El CV que te consigue<br><span>la entrevista</span></h1>
     <p class="hero-sub">La IA analiza tu perfil y genera un CV profesional optimizado para los reclutadores de Perú y Latinoamérica.</p>
-
     <div class="demo-box">
       <div class="demo-header">
         <div class="demo-dot" style="background:#ef4444;"></div>
@@ -158,7 +155,6 @@
       </div>
       <div class="demo-texto" id="demo-texto"><span class="demo-cursor"></span></div>
     </div>
-
     <a href="/crear" class="hero-cta">✨ Crear mi CV gratis</a>
     <div class="hero-cta-sub">Sin tarjeta de crédito · Listo en 5 minutos</div>
   </div>
@@ -197,36 +193,24 @@
       <p>La IA no solo cambia el diseño — reescribe tu experiencia con el lenguaje que los reclutadores quieren ver.</p>
       <div class="cv-feature">
         <div class="cv-feature-icon">🎯</div>
-        <div class="cv-feature-text">
-          <strong>Optimizado para ATS</strong>
-          Pasa los filtros automáticos de las grandes empresas
-        </div>
+        <div class="cv-feature-text"><strong>Optimizado para ATS</strong>Pasa los filtros automáticos de las grandes empresas</div>
       </div>
       <div class="cv-feature">
         <div class="cv-feature-icon">✍️</div>
-        <div class="cv-feature-text">
-          <strong>Redacción profesional</strong>
-          La IA convierte tu experiencia en logros con impacto
-        </div>
+        <div class="cv-feature-text"><strong>Redacción profesional</strong>La IA convierte tu experiencia en logros con impacto</div>
       </div>
       <div class="cv-feature">
         <div class="cv-feature-icon">📊</div>
-        <div class="cv-feature-text">
-          <strong>Análisis de compatibilidad</strong>
-          Compara tu CV con la oferta de trabajo y te dice cómo mejorar
-        </div>
+        <div class="cv-feature-text"><strong>Análisis de compatibilidad</strong>Compara tu CV con la oferta de trabajo y te dice cómo mejorar</div>
       </div>
       <div class="cv-feature">
         <div class="cv-feature-icon">🇵🇪</div>
-        <div class="cv-feature-text">
-          <strong>Formato peruano</strong>
-          Diseñado para el mercado laboral de Perú y Latinoamérica
-        </div>
+        <div class="cv-feature-text"><strong>Formato peruano</strong>Diseñado para el mercado laboral de Perú y Latinoamérica</div>
       </div>
     </div>
     <div style="position:relative;">
       <div class="cv-preview-mini">
-        <div style="display:grid; grid-template-columns:140px 1fr;">
+        <div style="display:grid;grid-template-columns:140px 1fr;">
           <div class="cv-mini-sidebar">
             <div class="cv-mini-foto">👤</div>
             <div class="cv-mini-nombre">Juan Pérez García</div>
@@ -239,25 +223,21 @@
             <div class="cv-mini-skill">
               <div class="cv-mini-skill-name">Excel</div>
               <div class="cv-mini-dots">
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div><div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div><div class="cv-mini-dot filled"></div>
                 <div class="cv-mini-dot"></div>
               </div>
             </div>
             <div class="cv-mini-skill">
               <div class="cv-mini-skill-name">SAP</div>
               <div class="cv-mini-dots">
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot filled"></div>
-                <div class="cv-mini-dot"></div>
+                <div class="cv-mini-dot filled"></div><div class="cv-mini-dot filled"></div>
+                <div class="cv-mini-dot filled"></div><div class="cv-mini-dot"></div>
                 <div class="cv-mini-dot"></div>
               </div>
             </div>
           </div>
-          <div class="cv-mini-main" style="position:relative; overflow:hidden;">            
+          <div class="cv-mini-main">
             <div class="cv-mini-main-nombre">Juan Pérez García</div>
             <div class="cv-mini-divider"></div>
             <div class="cv-mini-perfil">Contador con sólida experiencia en gestión financiera y cumplimiento tributario. Orientado a resultados con capacidad para optimizar procesos contables.</div>
@@ -281,38 +261,60 @@
 <section class="testimonios">
   <div class="section-label">Lo que dicen nuestros usuarios</div>
   <h2 class="section-title">Historias reales de éxito</h2>
-  <p class="section-sub">Próximamente — estamos recopilando testimonios de nuestros primeros usuarios.</p>
+  <p class="section-sub">Profesionales que ya usan TalentIA para destacar.</p>
   <div class="testimonios-grid">
-    <div class="testimonio testimonio-placeholder">
+    <div class="testimonio">
       <div class="testimonio-estrellas">★★★★★</div>
-      <p class="testimonio-texto">"Generé mi CV en 5 minutos y a la semana me llamaron de tres empresas. La IA mejoró muchísimo cómo describía mi experiencia."</p>
+      <p class="testimonio-texto">"No tenía idea de cómo mejorar mi CV y probé la herramienta con IA… me sorprendió. En serio lo dejó mucho más claro y profesional."</p>
       <div class="testimonio-autor">
-        <div class="testimonio-avatar">M</div>
+        <div class="testimonio-avatar">✓</div>
         <div>
-          <div class="testimonio-nombre">María García</div>
-          <div class="testimonio-cargo">Analista de Marketing · Lima</div>
+          <div class="testimonio-nombre">Usuario verificado</div>
+          <div class="testimonio-cargo">Lima, Perú</div>
         </div>
       </div>
     </div>
-    <div class="testimonio testimonio-placeholder">
+    <div class="testimonio">
       <div class="testimonio-estrellas">★★★★★</div>
-      <p class="testimonio-texto">"Llevaba meses buscando trabajo con mi CV de Word. Con TalentIA conseguí entrevista en menos de dos semanas."</p>
+      <p class="testimonio-texto">"Lo hice por curiosidad por la IA y terminé usando el CV para postular. A la semana ya tenía una entrevista."</p>
       <div class="testimonio-autor">
-        <div class="testimonio-avatar">C</div>
+        <div class="testimonio-avatar">✓</div>
         <div>
-          <div class="testimonio-nombre">Carlos Mendoza</div>
-          <div class="testimonio-cargo">Ingeniero de Sistemas · Arequipa</div>
+          <div class="testimonio-nombre">Usuario verificado</div>
+          <div class="testimonio-cargo">Lima, Perú</div>
         </div>
       </div>
     </div>
-    <div class="testimonio testimonio-placeholder">
+    <div class="testimonio">
       <div class="testimonio-estrellas">★★★★★</div>
-      <p class="testimonio-texto">"Como recién egresada no sabía cómo presentar mis proyectos universitarios. TalentIA los convirtió en logros reales."</p>
+      <p class="testimonio-texto">"Siempre me costó resumir mi experiencia. La IA me ayudó a ordenarlo todo y ahora mi CV se ve mucho más sólido."</p>
       <div class="testimonio-autor">
-        <div class="testimonio-avatar">L</div>
+        <div class="testimonio-avatar">✓</div>
         <div>
-          <div class="testimonio-nombre">Lucía Torres</div>
-          <div class="testimonio-cargo">Recién egresada · Trujillo</div>
+          <div class="testimonio-nombre">Usuario verificado</div>
+          <div class="testimonio-cargo">Perú</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio">
+      <div class="testimonio-estrellas">★★★★★</div>
+      <p class="testimonio-texto">"Pensé que sería algo genérico por ser con IA, pero nada que ver. Se siente bastante personalizado y bien hecho."</p>
+      <div class="testimonio-autor">
+        <div class="testimonio-avatar">✓</div>
+        <div>
+          <div class="testimonio-nombre">Usuario verificado</div>
+          <div class="testimonio-cargo">Perú</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonio">
+      <div class="testimonio-estrellas">★★★★★</div>
+      <p class="testimonio-texto">"Necesitaba algo rápido y que se vea bien. En minutos tenía un CV listo y mejor de lo que yo hubiera hecho solo."</p>
+      <div class="testimonio-autor">
+        <div class="testimonio-avatar">✓</div>
+        <div>
+          <div class="testimonio-nombre">Usuario verificado</div>
+          <div class="testimonio-cargo">Perú</div>
         </div>
       </div>
     </div>
@@ -333,6 +335,7 @@
       <div class="precio-ahorro">&nbsp;</div>
       <div class="precio-features">
         <div class="precio-feature">1 CV sin marca de agua</div>
+        <div class="precio-feature">Sugerencias IA de logros</div>
         <div class="precio-feature">Análisis de compatibilidad</div>
         <div class="precio-feature">Diseño profesional</div>
       </div>
@@ -347,6 +350,7 @@
       <div class="precio-ahorro">Ahorra 30%</div>
       <div class="precio-features">
         <div class="precio-feature">5 CVs sin marca de agua</div>
+        <div class="precio-feature">Sugerencias IA de logros</div>
         <div class="precio-feature">Análisis de compatibilidad</div>
         <div class="precio-feature">Diseño profesional</div>
         <div class="precio-feature">Adapta tu CV por oferta</div>
@@ -361,6 +365,7 @@
       <div class="precio-ahorro">Ahorra 41%</div>
       <div class="precio-features">
         <div class="precio-feature">12 CVs sin marca de agua</div>
+        <div class="precio-feature">Sugerencias IA de logros</div>
         <div class="precio-feature">Análisis de compatibilidad</div>
         <div class="precio-feature">Diseño profesional</div>
         <div class="precio-feature">Adapta tu CV por oferta</div>
@@ -392,19 +397,15 @@
     { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas que aumentaron el rendimiento estudiantil en un 40%.' }
   ];
 
-  let demoIdx = 0;
-  let charIdx = 0;
-  let pausando = false;
+  let demoIdx = 0, charIdx = 0, pausando = false;
 
   function animarDemo() {
     if (pausando) return;
     const el = document.getElementById('demo-texto');
     const cargoEl = document.getElementById('demo-cargo-texto');
     const demo = demos[demoIdx];
-
     charIdx++;
     el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
-
     if (charIdx === demo.texto.length) {
       pausando = true;
       setTimeout(() => {
