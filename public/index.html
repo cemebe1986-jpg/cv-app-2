@@ -800,11 +800,9 @@
   document.addEventListener('click',e=>{if(!e.target.closest('#email')&&!e.target.closest('#email-dropdown')){const dd=document.getElementById('email-dropdown');if(dd)dd.style.display='none';}});
 
   // ── TRABAJOS ──────────────────────────────────────────────────────────────
-  function agregarTrabajo(){
+  function agregarTrabajo() {
     trabajosData.push({id:Date.now(),cargo:'',empresa:'',desde:'',hasta:'',logros:['','']});
     renderTrabajoss();
-    document.getElementById('btn-mejorar').style.display='none';
-    document.getElementById('mejora-box').style.display='none';
   }
 
   function eliminarTrabajo(id){trabajosData=trabajosData.filter(t=>t.id!==id);renderTrabajoss();verificarBtnMejorar();}
@@ -1218,7 +1216,7 @@
     if (!btn) return;
     btn.style.display = cargo.trim() ? 'block' : 'none';
   }
-  
+
 </script>
 </body>
 </html>
