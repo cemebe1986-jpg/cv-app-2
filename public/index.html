@@ -811,7 +811,9 @@
   function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t){t[campo]=valor;verificarBtnMejorar();}}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
-  function verificarBtnMejorar(){document.getElementById('btn-mejorar').style.display=trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())?'block':'none';}
+  function verificarBtnMejorar() {
+    // btn-mejorar eliminado — sugerencias IA por cargo lo reemplazaron
+  }
 
   function toggleSugerencia(trabajoId,idx){
     document.getElementById(`sug-${trabajoId}-${idx}`).classList.toggle('seleccionado');
