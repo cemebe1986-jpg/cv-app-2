@@ -376,9 +376,12 @@
       <!-- PASO 3: EDUCACIÓN -->
       <div class="step" id="step-3">
         <label>Educación *</label>
-        <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">Incluye carreras, cursos y certificaciones.</p>
-        <textarea id="educacion" placeholder="Ej: Bachiller en Ingeniería de Sistemas, UPC 2020. Certificación AWS 2022..." oninput="actualizarContador('educacion','contador-edu',20)"></textarea>
-        <div class="char-count" id="contador-edu">0 / 20 mínimo</div>
+        <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
+        <div id="lista-educacion"></div>
+        <button type="button" onclick="agregarEducacion()"
+          style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">
+          + Agregar estudio o certificación
+        </button>
       </div>
 
       <!-- PASO 4: HABILIDADES -->
@@ -741,7 +744,7 @@
       if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}
     }
     if(pasoActual===1&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
-    if(pasoActual===2&&document.getElementById('educacion').value.trim().length<20){mostrarError('Educación incompleta','Agrega al menos tu nivel de estudios o una certificación.');return false;}
+    if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){mostrarError('Sin habilidades','Agrega al menos una habilidad técnica.');return false;}
     return true;
   }
@@ -1066,7 +1069,10 @@
     const codigoPais=document.getElementById('codigo-pais').value;
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
-    const educacion=document.getElementById('educacion').value;
+    const educacion=educacionData.map(e=>{
+      const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':'Universidad';
+      return `${tipo}: ${e.titulo} — ${e.institucion}${e.año?' ('+e.año+')':''}`;
+    }).join('. ');
     const habilidadesBlandas=document.getElementById('habilidades-blandas').value;
     const oferta=document.getElementById('oferta').value;
     const ciudad=document.getElementById('ciudad').value;
@@ -1078,7 +1084,7 @@
       const response=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},
         body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64})});
       const data=await response.json();
-      cvGeneradoData = data.cv; // guardamos para mejorar perfil
+      cvGeneradoData=data.cv;
       renderCV(data.cv,fotoBase64,ciudad,paisTexto);
       const guardarRes=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData})});
       const guardarData=await guardarRes.json();
@@ -1215,6 +1221,45 @@
     const btn = document.getElementById(`btn-sug-ia-${trabajoId}`);
     if (!btn) return;
     btn.style.display = cargo.trim() ? 'block' : 'none';
+  }
+
+  let educacionData = [];
+
+  function agregarEducacion() {
+    educacionData.push({ id: Date.now(), tipo: 'universitaria', titulo: '', institucion: '', año: '' });
+    renderEducacion();
+  }
+
+  function eliminarEducacion(id) { educacionData = educacionData.filter(e => e.id !== id); renderEducacion(); }
+  function actualizarEducacion(id, campo, valor) { const e = educacionData.find(e => e.id === id); if (e) e[campo] = valor; }
+
+  function renderEducacion() {
+    const container = document.getElementById('lista-educacion');
+    if (!educacionData.length) { container.innerHTML = ''; return; }
+    container.innerHTML = educacionData.map((e, idx) => `
+      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Estudio ${idx+1}</span>
+          <button onclick="eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
+        </div>
+        <label style="margin-bottom:6px;">Tipo</label>
+        <select onchange="actualizarEducacion(${e.id},'tipo',this.value)" style="margin-bottom:12px;">
+          <option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option>
+          <option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica</option>
+          <option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría / Posgrado</option>
+          <option value="certificacion" ${e.tipo==='certificacion'?'selected':''}>📜 Certificación</option>
+          <option value="curso" ${e.tipo==='curso'?'selected':''}>💻 Curso online</option>
+        </select>
+        <label style="margin-bottom:6px;">Título o nombre *</label>
+        <input type="text" placeholder="Ej: Ing. de Sistemas, Técnico en Enfermería, AWS Cloud..." value="${e.titulo}"
+          oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Institución *</label>
+        <input type="text" placeholder="Ej: UPC, Senati, Coursera, Cibertec..." value="${e.institucion}"
+          oninput="actualizarEducacion(${e.id},'institucion',this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Año</label>
+        <input type="text" placeholder="Ej: 2022" value="${e.año}"
+          oninput="actualizarEducacion(${e.id},'año',this.value)" style="margin-bottom:0;">
+      </div>`).join('');
   }
 
 </script>
