@@ -1071,7 +1071,7 @@
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
     const educacion=educacionData.map(e=>{
-      const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?'Otros estudios':'Universidad';
+      const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?(e.tipoCustom||'Otros estudios'):'Universidad';
       const periodo=e.desde&&e.hasta?` (${e.desde} - ${e.hasta})`:e.hasta?` (${e.hasta})`:e.desde?` (${e.desde})`:'';
       return `${tipo}: ${e.titulo} — ${e.institucion}${periodo}`;
     }).join('. ');
@@ -1244,7 +1244,7 @@
           <button onclick="eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
         </div>
         <label style="margin-bottom:6px;">Tipo</label>
-        <select onchange="actualizarEducacion(${e.id},'tipo',this.value)" style="margin-bottom:12px;">
+        <select onchange="actualizarEducacion(${e.id},'tipo',this.value);renderEducacion()" style="margin-bottom:12px;">
           <option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option>
           <option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica / Instituto</option>
           <option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría / Posgrado</option>
@@ -1253,6 +1253,11 @@
           <option value="colegio" ${e.tipo==='colegio'?'selected':''}>🏫 Colegio / Secundaria</option>
           <option value="otro" ${e.tipo==='otro'?'selected':''}>📋 Otro</option>
         </select>
+        ${e.tipo==='otro'?`
+        <label style="margin-bottom:6px;">¿Qué tipo de estudio es?</label>
+        <input type="text" placeholder="Ej: Diplomado, Intercambio, Taller..." value="${e.tipoCustom||''}"
+          oninput="actualizarEducacion(${e.id},'tipoCustom',this.value)" style="margin-bottom:12px;">
+        `:''}
         <label style="margin-bottom:6px;">Título o nombre *</label>
         <input type="text" placeholder="Ej: Ing. de Sistemas, AWS Cloud Practitioner, 5to de Secundaria..." value="${e.titulo}"
           oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;">
