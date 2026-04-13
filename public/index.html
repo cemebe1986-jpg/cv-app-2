@@ -686,7 +686,12 @@
       document.getElementById('wizard-titulo').textContent='Sube tu CV actual';
       document.getElementById('btn-next').style.display='none';
       pasoActual=-1;
-    } else { pasoActual=0; mostrarPaso(0); setTimeout(cargarProgreso,100); }
+    } else { 
+      pasoActual = 0; 
+      mostrarPaso(0); 
+      agregarTrabajo();
+      setTimeout(cargarProgreso, 100); 
+    }
   }
 
   function mostrarPaso(idx) {
@@ -710,6 +715,7 @@
     document.getElementById('btn-next').style.display='flex';
     document.getElementById('btn-next').textContent=idx===PASOS.length-1?'✨ Generar CV':'Continuar →';
     document.getElementById('btn-next').disabled=false;
+    if(idx===2 && !educacionData.length) agregarEducacion();
     actualizarNavPasos(idx);
     if(idx>0){
       const fb=document.createElement('div');
