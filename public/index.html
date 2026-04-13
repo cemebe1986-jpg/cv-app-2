@@ -277,7 +277,13 @@
     <div class="nav-paso" id="np-4"></div>
     <div class="nav-paso" id="np-5"></div>
   </div>
-  <button class="nav-back" onclick="history.back()" id="nav-back" style="display:none;">← Volver al inicio</button>
+  <div style="display:flex;align-items:center;gap:12px;">
+    <div id="nav-usuario" style="display:none;align-items:center;gap:8px;">
+      <span id="nav-nombre-usuario" style="color:rgba(255,255,255,0.8);font-size:0.82rem;"></span>
+      <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
+    </div>
+    <button class="nav-back" onclick="history.back()" id="nav-back" style="display:none;">← Inicio</button>
+  </div>
 </nav>
 
 <div class="loading-overlay" id="loading-overlay">
@@ -874,7 +880,8 @@
 
   function mostrarBotonSugerenciasIA(trabajoId, cargo) {
     const btn = document.getElementById(`btn-sug-ia-${trabajoId}`);
-    if (btn) btn.style.display = cargo.trim() ? 'block' : 'none';
+    if (!btn) return;
+    btn.style.display = cargo.trim() ? 'block' : 'none';
   }
 
   async function generarSugerenciasLogrosIA(trabajoId) {
@@ -1132,17 +1139,21 @@
   // ── LOGIN / LOGOUT ────────────────────────────────────────────────────────
   function verificarLoginParaComprar(plan){if(!window.usuarioActual){abrirModalLogin();return;}alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');}
 
-  function mostrarEstadoLogin(user){
-    if(user){
+  function mostrarEstadoLogin(user) {
+    const navUsuario = document.getElementById('nav-usuario');
+    const navNombre = document.getElementById('nav-nombre-usuario');
+    if (user) {
       document.getElementById('estado-sin-login').style.display='none';
       document.getElementById('estado-con-login').style.display='block';
       document.getElementById('nombre-usuario-cv').textContent=user.displayName?.split(' ')[0]||'usuario';
+      if (navUsuario) { navUsuario.style.display='flex'; }
+      if (navNombre) { navNombre.textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||''; }
     } else {
       document.getElementById('estado-sin-login').style.display='block';
       document.getElementById('estado-con-login').style.display='none';
+      if (navUsuario) navUsuario.style.display='none';
     }
   }
-
   // ── PROGRESO ──────────────────────────────────────────────────────────────
   function guardarProgreso(){
     try {
