@@ -116,7 +116,7 @@ INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
 - Perfil: 3 líneas impactantes basadas en la experiencia real
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
-${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: Lee cuidadosamente el texto de la oferta de trabajo. Extrae las keywords que aparecen EXPLÍCITAMENTE en esa oferta (tecnologías, herramientas, habilidades, requisitos mencionados). Luego revisa los datos del candidato y determina cuáles coinciden. NO inventes ni uses keywords de otras ofertas o industrias. El score (0-100) debe ser honesto: refleja el porcentaje real de keywords de la oferta que tiene el candidato.` : ''}
+${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : ''}
 - Responde SOLO con JSON válido sin markdown
 
 {
