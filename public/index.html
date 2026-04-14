@@ -304,10 +304,38 @@
 
       <!-- PASO 2: EXPERIENCIA -->
       <div class="step" id="step-2">
-        <label>Tu experiencia laboral *</label>
-        <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
-        <div id="lista-trabajos"></div>
-        <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar trabajo</button>
+        <!-- SELECTOR MODO -->
+        <div id="modo-experiencia-selector" style="margin-bottom:20px;">
+          <p style="font-size:0.88rem;color:#4a5568;margin-bottom:12px;font-weight:600;">¿Tienes experiencia laboral?</p>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
+            <div id="modo-btn-si" onclick="setModoExperiencia('con')" style="border:2px solid #0f3460;background:#f0f4ff;border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
+              <div style="font-size:1.4rem;margin-bottom:4px;">💼</div>
+              <div style="font-size:0.82rem;font-weight:700;color:#0f3460;">Sí tengo</div>
+            </div>
+            <div id="modo-btn-no" onclick="setModoExperiencia('sin')" style="border:2px solid #e2e8f0;background:white;border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
+              <div style="font-size:1.4rem;margin-bottom:4px;">🎓</div>
+              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Es mi primer empleo</div>
+            </div>
+          </div>
+        </div>
+        <!-- CON EXPERIENCIA -->
+        <div id="bloque-con-experiencia">
+          <label>Tu experiencia laboral</label>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
+          <div id="lista-trabajos"></div>
+          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar trabajo</button>
+        </div>
+        <!-- SIN EXPERIENCIA -->
+        <div id="bloque-sin-experiencia" style="display:none;">
+          <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px;">
+            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
+            <div style="font-size:0.8rem;color:#0369a1;">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
+          </div>
+          <label>Prácticas / Proyectos / Voluntariados</label>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
+          <div id="lista-proyectos"></div>
+          <button type="button" onclick="agregarProyecto()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar práctica o proyecto</button>
+        </div>
       </div>
 
       <!-- PASO 3: EDUCACIÓN -->
@@ -443,7 +471,7 @@
 </div>
 
 <script>
-  let fotoBase64=null,habilidadesData=[],trabajosData=[],educacionData=[],pasoActual=0,camino='',emailOpcionActiva=-1;
+  let fotoBase64=null,habilidadesData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
   const PASOS=['step-1','step-2','step-3','step-4'];
   const TITULOS=['Quién eres','Tu experiencia','Tu educación','Tus habilidades'];
@@ -465,7 +493,7 @@
   // OFERTA OPCIONAL
   function mostrarCampoOferta(){document.getElementById('oferta-si-card').classList.add('activa');document.getElementById('oferta-no-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
   function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card').classList.add('activa');document.getElementById('oferta-si-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
-  function iniciarFormulario(){pasoActual=0;mostrarPaso(0);if(!trabajosData.length)agregarTrabajo();setTimeout(cargarProgreso,100);}
+  function iniciarFormulario(){pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);}
 
   function detectarPaisPorCodigo(){const c=document.getElementById('codigo-pais').value,m={'+51':'PE','+57':'CO','+52':'MX','+54':'AR','+56':'CL','+593':'EC','+591':'BO'},p=m[c];if(p){document.getElementById('pais').value=p;actualizarCiudades();}}
   function actualizarCiudades(){const p=document.getElementById('pais').value,s=document.getElementById('ciudad');s.innerHTML='<option value="">Selecciona tu ciudad</option>';(ciudadesPorPais[p]||[]).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;s.appendChild(o);});const cod={PE:'+51',CO:'+57',MX:'+52',AR:'+54',CL:'+56',EC:'+593',BO:'+591'};document.getElementById('codigo-pais').value=cod[p]||'+51';}
@@ -549,7 +577,8 @@
 
   function validarPaso(){
     if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
-    if(pasoActual===1&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
+    if(pasoActual===1&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
+    if(pasoActual===1&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Sin experiencia','Agrega al menos una práctica, proyecto o voluntariado.');return false;}
     if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){mostrarError('Sin habilidades','Agrega al menos una habilidad técnica.');return false;}
     return true;
@@ -569,7 +598,67 @@
   function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
-  function obtenerCargoPrincipal(){const t=trabajosData.find(t=>t.cargo.trim());return t?t.cargo:'';}
+  function setModoExperiencia(modo){
+    modoExperiencia=modo;
+    const esCon=modo==='con';
+    document.getElementById('bloque-con-experiencia').style.display=esCon?'block':'none';
+    document.getElementById('bloque-sin-experiencia').style.display=esCon?'none':'block';
+    document.getElementById('modo-btn-si').style.cssText=`border:2px solid ${esCon?'#0f3460':'#e2e8f0'};background:${esCon?'#f0f4ff':'white'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
+    document.getElementById('modo-btn-no').style.cssText=`border:2px solid ${!esCon?'#0f3460':'#e2e8f0'};background:${!esCon?'#f0f4ff':'white'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
+    document.getElementById('modo-btn-si').querySelector('div:last-child').style.color=esCon?'#0f3460':'#718096';
+    document.getElementById('modo-btn-no').querySelector('div:last-child').style.color=!esCon?'#0f3460':'#718096';
+    if(!esCon&&!proyectosData.length)agregarProyecto();
+    if(esCon&&!trabajosData.length)agregarTrabajo();
+  }
+
+  // PROYECTOS / PRÁCTICAS
+  function agregarProyecto(){proyectosData.push({id:Date.now(),tipo:'practica',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});renderProyectos();}
+  function eliminarProyecto(id){proyectosData=proyectosData.filter(p=>p.id!==id);renderProyectos();}
+  function actualizarProyecto(id,campo,valor){const p=proyectosData.find(p=>p.id===id);if(p)p[campo]=valor;}
+  function renderProyectos(){
+    const c=document.getElementById('lista-proyectos');if(!proyectosData.length){c.innerHTML='';return;}
+    c.innerHTML=proyectosData.map((p,idx)=>`
+      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
+          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Experiencia ${idx+1}</span>
+          <button onclick="eliminarProyecto(${p.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
+        </div>
+        <label style="margin-bottom:6px;">Tipo</label>
+        <select onchange="actualizarProyecto(${p.id},'tipo',this.value)" style="margin-bottom:12px;">
+          <option value="practica" ${p.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option>
+          <option value="proyecto" ${p.tipo==='proyecto'?'selected':''}>🎓 Proyecto universitario / académico</option>
+          <option value="voluntariado" ${p.tipo==='voluntariado'?'selected':''}>🤝 Voluntariado</option>
+          <option value="freelance" ${p.tipo==='freelance'?'selected':''}>💻 Trabajo freelance / independiente</option>
+          <option value="negocio" ${p.tipo==='negocio'?'selected':''}>🏪 Negocio familiar / propio</option>
+          <option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option>
+        </select>
+        <label style="margin-bottom:6px;">Nombre del proyecto / rol *</label>
+        <input type="text" placeholder="Ej: Practicante de Contabilidad, Proyecto de tesis, Voluntario de Cruz Roja..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Empresa / Institución / Universidad</label>
+        <input type="text" placeholder="Ej: BCP, PUCP, Cruz Roja, Municipalidad de Lima..." value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:12px;">
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2023" value="${p.desde}" oninput="actualizarProyecto(${p.id},'desde',this.value)" style="margin-bottom:0;"></div>
+          <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o En curso" value="${p.hasta}" oninput="actualizarProyecto(${p.id},'hasta',this.value)" style="margin-bottom:0;"></div>
+        </div>
+        <label style="margin-bottom:6px;">¿Qué hiciste? ¿Qué lograste?</label>
+        <textarea placeholder="Describe brevemente tus funciones o logros. La IA lo mejorará automáticamente." oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:90px;">${p.descripcion}</textarea>
+      </div>`).join('');
+  }
+
+  function obtenerExperienciaParaCV(){
+    if(modoExperiencia==='con'){
+      return trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
+    } else {
+      return proyectosData.map(p=>{
+        const tipoLabel={practica:'Práctica pre-profesional',proyecto:'Proyecto académico',voluntariado:'Voluntariado',freelance:'Freelance',negocio:'Negocio propio',otro:'Experiencia'}[p.tipo]||'Experiencia';
+        return `${tipoLabel}: ${p.nombre}${p.organizacion?' — '+p.organizacion:''}${p.desde||p.hasta?' ('+[p.desde,p.hasta].filter(Boolean).join(' - ')+')':''}\n${p.descripcion?'• '+p.descripcion:''}`;
+      }).join('\n\n');
+    }
+  }
+  function obtenerCargoPrincipal(){
+    if(modoExperiencia==='con'){const t=trabajosData.find(t=>t.cargo.trim());return t?t.cargo:'';}
+    else{const p=proyectosData.find(p=>p.nombre.trim());return p?p.nombre:'';}
+  }
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
 
   function renderTrabajoss(){
@@ -664,7 +753,7 @@
   async function generarCV(){
     const nombre=document.getElementById('nombre').value,email=document.getElementById('email').value,codigoPais=document.getElementById('codigo-pais').value;
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
-    const experiencia=trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
+    const experiencia=obtenerExperienciaParaCV();
     const educacion=educacionData.map(e=>{const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?(e.tipoCustom||'Otros estudios'):'Universidad';const periodo=e.desde&&e.hasta?` (${e.desde} - ${e.hasta})`:e.hasta?` (${e.hasta})`:e.desde?` (${e.desde})`:'';return `${tipo}: ${e.titulo} — ${e.institucion}${periodo}`;}).join('. ');
     const habilidadesBlandas=document.getElementById('habilidades-blandas').value,oferta=document.getElementById('oferta').value;
     cvCiudad=document.getElementById('ciudad').value;const ps=document.getElementById('pais');cvPais=ps.options[ps.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim()||'';
