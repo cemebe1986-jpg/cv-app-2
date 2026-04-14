@@ -356,15 +356,6 @@
 
   <!-- CV PREVIEW -->
   <div class="cv-preview" id="cv-preview">
-    <div class="estilos-selector">
-      <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
-      <div class="estilos-grid">
-        <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>Clásico</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#047857;margin-right:6px;vertical-align:middle;"></span>Moderno</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
-      </div>
-    </div>
-
     <div class="analisis-box" id="analisis-compatibilidad" style="display:none;">
       <h3 style="color:#1a1a2e;margin-bottom:15px;font-size:1rem;">🎯 Análisis de compatibilidad con la oferta</h3>
       <div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;">
@@ -376,6 +367,15 @@
         <div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#c53030;margin-bottom:6px;">❌ KEYWORDS FALTANTES</div><div style="font-size:0.85rem;color:#2d3748;" id="comp-faltantes"></div></div>
       </div>
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:8px;">💡 RECOMENDACIONES</div><ul style="font-size:0.85rem;color:#2d3748;padding-left:18px;line-height:1.8;" id="comp-recomendaciones"></ul></div>
+    </div>
+
+    <div class="estilos-selector">
+      <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
+      <div class="estilos-grid">
+        <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>Clásico</button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#047857;margin-right:6px;vertical-align:middle;"></span>Moderno</button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
+      </div>
     </div>
 
     <div class="cv-document" id="cv-document">
@@ -402,19 +402,6 @@
     </div>
 
     <div class="cv-actions">
-      <div id="mejora-perfil-box" style="background:linear-gradient(135deg,#f5f3ff,#ede9fe);border:2px solid #8b5cf6;border-radius:16px;padding:20px;margin-bottom:20px;">
-        <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><span style="font-size:1.3rem;">✨</span><div><div style="font-size:0.88rem;font-weight:800;color:#5b21b6;">Mejora tu perfil profesional con IA</div><div style="font-size:0.78rem;color:#7c3aed;">La IA reescribirá tu párrafo de presentación haciéndolo más impactante</div></div></div>
-        <button onclick="pedirIAConLogin(mejorarPerfilIA)" style="width:100%;padding:11px;background:linear-gradient(135deg,#7c3aed,#6d28d9);color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.88rem;">✨ Mejorar mi perfil con IA</button>
-        <div id="perfil-ia-resultado" style="display:none;margin-top:12px;">
-          <div style="font-size:0.82rem;color:#5b21b6;font-weight:700;margin-bottom:6px;">Perfil mejorado:</div>
-          <div id="perfil-ia-texto" style="font-size:0.85rem;color:#2d3748;line-height:1.7;background:white;padding:12px;border-radius:8px;margin-bottom:10px;"></div>
-          <div style="display:flex;gap:8px;">
-            <button onclick="usarPerfilIA()" style="flex:1;padding:9px;background:#7c3aed;color:white;border:none;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;">✅ Usar este perfil</button>
-            <button onclick="document.getElementById('perfil-ia-resultado').style.display='none'" style="flex:1;padding:9px;background:white;color:#7c3aed;border:2px solid #7c3aed;border-radius:8px;font-weight:700;cursor:pointer;font-size:0.82rem;">✏️ Mantener el mío</button>
-          </div>
-        </div>
-      </div>
-
       <div id="estado-sin-login">
         <div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;">
           <div style="font-size:2.5rem;margin-bottom:10px;">🎉</div>
@@ -642,15 +629,6 @@
 
   function agregarHabilidadesSeleccionadas(){document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>{const n=btn.textContent.trim();if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});});renderListaHabilidades();document.getElementById('habilidades-ia-box').style.display='none';}
 
-  async function mejorarPerfilIA(){
-    if(!verificarLimiteIA())return;if(!cvGeneradoData){mostrarError('Sin CV','Genera tu CV primero.');return;}
-    const btn=document.querySelector('#mejora-perfil-box button');btn.textContent='⏳ Mejorando perfil...';btn.disabled=true;
-    try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({mejorarPerfil:true,perfil:cvGeneradoData.perfil,experiencia:cvGeneradoData.experiencia?.map(e=>e.cargo+' en '+e.empresa).join(', '),cargo:obtenerCargoPrincipal()})});const data=await r.json();incrementarLlamadasIA();document.getElementById('perfil-ia-texto').textContent=data.perfil||'';document.getElementById('perfil-ia-resultado').style.display='block';}
-    catch(e){mostrarError('Error','No se pudo mejorar el perfil.');}
-    finally{btn.textContent='✨ Mejorar mi perfil con IA';btn.disabled=false;}
-  }
-
-  function usarPerfilIA(){document.getElementById('cv-perfil').textContent=document.getElementById('perfil-ia-texto').textContent;document.getElementById('perfil-ia-resultado').style.display='none';}
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
   function renderListaHabilidades(){document.getElementById('lista-habilidades').innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
