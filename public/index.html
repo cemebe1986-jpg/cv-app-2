@@ -450,7 +450,7 @@
           <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;">
             <div style="font-size:1.3rem;margin-bottom:4px;">🎯</div>
             <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Básico</div>
-            <div style="font-size:0.75rem;color:#718096;">1 descarga</div>
+            <div style="font-size:0.75rem;color:#718096;">Para 1 postulación</div>
             <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/9.90</div>
             <a href="#" onclick="verificarLoginParaComprar('basico');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a>
           </div>
@@ -458,7 +458,7 @@
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:2px 10px;border-radius:10px;font-size:0.68rem;font-weight:700;white-space:nowrap;">⭐ POPULAR</div>
             <div style="font-size:1.3rem;margin-bottom:4px;margin-top:6px;">⭐</div>
             <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Popular</div>
-            <div style="font-size:0.75rem;color:#718096;">3 descargas</div>
+            <div style="font-size:0.75rem;color:#718096;">Para 3 postulaciones</div>
             <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/24.90</div>
             <div style="font-size:0.68rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorra S/4.80</div>
             <a href="#" onclick="verificarLoginParaComprar('popular');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a>
@@ -598,6 +598,7 @@
   function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
+  function eliminarLogro(id,idx){const t=trabajosData.find(t=>t.id===id);if(t&&t.logros.length>1){t.logros.splice(idx,1);renderTrabajoss();}}
   function setModoExperiencia(modo){
     modoExperiencia=modo;
     const esCon=modo==='con';
@@ -679,26 +680,36 @@
         <input type="text" placeholder="Ej: Jefe de Ventas, Analista de RRHH, Enfermero..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;">
         <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;">
           <button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
-            💡 Ver sugerencias de logros con IA <span style="font-size:0.72rem;opacity:0.7;">(${quedanLlamadasIA()} restantes)</span>
+            💡 Sugerir logros con IA <span style="font-size:0.72rem;opacity:0.7;">(${quedanLlamadasIA()} restantes)</span>
           </button>
         </div>
         <div id="sug-ia-box-${t.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:14px;">
           <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;" id="sug-ia-titulo-${t.id}">✨ Sugerencias para ${t.cargo}:</div>
           <div id="chips-ia-${t.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
-          <button onclick="agregarSugerenciasIASeleccionadas(${t.id})" style="padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionados</button>
+          <div id="sug-ia-actions-${t.id}" style="display:none;gap:8px;">
+            <button onclick="agregarSugerenciasIASeleccionadas(${t.id})" style="flex:1;padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionados</button>
+            <button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
+          </div>
         </div>
         <label style="margin-bottom:6px;">Tus logros adicionales</label>
-        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Agrega logros específicos que la IA no mencionó</p>
-        ${t.logros.map((l,i)=>`<input type="text" placeholder="Ej: Capacité a 15 personas en el nuevo sistema" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:8px;">`).join('')}
+        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Edita los logros sugeridos o agrega los tuyos</p>
+        ${t.logros.map((l,i)=>`
+          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
+            <input type="text" placeholder="Ej: Capacité a 15 personas en el nuevo sistema" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;">
+            <button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;" title="Eliminar logro">✕</button>
+          </div>`).join('')}
         <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
       </div>`).join('');
   }
 
   async function generarSugerenciasLogrosIA(tid){
     if(!verificarLimiteIA())return;
-    const t=trabajosData.find(t=>t.id===tid);if(!t||!t.cargo.trim())return;
-    const box=document.getElementById(`sug-ia-box-${tid}`),chips=document.getElementById(`chips-ia-${tid}`),titulo=document.getElementById(`sug-ia-titulo-${tid}`);
+    const t=trabajosData.find(t=>t.id===tid);
+    if(!t||!t.cargo.trim())return;
+    const box=document.getElementById(`sug-ia-box-${tid}`),chips=document.getElementById(`chips-ia-${tid}`),titulo=document.getElementById(`sug-ia-titulo-${tid}`),btnBox=document.getElementById(`btn-sug-ia-${tid}`);
     if(!box||!chips)return;
+    // Ocultar botón, mostrar box con spinner
+    btnBox.style.display='none';
     chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${t.cargo}...</div>`;
     box.style.display='block';
     try{
@@ -707,7 +718,13 @@
       incrementarLlamadasIA();
       if(titulo)titulo.textContent=`✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
       chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:4px;">${sg}</button>`).join('');
-    }catch(e){chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';}
+      document.getElementById(`sug-ia-actions-${tid}`).style.display='flex';
+    }catch(e){
+      chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
+      // Si hay error, mostrar botón de nuevo
+      btnBox.style.display='block';
+      box.style.display='none';
+    }
   }
 
   function agregarSugerenciasIASeleccionadas(tid){
