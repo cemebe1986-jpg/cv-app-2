@@ -408,8 +408,8 @@
           <h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo para impresionar!</h3>
           <p style="color:#4a5568;font-size:0.95rem;margin-bottom:6px;">Miles de reclutadores reciben CVs mediocres cada día.</p>
           <p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p>
-          <button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Guardar y descargar mi CV</button>
-          <p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">✅ Gratis · Sin spam · Solo toma 10 segundos</p>
+          <button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión para descargar</button>
+          <p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">Sin spam · Desde S/9.90 · Sin suscripción</p>
         </div>
       </div>
 
@@ -418,10 +418,23 @@
           <h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Elige tu plan para descargar</h3>
           <button onclick="cerrarSesion()" style="background:none;border:none;color:#a0aec0;font-size:0.78rem;cursor:pointer;margin-top:6px;text-decoration:underline;">Cerrar sesión</button>
         </div>
-        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px;margin-bottom:15px;">
-          <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:1.3rem;margin-bottom:4px;">🎯</div><div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Prueba</div><div style="font-size:0.75rem;color:#718096;">1 descarga</div><div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/9.90</div><a href="#" onclick="verificarLoginParaComprar('prueba');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a></div>
-          <div style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:#f0f4ff;position:relative;"><div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:2px 10px;border-radius:10px;font-size:0.68rem;font-weight:700;white-space:nowrap;">⭐ POPULAR</div><div style="font-size:1.3rem;margin-bottom:4px;margin-top:6px;">⭐</div><div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Popular</div><div style="font-size:0.75rem;color:#718096;">5 descargas</div><div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/35</div><a href="#" onclick="verificarLoginParaComprar('popular');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a></div>
-          <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;"><div style="font-size:1.3rem;margin-bottom:4px;">💼</div><div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Pro</div><div style="font-size:0.75rem;color:#718096;">12 descargas</div><div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/70</div><a href="#" onclick="verificarLoginParaComprar('pro');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a></div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
+          <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;">
+            <div style="font-size:1.3rem;margin-bottom:4px;">🎯</div>
+            <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Básico</div>
+            <div style="font-size:0.75rem;color:#718096;">1 descarga</div>
+            <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/9.90</div>
+            <a href="#" onclick="verificarLoginParaComprar('basico');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a>
+          </div>
+          <div style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:#f0f4ff;position:relative;">
+            <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:2px 10px;border-radius:10px;font-size:0.68rem;font-weight:700;white-space:nowrap;">⭐ POPULAR</div>
+            <div style="font-size:1.3rem;margin-bottom:4px;margin-top:6px;">⭐</div>
+            <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Popular</div>
+            <div style="font-size:0.75rem;color:#718096;">3 descargas</div>
+            <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/24.90</div>
+            <div style="font-size:0.68rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorra S/4.80</div>
+            <a href="#" onclick="verificarLoginParaComprar('popular');return false;" style="display:block;background:#0f3460;color:white;padding:8px;border-radius:8px;text-decoration:none;font-size:0.82rem;font-weight:700;">Comprar</a>
+          </div>
         </div>
         <a href="#" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:1rem;">✅ Descargar mi CV en PDF</a>
       </div>
