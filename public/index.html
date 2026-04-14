@@ -131,16 +131,94 @@
   .loading-spinner{width:56px;height:56px;border:4px solid rgba(255,255,255,0.15);border-top-color:#60a5fa;border-radius:50%;animation:spin 0.8s linear infinite;margin-bottom:20px;}
   .loading-text{color:white;font-size:1.05rem;font-weight:600;}
   /* CV ESTILOS */
-  .cv-estilo-moderno .cv-sidebar{background:linear-gradient(160deg,#065f46,#047857);}
-  .cv-estilo-moderno .cv-foto{border-color:#34d399;}
-  .cv-estilo-moderno .cv-section-title{color:#6ee7b7;}
-  .cv-estilo-moderno .cv-skill-tag{background:rgba(52,211,153,0.2);color:#6ee7b7;}
-  .cv-estilo-moderno .cv-main-nombre{color:#065f46;}
-  .cv-estilo-moderno .cv-divider{background:#059669;}
-  .cv-estilo-moderno .cv-main-section-title{color:#059669;border-color:#d1fae5;}
-  .cv-estilo-moderno .exp-empresa{color:#059669;}
-  .cv-estilo-moderno .exp-logro::before{color:#059669;}
-  .cv-estilo-moderno .edu-institucion{color:#059669;}
+
+  /* ── EJECUTIVO: una columna, header centrado, línea separadora ── */
+  .cv-estilo-moderno .cv-document{grid-template-columns:1fr;}
+  .cv-estilo-moderno .cv-sidebar{
+    background:white;color:#1a1a2e;
+    padding:36px 48px 20px;
+    border-bottom:none;
+    min-height:auto;
+    display:flex;flex-direction:column;align-items:center;
+    text-align:center;
+  }
+  .cv-estilo-moderno .cv-foto-container{margin-bottom:12px;}
+  .cv-estilo-moderno .cv-foto{
+    width:90px;height:90px;
+    border:3px solid #1a1a2e;
+    background:#f0f4ff;
+    font-size:28px;
+  }
+  .cv-estilo-moderno .cv-nombre-sidebar{
+    font-size:1.6rem;font-weight:900;
+    color:#1a1a2e;letter-spacing:-0.5px;
+    margin-bottom:4px;display:block;
+  }
+  /* Línea doble debajo del nombre */
+  .cv-estilo-moderno .cv-nombre-sidebar::after{
+    content:'';display:block;
+    width:100%;height:2px;
+    background:#1a1a2e;margin:10px 0 6px;
+  }
+  .cv-estilo-moderno .cv-contacto{
+    display:flex;flex-wrap:wrap;
+    justify-content:center;gap:0 20px;margin-bottom:0;
+  }
+  .cv-estilo-moderno .cv-contacto p{
+    color:#4a5568;opacity:1;
+    font-size:0.78rem;margin-bottom:4px;
+    display:flex;align-items:center;gap:5px;
+  }
+  .cv-estilo-moderno .cv-section-title{display:none;}
+  /* Habilidades en sidebar ejecutivo: inline chips oscuros */
+  .cv-estilo-moderno #cv-skills-tecnicas,
+  .cv-estilo-moderno #cv-skills-blandas{
+    display:flex;flex-wrap:wrap;
+    justify-content:center;gap:4px;margin-top:8px;
+  }
+  .cv-estilo-moderno .cv-skill-tag{
+    background:#1a1a2e;color:white;
+    padding:3px 10px;border-radius:4px;
+    font-size:0.72rem;margin:2px;
+  }
+  .cv-estilo-moderno .soft-skill{
+    background:#f0f4ff;color:#1a1a2e;
+    border:1px solid #cbd5e0;
+    padding:3px 10px;border-radius:4px;font-size:0.72rem;margin:2px;
+  }
+  /* Área principal ejecutivo */
+  .cv-estilo-moderno .cv-main{
+    background:white;padding:28px 48px 40px;
+    border-top:1px solid #e2e8f0;
+  }
+  .cv-estilo-moderno .cv-main-nombre{display:none;}
+  .cv-estilo-moderno .cv-divider{display:none;}
+  .cv-estilo-moderno .cv-perfil{
+    font-size:0.88rem;color:#4a5568;
+    line-height:1.75;margin-bottom:24px;
+    padding-bottom:20px;
+    border-bottom:1px solid #e2e8f0;
+  }
+  .cv-estilo-moderno .cv-main-section-title{
+    font-size:0.82rem;font-weight:900;
+    text-transform:uppercase;letter-spacing:1.5px;
+    color:#1a1a2e;
+    border-bottom:2px solid #1a1a2e;
+    padding-bottom:5px;margin-bottom:14px;
+    text-align:center;
+  }
+  .cv-estilo-moderno .exp-cargo{font-size:0.95rem;font-weight:800;color:#1a1a2e;}
+  .cv-estilo-moderno .exp-empresa{
+    color:#4a5568;font-weight:600;font-size:0.85rem;
+  }
+  .cv-estilo-moderno .exp-periodo{color:#718096;}
+  .cv-estilo-moderno .exp-logro{color:#4a5568;}
+  .cv-estilo-moderno .exp-logro::before{color:#1a1a2e;}
+  .cv-estilo-moderno .edu-titulo{font-weight:800;color:#1a1a2e;}
+  .cv-estilo-moderno .edu-institucion{color:#4a5568;font-style:italic;}
+
+  /* ── MINIMALISTA: una columna simple, header con línea ── */
+  /* ── MINIMALISTA: una columna simple, header con línea ── */
   .cv-estilo-minimal .cv-document{grid-template-columns:1fr;}
   .cv-estilo-minimal .cv-sidebar{background:#f8f9fa;color:#1a1a2e;padding:30px 40px 20px;border-bottom:3px solid #1a1a2e;min-height:auto;display:flex;flex-direction:column;}
   .cv-estilo-minimal .cv-foto-container{display:none;}
@@ -413,7 +491,7 @@
       <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
       <div class="estilos-grid">
         <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>Clásico</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#047857;margin-right:6px;vertical-align:middle;"></span>Moderno</button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
         <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
       </div>
     </div>
@@ -490,7 +568,22 @@
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
-  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));document.getElementById('cv-nombre-sidebar').style.display=estilo==='minimal'?'none':'block';}
+  function cambiarEstiloCV(estilo){
+    estiloActual=estilo;
+    const doc=document.getElementById('cv-document');
+    doc.className='cv-document';
+    if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);
+    ['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));
+    // Ejecutivo: nombre en sidebar (visible centrado), ocultar en main
+    // Clásico: nombre en sidebar + main
+    // Minimalista: ocultar sidebar nombre, mostrar en main
+    const nombreSidebar=document.getElementById('cv-nombre-sidebar');
+    if(estilo==='minimal'){
+      nombreSidebar.style.display='none';
+    } else {
+      nombreSidebar.style.display='block';
+    }
+  }
   function getLlamadasIA(){try{return parseInt(localStorage.getItem('talentia_ia_calls')||'0');}catch(e){return 0;}}
   function incrementarLlamadasIA(){try{localStorage.setItem('talentia_ia_calls',getLlamadasIA()+1);}catch(e){}}
   function quedanLlamadasIA(){return LIMITE_IA-getLlamadasIA();}
@@ -725,7 +818,7 @@
     chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${t.cargo}...</div>`;
     box.style.display='block';
     try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:t.cargo,empresa:t.empresa})});
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:t.cargo,empresa:t.empresa,usuarioId:window.usuarioActual?.uid||null})});
       const data=await r.json();const s=data.sugerencias||[];
       incrementarLlamadasIA();
       if(titulo)titulo.textContent=`✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
@@ -750,7 +843,7 @@
     const cargo=obtenerCargoPrincipal();if(!cargo){mostrarError('Sin cargo','Agrega primero tu cargo en el paso de experiencia.');return;}
     const btn=document.getElementById('btn-sugerir-habilidades');btn.textContent='⏳ Generando...';btn.disabled=true;
     try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasHabilidades:true,cargo})});
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasHabilidades:true,cargo,usuarioId:window.usuarioActual?.uid||null})});
       const data=await r.json();const h=data.sugerencias||[];incrementarLlamadasIA();
       document.getElementById('chips-habilidades').innerHTML=h.map((hab,i)=>`<button id="chip-hab-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;">${hab}</button>`).join('');
       document.getElementById('habilidades-ia-box').style.display='block';
@@ -766,7 +859,7 @@
     const btn=document.getElementById('btn-sugerir-blandas');
     btn.textContent='⏳ Generando...';btn.disabled=true;btn.style.display='block';
     try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta})});
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta,usuarioId:window.usuarioActual?.uid||null})});
       const data=await r.json();const b=data.sugerencias||[];
       incrementarLlamadasIA();
       btn.style.display='none';
@@ -822,7 +915,8 @@
     cvCiudad=document.getElementById('ciudad').value;const ps=document.getElementById('pais');cvPais=ps.options[ps.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim()||'';
     document.getElementById('loading-overlay').classList.add('active');iniciarMensajesCarga();
     try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64})});
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
+      if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData})});
       const gd=await gr.json();document.getElementById('link-descarga').href=`/descargar-cv?id=${gd.id}`;
