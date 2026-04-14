@@ -102,7 +102,7 @@ INSTRUCCIONES:
     const tieneOferta = oferta && oferta.trim().length > 0;
     const promptBase = `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
-DATOS:
+DATOS DEL CANDIDATO:
 - Nombre: ${nombre}
 - Email: ${email}
 - Teléfono: ${telefono}
@@ -110,13 +110,13 @@ DATOS:
 - Educación: ${educacion}
 - Habilidades técnicas: ${habilidades}
 - Habilidades blandas: ${habilidadesBlandas}
-${tieneOferta ? `\nOFERTA:\n${oferta}` : ''}
+${tieneOferta ? `\nOFERTA DE TRABAJO A LA QUE POSTULA:\n${oferta}` : ''}
 
 INSTRUCCIONES:
-- Usa EXACTAMENTE los datos, NO inventes nada
+- Usa EXACTAMENTE los datos del candidato, NO inventes nada
 - Perfil: 3 líneas impactantes basadas en la experiencia real
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
-${tieneOferta ? '- Analiza compatibilidad con la oferta' : ''}
+${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: Lee cuidadosamente el texto de la oferta de trabajo. Extrae las keywords que aparecen EXPLÍCITAMENTE en esa oferta (tecnologías, herramientas, habilidades, requisitos mencionados). Luego revisa los datos del candidato y determina cuáles coinciden. NO inventes ni uses keywords de otras ofertas o industrias. El score (0-100) debe ser honesto: refleja el porcentaje real de keywords de la oferta que tiene el candidato.` : ''}
 - Responde SOLO con JSON válido sin markdown
 
 {
@@ -126,10 +126,15 @@ ${tieneOferta ? '- Analiza compatibilidad con la oferta' : ''}
   "perfil": "párrafo de 3 líneas",
   "experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}],
   "educacion": [{"titulo": "...", "institucion": "...", "año": "..."}]
-  ${tieneOferta ? ',"compatibilidad": {"score": 85, "keywords_encontradas": ["kw1"], "keywords_faltantes": ["kw2"], "recomendaciones": ["rec1"]}' : ''}
+  ${tieneOferta ? `,"compatibilidad": {
+    "score": 0,
+    "keywords_encontradas": ["keywords que están TANTO en la oferta como en el perfil del candidato"],
+    "keywords_faltantes": ["keywords importantes de la oferta que el candidato NO tiene"],
+    "recomendaciones": ["consejo específico y accionable para mejorar compatibilidad con esta oferta específica"]
+  }` : ''}
 }`;
 
-    const message = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:1500, messages:[{role:'user',content:promptBase}] });
+    const message = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:2000, messages:[{role:'user',content:promptBase}] });
     let cvData;
     try { cvData = JSON.parse(message.content[0].text.replace(/```json|```/g,'').trim()); }
     catch(e) { cvData = { error: 'Error parseando respuesta' }; }
