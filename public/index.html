@@ -364,7 +364,19 @@
           <button onclick="agregarHabilidadesSeleccionadas()" style="padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionadas</button>
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
+        <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">Las que ya tienes, o usa la IA para sugerirlas según tu cargo.</p>
         <input type="text" id="habilidades-blandas" placeholder="Ej: liderazgo, trabajo en equipo, comunicación...">
+        <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:linear-gradient(135deg,#0f3460,#1e40af);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">
+          💡 Sugerir habilidades blandas con IA
+        </button>
+        <div id="blandas-ia-box" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;">💡 Habilidades blandas sugeridas — selecciona las que tienes:</div>
+          <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
+          <div id="blandas-ia-actions" style="display:none;gap:8px;">
+            <button onclick="agregarBlandasSeleccionadas()" style="flex:1;padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionadas</button>
+            <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
+          </div>
+        </div>
       </div>
 
       <div class="error-toast" id="error-toast">
@@ -746,7 +758,41 @@
     finally{btn.textContent='💡 Sugerir habilidades para mi cargo con IA';btn.disabled=false;}
   }
 
-  function agregarHabilidadesSeleccionadas(){document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>{const n=btn.textContent.trim();if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});});renderListaHabilidades();document.getElementById('habilidades-ia-box').style.display='none';}
+  async function sugerirHabilidadesBlandas(){
+    if(!verificarLimiteIA())return;
+    const cargo=obtenerCargoPrincipal();
+    const oferta=document.getElementById('oferta').value;
+    if(!cargo&&!oferta){mostrarError('Sin información','Agrega primero tu cargo en el paso de experiencia.');return;}
+    const btn=document.getElementById('btn-sugerir-blandas');
+    btn.textContent='⏳ Generando...';btn.disabled=true;btn.style.display='block';
+    try{
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta})});
+      const data=await r.json();const b=data.sugerencias||[];
+      incrementarLlamadasIA();
+      btn.style.display='none';
+      const chips=document.getElementById('chips-blandas');
+      chips.innerHTML=b.map((s,i)=>`<button id="chip-bland-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;transition:all 0.15s;">${s}</button>`).join('');
+      document.getElementById('blandas-ia-box').style.display='block';
+      document.getElementById('blandas-ia-actions').style.display='flex';
+    }catch(e){
+      mostrarError('Error','No se pudieron generar sugerencias.');
+      btn.textContent='💡 Sugerir habilidades blandas con IA';btn.disabled=false;
+    }
+  }
+
+  function agregarBlandasSeleccionadas(){
+    const seleccionadas=[];
+    document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
+    if(!seleccionadas.length)return;
+    const campo=document.getElementById('habilidades-blandas');
+    const actuales=campo.value.split(',').map(s=>s.trim()).filter(Boolean);
+    const todas=[...new Set([...actuales,...seleccionadas])];
+    campo.value=todas.join(', ');
+    document.getElementById('blandas-ia-box').style.display='none';
+    document.getElementById('btn-sugerir-blandas').style.display='block';
+    document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';
+    document.getElementById('btn-sugerir-blandas').disabled=false;
+  }
 
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}

@@ -33,7 +33,31 @@ REGLAS:
       catch(e) { return res.json({ sugerencias: [] }); }
     }
 
-    // SUGERENCIAS DE HABILIDADES
+    // SUGERENCIAS DE HABILIDADES BLANDAS
+    if (req.body.sugerenciasBlandas) {
+      const prompt = `Eres un experto en RRHH y CVs para el mercado peruano.
+Lista exactamente 8 habilidades blandas más relevantes para este perfil.
+
+CARGO: ${cargo || 'Profesional'}
+${oferta ? `OFERTA DE TRABAJO:\n${oferta.substring(0, 500)}` : ''}
+
+REGLAS:
+- Solo habilidades blandas (actitudes, competencias interpersonales)
+- NO incluyas habilidades técnicas
+- Si hay oferta, prioriza las blandas que menciona explícitamente
+- Si no hay oferta, basa las sugerencias en el cargo
+- Máximo 3 palabras por habilidad
+- Relevantes para el mercado laboral peruano
+- Responde SOLO con JSON sin markdown
+
+{"sugerencias": ["hab 1", "hab 2", "hab 3", "hab 4", "hab 5", "hab 6", "hab 7", "hab 8"]}`;
+
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:400, messages:[{role:'user',content:prompt}] });
+      try { return res.json(JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim())); }
+      catch(e) { return res.json({ sugerencias: [] }); }
+    }
+
+    // SUGERENCIAS DE HABILIDADES TÉCNICAS
     if (sugerenciasHabilidades) {
       if (!cargo) return res.status(400).json({ error: 'Cargo requerido' });
       const prompt = `Eres un experto en RRHH y CVs para el mercado peruano.
