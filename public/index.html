@@ -894,16 +894,66 @@
   function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){alert('La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';};reader.readAsDataURL(input.files[0]);}}
 
   async function procesarCVSubido(input){
-    if(!input.files||!input.files[0])return;if(input.files[0].size>5*1024*1024){mostrarError('Archivo muy grande','El PDF no debe pesar más de 5MB.');return;}
+    if(!input.files||!input.files[0])return;
+    if(input.files[0].size>5*1024*1024){mostrarError('Archivo muy grande','El PDF no debe pesar más de 5MB.');return;}
     document.getElementById('estado-subida').style.display='block';
-    try{const ab=await input.files[0].arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab}).promise;let texto='';for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();texto+=content.items.map(item=>item.str).join(' ')+'\n';}
-    const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});const data=await r.json();const d=data.datos;
-    if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;if(d.habilidades_blandas)document.getElementById('habilidades-blandas').value=d.habilidades_blandas;
-    if(d.habilidades_tecnicas?.length){habilidadesData=d.habilidades_tecnicas.map(h=>({nombre:h}));renderListaHabilidades();}
-    if(d.experiencia){trabajosData=[{id:Date.now(),cargo:'',empresa:'',desde:'',hasta:'',logros:[d.experiencia.substring(0,150)]}];renderTrabajoss();}
-    document.getElementById('estado-subida').style.display='none';document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
-    camino='manual';pasoActual=0;mostrarPaso(0);alert('✅ ¡Datos extraídos! Revisa y ajusta si es necesario.');}
-    catch(e){document.getElementById('estado-subida').style.display='none';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo.');}
+    try{
+      const ab=await input.files[0].arrayBuffer();
+      const pdf=await pdfjsLib.getDocument({data:ab}).promise;
+      let texto='';
+      for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();texto+=content.items.map(item=>item.str).join(' ')+'\n';}
+      const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
+      const data=await r.json();const d=data.datos;
+
+      // Datos personales
+      if(d.nombre)document.getElementById('nombre').value=d.nombre;
+      if(d.email)document.getElementById('email').value=d.email;
+      if(d.telefono)document.getElementById('telefono').value=d.telefono;
+      if(d.habilidades_blandas)document.getElementById('habilidades-blandas').value=d.habilidades_blandas;
+
+      // Habilidades técnicas — incluir certificaciones como habilidades si existen
+      let habs = [];
+      if(d.habilidades_tecnicas?.length) habs = d.habilidades_tecnicas.map(h=>({nombre:h}));
+      if(d.certificaciones?.length) habs = [...habs, ...d.certificaciones.map(c=>({nombre:c}))];
+      if(habs.length){habilidadesData=habs;renderListaHabilidades();}
+
+      // Trabajos estructurados
+      if(d.trabajos?.length){
+        trabajosData=d.trabajos.map((t,i)=>({
+          id:Date.now()+i,
+          cargo:t.cargo||'',
+          empresa:t.empresa||'',
+          desde:t.desde||'',
+          hasta:t.hasta||'',
+          logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']
+        }));
+        setModoExperiencia('con');
+        renderTrabajoss();
+      }
+
+      // Educación estructurada
+      if(d.educacion?.length){
+        educacionData=d.educacion.map((e,i)=>({
+          id:Date.now()+1000+i,
+          tipo:e.tipo||'universitaria',
+          titulo:e.titulo||'',
+          institucion:e.institucion||'',
+          desde:e.desde||'',
+          hasta:e.hasta||''
+        }));
+        renderEducacion();
+      }
+
+      document.getElementById('estado-subida').style.display='none';
+      document.getElementById('step-pdf').classList.remove('active');
+      document.getElementById('step-pdf').style.display='none';
+      camino='manual';pasoActual=0;mostrarPaso(0);
+      alert(`✅ ¡Datos extraídos! Se encontraron ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s). Revisa y ajusta si es necesario.`);
+    }catch(e){
+      console.error(e);
+      document.getElementById('estado-subida').style.display='none';
+      mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');
+    }
   }
 
   async function generarCV(){
