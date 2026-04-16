@@ -339,6 +339,7 @@
         <div id="campo-oferta" style="display:none;margin-bottom:16px;">
           <label>Pega la descripción del trabajo</label>
           <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:150px;"></textarea>
+          <button onclick="iniciarFormulario()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-top:4px;">Continuar →</button>
         </div>
         <div class="oferta-card" id="oferta-no-card" onclick="continuarSinOferta()">
           <div style="font-size:1.5rem;">➡️</div>
@@ -502,6 +503,9 @@
         <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
         <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
       </div>
+      <div id="estilo-descripcion" style="font-size:0.78rem;color:#718096;margin-top:10px;padding:8px 12px;background:#f8faff;border-radius:8px;transition:all 0.2s;">
+        Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.
+      </div>
     </div>
 
     <div class="cv-document" id="cv-document" style="position:relative;">
@@ -542,7 +546,6 @@
       <div id="estado-con-login" style="display:none;">
         <div style="text-align:center;margin-bottom:20px;">
           <h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Elige tu plan para descargar</h3>
-          <button onclick="cerrarSesion()" style="background:none;border:none;color:#a0aec0;font-size:0.78rem;cursor:pointer;margin-top:6px;text-decoration:underline;">Cerrar sesión</button>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
           <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;">
@@ -582,6 +585,15 @@
     doc.className='cv-document';
     if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);
     ['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));
+    const desc=document.getElementById('estilo-descripcion');
+    if(desc){
+      const textos={
+        clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',
+        moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',
+        minimal:'Diseño limpio sin colores — ATS-friendly al máximo, ideal para tecnología, startups o CVs simples.'
+      };
+      desc.textContent=textos[estilo]||'';
+    }
     // Ejecutivo: nombre en sidebar (visible centrado), ocultar en main
     // Clásico: nombre en sidebar + main
     // Minimalista: ocultar sidebar nombre, mostrar en main
