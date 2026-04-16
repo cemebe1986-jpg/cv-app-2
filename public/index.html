@@ -504,7 +504,8 @@
       </div>
     </div>
 
-    <div class="cv-document" id="cv-document">
+    <div class="cv-document" id="cv-document" style="position:relative;">
+      <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;overflow:hidden;"><div style="transform:rotate(-35deg);font-size:2.5rem;font-weight:900;color:rgba(15,52,96,0.07);white-space:nowrap;letter-spacing:4px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia</div></div>
       <div class="cv-sidebar">
         <div class="cv-foto-container"><div class="cv-foto" id="cv-foto">👤</div></div>
         <div class="cv-nombre-sidebar" id="cv-nombre-sidebar"></div><br>
@@ -518,7 +519,6 @@
         <div><div class="cv-section-title">Habilidades Blandas</div><div id="cv-skills-blandas"></div></div>
       </div>
       <div class="cv-main">
-        <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;"><div style="transform:rotate(-35deg);font-size:2.5rem;font-weight:900;color:rgba(15,52,96,0.07);white-space:nowrap;letter-spacing:4px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia</div></div>
         <div class="cv-main-nombre" id="cv-nombre-main"></div>
         <div class="cv-divider"></div>
         <div class="cv-perfil editable" id="cv-perfil" title="Haz clic para editar"></div>
@@ -592,10 +592,20 @@
       nombreSidebar.style.display='block';
     }
   }
-  function getLlamadasIA(){try{return parseInt(localStorage.getItem('talentia_ia_calls')||'0');}catch(e){return 0;}}
-  function incrementarLlamadasIA(){try{localStorage.setItem('talentia_ia_calls',getLlamadasIA()+1);}catch(e){}}
+  function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
+  function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session', getLlamadasIA()+1);}catch(e){}}
   function quedanLlamadasIA(){return LIMITE_IA-getLlamadasIA();}
-  function verificarLimiteIA(){if(getLlamadasIA()>=LIMITE_IA){mostrarError('Límite alcanzado',`Usaste tus ${LIMITE_IA} sugerencias gratuitas. Adquiere un plan para continuar.`);return false;}return true;}
+  function verificarLimiteIA(){
+    // Si está logueado, el backend controla el límite via Upstash (por usuarioId)
+    // Si no está logueado, usamos sessionStorage como límite temporal (se resetea al cerrar pestaña)
+    // El límite real lo valida el backend en cada llamada
+    if(!window.usuarioActual && getLlamadasIA()>=LIMITE_IA){
+      mostrarError('Límite alcanzado',`Crea una cuenta gratuita para continuar usando las sugerencias con IA.`);
+      setTimeout(()=>abrirModalLogin(),1500);
+      return false;
+    }
+    return true;
+  }
   function abrirModalLogin(a=null){if(a)window.accionPendienteLogin=a;document.getElementById('modal-login').classList.add('active');}
   function cerrarModalLogin(){document.getElementById('modal-login').classList.remove('active');}
   function cambiarTabModal(tab){document.getElementById('form-registro').style.display=tab==='registro'?'block':'none';document.getElementById('form-login').style.display=tab==='login'?'block':'none';document.getElementById('tab-registro').classList.toggle('active',tab==='registro');document.getElementById('tab-login').classList.toggle('active',tab==='login');}
