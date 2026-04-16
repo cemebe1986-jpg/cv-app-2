@@ -1,20 +1,51 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
-        xmlns:xhtml="http://www.w3.org/1999/xhtml">
-
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
     <loc>https://talentia.com.pe/</loc>
     <lastmod>2026-04-16</lastmod>
     <changefreq>weekly</changefreq>
     <priority>1.0</priority>
-    <xhtml:link rel="alternate" hreflang="es-PE" href="https://talentia.com.pe/"/>
   </url>
-
   <url>
     <loc>https://talentia.com.pe/crear</loc>
     <lastmod>2026-04-16</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.9</priority>
   </url>
-
+  <url>
+    <loc>https://talentia.com.pe/blog</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://talentia.com.pe/blog/como-hacer-cv-peru-2026</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://talentia.com.pe/blog/cv-sin-experiencia-peru</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://talentia.com.pe/blog/como-pasar-filtros-ats</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://talentia.com.pe/terminos</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
+  <url>
+    <loc>https://talentia.com.pe/privacidad</loc>
+    <lastmod>2026-04-16</lastmod>
+    <changefreq>yearly</changefreq>
+    <priority>0.3</priority>
+  </url>
 </urlset>
