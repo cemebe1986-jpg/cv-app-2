@@ -1242,30 +1242,29 @@
       }
 
       // SMART PAGE BREAK — calcular dónde caen los cortes y empujar bloques
-      const DPI=96; // px por pulgada en pantalla
-      const A4_HEIGHT_PX=(297/25.4)*DPI; // altura A4 en px a 96dpi
       const cvRect=cvDoc.getBoundingClientRect();
-      const scale=2; // mismo scale que html2canvas
+      const cvTotalHeight=cvDoc.scrollHeight;
+      // Calcular altura de página A4 en px proporcional al CV
+      // imgWidth=210mm, pageHeight=297mm → ratio = 297/210
+      const A4_HEIGHT_PX=cvDoc.scrollWidth*(297/210);
 
-      // Seleccionar todos los bloques de contenido relevantes
-      const bloques=cvDoc.querySelectorAll('.exp-item,.edu-item,.cv-main-section,.cv-perfil,.cv-main-section-title,.edu-titulo');
+      const bloques=cvDoc.querySelectorAll('.exp-item,.edu-item,.cv-perfil,.cv-main-section-title,.edu-titulo');
 
       bloques.forEach(bloque=>{
-        const rect=bloque.getBoundingClientRect();
-        const topRelativo=rect.top-cvRect.top; // posición relativa al CV
-        const bottomRelativo=rect.bottom-cvRect.top;
+        const topRelativo=bloque.offsetTop;
+        const bottomRelativo=bloque.offsetTop+bloque.offsetHeight;
 
-        // Ver en qué página caería el inicio y el fin del bloque
         const paginaInicio=Math.floor(topRelativo/A4_HEIGHT_PX);
         const paginaFin=Math.floor(bottomRelativo/A4_HEIGHT_PX);
 
-        // Si el bloque está partido entre dos páginas
         if(paginaInicio!==paginaFin){
-          // Calcular cuánto espacio falta para llegar a la siguiente página
-          const espacioHastaCorte=(paginaFin*A4_HEIGHT_PX)-topRelativo;
-          // Si el espacio restante es menos de 40px, empujar el bloque a la siguiente página
-          if(espacioHastaCorte<40){
-            bloque.style.marginTop=(espacioHastaCorte+8)+'px';
+          // Cuánto del bloque quedaría en la página anterior
+          const corteEnPagina=(paginaFin*A4_HEIGHT_PX);
+          const alturaEnPaginaAnterior=corteEnPagina-topRelativo;
+          // Si menos de 60px del bloque quedan en la página anterior, empujar todo a la siguiente
+          if(alturaEnPaginaAnterior<60){
+            const espacioNecesario=corteEnPagina-topRelativo+8;
+            bloque.style.paddingTop=espacioNecesario+'px';
           }
         }
       });
@@ -1301,7 +1300,7 @@
       if(watermarkContainer)watermarkContainer.style.visibility='visible';
       if(sidebar)sidebar.style.minHeight=originalSidebarHeight;
       // Restaurar márgenes modificados
-      bloques.forEach(b=>b.style.marginTop='');
+      bloques.forEach(b=>b.style.paddingTop='');
 
       const imgData=canvas.toDataURL('image/jpeg',0.97);
       const imgWidth=210;
