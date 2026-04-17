@@ -408,27 +408,27 @@
             </div>
             <div id="modo-btn-no" onclick="setModoExperiencia('sin')" style="border:2px solid #e2e8f0;background:white;border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
               <div style="font-size:1.4rem;margin-bottom:4px;">🎓</div>
-              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Prácticas / Sin empleo formal</div>
+              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Sin experiencia laboral</div>
             </div>
           </div>
         </div>
         <!-- CON EXPERIENCIA -->
         <div id="bloque-con-experiencia">
           <label>Tu experiencia laboral</label>
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Incluye trabajos en planilla, prácticas pre-profesionales, freelance y negocios propios.</p>
           <div id="lista-trabajos"></div>
-          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro trabajo</button>
+          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otra experiencia</button>
         </div>
         <!-- SIN EXPERIENCIA -->
         <div id="bloque-sin-experiencia" style="display:none;">
           <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px;">
-            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Las prácticas pre-profesionales cuentan como experiencia</div>
-            <div style="font-size:0.8rem;color:#0369a1;">En Perú, las prácticas son experiencia laboral válida. Agrégalas junto a proyectos, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
+            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia laboral formal</div>
+            <div style="font-size:0.8rem;color:#0369a1;">Agrega proyectos universitarios o voluntariados. La IA los presentará de forma profesional destacando tus habilidades.</div>
           </div>
-          <label>Prácticas / Proyectos / Voluntariados</label>
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
+          <label>Proyectos y voluntariados</label>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega proyectos académicos, tesis, trabajos de curso o voluntariados.</p>
           <div id="lista-proyectos"></div>
-          <button type="button" onclick="agregarProyecto()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otra práctica o proyecto</button>
+          <button type="button" onclick="agregarProyecto()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro proyecto o voluntariado</button>
         </div>
       </div>
 
@@ -768,7 +768,7 @@
   }
 
   // PROYECTOS / PRÁCTICAS
-  function agregarProyecto(){proyectosData.push({id:Date.now(),tipo:'practica',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});renderProyectos();}
+  function agregarProyecto(){proyectosData.push({id:Date.now(),tipo:'proyecto',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});renderProyectos();}
   function eliminarProyecto(id){proyectosData=proyectosData.filter(p=>p.id!==id);renderProyectos();}
   function actualizarProyecto(id,campo,valor){const p=proyectosData.find(p=>p.id===id);if(p)p[campo]=valor;}
   function renderProyectos(){
@@ -781,11 +781,8 @@
         </div>
         <label style="margin-bottom:6px;">Tipo</label>
         <select onchange="actualizarProyecto(${p.id},'tipo',this.value)" style="margin-bottom:12px;">
-          <option value="practica" ${p.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option>
           <option value="proyecto" ${p.tipo==='proyecto'?'selected':''}>🎓 Proyecto universitario / académico</option>
           <option value="voluntariado" ${p.tipo==='voluntariado'?'selected':''}>🤝 Voluntariado</option>
-          <option value="freelance" ${p.tipo==='freelance'?'selected':''}>💻 Trabajo freelance / independiente</option>
-          <option value="negocio" ${p.tipo==='negocio'?'selected':''}>🏪 Negocio familiar / propio</option>
           <option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option>
         </select>
         <label style="margin-bottom:6px;">Rol / Cargo *</label>
@@ -819,7 +816,7 @@
       return trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
     } else {
       return proyectosData.map(p=>{
-        const tipoLabel={practica:'Práctica pre-profesional',proyecto:'Proyecto académico',voluntariado:'Voluntariado',freelance:'Freelance',negocio:'Negocio propio',otro:'Experiencia'}[p.tipo]||'Experiencia';
+        const tipoLabel={proyecto:'Proyecto académico',voluntariado:'Voluntariado',otro:'Experiencia'}[p.tipo]||'Proyecto';
         return `${tipoLabel}: ${p.nombre}${p.organizacion?' — '+p.organizacion:''}${p.desde||p.hasta?' ('+[p.desde,p.hasta].filter(Boolean).join(' - ')+')':''}\n${p.descripcion?'• '+p.descripcion:''}`;
       }).join('\n\n');
     }
@@ -867,20 +864,28 @@
 
   function renderTrabajoss(){
     const c=document.getElementById('lista-trabajos');if(!trabajosData.length){c.innerHTML='';return;}
+    const tipoLabels={trabajo:'Trabajo',practica:'Práctica pre-profesional',freelance:'Freelance',negocio:'Negocio propio'};
     c.innerHTML=trabajosData.map((t,idx)=>`
       <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
         <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Trabajo ${idx+1}</span>
+          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">${tipoLabels[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span>
           <button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
         </div>
-        <label style="margin-bottom:6px;">Empresa *</label>
-        <input type="text" placeholder="Ej: Ripley, Claro, Alicorp, Ministerio de Salud..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Tipo de experiencia</label>
+        <select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;">
+          <option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo (planilla / CAS / contrato)</option>
+          <option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option>
+          <option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance / independiente</option>
+          <option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio familiar / propio</option>
+        </select>
+        <label style="margin-bottom:6px;">${t.tipo==='practica'?'Empresa / Institución *':t.tipo==='freelance'?'Cliente principal / Rubro *':t.tipo==='negocio'?'Nombre del negocio *':'Empresa *'}</label>
+        <input type="text" placeholder="${t.tipo==='practica'?'Ej: BCP, Ministerio de Salud, PUCP...':t.tipo==='freelance'?'Ej: Clientes de diseño gráfico, Desarrollo web...':t.tipo==='negocio'?'Ej: Bodega Don Carlos, Ferretería Pérez...':'Ej: Ripley, Claro, Alicorp, Ministerio de Salud...'}" value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
           <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div>
           <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div>
         </div>
-        <label style="margin-bottom:6px;">Cargo *</label>
-        <input type="text" placeholder="Ej: Jefe de Ventas, Analista de RRHH, Enfermero..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;">
+        <label style="margin-bottom:6px;">${t.tipo==='practica'?'Rol / Cargo de práctica *':t.tipo==='freelance'?'Descripción del servicio *':t.tipo==='negocio'?'Tu rol en el negocio *':'Cargo *'}</label>
+        <input type="text" placeholder="${t.tipo==='practica'?'Ej: Practicante de Contabilidad, Asistente de Marketing...':t.tipo==='freelance'?'Ej: Diseñador gráfico freelance, Desarrollador web...':t.tipo==='negocio'?'Ej: Administrador, Gerente general...':'Ej: Jefe de Ventas, Analista de RRHH, Enfermero...'}" value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;">
         <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;">
           <button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
             💡 Sugerir logros con IA <span style="font-size:0.72rem;opacity:0.7;">(${quedanLlamadasIA()} restantes)</span>
