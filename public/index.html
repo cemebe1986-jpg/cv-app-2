@@ -243,6 +243,7 @@
   .cv-estilo-minimal .exp-empresa{color:#1a1a2e;font-weight:400;}
   .cv-estilo-minimal .exp-logro::before{color:#1a1a2e;}
   .cv-estilo-minimal .edu-institucion{color:#4a5568;}
+  @media(max-width:768px){.wizard{max-width:100%;}.cv-preview{max-width:100%;margin:20px auto 0;}.cv-document{grid-template-columns:200px 1fr;}.step{padding:20px;}.wizard-nav{padding:14px 20px;}}
   @media(max-width:600px){nav{padding:14px 20px;}.choice-cards{grid-template-columns:1fr;}.cv-document{grid-template-columns:1fr;}.cv-sidebar{padding:25px;}.step{padding:24px;}.wizard-nav{padding:16px 24px;}.wizard-card-header{padding:22px 24px 16px;}.estilos-grid{gap:8px;}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
@@ -1221,7 +1222,15 @@
     if(!window.usuarioActual){mostrarError('Sesión requerida','Inicia sesión para descargar.');return;}
     
     const btn=document.getElementById('link-descarga');
-    btn.textContent='⏳ Generando PDF...';btn.disabled=true;
+    btn.textContent='⏳ Preparando tu CV...';btn.disabled=true;
+
+    // Mensajes de progreso para que el usuario sepa que está procesando
+    const mensajes=['⏳ Preparando tu CV...','⏳ Aplicando el diseño...','⏳ Generando el PDF...','⏳ Casi listo...'];
+    let msgIdx=0;
+    const msgInterval=setInterval(()=>{
+      msgIdx=(msgIdx+1)%mensajes.length;
+      if(btn.disabled)btn.textContent=mensajes[msgIdx];
+    },2000);
 
     try{
       // Verificar pago
@@ -1259,6 +1268,7 @@
       console.error('Error descarga PDF:',e);
       mostrarError('Error al descargar','Hubo un problema generando el PDF. Intenta de nuevo.');
     }finally{
+      clearInterval(msgInterval);
       btn.textContent='✅ Descargar mi CV en PDF';btn.disabled=false;
     }
   }
@@ -1304,6 +1314,9 @@
             const cvData=await cvR.json();
             if(cvData.cvData){
               cvGeneradoData=cvData.cvData;
+              // Restaurar habilidades para que aparezcan en el preview
+              if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
+              if(cvData.blandasData?.length) blandasData=cvData.blandasData;
               renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
               cambiarEstiloCV(estiloActual);
               mostrarEstadoLogin(window.usuarioActual);
@@ -1316,14 +1329,18 @@
       // Si pagó, habilitar botón de descarga y mostrar toast
       if(data.pagado){
         const link=document.getElementById('link-descarga');
-        if(link){
-          link.style.display='block';
-        }
+        if(link) link.style.display='block';
         if(paramPago==='ok'){
           const t=document.createElement('div');
           t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
           t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
           document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
+        } else if(!paramPago && !data.tieneCv){
+          // Usuario vuelve sin CV generado — mostrar instrucción
+          const t=document.createElement('div');
+          t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:14px 28px;border-radius:20px;font-size:0.85rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(15,52,96,0.4);max-width:90%;text-align:center;';
+          t.textContent='✅ Ya tienes un plan activo. Genera tu CV y podrás descargarlo sin marca de agua.';
+          document.body.appendChild(t);setTimeout(()=>t.remove(),7000);
         }
       }
     }catch(e){console.log('verificarPago error:',e);}
