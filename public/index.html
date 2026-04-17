@@ -437,7 +437,7 @@
         <label>Educación *</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
         <div id="lista-educacion"></div>
-        <button type="button" onclick="agregarEducacion()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro estudio o certificación</button>
+        <button type="button" onclick="agregarEducacion()" style="width:100%;padding:10px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro estudio o certificación</button>
       </div>
 
       <!-- PASO 4: HABILIDADES -->
@@ -520,7 +520,11 @@
     </div>
 
     <div class="cv-document" id="cv-document" style="position:relative;">
-      <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;overflow:hidden;"><div style="transform:rotate(-35deg);font-size:2.5rem;font-weight:900;color:rgba(15,52,96,0.07);white-space:nowrap;letter-spacing:4px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia</div></div>
+      <div style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:hidden;">
+        <div style="position:absolute;top:15%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
+        <div style="position:absolute;top:45%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
+        <div style="position:absolute;top:75%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
+      </div>
       <div class="cv-sidebar">
         <div class="cv-foto-container"><div class="cv-foto" id="cv-foto">👤</div></div>
         <div class="cv-nombre-sidebar" id="cv-nombre-sidebar"></div><br>
@@ -559,21 +563,21 @@
           <h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Elige tu plan para descargar</h3>
         </div>
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
-          <div style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;">
+          <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
             <div style="font-size:1.3rem;margin-bottom:4px;">🎯</div>
             <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Básico</div>
             <div style="font-size:0.75rem;color:#718096;">Para 1 postulación</div>
             <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/9.90</div>
-            <button onclick="iniciarPago('basico')" style="display:block;width:100%;background:#0f3460;color:white;padding:8px;border-radius:8px;border:none;font-size:0.82rem;font-weight:700;cursor:pointer;">Comprar</button>
+            <div style="background:#0f3460;color:white;padding:8px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div>
           </div>
-          <div style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:#f0f4ff;position:relative;">
+          <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:#f0f4ff;position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='#f0f4ff'">
             <div style="position:absolute;top:-10px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:2px 10px;border-radius:10px;font-size:0.68rem;font-weight:700;white-space:nowrap;">⭐ POPULAR</div>
             <div style="font-size:1.3rem;margin-bottom:4px;margin-top:6px;">⭐</div>
             <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Popular</div>
             <div style="font-size:0.75rem;color:#718096;">Para 3 postulaciones</div>
             <div style="font-size:1.3rem;font-weight:900;color:#0f3460;margin:6px 0;">S/24.90</div>
             <div style="font-size:0.68rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorra S/4.80</div>
-            <button onclick="iniciarPago('popular')" style="display:block;width:100%;background:#0f3460;color:white;padding:8px;border-radius:8px;border:none;font-size:0.82rem;font-weight:700;cursor:pointer;">Comprar</button>
+            <div style="background:#0f3460;color:white;padding:8px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div>
           </div>
         </div>
         <a href="#" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:1rem;">✅ Descargar mi CV en PDF</a>
@@ -785,8 +789,8 @@
           <option value="voluntariado" ${p.tipo==='voluntariado'?'selected':''}>🤝 Voluntariado</option>
           <option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option>
         </select>
-        <label style="margin-bottom:6px;">Rol / Cargo *</label>
-        <input type="text" placeholder="Ej: Practicante de Contabilidad, Asistente de Marketing, Voluntario..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value);mostrarBotonSugerenciasProyectoIA(${p.id},this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Rol o descripción (opcional)</label>
+        <input type="text" placeholder="Ej: Investigador principal, Coordinador, Desarrollador..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value);mostrarBotonSugerenciasProyectoIA(${p.id},this.value)" style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Empresa / Institución / Universidad</label>
         <input type="text" placeholder="Ej: BCP, PUCP, Cruz Roja, Municipalidad de Lima..." value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
@@ -1065,7 +1069,11 @@
       document.getElementById('step-pdf').classList.remove('active');
       document.getElementById('step-pdf').style.display='none';
       camino='manual';pasoActual=0;mostrarPaso(0);
-      alert(`✅ ¡Datos extraídos! Se encontraron ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s). Revisa y ajusta si es necesario.`);
+      // Toast silencioso en vez de alert bloqueante
+      const t=document.createElement('div');
+      t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';
+      t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;
+      document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
     }catch(e){
       console.error(e);
       document.getElementById('estado-subida').style.display='none';
@@ -1087,7 +1095,10 @@
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();document.getElementById('link-descarga').href=`/descargar-cv?id=${gd.id}`;
-    }catch(e){mostrarError('Error al generar tu CV','Hubo un problema con la IA. Intenta de nuevo.');}
+    }catch(e){
+      console.error('Error generarCV:', e);
+      mostrarError('Error al generar tu CV', e.message?.includes('429') ? 'Límite de uso alcanzado. Intenta en unos minutos.' : 'Hubo un problema con la IA. Intenta de nuevo.');
+    }
     finally{document.getElementById('loading-overlay').classList.remove('active');}
   }
 
@@ -1159,6 +1170,10 @@
         <input type="text" placeholder="Ej: Ing. de Sistemas, AWS Cloud Practitioner..." value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Institución *</label>
         <input type="text" placeholder="Ej: UPC, Senati, Coursera..." value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" style="margin-bottom:12px;">
+        ${(e.tipo==='universitaria'||e.tipo==='tecnica')&&(!e.hasta||e.hasta.toLowerCase().includes('curso'))?`
+        <label style="margin-bottom:6px;">Ciclo actual (opcional)</label>
+        <input type="text" placeholder="Ej: 7mo ciclo, 8vo semestre, 3er año..." value="${e.ciclo||''}" oninput="actualizarEducacion(${e.id},'ciclo',this.value)" style="margin-bottom:12px;">
+        `:''}
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
           <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2018" value="${e.desde||''}" oninput="actualizarEducacion(${e.id},'desde',this.value)" style="margin-bottom:0;"></div>
           <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2022 o En curso" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div>
