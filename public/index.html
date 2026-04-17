@@ -1237,7 +1237,11 @@
       
       if(!response.ok){
         const err=await response.json();
-        mostrarError('Error','No se pudo generar el PDF: '+(err.error||'intenta de nuevo.'));
+        if(response.status===429){
+          mostrarError('Límite alcanzado', err.error||'Alcanzaste el límite de descargas del día.');
+        } else {
+          mostrarError('Error','No se pudo generar el PDF: '+(err.error||'intenta de nuevo.'));
+        }
         return;
       }
 

@@ -13,7 +13,6 @@ module.exports = async (req, res) => {
   try {
     const { type, data } = req.body;
 
-    // Aceptar tanto payment.created como payment.updated
     if (type !== 'payment') return res.status(200).json({ ok: true });
     if (!data?.id) return res.status(200).json({ ok: true });
 
@@ -23,7 +22,6 @@ module.exports = async (req, res) => {
 
     console.log(`Payment ${data.id} status: ${payment.status}`);
 
-    // Solo procesar pagos aprobados
     if (payment.status !== 'approved') return res.status(200).json({ ok: true });
 
     const [usuarioId, plan] = (payment.external_reference || '').split('|');
@@ -33,16 +31,29 @@ module.exports = async (req, res) => {
     }
 
     const planes = { basico: 1, popular: 3 };
+    const limiteDescargasDia = { basico: 3, popular: 5 };
     const cvs = planes[plan] || 1;
     const token = `mp_${payment.id}_${Date.now()}`;
 
+    // Guardar token de pago
     await redis.setex(`descarga:${usuarioId}`, 60 * 60 * 24 * 30, JSON.stringify({
       token, cvs, plan,
+      limiteDia: limiteDescargasDia[plan] || 3,
       pagoId: payment.id,
       fecha: new Date().toISOString()
     }));
 
-    console.log(`✅ Pago guardado: ${usuarioId} → ${plan} (${cvs} CVs)`);
+    // Congelar el CV actual al momento del pago
+    // Así la descarga siempre corresponde al CV por el que se pagó
+    const cvActual = await redis.get(`cv:usuario:${usuarioId}`);
+    if (cvActual) {
+      await redis.setex(`cv:pagado:${usuarioId}`, 60 * 60 * 24 * 30, 
+        typeof cvActual === 'string' ? cvActual : JSON.stringify(cvActual)
+      );
+      console.log(`✅ CV congelado para: ${usuarioId}`);
+    }
+
+    console.log(`✅ Pago guardado: ${usuarioId} → ${plan} (${cvs} CVs, ${limiteDescargasDia[plan]} descargas/día)`);
     res.status(200).json({ ok: true });
 
   } catch (error) {

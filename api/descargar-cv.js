@@ -18,7 +18,20 @@ module.exports = async (req, res) => {
       const pago = typeof pagoRaw === 'string' ? JSON.parse(pagoRaw) : pagoRaw;
       if (pago.token !== token) return res.status(403).json({ error: 'Token inválido' });
 
-      const cvRaw = await redis.get(`cv:usuario:${uid}`);
+      // Verificar límite de descargas del día
+      const hoy = new Date().toISOString().split('T')[0]; // YYYY-MM-DD
+      const claveContador = `descargas:${uid}:${hoy}`;
+      const descargasHoy = parseInt(await redis.get(claveContador) || '0');
+      const limiteDia = pago.limiteDia || 3;
+
+      if (descargasHoy >= limiteDia) {
+        return res.status(429).json({ 
+          error: `Límite de ${limiteDia} descargas por día alcanzado. Vuelve mañana.` 
+        });
+      }
+
+      // Usar CV congelado al momento del pago (no el CV actual)
+      const cvRaw = await redis.get(`cv:pagado:${uid}`) || await redis.get(`cv:usuario:${uid}`);
       if (!cvRaw) return res.status(404).json({ error: 'CV no encontrado. Genera tu CV de nuevo.' });
       const parsed = typeof cvRaw === 'string' ? JSON.parse(cvRaw) : cvRaw;
       cvData = parsed.cvData;
@@ -26,6 +39,10 @@ module.exports = async (req, res) => {
       blandasData = parsed.blandasData || [];
       foto = parsed.foto || null;
       estilo = estiloParam || parsed.estilo || 'clasico';
+
+      // Incrementar contador de descargas del día (expira en 25 horas)
+      await redis.setex(claveContador, 60 * 60 * 25, String(descargasHoy + 1));
+      console.log(`Descarga ${descargasHoy + 1}/${limiteDia} para ${uid} hoy`);
 
     } else if (id) {
       const pagado = await redis.get(`pagado:${id}`);
@@ -51,7 +68,7 @@ module.exports = async (req, res) => {
         options: {
           format: 'A4',
           printBackground: true,
-          margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
+          margin: { top: '10mm', right: '0mm', bottom: '10mm', left: '0mm' },
           tagged: false
         },
         gotoOptions: { waitUntil: 'load', timeout: 15000 }
