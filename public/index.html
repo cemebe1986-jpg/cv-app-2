@@ -1268,11 +1268,10 @@
       if(sidebar)sidebar.style.minHeight=originalSidebarHeight;
 
       const imgData=canvas.toDataURL('image/jpeg',0.97);
-      const imgWidth=210; // A4 ancho en mm
+      const imgWidth=210;
       const imgHeight=(canvas.height*imgWidth)/canvas.width;
-      const pageHeight=297; // A4 alto en mm
+      const pageHeight=297;
 
-      // Cargar jsPDF si no está disponible
       if(!window.jspdf){
         const script=document.createElement('script');
         script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
@@ -1282,20 +1281,20 @@
 
       const {jsPDF:PDF}=window.jspdf;
       const doc=new PDF({unit:'mm',format:'a4'});
+      const totalPages=Math.ceil(imgHeight/pageHeight);
 
-      let heightLeft=imgHeight;
-      let yOffset=0;
-
-      // Primera página
-      doc.addImage(imgData,'JPEG',0,yOffset,imgWidth,imgHeight);
-      heightLeft-=pageHeight;
-
-      // Páginas adicionales
-      while(heightLeft>0){
-        yOffset-=pageHeight;
-        doc.addPage();
-        doc.addImage(imgData,'JPEG',0,yOffset,imgWidth,imgHeight);
-        heightLeft-=pageHeight;
+      for(let page=0;page<totalPages;page++){
+        if(page>0)doc.addPage();
+        // Fondo blanco
+        doc.setFillColor(255,255,255);
+        doc.rect(0,0,210,297,'F');
+        // Imagen con offset correcto
+        doc.addImage(imgData,'JPEG',0,-(page*pageHeight),imgWidth,imgHeight);
+        // Franja blanca al pie de cada página excepto la última — suaviza el corte
+        if(page<totalPages-1){
+          doc.setFillColor(255,255,255);
+          doc.rect(0,287,210,10,'F');
+        }
       }
 
       const nombre=cvGeneradoData?.nombre?.replace(/\s+/g,'-').toLowerCase()||'mi-cv';
