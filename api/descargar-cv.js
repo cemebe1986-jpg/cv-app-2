@@ -52,6 +52,7 @@ module.exports = async (req, res) => {
           format: 'A4',
           printBackground: true,
           margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
+          tagged: false
         }
       })
     });
@@ -98,7 +99,7 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
 
   if (estilo === 'moderno') {
     // Estilo Ejecutivo - una columna centrada
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=210mm">
     <style>
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
@@ -131,7 +132,7 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
 
   } else if (estilo === 'minimal') {
     // Estilo Minimalista
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=210mm">
     <style>
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
@@ -164,7 +165,7 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
 
   } else {
     // Estilo Clásico - sidebar azul
-    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8"><meta name="viewport" content="width=210mm">
     <style>
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
