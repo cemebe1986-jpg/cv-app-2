@@ -408,7 +408,7 @@
             </div>
             <div id="modo-btn-no" onclick="setModoExperiencia('sin')" style="border:2px solid #e2e8f0;background:white;border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
               <div style="font-size:1.4rem;margin-bottom:4px;">🎓</div>
-              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Es mi primer empleo</div>
+              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Prácticas / Sin empleo formal</div>
             </div>
           </div>
         </div>
@@ -422,8 +422,8 @@
         <!-- SIN EXPERIENCIA -->
         <div id="bloque-sin-experiencia" style="display:none;">
           <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px;">
-            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
-            <div style="font-size:0.8rem;color:#0369a1;">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
+            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Las prácticas pre-profesionales cuentan como experiencia</div>
+            <div style="font-size:0.8rem;color:#0369a1;">En Perú, las prácticas son experiencia laboral válida. Agrégalas junto a proyectos, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
           </div>
           <label>Prácticas / Proyectos / Voluntariados</label>
           <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
@@ -788,8 +788,8 @@
           <option value="negocio" ${p.tipo==='negocio'?'selected':''}>🏪 Negocio familiar / propio</option>
           <option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option>
         </select>
-        <label style="margin-bottom:6px;">Nombre del proyecto / rol *</label>
-        <input type="text" placeholder="Ej: Practicante de Contabilidad, Proyecto de tesis, Voluntario de Cruz Roja..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:12px;">
+        <label style="margin-bottom:6px;">Rol / Cargo *</label>
+        <input type="text" placeholder="Ej: Practicante de Contabilidad, Asistente de Marketing, Voluntario..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value);mostrarBotonSugerenciasProyectoIA(${p.id},this.value)" style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Empresa / Institución / Universidad</label>
         <input type="text" placeholder="Ej: BCP, PUCP, Cruz Roja, Municipalidad de Lima..." value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:12px;">
         <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
@@ -798,6 +798,19 @@
         </div>
         <label style="margin-bottom:6px;">¿Qué hiciste? ¿Qué lograste?</label>
         <textarea placeholder="Describe brevemente tus funciones o logros. La IA lo mejorará automáticamente." oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:90px;">${p.descripcion}</textarea>
+        <div id="btn-sug-proy-${p.id}" style="display:${p.nombre.trim()?'block':'none'};margin-bottom:8px;">
+          <button onclick="pedirIAConLogin(()=>generarSugerenciasProyectoIA(${p.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
+            💡 Sugerir logros para este rol con IA
+          </button>
+        </div>
+        <div id="sug-proy-box-${p.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:8px;">
+          <div id="sug-proy-titulo-${p.id}" style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;">💡 Sugerencias — selecciona las que aplican:</div>
+          <div id="chips-proy-${p.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+          <div id="sug-proy-actions-${p.id}" style="display:none;gap:8px;">
+            <button onclick="agregarSugerenciasProyectoSeleccionadas(${p.id})" style="flex:1;padding:8px 14px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionadas</button>
+            <button onclick="document.getElementById('sug-proy-box-${p.id}').style.display='none';document.getElementById('btn-sug-proy-${p.id}').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
+          </div>
+        </div>
       </div>`).join('');
   }
 
@@ -815,6 +828,41 @@
     if(modoExperiencia==='con'){const t=trabajosData.find(t=>t.cargo.trim());return t?t.cargo:'';}
     else{const p=proyectosData.find(p=>p.nombre.trim());return p?p.nombre:'';}
   }
+  function mostrarBotonSugerenciasProyectoIA(pid,nombre){const btn=document.getElementById(`btn-sug-proy-${pid}`);if(!btn)return;btn.style.display=nombre.trim()?'block':'none';}
+
+  async function generarSugerenciasProyectoIA(pid){
+    if(!verificarLimiteIA())return;
+    const p=proyectosData.find(p=>p.id===pid);
+    if(!p||!p.nombre.trim())return;
+    const box=document.getElementById(`sug-proy-box-${pid}`),chips=document.getElementById(`chips-proy-${pid}`),titulo=document.getElementById(`sug-proy-titulo-${pid}`),btnBox=document.getElementById(`btn-sug-proy-${pid}`);
+    if(!box||!chips)return;
+    btnBox.style.display='none';
+    chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${p.nombre}...</div>`;
+    box.style.display='block';
+    try{
+      const tipoLabel={practica:'Práctica pre-profesional',proyecto:'Proyecto académico',voluntariado:'Voluntariado',freelance:'Freelance',negocio:'Negocio propio',otro:'Experiencia'}[p.tipo]||'Experiencia';
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:p.nombre,empresa:p.organizacion||tipoLabel,usuarioId:window.usuarioActual?.uid||null})});
+      const data=await r.json();const s=data.sugerencias||[];
+      incrementarLlamadasIA();
+      if(titulo)titulo.textContent=`✨ Sugerencias para ${p.nombre} — selecciona las que aplican:`;
+      chips.innerHTML=s.map((sg,i)=>`<button id="sug-proy-${pid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:4px;">${sg}</button>`).join('');
+      document.getElementById(`sug-proy-actions-${pid}`).style.display='flex';
+    }catch(e){
+      chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
+      btnBox.style.display='block';box.style.display='none';
+    }
+  }
+
+  function agregarSugerenciasProyectoSeleccionadas(pid){
+    const p=proyectosData.find(p=>p.id===pid);if(!p)return;
+    const seleccionadas=[];
+    document.querySelectorAll(`[id^="sug-proy-${pid}-"].seleccionado`).forEach(btn=>seleccionadas.push(btn.getAttribute('data-texto')));
+    if(!seleccionadas.length)return;
+    const actual=p.descripcion?p.descripcion+'\n':'';
+    p.descripcion=actual+seleccionadas.join('\n');
+    renderProyectos();
+  }
+
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
 
   function renderTrabajoss(){
