@@ -1129,7 +1129,7 @@
       const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
-      const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,usuarioId:window.usuarioActual?.uid||null})});
+      const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();window._cvDescargaId=gd.id;
     }catch(e){
       console.error('Error generarCV:', e);
@@ -1218,122 +1218,38 @@
   }
 
   async function descargarCVComoPDF(){
-    // Verificar pago antes de generar PDF
     if(!window.usuarioActual){mostrarError('Sesión requerida','Inicia sesión para descargar.');return;}
-    try{
-      const check=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
-      const checkData=await check.json();
-      if(!checkData.pagado){mostrarError('Pago requerido','Adquiere un plan para descargar tu CV sin marca de agua.');return;}
-    }catch(e){mostrarError('Error','No se pudo verificar el pago. Intenta de nuevo.');return;}
-
+    
     const btn=document.getElementById('link-descarga');
     btn.textContent='⏳ Generando PDF...';btn.disabled=true;
 
     try{
-      const cvDoc=document.getElementById('cv-document');
-
-      // Igualar altura sidebar y main
-      const sidebar=cvDoc.querySelector('.cv-sidebar');
-      const main=cvDoc.querySelector('.cv-main');
-      const originalSidebarHeight=sidebar?sidebar.style.minHeight:'';
-      if(sidebar&&main){
-        const maxH=Math.max(sidebar.scrollHeight,main.scrollHeight);
-        sidebar.style.minHeight=maxH+'px';
+      // Verificar pago
+      const check=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
+      const checkData=await check.json();
+      if(!checkData.pagado){
+        mostrarError('Pago requerido','Adquiere un plan para descargar tu CV sin marca de agua.');
+        return;
       }
 
-      // SMART PAGE BREAK — calcular dónde caen los cortes y empujar bloques
-      const cvRect=cvDoc.getBoundingClientRect();
-      const cvTotalHeight=cvDoc.scrollHeight;
-      // Calcular altura de página A4 en px proporcional al CV
-      // imgWidth=210mm, pageHeight=297mm → ratio = 297/210
-      const A4_HEIGHT_PX=cvDoc.scrollWidth*(297/210);
-
-      const bloques=cvDoc.querySelectorAll('.exp-item,.edu-item,.cv-perfil,.cv-main-section-title,.edu-titulo');
-
-      bloques.forEach(bloque=>{
-        const topRelativo=bloque.offsetTop;
-        const bottomRelativo=bloque.offsetTop+bloque.offsetHeight;
-
-        const paginaInicio=Math.floor(topRelativo/A4_HEIGHT_PX);
-        const paginaFin=Math.floor(bottomRelativo/A4_HEIGHT_PX);
-
-        if(paginaInicio!==paginaFin){
-          // Cuánto del bloque quedaría en la página anterior
-          const corteEnPagina=(paginaFin*A4_HEIGHT_PX);
-          const alturaEnPaginaAnterior=corteEnPagina-topRelativo;
-          // Si menos de 60px del bloque quedan en la página anterior, empujar todo a la siguiente
-          if(alturaEnPaginaAnterior<60){
-            const espacioNecesario=corteEnPagina-topRelativo+8;
-            bloque.style.paddingTop=espacioNecesario+'px';
-          }
-        }
-      });
-
-      // Igualar altura nuevamente después del padding
-      await new Promise(r=>setTimeout(r,100));
-      if(sidebar&&main){
-        const maxH2=Math.max(sidebar.scrollHeight,main.scrollHeight);
-        sidebar.style.minHeight=maxH2+'px';
+      // Descargar PDF desde el backend (Browserless)
+      const response=await fetch(`/descargar-cv?uid=${window.usuarioActual.uid}&token=${checkData.token}&estilo=${estiloActual}`);
+      
+      if(!response.ok){
+        const err=await response.json();
+        mostrarError('Error','No se pudo generar el PDF: '+(err.error||'intenta de nuevo.'));
+        return;
       }
 
-      // Ocultar marca de agua
-      const watermarkContainer=cvDoc.querySelector('div[style*="overflow:hidden"]');
-      if(watermarkContainer)watermarkContainer.style.visibility='hidden';
-      const allDivs=cvDoc.querySelectorAll('div');
-      const watermarkDivs=Array.from(allDivs).filter(d=>d.textContent.includes('Sin licencia'));
-      watermarkDivs.forEach(w=>w.style.visibility='hidden');
-
-      await new Promise(r=>setTimeout(r,150));
-
-      const canvas=await html2canvas(cvDoc,{
-        scale:2,
-        useCORS:true,
-        allowTaint:true,
-        backgroundColor:'#ffffff',
-        logging:false,
-        windowWidth:cvDoc.scrollWidth,
-        windowHeight:cvDoc.scrollHeight
-      });
-
-      // Restaurar todo
-      watermarkDivs.forEach(w=>w.style.visibility='visible');
-      if(watermarkContainer)watermarkContainer.style.visibility='visible';
-      if(sidebar)sidebar.style.minHeight=originalSidebarHeight;
-      // Restaurar márgenes modificados
-      bloques.forEach(b=>b.style.paddingTop='');
-
-      const imgData=canvas.toDataURL('image/jpeg',0.97);
-      const imgWidth=210;
-      const imgHeight=(canvas.height*imgWidth)/canvas.width;
-      const pageHeight=297;
-
-      if(!window.jspdf){
-        const script=document.createElement('script');
-        script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-        document.head.appendChild(script);
-        await new Promise(resolve=>script.onload=resolve);
-      }
-
-      const {jsPDF:PDF}=window.jspdf;
-      const doc=new PDF({unit:'mm',format:'a4'});
-      const totalPages=Math.ceil(imgHeight/pageHeight);
-
-      for(let page=0;page<totalPages;page++){
-        if(page>0)doc.addPage();
-        // Fondo blanco
-        doc.setFillColor(255,255,255);
-        doc.rect(0,0,210,297,'F');
-        // Imagen con offset correcto
-        doc.addImage(imgData,'JPEG',0,-(page*pageHeight),imgWidth,imgHeight);
-        // Franja blanca al pie de cada página excepto la última — suaviza el corte
-        if(page<totalPages-1){
-          doc.setFillColor(255,255,255);
-          doc.rect(0,287,210,10,'F');
-        }
-      }
-
+      // Descargar el PDF
+      const blob=await response.blob();
+      const url=URL.createObjectURL(blob);
+      const a=document.createElement('a');
+      a.href=url;
       const nombre=cvGeneradoData?.nombre?.replace(/\s+/g,'-').toLowerCase()||'mi-cv';
-      doc.save(`cv-${nombre}-talentia.pdf`);
+      a.download=`cv-${nombre}-talentia.pdf`;
+      a.click();
+      URL.revokeObjectURL(url);
 
     }catch(e){
       console.error('Error descarga PDF:',e);

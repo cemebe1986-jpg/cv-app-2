@@ -3,7 +3,7 @@ const { Redis } = require('@upstash/redis');
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { cvData, foto, habilidades, usuarioId } = req.body;
+  const { cvData, foto, habilidades, blandasData, estilo, usuarioId } = req.body;
   
   try {
     const redis = new Redis({
@@ -11,15 +11,13 @@ module.exports = async (req, res) => {
       token: process.env.KV_REST_API_TOKEN,
     });
 
-    // ID aleatorio para la descarga (compatible con flujo existente)
     const id = Math.random().toString(36).substring(2, 10).toUpperCase();
-    const cvPayload = JSON.stringify({ cvData, foto, habilidades });
+    const cvPayload = JSON.stringify({ cvData, foto, habilidades, blandasData, estilo });
     
     // Guardar con ID aleatorio — expira en 24h
     await redis.set(`cv:${id}`, cvPayload, { ex: 86400 });
 
-    // Si hay usuario logueado, guardar también con su uid — expira en 30 días
-    // Así podemos recuperar el CV cuando vuelve de Mercado Pago
+    // Guardar con uid — expira en 30 días
     if (usuarioId) {
       await redis.set(`cv:usuario:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
     }
