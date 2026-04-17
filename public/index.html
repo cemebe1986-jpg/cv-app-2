@@ -14,7 +14,7 @@
   window.registrarEmail = async () => { const nombre=document.getElementById('modal-nombre').value.trim(),email=document.getElementById('modal-email').value.trim(),pass=document.getElementById('modal-pass').value; if(!nombre||!email||!pass){mostrarErrorModal('Completa todos los campos.');return;} if(pass.length<6){mostrarErrorModal('La contraseña debe tener mínimo 6 caracteres.');return;} try{const r=await createUserWithEmailAndPassword(auth,email,pass);await updateProfile(r.user,{displayName:nombre});window.usuarioActual=r.user;cerrarModalLogin();mostrarEstadoLogin(r.user);if(window.accionPendienteLogin){window.accionPendienteLogin();window.accionPendienteLogin=null;}}catch(e){if(e.code==='auth/email-already-in-use')mostrarErrorModal('Este email ya tiene una cuenta.');else mostrarErrorModal('Error al crear cuenta.');} };
   window.olvideMiPassword = async () => { const email=document.getElementById('modal-email').value.trim(); if(!email){mostrarErrorModal('Ingresa tu email primero.');return;} try{await sendPasswordResetEmail(auth,email);mostrarErrorModal('✅ Te enviamos un email para restablecer tu contraseña.',true);}catch(e){mostrarErrorModal('No encontramos ese email.');} };
   window.cerrarSesion = async () => { await signOut(auth); window.usuarioActual=null; mostrarEstadoLogin(null); };
-  onAuthStateChanged(auth, user => { window.usuarioActual=user; if(document.getElementById('cv-preview')?.style.display!=='none')mostrarEstadoLogin(user); });
+  onAuthStateChanged(auth, user => { window.usuarioActual=user; if(document.getElementById('cv-preview')?.style.display!=='none')mostrarEstadoLogin(user); if(user && window.verificarPagoUsuario) window.verificarPagoUsuario(); });
   function mostrarErrorModal(msg,exito=false){const el=document.getElementById('modal-error');if(!el)return;el.textContent=msg;el.style.color=exito?'#22c55e':'#e53e3e';el.style.display='block';}
 </script>
 <meta charset="UTF-8">
@@ -1233,6 +1233,7 @@
 
   async function verificarPagoUsuario(){
     if(!window.usuarioActual)return;
+    window.verificarPagoUsuario = verificarPagoUsuario;
     try{
       const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
       const data=await r.json();
@@ -1296,12 +1297,7 @@
 
   detectarPaisPorCodigo();
   verificarRetornoMP();
-
-  // Verificar pago cuando Firebase confirma el usuario
-  onAuthStateChanged(auth, user => {
-    window.usuarioActual = user;
-    if(user) verificarPagoUsuario();
-  });
+  // verificarPagoUsuario se llama desde onAuthStateChanged en el módulo Firebase del head
 </script>
 </body>
 </html>
