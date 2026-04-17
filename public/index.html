@@ -245,6 +245,7 @@
   .cv-estilo-minimal .edu-institucion{color:#4a5568;}
   @media(max-width:600px){nav{padding:14px 20px;}.choice-cards{grid-template-columns:1fr;}.cv-document{grid-template-columns:1fr;}.cv-sidebar{padding:25px;}.step{padding:24px;}.wizard-nav{padding:16px 24px;}.wizard-card-header{padding:22px 24px 16px;}.estilos-grid{gap:8px;}}
 </style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 </head>
@@ -588,7 +589,7 @@
             <div style="background:#0f3460;color:white;padding:8px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div>
           </div>
         </div>
-        <a href="#" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;text-decoration:none;font-weight:700;font-size:1rem;">✅ Descargar mi CV en PDF</a>
+        <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
       </div>
     </div>
   </div>
@@ -1129,7 +1130,7 @@
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,usuarioId:window.usuarioActual?.uid||null})});
-      const gd=await gr.json();document.getElementById('link-descarga').href=`/descargar-cv?id=${gd.id}`;
+      const gd=await gr.json();window._cvDescargaId=gd.id;
     }catch(e){
       console.error('Error generarCV:', e);
       mostrarError('Error al generar tu CV', e.message?.includes('429') ? 'Límite de uso alcanzado. Intenta en unos minutos.' : 'Hubo un problema con la IA. Intenta de nuevo.');
@@ -1216,7 +1217,68 @@
       </div>`).join('');
   }
 
-  async function iniciarPago(plan){
+  async function descargarCVComoPDF(){
+    const btn=document.getElementById('link-descarga');
+    btn.textContent='⏳ Generando PDF...';btn.disabled=true;
+
+    try{
+      const cvDoc=document.getElementById('cv-document');
+
+      // Ocultar temporalmente la marca de agua
+      const watermarks=cvDoc.querySelectorAll('div[style*="Sin licencia"]');
+      watermarks.forEach(w=>w.style.display='none');
+
+      const canvas=await html2canvas(cvDoc,{
+        scale:2,
+        useCORS:true,
+        allowTaint:true,
+        backgroundColor:'#ffffff',
+        logging:false
+      });
+
+      // Restaurar marca de agua
+      watermarks.forEach(w=>w.style.display='block');
+
+      const {jsPDF}=window.jspdf||{};
+      // Usar jsPDF desde CDN si no está disponible
+      const imgData=canvas.toDataURL('image/jpeg',0.95);
+      const imgWidth=210; // A4 en mm
+      const imgHeight=(canvas.height*imgWidth)/canvas.width;
+
+      // Crear PDF con jsPDF
+      const script=document.createElement('script');
+      script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+      document.head.appendChild(script);
+
+      await new Promise(resolve=>script.onload=resolve);
+
+      const {jsPDF:PDF}=window.jspdf;
+      const doc=new PDF({orientation:imgHeight>imgWidth?'portrait':'portrait',unit:'mm',format:'a4'});
+
+      const pageHeight=297;
+      let position=0;
+      let heightLeft=imgHeight;
+
+      doc.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
+      heightLeft-=pageHeight;
+
+      while(heightLeft>0){
+        position=heightLeft-imgHeight;
+        doc.addPage();
+        doc.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
+        heightLeft-=pageHeight;
+      }
+
+      const nombre=cvGeneradoData?.nombre?.replace(/\s+/g,'-').toLowerCase()||'mi-cv';
+      doc.save(`cv-${nombre}-talentia.pdf`);
+
+    }catch(e){
+      console.error('Error descarga PDF:',e);
+      mostrarError('Error al descargar','Hubo un problema generando el PDF. Intenta de nuevo.');
+    }finally{
+      btn.textContent='✅ Descargar mi CV en PDF';btn.disabled=false;
+    }
+  }
     if(!window.usuarioActual){abrirModalLogin(()=>iniciarPago(plan));return;}
     const btns=document.querySelectorAll('.cv-actions button');
     btns.forEach(b=>{b.textContent='⏳ Redirigiendo...';b.disabled=true;});
