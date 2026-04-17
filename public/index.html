@@ -1279,6 +1279,8 @@
       btn.textContent='✅ Descargar mi CV en PDF';btn.disabled=false;
     }
   }
+
+  async function iniciarPago(plan){
     if(!window.usuarioActual){abrirModalLogin(()=>iniciarPago(plan));return;}
     const btns=document.querySelectorAll('.cv-actions button');
     btns.forEach(b=>{b.textContent='⏳ Redirigiendo...';b.disabled=true;});
