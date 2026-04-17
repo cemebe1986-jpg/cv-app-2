@@ -1181,29 +1181,51 @@
     }
   }
 
+  async function verificarPagoUsuario(){
+    if(!window.usuarioActual)return;
+    try{
+      const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
+      const data=await r.json();
+      if(data.pagado){
+        const link=document.getElementById('link-descarga');
+        if(link){
+          link.style.display='block';
+          link.href=`/descargar-cv?uid=${window.usuarioActual.uid}&token=${data.token}`;
+        }
+        // Mostrar toast solo si viene de pago reciente (parámetro en URL)
+        const params=new URLSearchParams(window.location.search);
+        if(params.get('pago')==='ok'){
+          window.history.replaceState({},'','/crear');
+          const t=document.createElement('div');
+          t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
+          t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
+          document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
+        }
+      }
+    }catch(e){console.log('verificarPago error:',e);}
+  }
+
   function verificarRetornoMP(){
     const params=new URLSearchParams(window.location.search);
     const pago=params.get('pago');
     if(!pago)return;
     window.history.replaceState({},'','/crear');
-    if(pago==='ok'){
-      setTimeout(()=>{
-        const link=document.getElementById('link-descarga');
-        if(link){link.style.display='block';link.href=`/descargar-cv?uid=${window.usuarioActual?.uid}`;}
-        const t=document.createElement('div');
-        t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
-        t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
-        document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
-      },1500);
-    } else if(pago==='error'){
+    if(pago==='error'){
       mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.');
     } else if(pago==='pendiente'){
       mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
     }
+    // Si pago=ok, verificarPagoUsuario() lo maneja
   }
 
   detectarPaisPorCodigo();
   verificarRetornoMP();
+
+  // Verificar pago cuando Firebase confirma el usuario
+  onAuthStateChanged(auth, user => {
+    window.usuarioActual = user;
+    if(user) verificarPagoUsuario();
+  });
 </script>
 </body>
 </html>
