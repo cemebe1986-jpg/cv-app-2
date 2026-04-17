@@ -1085,7 +1085,7 @@
       const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
-      const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData})});
+      const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();document.getElementById('link-descarga').href=`/descargar-cv?id=${gd.id}`;
     }catch(e){mostrarError('Error al generar tu CV','Hubo un problema con la IA. Intenta de nuevo.');}
     finally{document.getElementById('loading-overlay').classList.remove('active');}
@@ -1186,21 +1186,39 @@
     try{
       const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
       const data=await r.json();
-      if(data.pagado){
-        const link=document.getElementById('link-descarga');
-        if(link){
-          link.style.display='block';
-          link.href=`/descargar-cv?uid=${window.usuarioActual.uid}&token=${data.token}`;
+      if(!data.pagado)return;
+
+      // Habilitar botón de descarga
+      const link=document.getElementById('link-descarga');
+      if(link){
+        link.style.display='block';
+        link.href=`/descargar-cv?uid=${window.usuarioActual.uid}&token=${data.token}`;
+      }
+
+      // Si viene de pago reciente y tiene CV guardado, recuperarlo y mostrarlo
+      const params=new URLSearchParams(window.location.search);
+      if(params.get('pago')==='ok'){
+        window.history.replaceState({},'','/crear');
+        if(data.tieneCv){
+          try{
+            const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
+            if(cvR.ok){
+              const cvData=await cvR.json();
+              if(cvData.cvData){
+                cvGeneradoData=cvData.cvData;
+                renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
+                cambiarEstiloCV(estiloActual);
+                mostrarEstadoLogin(window.usuarioActual);
+                document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+              }
+            }
+          }catch(e){console.log('No se pudo recuperar CV:',e);}
         }
-        // Mostrar toast solo si viene de pago reciente (parámetro en URL)
-        const params=new URLSearchParams(window.location.search);
-        if(params.get('pago')==='ok'){
-          window.history.replaceState({},'','/crear');
-          const t=document.createElement('div');
-          t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
-          t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
-          document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
-        }
+        // Toast de confirmación
+        const t=document.createElement('div');
+        t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
+        t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
+        document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
       }
     }catch(e){console.log('verificarPago error:',e);}
   }

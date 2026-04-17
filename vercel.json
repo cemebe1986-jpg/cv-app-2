@@ -12,6 +12,10 @@
   ],
   "routes": [
     {
+      "src": "/recuperar-cv",
+      "dest": "/api/recuperar-cv.js"
+    },
+    {
       "src": "/verificar-pago",
       "dest": "/api/verificar-pago.js"
     },
