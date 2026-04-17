@@ -40,6 +40,30 @@
       "dest": "/public/index.html"
     },
     {
+      "src": "/terminos",
+      "dest": "/public/terminos.html"
+    },
+    {
+      "src": "/privacidad",
+      "dest": "/public/privacidad.html"
+    },
+    {
+      "src": "/blog",
+      "dest": "/public/blog-index.html"
+    },
+    {
+      "src": "/blog/como-hacer-cv-peru-2026",
+      "dest": "/public/blog-como-hacer-cv-peru-2026.html"
+    },
+    {
+      "src": "/blog/cv-sin-experiencia-peru",
+      "dest": "/public/blog-cv-sin-experiencia-peru.html"
+    },
+    {
+      "src": "/blog/como-pasar-filtros-ats",
+      "dest": "/public/blog-como-pasar-filtros-ats.html"
+    },
+    {
       "src": "/",
       "dest": "/public/landing.html"
     },
