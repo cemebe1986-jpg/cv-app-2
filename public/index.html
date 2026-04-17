@@ -1232,7 +1232,7 @@
     try{
       const cvDoc=document.getElementById('cv-document');
 
-      // Igualar altura sidebar y main para evitar cortes
+      // Igualar altura sidebar y main
       const sidebar=cvDoc.querySelector('.cv-sidebar');
       const main=cvDoc.querySelector('.cv-main');
       const originalSidebarHeight=sidebar?sidebar.style.minHeight:'';
@@ -1241,15 +1241,49 @@
         sidebar.style.minHeight=maxH+'px';
       }
 
-      // Ocultar marca de agua - buscar el contenedor que tiene los 3 divs diagonales
+      // SMART PAGE BREAK — calcular dónde caen los cortes y empujar bloques
+      const DPI=96; // px por pulgada en pantalla
+      const A4_HEIGHT_PX=(297/25.4)*DPI; // altura A4 en px a 96dpi
+      const cvRect=cvDoc.getBoundingClientRect();
+      const scale=2; // mismo scale que html2canvas
+
+      // Seleccionar todos los bloques de contenido relevantes
+      const bloques=cvDoc.querySelectorAll('.exp-item,.edu-item,.cv-main-section,.cv-perfil,.cv-main-section-title,.edu-titulo');
+
+      bloques.forEach(bloque=>{
+        const rect=bloque.getBoundingClientRect();
+        const topRelativo=rect.top-cvRect.top; // posición relativa al CV
+        const bottomRelativo=rect.bottom-cvRect.top;
+
+        // Ver en qué página caería el inicio y el fin del bloque
+        const paginaInicio=Math.floor(topRelativo/A4_HEIGHT_PX);
+        const paginaFin=Math.floor(bottomRelativo/A4_HEIGHT_PX);
+
+        // Si el bloque está partido entre dos páginas
+        if(paginaInicio!==paginaFin){
+          // Calcular cuánto espacio falta para llegar a la siguiente página
+          const espacioHastaCorte=(paginaFin*A4_HEIGHT_PX)-topRelativo;
+          // Si el espacio restante es menos de 40px, empujar el bloque a la siguiente página
+          if(espacioHastaCorte<40){
+            bloque.style.marginTop=(espacioHastaCorte+8)+'px';
+          }
+        }
+      });
+
+      // Igualar altura nuevamente después del padding
+      await new Promise(r=>setTimeout(r,100));
+      if(sidebar&&main){
+        const maxH2=Math.max(sidebar.scrollHeight,main.scrollHeight);
+        sidebar.style.minHeight=maxH2+'px';
+      }
+
+      // Ocultar marca de agua
       const watermarkContainer=cvDoc.querySelector('div[style*="overflow:hidden"]');
       if(watermarkContainer)watermarkContainer.style.visibility='hidden';
-      // También buscar por contenido de texto
       const allDivs=cvDoc.querySelectorAll('div');
       const watermarkDivs=Array.from(allDivs).filter(d=>d.textContent.includes('Sin licencia'));
       watermarkDivs.forEach(w=>w.style.visibility='hidden');
 
-      // Dar tiempo al browser para re-renderizar
       await new Promise(r=>setTimeout(r,150));
 
       const canvas=await html2canvas(cvDoc,{
@@ -1262,10 +1296,12 @@
         windowHeight:cvDoc.scrollHeight
       });
 
-      // Restaurar
+      // Restaurar todo
       watermarkDivs.forEach(w=>w.style.visibility='visible');
       if(watermarkContainer)watermarkContainer.style.visibility='visible';
       if(sidebar)sidebar.style.minHeight=originalSidebarHeight;
+      // Restaurar márgenes modificados
+      bloques.forEach(b=>b.style.marginTop='');
 
       const imgData=canvas.toDataURL('image/jpeg',0.97);
       const imgWidth=210;
