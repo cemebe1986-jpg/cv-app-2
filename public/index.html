@@ -903,6 +903,18 @@
     }
   }
 
+  function agregarHabilidadesSeleccionadas(){
+    const seleccionadas=[];
+    document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
+    if(!seleccionadas.length)return;
+    seleccionadas.forEach(hab=>{if(!habilidadesData.find(h=>h.nombre===hab))habilidadesData.push({nombre:hab});});
+    renderListaHabilidades();
+    document.getElementById('habilidades-ia-box').style.display='none';
+    document.getElementById('btn-sugerir-habilidades').style.display='block';
+    document.getElementById('btn-sugerir-habilidades').textContent='💡 Sugerir habilidades para mi cargo con IA';
+    document.getElementById('btn-sugerir-habilidades').disabled=false;
+  }
+
   function agregarBlandasSeleccionadas(){
     const seleccionadas=[];
     document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
