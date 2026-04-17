@@ -1286,13 +1286,12 @@
     const params=new URLSearchParams(window.location.search);
     const pago=params.get('pago');
     if(!pago)return;
-    window.history.replaceState({},'','/crear');
+    // NO limpiar la URL aquí — verificarPagoUsuario lo hace cuando Firebase confirma sesión
     if(pago==='error'){
       mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.');
     } else if(pago==='pendiente'){
       mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
     }
-    // Si pago=ok, verificarPagoUsuario() lo maneja
   }
 
   detectarPaisPorCodigo();
