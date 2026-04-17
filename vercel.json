@@ -12,6 +12,14 @@
   ],
   "routes": [
     {
+      "src": "/crear-preferencia",
+      "dest": "/api/crear-preferencia.js"
+    },
+    {
+      "src": "/webhook-mp",
+      "dest": "/api/webhook-mp.js"
+    },
+    {
       "src": "/generar-cv",
       "dest": "/api/generar-cv.js"
     },
