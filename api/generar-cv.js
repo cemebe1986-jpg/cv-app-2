@@ -20,7 +20,8 @@ Genera exactamente 6 logros profesionales específicos y medibles para el cargo:
 
 REGLAS:
 - Usa verbos de acción: gestioné, implementé, reduje, aumenté, lideré, optimicé, desarrollé, supervisé
-- Incluye números concretos, porcentajes o montos en soles cuando sea relevante
+- Cuando el logro requiera un número, porcentaje o monto, usa el placeholder [X] para que el usuario lo complete con su dato real. Ejemplo: "Reduje errores en [X]% mediante automatización" o "Gestioné cartera de [X] clientes"
+- NUNCA inventes números, porcentajes ni montos específicos
 - Cada logro máximo 15 palabras
 - Sé específico para este cargo exacto
 - Lenguaje profesional del mercado peruano

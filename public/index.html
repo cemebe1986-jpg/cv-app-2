@@ -842,7 +842,7 @@
       const data=await r.json();const s=data.sugerencias||[];
       incrementarLlamadasIA();
       if(titulo)titulo.textContent=`✨ Sugerencias para ${p.nombre} — selecciona las que aplican:`;
-      chips.innerHTML=s.map((sg,i)=>`<button id="sug-proy-${pid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:4px;">${sg}</button>`).join('');
+      chips.innerHTML=s.map((sg,i)=>`<button id="sug-proy-${pid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="width:100%;padding:10px 14px;border:2px solid #bfdbfe;border-radius:10px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:6px;line-height:1.5;white-space:normal;">${sg}</button>`).join('');
       document.getElementById(`sug-proy-actions-${pid}`).style.display='flex';
     }catch(e){
       chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
@@ -900,11 +900,11 @@
           </div>
         </div>
         <label style="margin-bottom:6px;">Tus logros adicionales</label>
-        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Edita los logros sugeridos o agrega los tuyos</p>
+        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Edita los logros sugeridos o agrega los tuyos. Reemplaza <strong>[X]</strong> con tus números reales.</p>
         ${t.logros.map((l,i)=>`
-          <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px;">
-            <input type="text" placeholder="Ej: Capacité a 15 personas en el nuevo sistema" value="${l}" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;">
-            <button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;" title="Eliminar logro">✕</button>
+          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
+            <textarea placeholder="Ej: Capacité a 15 personas en el nuevo sistema" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;line-height:1.5;">${l}</textarea>
+            <button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;" title="Eliminar logro">✕</button>
           </div>`).join('')}
         <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
       </div>`).join('');
@@ -925,7 +925,7 @@
       const data=await r.json();const s=data.sugerencias||[];
       incrementarLlamadasIA();
       if(titulo)titulo.textContent=`✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
-      chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.78rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:4px;">${sg}</button>`).join('');
+      chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="width:100%;padding:10px 14px;border:2px solid #bfdbfe;border-radius:10px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:6px;line-height:1.5;white-space:normal;">${sg}</button>`).join('');
       document.getElementById(`sug-ia-actions-${tid}`).style.display='flex';
     }catch(e){
       chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
