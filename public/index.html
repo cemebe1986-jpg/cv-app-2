@@ -1218,6 +1218,14 @@
   }
 
   async function descargarCVComoPDF(){
+    // Verificar pago antes de generar PDF
+    if(!window.usuarioActual){mostrarError('Sesión requerida','Inicia sesión para descargar.');return;}
+    try{
+      const check=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
+      const checkData=await check.json();
+      if(!checkData.pagado){mostrarError('Pago requerido','Adquiere un plan para descargar tu CV sin marca de agua.');return;}
+    }catch(e){mostrarError('Error','No se pudo verificar el pago. Intenta de nuevo.');return;}
+
     const btn=document.getElementById('link-descarga');
     btn.textContent='⏳ Generando PDF...';btn.disabled=true;
 
@@ -1239,33 +1247,34 @@
       // Restaurar marca de agua
       watermarks.forEach(w=>w.style.display='block');
 
-      const {jsPDF}=window.jspdf||{};
-      // Usar jsPDF desde CDN si no está disponible
-      const imgData=canvas.toDataURL('image/jpeg',0.95);
-      const imgWidth=210; // A4 en mm
+      const imgData=canvas.toDataURL('image/jpeg',0.97);
+      const imgWidth=210; // A4 ancho en mm
       const imgHeight=(canvas.height*imgWidth)/canvas.width;
+      const pageHeight=297; // A4 alto en mm
 
-      // Crear PDF con jsPDF
-      const script=document.createElement('script');
-      script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
-      document.head.appendChild(script);
-
-      await new Promise(resolve=>script.onload=resolve);
+      // Cargar jsPDF si no está disponible
+      if(!window.jspdf){
+        const script=document.createElement('script');
+        script.src='https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js';
+        document.head.appendChild(script);
+        await new Promise(resolve=>script.onload=resolve);
+      }
 
       const {jsPDF:PDF}=window.jspdf;
-      const doc=new PDF({orientation:imgHeight>imgWidth?'portrait':'portrait',unit:'mm',format:'a4'});
+      const doc=new PDF({unit:'mm',format:'a4'});
 
-      const pageHeight=297;
-      let position=0;
       let heightLeft=imgHeight;
+      let yOffset=0;
 
-      doc.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
+      // Primera página
+      doc.addImage(imgData,'JPEG',0,yOffset,imgWidth,imgHeight);
       heightLeft-=pageHeight;
 
+      // Páginas adicionales
       while(heightLeft>0){
-        position=heightLeft-imgHeight;
+        yOffset-=pageHeight;
         doc.addPage();
-        doc.addImage(imgData,'JPEG',0,position,imgWidth,imgHeight);
+        doc.addImage(imgData,'JPEG',0,yOffset,imgWidth,imgHeight);
         heightLeft-=pageHeight;
       }
 
@@ -1335,7 +1344,6 @@
         const link=document.getElementById('link-descarga');
         if(link){
           link.style.display='block';
-          link.href=`/descargar-cv?uid=${window.usuarioActual.uid}&token=${data.token}`;
         }
         if(paramPago==='ok'){
           const t=document.createElement('div');
