@@ -323,6 +323,7 @@
           <div class="choice-card" onclick="elegirCamino('manual')"><div class="icon">✍️</div><h3>Crear desde cero</h3><p>Completa el formulario paso a paso y la IA genera tu CV</p></div>
           <div class="choice-card" onclick="elegirCamino('pdf')"><div class="icon">📄</div><h3>Subir mi CV actual</h3><p>Sube tu CV en PDF y lo mejoramos con IA automáticamente</p></div>
         </div>
+        <p style="text-align:center;color:#a0aec0;font-size:0.78rem;margin-top:16px;">👆 Toca una opción para comenzar</p>
       </div>
 
       <!-- PASO OFERTA OPCIONAL -->
@@ -385,8 +386,14 @@
         <select id="ciudad" style="margin-bottom:20px;"><option value="">Selecciona tu ciudad</option></select>
         <label>Foto de perfil (opcional)</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">📷 Recomendado · Fondo neutro · Máximo 2MB</p>
-        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="margin-bottom:8px;">
-        <img id="foto-preview" class="foto-preview">
+        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="display:none;">
+        <div id="foto-upload-zone" onclick="document.getElementById('foto').click()" style="background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border:2px dashed #0f3460;border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#e8f0ff)'">
+          <div style="font-size:2rem;margin-bottom:8px;">📷</div>
+          <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu foto</div>
+          <div style="font-size:0.78rem;color:#718096;">JPG, PNG · Máximo 2MB · Fondo neutro recomendado</div>
+        </div>
+        <img id="foto-preview" class="foto-preview" onclick="document.getElementById('foto').click()" style="cursor:pointer;">
+        <div id="foto-nombre" style="display:none;font-size:0.78rem;color:#22c55e;font-weight:700;margin-bottom:8px;text-align:center;"></div>
       </div>
 
       <!-- PASO 2: EXPERIENCIA -->
@@ -720,8 +727,14 @@
     if(pasoActual===1&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Sin experiencia','Agrega al menos una práctica, proyecto o voluntariado.');return false;}
     if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){
-      const continuar=confirm('💡 Tu CV tendrá más impacto con habilidades técnicas.\n\nLos reclutadores y sistemas ATS las usan para filtrar candidatos.\n\n¿Quieres continuar sin agregarlas?');
-      if(!continuar)return false;
+      document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
+      document.getElementById('error-toast-desc').innerHTML='Los reclutadores y sistemas ATS las usan para filtrar candidatos. Tu CV tendrá más impacto con ellas.';
+      document.getElementById('error-toast').classList.add('visible');
+      document.getElementById('error-toast').setAttribute('data-sin-habilidades','1');
+      // Cambiar botón cerrar del toast a "Sí, continuar"
+      const btnCerrar=document.querySelector('.error-toast button');
+      if(btnCerrar){btnCerrar.textContent='Continuar sin habilidades';btnCerrar.style.cssText='background:#e2e8f0;border:none;cursor:pointer;color:#4a5568;font-size:0.78rem;font-weight:700;padding:6px 10px;border-radius:8px;white-space:nowrap;';btnCerrar.onclick=()=>{cerrarError();generarCV();};}
+      return false;
     }
     return true;
   }
@@ -942,7 +955,7 @@
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
   function renderListaHabilidades(){document.getElementById('lista-habilidades').innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
 
-  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){alert('La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';};reader.readAsDataURL(input.files[0]);}}
+  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name+' · Clic en la foto para cambiar';nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
 
   async function procesarCVSubido(input){
     if(!input.files||!input.files[0])return;
