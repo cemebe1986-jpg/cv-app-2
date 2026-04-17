@@ -140,7 +140,7 @@ INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
 - Perfil: 3 líneas impactantes basadas en la experiencia real
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
-${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : ''}
+${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : `- NO incluyas el campo "compatibilidad" en el JSON. No hay oferta de trabajo.`}
 - Responde SOLO con JSON válido sin markdown
 
 {
