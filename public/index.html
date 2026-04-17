@@ -256,7 +256,7 @@
     <div style="text-align:center;margin-bottom:20px;">
       <div style="font-size:1.8rem;margin-bottom:6px;">✨</div>
       <h3 style="font-size:1.1rem;font-weight:800;color:#1a1a2e;" id="modal-titulo">Activa las sugerencias con IA</h3>
-      <p style="font-size:0.82rem;color:#718096;margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita y obtén 10 sugerencias con IA</p>
+      <p style="font-size:0.82rem;color:#718096;margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita para continuar</p>
     </div>
     <div class="modal-tabs">
       <button class="modal-tab active" onclick="cambiarTabModal('registro')" id="tab-registro">Crear cuenta</button>
@@ -417,7 +417,15 @@
           <label>Tu experiencia laboral</label>
           <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Incluye trabajos en planilla, prácticas pre-profesionales, freelance y negocios propios.</p>
           <div id="lista-trabajos"></div>
-          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otra experiencia</button>
+          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:8px;">+ Agregar otra experiencia</button>
+          <button type="button" onclick="mostrarBloqueProyectos()" id="btn-agregar-proyectos" style="width:100%;padding:8px;background:none;border:none;color:#3b82f6;font-size:0.78rem;cursor:pointer;margin-bottom:8px;">+ También tengo proyectos universitarios o voluntariados</button>
+          <div id="bloque-proyectos-extra" style="display:none;">
+            <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:12px;padding:12px;margin-bottom:12px;">
+              <div style="font-size:0.82rem;font-weight:700;color:#0369a1;">🎓 Proyectos / Voluntariados adicionales</div>
+            </div>
+            <div id="lista-proyectos-extra"></div>
+            <button type="button" onclick="agregarProyectoExtra()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar proyecto o voluntariado</button>
+          </div>
         </div>
         <!-- SIN EXPERIENCIA -->
         <div id="bloque-sin-experiencia" style="display:none;">
@@ -728,7 +736,7 @@
   function validarPaso(){
     if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
     if(pasoActual===1&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
-    if(pasoActual===1&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Sin experiencia','Agrega al menos una práctica, proyecto o voluntariado.');return false;}
+    if(pasoActual===1&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Sin experiencia','Agrega al menos un proyecto, voluntariado o experiencia.');return false;}
     if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
@@ -862,6 +870,33 @@
     const actual=p.descripcion?p.descripcion+'\n':'';
     p.descripcion=actual+seleccionadas.join('\n');
     renderProyectos();
+  }
+
+  function mostrarBloqueProyectos(){
+    document.getElementById('bloque-proyectos-extra').style.display='block';
+    document.getElementById('btn-agregar-proyectos').style.display='none';
+    if(!proyectosData.length)agregarProyecto();
+    renderProyectosExtra();
+  }
+
+  function agregarProyectoExtra(){
+    proyectosData.push({id:Date.now(),tipo:'proyecto',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});
+    renderProyectosExtra();
+  }
+
+  function renderProyectosExtra(){
+    const c=document.getElementById('lista-proyectos-extra');
+    if(!c||!proyectosData.length){return;}
+    c.innerHTML=proyectosData.map((p,idx)=>`
+      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px;">
+        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
+          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Proyecto/Voluntariado ${idx+1}</span>
+          <button onclick="eliminarProyecto(${p.id});renderProyectosExtra();" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕</button>
+        </div>
+        <input type="text" placeholder="Nombre del proyecto o rol" value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:8px;">
+        <input type="text" placeholder="Universidad / Organización" value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:8px;">
+        <textarea placeholder="¿Qué hiciste? ¿Qué lograste?" oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:70px;margin-bottom:0;">${p.descripcion}</textarea>
+      </div>`).join('');
   }
 
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
