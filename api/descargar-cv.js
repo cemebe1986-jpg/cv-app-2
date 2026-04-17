@@ -2,9 +2,7 @@ const { Redis } = require('@upstash/redis');
 const { jsPDF } = require('jspdf');
 
 module.exports = async (req, res) => {
-  const { id } = req.query;
-
-  if (!id) return res.status(400).json({ error: 'ID requerido' });
+  const { id, uid, token } = req.query;
 
   try {
     const redis = new Redis({
@@ -12,19 +10,36 @@ module.exports = async (req, res) => {
       token: process.env.KV_REST_API_TOKEN,
     });
 
-    // Verificar si está pagado
-    const pagado = await redis.get(`pagado:${id}`);
-    if (!pagado) {
-      return res.status(403).json({ error: 'Pago no verificado' });
-    }
+    let cvData, habilidades;
 
-    // Obtener datos del CV
-    const cvRaw = await redis.get(`cv:${id}`);
-    if (!cvRaw) {
-      return res.status(404).json({ error: 'CV no encontrado o expirado' });
-    }
+    // Flujo nuevo: uid + token (post-pago con Mercado Pago)
+    if (uid && token) {
+      // Verificar que el token coincide con el pago registrado
+      const pagoRaw = await redis.get(`descarga:${uid}`);
+      if (!pagoRaw) return res.status(403).json({ error: 'Pago no verificado' });
+      const pago = typeof pagoRaw === 'string' ? JSON.parse(pagoRaw) : pagoRaw;
+      if (pago.token !== token) return res.status(403).json({ error: 'Token inválido' });
 
-    const { cvData, habilidades } = typeof cvRaw === 'string' ? JSON.parse(cvRaw) : cvRaw;
+      // Obtener CV guardado por uid
+      const cvRaw = await redis.get(`cv:usuario:${uid}`);
+      if (!cvRaw) return res.status(404).json({ error: 'CV no encontrado. Genera tu CV de nuevo.' });
+      const parsed = typeof cvRaw === 'string' ? JSON.parse(cvRaw) : cvRaw;
+      cvData = parsed.cvData;
+      habilidades = parsed.habilidades;
+
+    // Flujo anterior: id aleatorio (compatibilidad)
+    } else if (id) {
+      const pagado = await redis.get(`pagado:${id}`);
+      if (!pagado) return res.status(403).json({ error: 'Pago no verificado' });
+      const cvRaw = await redis.get(`cv:${id}`);
+      if (!cvRaw) return res.status(404).json({ error: 'CV no encontrado o expirado' });
+      const parsed = typeof cvRaw === 'string' ? JSON.parse(cvRaw) : cvRaw;
+      cvData = parsed.cvData;
+      habilidades = parsed.habilidades;
+
+    } else {
+      return res.status(400).json({ error: 'Parámetros requeridos' });
+    }
 
     // Generar PDF sin marca de agua
     const doc = new jsPDF();
@@ -41,7 +56,6 @@ module.exports = async (req, res) => {
     doc.setFont('helvetica', 'normal');
     doc.text(`${cvData.email || ''} | ${cvData.telefono || ''}`, pageWidth / 2, 28, { align: 'center' });
 
-    // Línea
     doc.setDrawColor(15, 52, 96);
     doc.setLineWidth(0.5);
     doc.line(15, 40, pageWidth - 15, 40);
@@ -87,14 +101,15 @@ module.exports = async (req, res) => {
       (exp.logros || []).forEach(l => {
         if (y > 260) { doc.addPage(); y = 20; }
         doc.setTextColor(45, 55, 72);
-        doc.text(`▸ ${l}`, 18, y);
-        y += 5;
+        const lines = doc.splitTextToSize(`▸ ${l}`, 170);
+        lines.forEach(line => { doc.text(line, 18, y); y += 5; });
       });
       y += 4;
     });
 
     // Educación
     y += 3;
+    if (y > 260) { doc.addPage(); y = 20; }
     doc.setFillColor(15, 52, 96);
     doc.rect(15, y - 5, pageWidth - 30, 8, 'F');
     doc.setTextColor(255, 255, 255);
@@ -119,6 +134,7 @@ module.exports = async (req, res) => {
 
     // Habilidades
     y += 3;
+    if (y > 260) { doc.addPage(); y = 20; }
     doc.setFillColor(15, 52, 96);
     doc.rect(15, y - 5, pageWidth - 30, 8, 'F');
     doc.setTextColor(255, 255, 255);
@@ -128,7 +144,7 @@ module.exports = async (req, res) => {
     y += 10;
     doc.setTextColor(45, 55, 72);
     doc.setFont('helvetica', 'normal');
-    const habilidadesTexto = (habilidades || []).map(h => `${h.nombre} (${'●'.repeat(h.nivel)}${'○'.repeat(5 - h.nivel)})`).join('  |  ');
+    const habilidadesTexto = (habilidades || []).map(h => h.nombre).join('  |  ');
     const habLines = doc.splitTextToSize(habilidadesTexto, 175);
     habLines.forEach(l => { doc.text(l, 15, y); y += 6; });
 
