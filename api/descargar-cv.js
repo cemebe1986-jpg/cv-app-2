@@ -47,13 +47,14 @@ module.exports = async (req, res) => {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        html,
+        url: 'data:text/html;charset=utf-8,' + encodeURIComponent(html),
         options: {
           format: 'A4',
           printBackground: true,
           margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
           tagged: false
-        }
+        },
+        gotoOptions: { waitUntil: 'load', timeout: 15000 }
       })
     });
 
