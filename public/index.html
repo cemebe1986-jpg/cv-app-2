@@ -888,7 +888,7 @@
         <input type="text" placeholder="${t.tipo==='practica'?'Ej: Practicante de Contabilidad, Asistente de Marketing...':t.tipo==='freelance'?'Ej: Diseñador gráfico freelance, Desarrollador web...':t.tipo==='negocio'?'Ej: Administrador, Gerente general...':'Ej: Jefe de Ventas, Analista de RRHH, Enfermero...'}" value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;">
         <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;">
           <button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
-            💡 Sugerir logros con IA <span style="font-size:0.72rem;opacity:0.7;">(${quedanLlamadasIA()} restantes)</span>
+            💡 Sugerir logros con IA
           </button>
         </div>
         <div id="sug-ia-box-${t.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:14px;">
