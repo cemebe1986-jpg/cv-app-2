@@ -43,28 +43,28 @@ module.exports = async (req, res) => {
     const html = generarHTMLCV(cvData, habilidades, blandasData, foto, estilo);
 
     // Llamar a Browserless para generar el PDF
-    const response = await fetch(`https://production-sfo.browserless.io/pdf?token=${process.env.BROWSERLESS_API_KEY}`, {
+    const response = await fetch(`https://production-sfo.browserless.io/chromium/pdf?token=${process.env.BROWSERLESS_API_KEY}`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify({
-        url: 'about:blank',
         html,
         options: {
           format: 'A4',
           printBackground: true,
-          margin: { top: '0', right: '0', bottom: '0', left: '0' },
-        },
-        gotoOptions: { waitUntil: 'networkidle2' }
+          margin: { top: '0mm', right: '0mm', bottom: '0mm', left: '0mm' },
+        }
       })
     });
 
     if (!response.ok) {
       const err = await response.text();
-      console.error('Browserless error:', err);
-      return res.status(500).json({ error: 'Error generando PDF' });
+      console.error('Browserless error:', response.status, err);
+      return res.status(500).json({ error: 'Error generando PDF: ' + err });
     }
 
+    console.log('Browserless OK - Content-Type:', response.headers.get('content-type'));
     const pdfBuffer = await response.arrayBuffer();
+    console.log('PDF size:', pdfBuffer.byteLength, 'bytes');
     res.setHeader('Content-Type', 'application/pdf');
     res.setHeader('Content-Disposition', `attachment; filename=mi-cv-talentia.pdf`);
     res.send(Buffer.from(pdfBuffer));
