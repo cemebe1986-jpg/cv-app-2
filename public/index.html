@@ -1232,20 +1232,40 @@
     try{
       const cvDoc=document.getElementById('cv-document');
 
-      // Ocultar temporalmente la marca de agua
-      const watermarks=cvDoc.querySelectorAll('div[style*="Sin licencia"]');
-      watermarks.forEach(w=>w.style.display='none');
+      // Igualar altura sidebar y main para evitar cortes
+      const sidebar=cvDoc.querySelector('.cv-sidebar');
+      const main=cvDoc.querySelector('.cv-main');
+      const originalSidebarHeight=sidebar?sidebar.style.minHeight:'';
+      if(sidebar&&main){
+        const maxH=Math.max(sidebar.scrollHeight,main.scrollHeight);
+        sidebar.style.minHeight=maxH+'px';
+      }
+
+      // Ocultar marca de agua - buscar el contenedor que tiene los 3 divs diagonales
+      const watermarkContainer=cvDoc.querySelector('div[style*="overflow:hidden"]');
+      if(watermarkContainer)watermarkContainer.style.visibility='hidden';
+      // También buscar por contenido de texto
+      const allDivs=cvDoc.querySelectorAll('div');
+      const watermarkDivs=Array.from(allDivs).filter(d=>d.textContent.includes('Sin licencia'));
+      watermarkDivs.forEach(w=>w.style.visibility='hidden');
+
+      // Dar tiempo al browser para re-renderizar
+      await new Promise(r=>setTimeout(r,150));
 
       const canvas=await html2canvas(cvDoc,{
         scale:2,
         useCORS:true,
         allowTaint:true,
         backgroundColor:'#ffffff',
-        logging:false
+        logging:false,
+        windowWidth:cvDoc.scrollWidth,
+        windowHeight:cvDoc.scrollHeight
       });
 
-      // Restaurar marca de agua
-      watermarks.forEach(w=>w.style.display='block');
+      // Restaurar
+      watermarkDivs.forEach(w=>w.style.visibility='visible');
+      if(watermarkContainer)watermarkContainer.style.visibility='visible';
+      if(sidebar)sidebar.style.minHeight=originalSidebarHeight;
 
       const imgData=canvas.toDataURL('image/jpeg',0.97);
       const imgWidth=210; // A4 ancho en mm
