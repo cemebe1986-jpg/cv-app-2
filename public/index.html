@@ -452,7 +452,11 @@
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">Las que ya tienes, o usa la IA para sugerirlas según tu cargo.</p>
-        <input type="text" id="habilidades-blandas" placeholder="Ej: liderazgo, trabajo en equipo, comunicación...">
+        <div style="display:flex;gap:10px;margin-bottom:12px;">
+          <input type="text" id="nueva-blanda" placeholder="Ej: liderazgo, trabajo en equipo..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarBlanda();}">
+          <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#0f3460;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;">+ Agregar</button>
+        </div>
+        <div id="lista-blandas"></div>
         <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:linear-gradient(135deg,#0f3460,#1e40af);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">
           💡 Sugerir habilidades blandas con IA
         </button>
@@ -572,7 +576,7 @@
 </div>
 
 <script>
-  let fotoBase64=null,habilidadesData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
+  let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
   const PASOS=['step-1','step-2','step-3','step-4'];
   const TITULOS=['Quién eres','Tu experiencia','Tu educación','Tus habilidades'];
@@ -919,15 +923,17 @@
     const seleccionadas=[];
     document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
     if(!seleccionadas.length)return;
-    const campo=document.getElementById('habilidades-blandas');
-    const actuales=campo.value.split(',').map(s=>s.trim()).filter(Boolean);
-    const todas=[...new Set([...actuales,...seleccionadas])];
-    campo.value=todas.join(', ');
+    seleccionadas.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});
+    renderListaBlandas();
     document.getElementById('blandas-ia-box').style.display='none';
     document.getElementById('btn-sugerir-blandas').style.display='block';
     document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';
     document.getElementById('btn-sugerir-blandas').disabled=false;
   }
+
+  function agregarBlanda(){const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
+  function eliminarBlanda(i){blandasData.splice(i,1);renderListaBlandas();}
+  function renderListaBlandas(){document.getElementById('lista-blandas').innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
 
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
@@ -951,7 +957,7 @@
       if(d.nombre)document.getElementById('nombre').value=d.nombre;
       if(d.email)document.getElementById('email').value=d.email;
       if(d.telefono)document.getElementById('telefono').value=d.telefono;
-      if(d.habilidades_blandas)document.getElementById('habilidades-blandas').value=d.habilidades_blandas;
+      if(d.habilidades_blandas){blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}
 
       // Habilidades técnicas — incluir certificaciones como habilidades si existen
       let habs = [];
@@ -1003,7 +1009,7 @@
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
     const educacion=educacionData.map(e=>{const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?(e.tipoCustom||'Otros estudios'):'Universidad';const periodo=e.desde&&e.hasta?` (${e.desde} - ${e.hasta})`:e.hasta?` (${e.hasta})`:e.desde?` (${e.desde})`:'';return `${tipo}: ${e.titulo} — ${e.institucion}${periodo}`;}).join('. ');
-    const habilidadesBlandas=document.getElementById('habilidades-blandas').value,oferta=document.getElementById('oferta').value;
+    const habilidadesBlandas=blandasData.map(b=>b.nombre).join(', '),oferta=document.getElementById('oferta').value;
     cvCiudad=document.getElementById('ciudad').value;const ps=document.getElementById('pais');cvPais=ps.options[ps.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim()||'';
     document.getElementById('loading-overlay').classList.add('active');iniciarMensajesCarga();
     try{
@@ -1025,8 +1031,7 @@
     document.getElementById('cv-ciudad').textContent=[ciudad,pais].filter(Boolean).join(', ')||'Perú';
     const perfil=document.getElementById('cv-perfil');perfil.textContent=cv.perfil||'';perfil.classList.add('editable');perfil.setAttribute('contenteditable','false');perfil.onclick=function(){this.setAttribute('contenteditable','true');this.focus();};perfil.onblur=function(){this.setAttribute('contenteditable','false');};
     document.getElementById('cv-skills-tecnicas').innerHTML=habilidadesData.map(h=>`<span class="cv-skill-tag">${h.nombre}</span>`).join('');
-    const blandas=document.getElementById('habilidades-blandas').value.split(',').map(s=>s.trim()).filter(Boolean);
-    document.getElementById('cv-skills-blandas').innerHTML=blandas.map(s=>`<span class="soft-skill">${s}</span>`).join('');
+    document.getElementById('cv-skills-blandas').innerHTML=blandasData.map(b=>`<span class="soft-skill">${b.nombre}</span>`).join('');
     document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.cargo}</div><div class="exp-empresa editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.empresa}</div><div class="exp-periodo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${l}</div>`).join('')}</div>`).join('');
     document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.titulo}</div><div class="edu-institucion editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.institucion}</div><div class="edu-año editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.año}</div></div>`).join('');
     document.getElementById('cv-preview').style.display='block';
@@ -1040,13 +1045,14 @@
 
   function mostrarEstadoLogin(user){const nu=document.getElementById('nav-usuario'),nn=document.getElementById('nav-nombre-usuario');if(user){document.getElementById('estado-sin-login').style.display='none';document.getElementById('estado-con-login').style.display='block';document.getElementById('nombre-usuario-cv').textContent=user.displayName?.split(' ')[0]||'usuario';if(nu)nu.style.display='flex';if(nn)nn.textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';}else{document.getElementById('estado-sin-login').style.display='block';document.getElementById('estado-con-login').style.display='none';if(nu)nu.style.display='none';}}
 
-  function guardarProgreso(){try{localStorage.setItem('talentia_progreso',JSON.stringify({nombre:document.getElementById('nombre').value,email:document.getElementById('email').value,telefono:document.getElementById('telefono').value,pais:document.getElementById('pais').value,ciudad:document.getElementById('ciudad').value,habilidadesBlandas:document.getElementById('habilidades-blandas').value,oferta:document.getElementById('oferta').value,habilidadesData,trabajosData,educacionData}));}catch(e){}}
+  function guardarProgreso(){try{localStorage.setItem('talentia_progreso',JSON.stringify({nombre:document.getElementById('nombre').value,email:document.getElementById('email').value,telefono:document.getElementById('telefono').value,pais:document.getElementById('pais').value,ciudad:document.getElementById('ciudad').value,oferta:document.getElementById('oferta').value,habilidadesData,blandasData,trabajosData,educacionData}));}catch(e){}}
 
   function cargarProgreso(){
     const guardado=localStorage.getItem('talentia_progreso');if(!guardado)return;
     try{const d=JSON.parse(guardado);
-    if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;if(d.pais){document.getElementById('pais').value=d.pais;actualizarCiudades();}if(d.ciudad)document.getElementById('ciudad').value=d.ciudad;if(d.habilidadesBlandas)document.getElementById('habilidades-blandas').value=d.habilidadesBlandas;if(d.oferta)document.getElementById('oferta').value=d.oferta;
+    if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;if(d.pais){document.getElementById('pais').value=d.pais;actualizarCiudades();}if(d.ciudad)document.getElementById('ciudad').value=d.ciudad;if(d.oferta)document.getElementById('oferta').value=d.oferta;
     if(d.habilidadesData?.length){habilidadesData=d.habilidadesData.map(h=>({nombre:h.nombre||h}));renderListaHabilidades();}
+    if(d.blandasData?.length){blandasData=d.blandasData.map(b=>({nombre:b.nombre||b}));renderListaBlandas();}
     if(d.trabajosData?.length){trabajosData=d.trabajosData;renderTrabajoss();}
     if(d.educacionData?.length){educacionData=d.educacionData;renderEducacion();}
     if(d.nombre){const b=document.createElement('div');b.style.cssText='background:#f0fff4;border:1px solid #c6f6d5;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:0.85rem;color:#276749;display:flex;justify-content:space-between;align-items:center;';b.innerHTML=`<span>✅ Recuperamos tu progreso anterior</span><button onclick="limpiarProgreso()" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;">✕ Limpiar</button>`;document.getElementById('step-1').insertBefore(b,document.getElementById('step-1').firstChild);}
