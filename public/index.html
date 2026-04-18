@@ -1222,6 +1222,9 @@
   }
 
   async function generarCV(){
+    // Ocultar botón de descarga — este CV nuevo no ha sido pagado
+    const linkDescarga=document.getElementById('link-descarga');
+    if(linkDescarga) linkDescarga.style.display='none';
     const nombre=document.getElementById('nombre').value,email=document.getElementById('email').value,codigoPais=document.getElementById('codigo-pais').value;
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
