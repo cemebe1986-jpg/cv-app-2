@@ -187,7 +187,11 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
     <style>
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
-      .cv { display:grid; grid-template-columns:240px 1fr; min-height:100vh; }
+      .cv { display:grid; grid-template-columns:240px 1fr; min-height:100%; }
+      .sidebar { background:#1a1a2e; color:white; padding:32px 20px; min-height:100vh; }
+      @page { margin: 0; }
+      html, body { height: 100%; }
+      .cv-wrap { min-height: 100vh; display: flex; flex-direction: column; }
       .sidebar { background:#1a1a2e; color:white; padding:32px 20px; }
       .foto-wrap { text-align:center; margin-bottom:20px; }
       .nombre-sidebar { font-size:14px; font-weight:700; text-align:center; margin-bottom:16px; }
@@ -208,9 +212,9 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
       .edu-titulo { font-size:12px; font-weight:700; color:#1a1a2e; }
       .edu-inst { font-size:10px; color:#0f3460; }
       .edu-año { font-size:10px; color:#718096; }
-    </style></head><body>
-    <div class="cv">
-      <div class="sidebar">
+    </style></head><body style="margin:0;padding:0;min-height:100vh;">
+    <div class="cv" style="min-height:100vh;align-items:stretch;">
+      <div class="sidebar" style="min-height:100vh;">
         <div class="foto-wrap">${fotoHTML}</div>
         <div class="nombre-sidebar">${cv.nombre||''}</div>
         <div class="section-label">Contacto</div>
