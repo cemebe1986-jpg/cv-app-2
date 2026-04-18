@@ -1163,7 +1163,7 @@
     try{
       const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
-      const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais);
+      const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais,oferta);
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();window._cvDescargaId=gd.id;
     }catch(e){
@@ -1173,7 +1173,8 @@
     finally{document.getElementById('loading-overlay').classList.remove('active');}
   }
 
-  function renderCV(cv,foto,ciudad,pais){
+  function renderCV(cv,foto,ciudad,pais,ofertaCtx){
+    const ofertaLocal=ofertaCtx||document.getElementById('oferta')?.value||'';
     document.getElementById('cv-foto').innerHTML=foto?`<img src="${foto}" alt="foto">`:'👤';
     document.getElementById('cv-nombre-sidebar').textContent=cv.nombre||'';
     document.getElementById('cv-nombre-main').textContent=cv.nombre||'';
@@ -1186,7 +1187,7 @@
     document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.cargo}</div><div class="exp-empresa editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.empresa}</div><div class="exp-periodo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${l}</div>`).join('')}</div>`).join('');
     document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.titulo}</div><div class="edu-institucion editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.institucion}</div><div class="edu-año editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.año}</div></div>`).join('');
     document.getElementById('cv-preview').style.display='block';
-    if(cv.compatibilidad && oferta && typeof oferta === 'string' && oferta.trim().length > 0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
+    if(cv.compatibilidad && typeof ofertaLocal === 'string' && ofertaLocal.trim().length > 0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
     else document.getElementById('analisis-compatibilidad').style.display='none';
     cambiarEstiloCV(estiloActual);mostrarEstadoLogin(window.usuarioActual);
     document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
