@@ -718,7 +718,22 @@
   // OFERTA OPCIONAL
   function mostrarCampoOferta(){document.getElementById('oferta-si-card').classList.add('activa');document.getElementById('oferta-no-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
   function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card').classList.add('activa');document.getElementById('oferta-si-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
-  function iniciarFormulario(){pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);}
+  function iniciarFormulario(){
+    if(camino==='pdf'){
+      // Ir al paso de subir PDF
+      const so=document.getElementById('step-oferta');
+      so.classList.remove('active');
+      setTimeout(()=>{so.style.display='none';},300);
+      document.getElementById('step-pdf').style.display='block';
+      setTimeout(()=>document.getElementById('step-pdf').classList.add('active'),10);
+      document.getElementById('wizard-titulo').textContent='Sube tu CV actual';
+      document.getElementById('btn-next').style.display='none';
+      document.getElementById('btn-prev').style.display='none';
+      pasoActual=-1;
+    } else {
+      pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);
+    }
+  }
 
   function detectarPaisPorCodigo(){const c=document.getElementById('codigo-pais').value,m={'+51':'PE','+57':'CO','+52':'MX','+54':'AR','+56':'CL','+593':'EC','+591':'BO'},p=m[c];if(p){document.getElementById('pais').value=p;actualizarCiudades();}}
   function actualizarCiudades(){const p=document.getElementById('pais').value,s=document.getElementById('ciudad');s.innerHTML='<option value="">Selecciona tu ciudad</option>';(ciudadesPorPais[p]||[]).forEach(c=>{const o=document.createElement('option');o.value=c;o.textContent=c;s.appendChild(o);});const cod={PE:'+51',CO:'+57',MX:'+52',AR:'+54',CL:'+56',EC:'+593',BO:'+591'};document.getElementById('codigo-pais').value=cod[p]||'+51';}
@@ -751,12 +766,16 @@
     document.getElementById('nav-pasos').style.display='flex';
     document.getElementById('nav-back').style.display='block';
     if(tipo==='pdf'){
-      document.getElementById('step-pdf').style.display='block';
-      setTimeout(()=>document.getElementById('step-pdf').classList.add('active'),10);
-      document.getElementById('wizard-titulo').textContent='Sube tu CV actual';
-      document.getElementById('btn-next').style.display='none';
+      // Primero mostrar paso de oferta, luego el PDF
+      const so=document.getElementById('step-oferta');
+      so.style.display='block';
+      setTimeout(()=>so.classList.add('active'),10);
+      document.getElementById('wizard-titulo').textContent='¿Postulas a un trabajo específico?';
+      document.getElementById('progress-fill').style.width='0%';
+      document.getElementById('progress-text').textContent='Paso opcional';
       document.getElementById('btn-prev').style.display='none';
-      pasoActual=-1;
+      document.getElementById('btn-next').style.display='none';
+      pasoActual=-2;
     } else {
       const so=document.getElementById('step-oferta');
       so.style.display='block';
