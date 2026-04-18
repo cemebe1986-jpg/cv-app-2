@@ -12,7 +12,9 @@ module.exports = async (req, res) => {
   if (!uid) return res.status(400).json({ error: 'uid requerido' });
 
   try {
-    const data = await redis.get(`cv:usuario:${uid}`);
+    // Buscar primero el CV congelado al momento del pago
+    // Si no existe, buscar el CV más reciente del usuario
+    const data = await redis.get(`cv:pagado:${uid}`) || await redis.get(`cv:usuario:${uid}`);
     if (!data) return res.status(404).json({ error: 'CV no encontrado' });
 
     const parsed = typeof data === 'string' ? JSON.parse(data) : data;

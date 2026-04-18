@@ -1379,8 +1379,8 @@
         }catch(e){}
       }
 
-      // Recuperar CV y mostrar botón descarga solo si viene de pago
-      if(data.tieneCv && paramPago==='ok'){
+      // Recuperar CV y mostrar botón descarga cuando viene de pago
+      if(paramPago==='ok'){
         try{
           const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
           if(cvR.ok){
@@ -1390,7 +1390,7 @@
               if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
               if(cvData.blandasData?.length) blandasData=cvData.blandasData;
               renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
-              cambiarEstiloCV(estiloActual);
+              cambiarEstiloCV(cvData.estilo||estiloActual);
               mostrarEstadoLogin(window.usuarioActual);
               document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
             }
