@@ -303,6 +303,56 @@
   </div>
 </nav>
 
+<datalist id="lista-instituciones">
+  <option value="Universidad Nacional Mayor de San Marcos (UNMSM)">
+  <option value="Universidad Nacional de Ingeniería (UNI)">
+  <option value="Universidad Nacional Agraria La Molina (UNALM)">
+  <option value="Universidad Nacional Federico Villarreal (UNFV)">
+  <option value="Universidad Nacional del Callao (UNAC)">
+  <option value="Universidad Nacional de Trujillo (UNT)">
+  <option value="Universidad Nacional de Piura (UNP)">
+  <option value="Universidad Nacional de San Antonio Abad del Cusco (UNSAAC)">
+  <option value="Universidad Nacional del Altiplano (UNAP)">
+  <option value="Pontificia Universidad Católica del Perú (PUCP)">
+  <option value="Universidad de Lima">
+  <option value="Universidad del Pacífico">
+  <option value="Universidad Peruana de Ciencias Aplicadas (UPC)">
+  <option value="Universidad San Ignacio de Loyola (USIL)">
+  <option value="Universidad ESAN">
+  <option value="Universidad Tecnológica del Perú (UTP)">
+  <option value="Universidad César Vallejo (UCV)">
+  <option value="Universidad Privada del Norte (UPN)">
+  <option value="Universidad Científica del Sur">
+  <option value="Universidad Peruana Cayetano Heredia (UPCH)">
+  <option value="Universidad San Martín de Porres (USMP)">
+  <option value="Universidad Ricardo Palma (URP)">
+  <option value="Universidad Inca Garcilaso de la Vega">
+  <option value="Universidad Wiener">
+  <option value="Universidad Alas Peruanas">
+  <option value="Universidad Andina del Cusco">
+  <option value="Universidad Privada Antenor Orrego (UPAO)">
+  <option value="Universidad Católica Santo Toribio de Mogrovejo (USAT)">
+  <option value="Universidad Católica San Pablo">
+  <option value="SENATI">
+  <option value="SENCICO">
+  <option value="TECSUP">
+  <option value="CIBERTEC">
+  <option value="IDAT">
+  <option value="CERTUS">
+  <option value="Instituto Peruano de Administración de Empresas (IPAE)">
+  <option value="Toulouse Lautrec">
+  <option value="Platzi">
+  <option value="Coursera">
+  <option value="Udemy">
+  <option value="LinkedIn Learning">
+  <option value="edX">
+  <option value="Google (Certificación)">
+  <option value="AWS (Amazon Web Services)">
+  <option value="Microsoft Learn">
+  <option value="Oracle Academy">
+  <option value="Cisco Networking Academy">
+</datalist>
+
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Analizando tu perfil...</div>
@@ -1241,7 +1291,7 @@
         <label style="margin-bottom:6px;">Título o nombre *</label>
         <input type="text" placeholder="Ej: Ing. de Sistemas, AWS Cloud Practitioner..." value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;">
         <label style="margin-bottom:6px;">Institución *</label>
-        <input type="text" placeholder="Ej: UPC, Senati, Coursera..." value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" style="margin-bottom:12px;">
+        <input type="text" placeholder="Ej: UPC, Senati, Coursera..." value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" list="lista-instituciones" style="margin-bottom:12px;" autocomplete="off">
         ${(e.tipo==='universitaria'||e.tipo==='tecnica')&&(!e.hasta||e.hasta.toLowerCase().includes('curso'))?`
         <label style="margin-bottom:6px;">Ciclo actual (opcional)</label>
         <input type="text" placeholder="Ej: 7mo ciclo, 8vo semestre, 3er año..." value="${e.ciclo||''}" oninput="actualizarEducacion(${e.id},'ciclo',this.value)" style="margin-bottom:12px;">
