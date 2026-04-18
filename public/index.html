@@ -318,6 +318,21 @@
         <div class="progress-text" id="progress-text"></div>
       </div>
 
+      <!-- BANNER CV GUARDADO - aparece cuando el usuario tiene CV + pago activo -->
+      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;">
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+          <div>
+            <div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div>
+            <div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div>
+            <div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div>
+          </div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button>
+            <button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;">Crear nuevo</button>
+          </div>
+        </div>
+      </div>
+
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
         <p style="color:#718096;font-size:0.9rem;margin-bottom:20px;">Elige cómo quieres empezar:</p>
@@ -1307,9 +1322,32 @@
     }
   }
 
+  let cvGuardadoCache = null;
+
+  async function mostrarCVGuardado(){
+    if(!window.usuarioActual)return;
+    try{
+      if(!cvGuardadoCache){
+        const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
+        if(!cvR.ok)return;
+        cvGuardadoCache=await cvR.json();
+      }
+      const cvData=cvGuardadoCache;
+      if(cvData.cvData){
+        cvGeneradoData=cvData.cvData;
+        if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
+        if(cvData.blandasData?.length) blandasData=cvData.blandasData;
+        renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
+        cambiarEstiloCV(cvData.estilo||'clasico');
+        mostrarEstadoLogin(window.usuarioActual);
+        document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+      }
+    }catch(e){console.log('Error mostrarCVGuardado:',e);}
+  }
+
   async function verificarPagoUsuario(){
     if(!window.usuarioActual)return;
-    window.verificarPagoUsuario = verificarPagoUsuario;
+    window.verificarPagoUsuario=verificarPagoUsuario;
     try{
       const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
       const data=await r.json();
@@ -1318,22 +1356,36 @@
       const paramPago=params.get('pago');
       if(paramPago) window.history.replaceState({},'','/crear');
 
-      // Mostrar mensajes según el resultado del pago
       if(paramPago==='error'){
         mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.');
       } else if(paramPago==='pendiente'){
         mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
       }
 
-      // Recuperar CV guardado si existe — independientemente de si pagó o no
-      if(data.tieneCv){
+      // Mostrar banner si tiene CV guardado y pago activo (sin venir de MP)
+      if(data.pagado && data.tieneCv && !paramPago){
+        try{
+          const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
+          if(cvR.ok){
+            cvGuardadoCache=await cvR.json();
+            const banner=document.getElementById('banner-cv-guardado');
+            if(banner){
+              banner.style.display='block';
+              document.getElementById('banner-nombre-cv').textContent=cvGuardadoCache?.cvData?.nombre||'Tu CV profesional';
+              document.getElementById('banner-plan-cv').textContent=`Plan ${data.plan||'Básico'} activo · Descarga sin marca de agua`;
+            }
+          }
+        }catch(e){}
+      }
+
+      // Recuperar CV y mostrar botón descarga solo si viene de pago
+      if(data.tieneCv && paramPago==='ok'){
         try{
           const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
           if(cvR.ok){
             const cvData=await cvR.json();
             if(cvData.cvData){
               cvGeneradoData=cvData.cvData;
-              // Restaurar habilidades para que aparezcan en el preview
               if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
               if(cvData.blandasData?.length) blandasData=cvData.blandasData;
               renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
@@ -1345,7 +1397,7 @@
         }catch(e){console.log('No se pudo recuperar CV:',e);}
       }
 
-      // Si pagó, habilitar botón de descarga y mostrar toast
+      // Habilitar botón descarga si pagó
       if(data.pagado){
         const link=document.getElementById('link-descarga');
         if(link) link.style.display='block';
@@ -1354,12 +1406,6 @@
           t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
           t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
           document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
-        } else if(!paramPago && !data.tieneCv){
-          // Usuario vuelve sin CV generado — mostrar instrucción
-          const t=document.createElement('div');
-          t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:14px 28px;border-radius:20px;font-size:0.85rem;font-weight:600;z-index:9999;box-shadow:0 4px 20px rgba(15,52,96,0.4);max-width:90%;text-align:center;';
-          t.textContent='✅ Ya tienes un plan activo. Genera tu CV y podrás descargarlo sin marca de agua.';
-          document.body.appendChild(t);setTimeout(()=>t.remove(),7000);
         }
       }
     }catch(e){console.log('verificarPago error:',e);}
