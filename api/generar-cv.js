@@ -15,18 +15,27 @@ module.exports = async (req, res) => {
     // SUGERENCIAS DE LOGROS POR CARGO
     if (sugerenciasLogros) {
       if (!cargo) return res.status(400).json({ error: 'Cargo requerido' });
-      const prompt = `Eres un experto en CVs profesionales para el mercado peruano y latinoamericano.
-Genera exactamente 6 logros profesionales específicos y medibles para el cargo: "${cargo}"${empresa ? ` en ${empresa}` : ''}.
+      const prompt = `Eres un experto en CVs profesionales para el mercado peruano.
 
-REGLAS:
-- Usa verbos de acción: gestioné, implementé, reduje, aumenté, lideré, optimicé, desarrollé, supervisé
-- Cuando el logro requiera un número, porcentaje o monto, usa el placeholder [X] para que el usuario lo complete con su dato real. Ejemplo: "Reduje errores en [X]% mediante automatización" o "Gestioné cartera de [X] clientes"
-- NUNCA inventes números, porcentajes ni montos específicos
-- Cada logro máximo 15 palabras
-- Sé específico para este cargo exacto
-- Lenguaje profesional del mercado peruano
-- Responde SOLO con JSON sin markdown
+Tu tarea: generar exactamente 6 logros para alguien con el cargo "${cargo}"${empresa ? `, que trabaja en ${empresa}` : ''}.
 
+REGLA PRINCIPAL: Los logros deben reflejar LAS FUNCIONES DEL CARGO, no el rubro de la empresa.
+Ejemplos:
+- Cargo "Doctor" en BBVA → logros médicos (atención pacientes, diagnósticos, procedimientos). BBVA puede tener médicos en su área de salud ocupacional.
+- Cargo "Abogado" en minera → logros legales (contratos, litigios, cumplimiento normativo)
+- Cargo "Contador" en hospital → logros contables (cierres, auditorías, presupuestos)
+- Cargo "Ingeniero de Sistemas" en banco → logros tecnológicos (sistemas, desarrollo, infraestructura)
+
+PARA EL CARGO "${cargo}":
+Piensa: ¿qué hace alguien con este cargo día a día? Genera logros basados en esas funciones reales.
+
+FORMATO DE CADA LOGRO:
+- Verbo de acción + qué hiciste + resultado concreto (número, % o impacto)
+- Máximo 15 palabras
+- Usa [X] como placeholder para números que el usuario completará
+- Lenguaje profesional peruano
+
+Responde SOLO con este JSON sin markdown ni explicaciones:
 {"sugerencias": ["logro 1", "logro 2", "logro 3", "logro 4", "logro 5", "logro 6"]}`;
 
       const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:600, messages:[{role:'user',content:prompt}] });
@@ -141,7 +150,7 @@ INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
 - Perfil: 3 líneas impactantes basadas en la experiencia real
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
-${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : `- NO incluyas el campo "compatibilidad" en el JSON. No hay oferta de trabajo.`}
+${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : ''}
 - Responde SOLO con JSON válido sin markdown
 
 {
