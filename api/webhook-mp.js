@@ -30,8 +30,8 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: true });
     }
 
-    const planes = { basico: 1, popular: 3 };
-    const limiteDescargasDia = { basico: 3, popular: 5 };
+    const planes = { esencial: 1, basico: 1, popular: 3 };
+    const limiteDescargasDia = { esencial: 1, basico: 3, popular: 5 };
     const cvs = planes[plan] || 1;
     const token = `mp_${payment.id}_${Date.now()}`;
 
