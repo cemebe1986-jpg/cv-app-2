@@ -1580,8 +1580,37 @@
     const params=new URLSearchParams(window.location.search);
     const pago=params.get('pago');
     if(!pago)return;
+
+    // Restaurar el CV inmediatamente — antes de que Firebase confirme sesión
+    // Así el wizard no aparece ni por un instante
+    if(pago==='error'||pago==='ok'||pago==='pendiente'){
+      const estadoStr=sessionStorage.getItem('talentia_wizard_estado');
+      if(estadoStr){
+        try{
+          const estado=JSON.parse(estadoStr);
+          if(estado.cvGenerado){
+            cvGeneradoData=estado.cvGenerado;
+            if(estado.habilidades?.length) habilidadesData=estado.habilidades;
+            if(estado.blandas?.length) blandasData=estado.blandas;
+            if(estado.foto) fotoBase64=estado.foto;
+            estiloActual=estado.estilo||'clasico';
+
+            // Ocultar wizard inmediatamente
+            document.getElementById('step-0').classList.remove('active');
+            document.getElementById('wizard-nav').style.display='none';
+            document.getElementById('progress-bar-container').style.display='none';
+            document.getElementById('nav-pasos').style.display='none';
+
+            // Renderizar CV
+            renderCV(estado.cvGenerado, estado.foto||null, estado.cvGenerado.ciudad||'', '');
+            cambiarEstiloCV(estiloActual);
+            setTimeout(()=>document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'}), 300);
+          }
+        }catch(e){console.log('Error restaurando estado:',e);}
+      }
+    }
+
     if(pago==='ok'){
-      // Disparar conversión de Google Ads
       if(typeof gtag !== 'undefined'){
         gtag('event', 'conversion_event_purchase', {
           'send_to': 'AW-3807168634',
@@ -1591,9 +1620,9 @@
       }
     }
     if(pago==='error'){
-      mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.');
+      setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),400);
     } else if(pago==='pendiente'){
-      mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
+      setTimeout(()=>mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.'),400);
     }
   }
 
