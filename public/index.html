@@ -350,11 +350,31 @@
       <!-- PASO PDF -->
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
-        <div style="margin-bottom:20px;"><p style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:12px;">🎯 ¿Postulas a un trabajo específico?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div id="oferta-btn-si" onclick="toggleOferta(true)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;"><div style="font-size:1.3rem;margin-bottom:4px;">✅</div><div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">Sí tengo</div><div style="font-size:0.72rem;color:#718096;">Optimiza para esa oferta</div></div><div id="oferta-btn-no" onclick="toggleOferta(false)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;"><div style="font-size:1.3rem;margin-bottom:4px;">➡️</div><div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">No por ahora</div><div style="font-size:0.72rem;color:#718096;">CV general profesional</div></div></div><div id="campo-oferta-pdf" style="display:none;"><textarea id="oferta-pdf" placeholder="Pega la descripción de la oferta..." style="height:110px;font-size:0.85rem;border:2px solid #0f3460;border-radius:12px;"></textarea></div></div>
-        <div style="border-top:1px solid #f0f0f0;padding-top:16px;"><label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;display:block;">📄 Sube tu CV en PDF <span style="color:#ef4444;">*</span></label><div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;"><div style="font-size:2rem;margin-bottom:8px;">📤</div><h3 style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">Haz clic para subir tu CV</h3><p style="font-size:0.82rem;color:#718096;">Formato PDF · Máximo 5MB</p></div><div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div><div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div><button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;">Continuar →</button></div>
+
+        <!-- PDF primero — lo obligatorio -->
+        <label style="font-size:0.88rem;font-weight:600;color:#1a1a2e;margin-bottom:8px;display:block;">Sube tu CV en PDF</label>
+        <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;">
+          <div style="font-size:2rem;margin-bottom:8px;">📤</div>
+          <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu CV</div>
+          <div style="font-size:0.78rem;color:#718096;">Formato PDF · Máximo 5MB</div>
+        </div>
+        <div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div>
+        <div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div>
+
+        <!-- Oferta opcional — discreta -->
+        <div style="margin-top:16px;border-top:1px solid #f0f0f0;padding-top:14px;">
+          <button onclick="toggleOfertaPDF()" id="btn-agregar-oferta" style="background:none;border:none;color:#60a5fa;font-size:0.82rem;cursor:pointer;font-weight:600;padding:0;display:flex;align-items:center;gap:6px;">
+            <span id="oferta-toggle-icon">＋</span> ¿Tienes una oferta laboral? Agrégala para optimizar tu CV
+          </button>
+          <div id="campo-oferta-pdf" style="display:none;margin-top:12px;">
+            <textarea id="oferta-pdf" placeholder="Pega aquí la descripción de la oferta de trabajo..." style="height:110px;font-size:0.85rem;border:1.5px solid #e2e8f0;border-radius:8px;margin-bottom:0;"></textarea>
+          </div>
+        </div>
+
+        <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:12px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:14px;">Continuar →</button>
       </div>
 
-      <!-- PASO 1: DATOS PERSONALES + FOTO -->
+          <!-- PASO 1: DATOS PERSONALES + FOTO -->
       <div class="step" id="step-1">
         <p style="font-size:0.75rem;color:#a0aec0;margin-bottom:20px;">* Campos obligatorios</p>
         <label>Nombre completo *</label>
@@ -597,6 +617,23 @@
   function mostrarCampoOferta(){document.getElementById('oferta-si-card').classList.add('activa');document.getElementById('oferta-no-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
   function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card').classList.add('activa');document.getElementById('oferta-si-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
   function iniciarFormulario(){pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);}
+
+  function toggleOfertaPDF(){
+    const campo=document.getElementById('campo-oferta-pdf');
+    const icon=document.getElementById('oferta-toggle-icon');
+    const btn=document.getElementById('btn-agregar-oferta');
+    if(campo.style.display==='none'){
+      campo.style.display='block';
+      icon.textContent='－';
+      btn.style.color='#718096';
+      setTimeout(()=>document.getElementById('oferta-pdf').focus(),100);
+    } else {
+      campo.style.display='none';
+      icon.textContent='＋';
+      btn.style.color='#60a5fa';
+      document.getElementById('oferta-pdf').value='';
+    }
+  }
 
   function toggleOferta(tiene){
     const btnSi=document.getElementById('oferta-btn-si'),btnNo=document.getElementById('oferta-btn-no'),campo=document.getElementById('campo-oferta-pdf');
