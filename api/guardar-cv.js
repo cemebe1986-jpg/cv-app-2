@@ -20,6 +20,14 @@ module.exports = async (req, res) => {
     // Guardar con uid — expira en 30 días
     if (usuarioId) {
       await redis.set(`cv:usuario:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
+
+      // Si el usuario ya tiene un pago activo, actualizar también el CV congelado
+      // Así el PDF descargado siempre corresponde al CV más reciente generado
+      const pagoExistente = await redis.get(`descarga:${usuarioId}`);
+      if (pagoExistente) {
+        await redis.set(`cv:pagado:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
+        console.log(`CV pagado actualizado para: ${usuarioId}`);
+      }
     }
 
     res.json({ id });
