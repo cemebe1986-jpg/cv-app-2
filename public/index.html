@@ -30,7 +30,7 @@
 </script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
-  body{font-family:'Segoe UI',sans-serif;background:#f0f4ff;min-height:100vh;}
+  body{font-family:'Segoe UI',sans-serif;background:#f5f6f8;min-height:100vh;}
   nav{position:fixed;top:0;left:0;right:0;z-index:100;padding:14px 40px;display:flex;align-items:center;justify-content:space-between;background:rgba(26,26,46,0.97);backdrop-filter:blur(10px);}
   .nav-logo{font-size:1.2rem;font-weight:900;color:white;letter-spacing:-0.5px;text-decoration:none;}
   .nav-logo span{color:#60a5fa;}
@@ -39,24 +39,24 @@
   .nav-paso.activo{background:#60a5fa;width:24px;border-radius:4px;}
   .page{padding:80px 20px 40px;min-height:100vh;}
   .wizard{max-width:580px;margin:0 auto;}
-  .wizard-card{background:white;border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);}
-  .wizard-card-header{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:28px 36px 20px;border-radius:24px 24px 0 0;}
-  .wizard-card-header h2{font-size:1.25rem;font-weight:800;color:white;margin-bottom:16px;}
+  .wizard-card{background:white;border-radius:16px;box-shadow:0 2px 12px rgba(0,0,0,0.06);border:1px solid #e8eaed;}
+  .wizard-card-header{background:#1a1a2e;padding:22px 32px 18px;border-radius:16px 16px 0 0;}
+  .wizard-card-header h2{font-size:1.05rem;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.2px;}
   .progress-bar{background:rgba(255,255,255,0.15);border-radius:10px;height:5px;margin-bottom:8px;}
   .progress-fill{background:#60a5fa;border-radius:10px;height:100%;transition:width 0.4s ease;}
   .progress-text{font-size:0.78rem;color:rgba(255,255,255,0.6);}
-  .step{display:none;padding:36px;opacity:0;transform:translateX(20px);transition:opacity 0.25s ease,transform 0.25s ease;}
+  .step{display:none;padding:28px 32px;opacity:0;transform:translateX(16px);transition:opacity 0.22s ease,transform 0.22s ease;}
   .step.active{display:block;opacity:1;transform:translateX(0);}
   .step.saliendo{opacity:0;transform:translateX(-20px);}
   .choice-cards{display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:8px;}
-  .choice-card{border:2px solid #e2e8f0;border-radius:16px;padding:28px 18px;text-align:center;cursor:pointer;transition:all 0.2s;background:white;}
-  .choice-card:hover{border-color:#0f3460;background:#f0f4ff;transform:translateY(-2px);}
+  .choice-card{border:1.5px solid #e2e8f0;border-radius:12px;padding:22px 16px;text-align:center;cursor:pointer;transition:all 0.18s;background:white;}
+  .choice-card:hover{border-color:#1a1a2e;background:#f8f9ff;transform:translateY(-1px);}
   .choice-card .icon{font-size:2.2rem;margin-bottom:12px;}
   .choice-card h3{font-size:0.95rem;font-weight:700;color:#1a1a2e;margin-bottom:6px;}
   .choice-card p{font-size:0.8rem;color:#718096;line-height:1.5;}
-  label{display:block;font-size:0.75rem;font-weight:700;color:#4a5568;margin-bottom:7px;text-transform:uppercase;letter-spacing:0.6px;}
-  input[type="text"],input[type="email"],input[type="password"],input[type="file"],textarea,select{padding:13px 16px;border:2px solid #e2e8f0;border-radius:12px;font-size:0.95rem;color:#2d3748;transition:border-color 0.2s;font-family:'Segoe UI',sans-serif;width:100%;margin-bottom:20px;background:white;}
-  input:focus,textarea:focus,select:focus{outline:none;border-color:#0f3460;box-shadow:0 0 0 3px rgba(15,52,96,0.08);}
+  label{display:block;font-size:0.72rem;font-weight:600;color:#64748b;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;}
+  input[type="text"],input[type="email"],input[type="password"],input[type="file"],textarea,select{padding:11px 14px;border:1.5px solid #e2e8f0;border-radius:8px;font-size:0.92rem;color:#2d3748;transition:border-color 0.18s;font-family:'Segoe UI',sans-serif;width:100%;margin-bottom:18px;background:white;}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:#1a1a2e;box-shadow:0 0 0 2px rgba(26,26,46,0.07);}
   textarea{height:130px;resize:vertical;}
   .microcopy{font-size:0.75rem;color:#a0aec0;margin-top:6px;margin-bottom:16px;}
   .error-msg{color:#e53e3e;font-size:0.78rem;margin-top:-14px;margin-bottom:16px;}
@@ -70,8 +70,8 @@
   .wizard-nav{display:flex;gap:12px;padding:20px 36px;background:#f8faff;border-top:1px solid #f0f0f0;border-radius:0 0 24px 24px;justify-content:center;}
   .btn-prev{padding:13px 28px;background:white;color:#0f3460;border:2px solid #e2e8f0;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;min-width:110px;transition:all 0.2s;}
   .btn-prev:hover{border-color:#0f3460;background:#f0f4ff;}
-  .btn-next{padding:13px 32px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;min-width:160px;}
-  .btn-next:hover{opacity:0.92;transform:translateY(-1px);}
+  .btn-next{padding:12px 32px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;min-width:150px;letter-spacing:-0.2px;}
+  .btn-next:hover{background:#0f3460;}
   .error-toast{display:none;background:#fff5f5;border:2px solid #fed7d7;border-radius:12px;padding:16px 20px;margin:0 36px 16px;}
   .error-toast.visible{display:flex;align-items:center;gap:12px;}
   .error-toast-icono{font-size:1.3rem;}
@@ -99,7 +99,7 @@
   .estilo-btn:hover{border-color:#0f3460;color:#0f3460;}
   .estilo-btn.activo{border-color:#0f3460;background:#f0f4ff;color:#0f3460;}
   /* CV */
-  .cv-preview{display:none;max-width:800px;margin:32px auto 0;background:white;border-radius:20px;overflow:hidden;box-shadow:0 8px 40px rgba(0,0,0,0.12);}
+  .cv-preview{display:none;max-width:800px;margin:24px auto 0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.08);border:1px solid #e8eaed;}
   .cv-document{display:grid;grid-template-columns:280px 1fr;min-height:900px;position:relative;}
   .cv-sidebar{background:#1a1a2e;color:white;padding:40px 25px;}
   .cv-foto-container{text-align:center;margin-bottom:25px;}
@@ -492,6 +492,37 @@
       <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:8px;">💡 RECOMENDACIONES</div><ul style="font-size:0.85rem;color:#2d3748;padding-left:18px;line-height:1.8;" id="comp-recomendaciones"></ul></div>
     </div>
 
+
+    <!-- TALENTIA SCORE -->
+    <div id="talentia-score-box" style="display:none;padding:24px 36px;background:white;border-bottom:2px solid #f0f0f0;">
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
+        <!-- Score circular -->
+        <div style="position:relative;width:90px;height:90px;flex-shrink:0;">
+          <svg viewBox="0 0 90 90" style="width:90px;height:90px;transform:rotate(-90deg);">
+            <circle cx="45" cy="45" r="38" fill="none" stroke="#f0f0f0" stroke-width="8"/>
+            <circle id="score-circle" cx="45" cy="45" r="38" fill="none" stroke="#22c55e" stroke-width="8"
+              stroke-dasharray="239" stroke-dashoffset="239" stroke-linecap="round"
+              style="transition:stroke-dashoffset 1.2s ease;"/>
+          </svg>
+          <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+            <div id="score-numero" style="font-size:1.5rem;font-weight:900;color:#1a1a2e;line-height:1;">0</div>
+            <div style="font-size:0.6rem;color:#718096;font-weight:700;">/100</div>
+          </div>
+        </div>
+        <!-- Detalle del score -->
+        <div style="flex:1;min-width:200px;">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">
+            <div id="score-label" style="font-size:1rem;font-weight:800;color:#1a1a2e;">TalentIA Score</div>
+            <div id="score-badge" style="padding:3px 10px;border-radius:20px;font-size:0.72rem;font-weight:700;background:#f0fdf4;color:#15803d;">Calculando...</div>
+          </div>
+          <div id="score-barra-container" style="background:#f0f0f0;border-radius:10px;height:6px;margin-bottom:12px;">
+            <div id="score-barra" style="height:100%;border-radius:10px;background:#22c55e;width:0%;transition:width 1.2s ease;"></div>
+          </div>
+          <div id="score-items" style="display:grid;grid-template-columns:1fr 1fr;gap:6px;"></div>
+        </div>
+      </div>
+      <div id="score-consejo" style="margin-top:16px;padding:12px 16px;background:#f8faff;border-left:3px solid #60a5fa;border-radius:0 8px 8px 0;font-size:0.82rem;color:#4a5568;display:none;"></div>
+    </div>
     <div class="estilos-selector">
       <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
       <div class="estilos-grid">
@@ -550,7 +581,7 @@
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
-  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — ATS-friendly al máximo, ideal para tecnología, startups o CVs simples.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
+  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
   function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
   function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session',getLlamadasIA()+1);}catch(e){}}
   function verificarLimiteIA(){if(!window.usuarioActual&&getLlamadasIA()>=LIMITE_IA){mostrarError('Límite alcanzado','Crea una cuenta gratuita para continuar usando las sugerencias con IA.');setTimeout(()=>abrirModalLogin(),1500);return false;}return true;}
@@ -580,6 +611,97 @@
     document.getElementById('step-pdf').classList.remove('active');
     document.getElementById('step-pdf').style.display='none';
     camino='manual';pasoActual=0;mostrarPaso(0);
+  }
+
+
+  function calcularTalentiaScore(cv, habilidades, blandas, foto, oferta){
+    let score = 0;
+    const items = [];
+
+    // Perfil profesional (20 pts)
+    const perfil = cv.perfil || '';
+    if(perfil.length > 100){ score+=20; items.push({ok:true, texto:'Perfil profesional completo'}); }
+    else if(perfil.length > 50){ score+=12; items.push({ok:'parcial', texto:'Perfil podría ser más detallado'}); }
+    else{ score+=0; items.push({ok:false, texto:'Perfil profesional muy corto'}); }
+
+    // Experiencia laboral (25 pts)
+    const exp = cv.experiencia || [];
+    if(exp.length >= 2){ score+=25; items.push({ok:true, texto:'Buena trayectoria laboral'}); }
+    else if(exp.length === 1){ score+=15; items.push({ok:'parcial', texto:'Agrega más experiencias si tienes'}); }
+    else{ score+=5; items.push({ok:false, texto:'Sin experiencia laboral'}); }
+
+    // Logros con métricas (15 pts)
+    const todosLogros = exp.flatMap(e=>e.logros||[]).join(' ');
+    const tieneNumeros = /\d+%|\d+ (personas|clientes|usuarios|proyectos|soles|millones)/.test(todosLogros);
+    if(tieneNumeros){ score+=15; items.push({ok:true, texto:'Logros con números y métricas'}); }
+    else{ score+=5; items.push({ok:false, texto:'Agrega números a tus logros (ej: 20%)'}); }
+
+    // Habilidades técnicas (15 pts)
+    if(habilidades.length >= 5){ score+=15; items.push({ok:true, texto:'Habilidades técnicas completas'}); }
+    else if(habilidades.length >= 2){ score+=8; items.push({ok:'parcial', texto:'Agrega más habilidades técnicas'}); }
+    else{ score+=0; items.push({ok:false, texto:'Sin habilidades técnicas'}); }
+
+    // Educación (10 pts)
+    const edu = cv.educacion || [];
+    if(edu.length >= 1){ score+=10; items.push({ok:true, texto:'Educación registrada'}); }
+    else{ score+=0; items.push({ok:false, texto:'Sin educación registrada'}); }
+
+    // Foto (5 pts)
+    if(foto){ score+=5; items.push({ok:true, texto:'Foto de perfil incluida'}); }
+    else{ items.push({ok:false, texto:'Agrega foto para destacar'}); }
+
+    // Análisis de oferta (10 pts)
+    if(oferta && oferta.trim().length > 50){ score+=10; items.push({ok:true, texto:'CV optimizado para la oferta'}); }
+    else{ items.push({ok:'parcial', texto:'Pega una oferta para optimizar más'}); }
+
+    return {score: Math.min(score, 100), items};
+  }
+
+  function mostrarTalentiaScore(cv, habilidades, blandas, foto, oferta){
+    const {score, items} = calcularTalentiaScore(cv, habilidades, blandas, foto, oferta);
+    const box = document.getElementById('talentia-score-box');
+    if(!box) return;
+    box.style.display='block';
+
+    // Animar número
+    const numEl = document.getElementById('score-numero');
+    let current = 0;
+    const timer = setInterval(()=>{
+      current = Math.min(current + 2, score);
+      numEl.textContent = current;
+      if(current >= score) clearInterval(timer);
+    }, 25);
+
+    // Animar barra y círculo
+    document.getElementById('score-barra').style.width = score + '%';
+    const circumference = 239;
+    const offset = circumference - (score/100 * circumference);
+    document.getElementById('score-circle').style.strokeDashoffset = offset;
+
+    // Color según score
+    const color = score >= 80 ? '#22c55e' : score >= 60 ? '#f59e0b' : '#ef4444';
+    const label = score >= 80 ? '🏆 Excelente' : score >= 60 ? '👍 Bueno' : score >= 40 ? '⚠️ Regular' : '❗ Necesita mejoras';
+    document.getElementById('score-circle').style.stroke = color;
+    document.getElementById('score-barra').style.background = color;
+    document.getElementById('score-badge').style.background = score>=80?'#f0fdf4':score>=60?'#fefce8':'#fff5f5';
+    document.getElementById('score-badge').style.color = score>=80?'#15803d':score>=60?'#92400e':'#b91c1c';
+    document.getElementById('score-badge').textContent = label;
+
+    // Items
+    const itemsEl = document.getElementById('score-items');
+    itemsEl.innerHTML = items.map(item=>`
+      <div style="display:flex;align-items:flex-start;gap:6px;font-size:0.75rem;color:${item.ok===true?'#15803d':item.ok==='parcial'?'#92400e':'#b91c1c'};">
+        <span style="flex-shrink:0;">${item.ok===true?'✅':item.ok==='parcial'?'⚡':'❌'}</span>
+        <span>${item.texto}</span>
+      </div>`).join('');
+
+    // Consejo principal
+    const consejo = document.getElementById('score-consejo');
+    const mejorar = items.filter(i=>i.ok!==true);
+    if(mejorar.length > 0){
+      consejo.style.display='block';
+      consejo.innerHTML = `<strong>💡 Para subir tu score:</strong> ${mejorar[0].texto}.`;
+    }
   }
 
   function detectarPaisPorCodigo(){const c=document.getElementById('codigo-pais').value,m={'+51':'PE','+57':'CO','+52':'MX','+54':'AR','+56':'CL','+593':'EC','+591':'BO'},p=m[c];if(p){document.getElementById('pais').value=p;actualizarCiudades();}}
@@ -690,7 +812,7 @@
     if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
-      document.getElementById('error-toast-desc').innerHTML='Los reclutadores y sistemas ATS las usan para filtrar candidatos.';
+      document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
       document.getElementById('error-toast').classList.add('visible');
       const btnCerrar=document.querySelector('.error-toast button');
       if(btnCerrar){btnCerrar.textContent='Continuar sin habilidades';btnCerrar.style.cssText='background:#e2e8f0;border:none;cursor:pointer;color:#4a5568;font-size:0.78rem;font-weight:700;padding:6px 10px;border-radius:8px;white-space:nowrap;';btnCerrar.onclick=()=>{cerrarError();generarCV();};}
@@ -826,6 +948,7 @@
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais,oferta);
       if(typeof gtag!=='undefined')gtag('event','cv_generado');
+      mostrarTalentiaScore(data.cv,habilidadesData,blandasData,fotoBase64,oferta);
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();window._cvDescargaId=gd.id;
     }catch(e){console.error('Error generarCV:',e);mostrarError('Error al generar tu CV',e.message?.includes('429')?'Límite de uso alcanzado.':'Hubo un problema con la IA. Intenta de nuevo.');}
