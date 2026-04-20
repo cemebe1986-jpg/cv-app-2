@@ -1441,6 +1441,12 @@
       if(estado.foto) fotoBase64=estado.foto;
       estiloActual=estado.estilo||'clasico';
 
+      // Ocultar el wizard — mostrar solo el CV con planes de pago
+      document.getElementById('step-0').classList.remove('active');
+      document.getElementById('wizard-nav').style.display='none';
+      document.getElementById('progress-bar-container').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';
+
       // Renderizar el CV
       renderCV(estado.cvGenerado, estado.foto||null, estado.cvGenerado.ciudad||'', '');
       cambiarEstiloCV(estiloActual);
