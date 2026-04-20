@@ -2,14 +2,6 @@
 <html lang="es">
 <head>
 <link rel="icon" type="image/x-icon" href="/favicon.ico">
-<!-- Google Ads tag -->
-<script async src="https://www.googletagmanager.com/gtag/js?id=AW-3807168634"></script>
-<script>
-  window.dataLayer = window.dataLayer || [];
-  function gtag(){dataLayer.push(arguments);}
-  gtag('js', new Date());
-  gtag('config', 'AW-3807168634');
-</script>
 <script type="module">
   import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
   import { getAuth, signInWithPopup, GoogleAuthProvider, signOut, onAuthStateChanged, createUserWithEmailAndPassword, signInWithEmailAndPassword, sendPasswordResetEmail, updateProfile } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
@@ -22,13 +14,11 @@
   window.registrarEmail = async () => { const nombre=document.getElementById('modal-nombre').value.trim(),email=document.getElementById('modal-email').value.trim(),pass=document.getElementById('modal-pass').value; if(!nombre||!email||!pass){mostrarErrorModal('Completa todos los campos.');return;} if(pass.length<6){mostrarErrorModal('La contraseña debe tener mínimo 6 caracteres.');return;} try{const r=await createUserWithEmailAndPassword(auth,email,pass);await updateProfile(r.user,{displayName:nombre});window.usuarioActual=r.user;cerrarModalLogin();mostrarEstadoLogin(r.user);if(window.accionPendienteLogin){window.accionPendienteLogin();window.accionPendienteLogin=null;}}catch(e){if(e.code==='auth/email-already-in-use')mostrarErrorModal('Este email ya tiene una cuenta.');else mostrarErrorModal('Error al crear cuenta.');} };
   window.olvideMiPassword = async () => { const email=document.getElementById('modal-email').value.trim(); if(!email){mostrarErrorModal('Ingresa tu email primero.');return;} try{await sendPasswordResetEmail(auth,email);mostrarErrorModal('✅ Te enviamos un email para restablecer tu contraseña.',true);}catch(e){mostrarErrorModal('No encontramos ese email.');} };
   window.cerrarSesion = async () => { await signOut(auth); window.usuarioActual=null; mostrarEstadoLogin(null); };
-  onAuthStateChanged(auth, user => { window.usuarioActual=user; if(document.getElementById('cv-preview')?.style.display!=='none')mostrarEstadoLogin(user); if(user && window.verificarPagoUsuario) window.verificarPagoUsuario(); });
+  onAuthStateChanged(auth, user => { window.usuarioActual=user; if(document.getElementById('cv-preview')?.style.display!=='none')mostrarEstadoLogin(user); if(user && window.verificarPagoUsuario)window.verificarPagoUsuario(); if(user && typeof gtag!=='undefined')gtag('event','usuario_autenticado'); });
   function mostrarErrorModal(msg,exito=false){const el=document.getElementById('modal-error');if(!el)return;el.textContent=msg;el.style.color=exito?'#22c55e':'#e53e3e';el.style.display='block';}
 </script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Crea tu CV profesional con Inteligencia Artificial en minutos. Optimizado para reclutadores de Perú y Latinoamérica. 3 estilos profesionales. Análisis ATS incluido.">
-<title>TalentIA | Crear CV con IA — Generador de Curriculum Vitae</title>
 <title>TalentIA — Crear mi CV</title>
 <!-- Google Analytics GA4 -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB"></script>
@@ -48,7 +38,7 @@
   .nav-paso{width:8px;height:8px;border-radius:50%;background:rgba(255,255,255,0.25);transition:all 0.3s;}
   .nav-paso.activo{background:#60a5fa;width:24px;border-radius:4px;}
   .page{padding:80px 20px 40px;min-height:100vh;}
-  .wizard{max-width:720px;margin:0 auto;}
+  .wizard{max-width:580px;margin:0 auto;}
   .wizard-card{background:white;border-radius:24px;box-shadow:0 4px 24px rgba(0,0,0,0.08);}
   .wizard-card-header{background:linear-gradient(135deg,#1a1a2e,#0f3460);padding:28px 36px 20px;border-radius:24px 24px 0 0;}
   .wizard-card-header h2{font-size:1.25rem;font-weight:800;color:white;margin-bottom:16px;}
@@ -77,7 +67,7 @@
   .spinner{width:28px;height:28px;border:3px solid #e2e8f0;border-top-color:#0f3460;border-radius:50%;animation:spin 0.8s linear infinite;margin:10px auto;}
   @keyframes spin{to{transform:rotate(360deg);}}
   .foto-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #0f3460;display:none;margin-top:10px;}
-  .wizard-nav{display:flex;gap:12px;padding:20px 36px;background:#f8faff;border-top:1px solid #f0f0f0;border-radius:0 0 24px 24px;justify-content:center;position:sticky;bottom:0;z-index:50;box-shadow:0 -4px 16px rgba(0,0,0,0.06);}
+  .wizard-nav{display:flex;gap:12px;padding:20px 36px;background:#f8faff;border-top:1px solid #f0f0f0;border-radius:0 0 24px 24px;justify-content:center;}
   .btn-prev{padding:13px 28px;background:white;color:#0f3460;border:2px solid #e2e8f0;border-radius:12px;font-size:0.9rem;font-weight:700;cursor:pointer;min-width:110px;transition:all 0.2s;}
   .btn-prev:hover{border-color:#0f3460;background:#f0f4ff;}
   .btn-next{padding:13px 32px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;min-width:160px;}
@@ -253,10 +243,8 @@
   .cv-estilo-minimal .exp-empresa{color:#1a1a2e;font-weight:400;}
   .cv-estilo-minimal .exp-logro::before{color:#1a1a2e;}
   .cv-estilo-minimal .edu-institucion{color:#4a5568;}
-  @media(max-width:768px){.wizard{max-width:100%;}.cv-preview{max-width:100%;margin:20px auto 0;}.cv-document{grid-template-columns:200px 1fr;}.step{padding:20px;}.wizard-nav{padding:14px 20px;}}
   @media(max-width:600px){nav{padding:14px 20px;}.choice-cards{grid-template-columns:1fr;}.cv-document{grid-template-columns:1fr;}.cv-sidebar{padding:25px;}.step{padding:24px;}.wizard-nav{padding:16px 24px;}.wizard-card-header{padding:22px 24px 16px;}.estilos-grid{gap:8px;}}
 </style>
-<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
 </head>
@@ -268,7 +256,7 @@
     <div style="text-align:center;margin-bottom:20px;">
       <div style="font-size:1.8rem;margin-bottom:6px;">✨</div>
       <h3 style="font-size:1.1rem;font-weight:800;color:#1a1a2e;" id="modal-titulo">Activa las sugerencias con IA</h3>
-      <p style="font-size:0.82rem;color:#718096;margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita para continuar</p>
+      <p style="font-size:0.82rem;color:#718096;margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita y obtén 10 sugerencias con IA</p>
     </div>
     <div class="modal-tabs">
       <button class="modal-tab active" onclick="cambiarTabModal('registro')" id="tab-registro">Crear cuenta</button>
@@ -313,56 +301,6 @@
   </div>
 </nav>
 
-<datalist id="lista-instituciones">
-  <option value="Universidad Nacional Mayor de San Marcos (UNMSM)">
-  <option value="Universidad Nacional de Ingeniería (UNI)">
-  <option value="Universidad Nacional Agraria La Molina (UNALM)">
-  <option value="Universidad Nacional Federico Villarreal (UNFV)">
-  <option value="Universidad Nacional del Callao (UNAC)">
-  <option value="Universidad Nacional de Trujillo (UNT)">
-  <option value="Universidad Nacional de Piura (UNP)">
-  <option value="Universidad Nacional de San Antonio Abad del Cusco (UNSAAC)">
-  <option value="Universidad Nacional del Altiplano (UNAP)">
-  <option value="Pontificia Universidad Católica del Perú (PUCP)">
-  <option value="Universidad de Lima">
-  <option value="Universidad del Pacífico">
-  <option value="Universidad Peruana de Ciencias Aplicadas (UPC)">
-  <option value="Universidad San Ignacio de Loyola (USIL)">
-  <option value="Universidad ESAN">
-  <option value="Universidad Tecnológica del Perú (UTP)">
-  <option value="Universidad César Vallejo (UCV)">
-  <option value="Universidad Privada del Norte (UPN)">
-  <option value="Universidad Científica del Sur">
-  <option value="Universidad Peruana Cayetano Heredia (UPCH)">
-  <option value="Universidad San Martín de Porres (USMP)">
-  <option value="Universidad Ricardo Palma (URP)">
-  <option value="Universidad Inca Garcilaso de la Vega">
-  <option value="Universidad Wiener">
-  <option value="Universidad Alas Peruanas">
-  <option value="Universidad Andina del Cusco">
-  <option value="Universidad Privada Antenor Orrego (UPAO)">
-  <option value="Universidad Católica Santo Toribio de Mogrovejo (USAT)">
-  <option value="Universidad Católica San Pablo">
-  <option value="SENATI">
-  <option value="SENCICO">
-  <option value="TECSUP">
-  <option value="CIBERTEC">
-  <option value="IDAT">
-  <option value="CERTUS">
-  <option value="Instituto Peruano de Administración de Empresas (IPAE)">
-  <option value="Toulouse Lautrec">
-  <option value="Platzi">
-  <option value="Coursera">
-  <option value="Udemy">
-  <option value="LinkedIn Learning">
-  <option value="edX">
-  <option value="Google (Certificación)">
-  <option value="AWS (Amazon Web Services)">
-  <option value="Microsoft Learn">
-  <option value="Oracle Academy">
-  <option value="Cisco Networking Academy">
-</datalist>
-
 <div class="loading-overlay" id="loading-overlay">
   <div class="loading-spinner"></div>
   <div class="loading-text" id="loading-text">Analizando tu perfil...</div>
@@ -372,27 +310,13 @@
 <div class="page">
   <div class="wizard" id="wizard-box">
     <div class="wizard-card">
-      <div class="wizard-card-header">
+      <div class="wizard-card-header" id="wizard-card-header">
         <h2 id="wizard-titulo">¿Cómo quieres crear tu CV?</h2>
         <div class="progress-bar" id="progress-bar-container" style="display:none;"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
         <div class="progress-text" id="progress-text"></div>
       </div>
 
-      <!-- BANNER CV GUARDADO - aparece cuando el usuario tiene CV + pago activo -->
-      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;">
-        <button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;">
-          <div>
-            <div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div>
-            <div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div>
-            <div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div>
-          </div>
-          <div>
-            <button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button>
-          </div>
-        </div>
-      </div>
-
+      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;"><button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;"><div><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div><div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div><div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div></div><div><button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button></div></div></div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
         <p style="color:#718096;font-size:0.9rem;margin-bottom:20px;">Elige cómo quieres empezar:</p>
@@ -400,7 +324,6 @@
           <div class="choice-card" onclick="elegirCamino('manual')"><div class="icon">✍️</div><h3>Crear desde cero</h3><p>Completa el formulario paso a paso y la IA genera tu CV</p></div>
           <div class="choice-card" onclick="elegirCamino('pdf')"><div class="icon">📄</div><h3>Subir mi CV actual</h3><p>Sube tu CV en PDF y lo mejoramos con IA automáticamente</p></div>
         </div>
-        <p style="text-align:center;color:#a0aec0;font-size:0.78rem;margin-top:16px;">👆 Toca una opción para comenzar</p>
       </div>
 
       <!-- PASO OFERTA OPCIONAL -->
@@ -417,7 +340,6 @@
         <div id="campo-oferta" style="display:none;margin-bottom:16px;">
           <label>Pega la descripción del trabajo</label>
           <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:150px;"></textarea>
-          <button onclick="iniciarFormulario()" style="width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;margin-top:4px;">Continuar →</button>
         </div>
         <div class="oferta-card" id="oferta-no-card" onclick="continuarSinOferta()">
           <div style="font-size:1.5rem;">➡️</div>
@@ -425,42 +347,11 @@
         </div>
       </div>
 
-      <!-- PASO PDF: oferta opcional arriba + subir CV abajo -->
+      <!-- PASO PDF -->
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
-
-        <!-- Oferta laboral — toggle -->
-        <div style="margin-bottom:22px;">
-          <p style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:12px;">🎯 ¿Postulas a un trabajo específico?</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:14px;">
-            <div id="oferta-btn-si" onclick="toggleOferta(true)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;">
-              <div style="font-size:1.3rem;margin-bottom:4px;">✅</div>
-              <div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">Sí tengo</div>
-              <div style="font-size:0.72rem;color:#718096;">Optimiza para esa oferta</div>
-            </div>
-            <div id="oferta-btn-no" onclick="toggleOferta(false)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;">
-              <div style="font-size:1.3rem;margin-bottom:4px;">➡️</div>
-              <div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">No por ahora</div>
-              <div style="font-size:0.72rem;color:#718096;">CV general profesional</div>
-            </div>
-          </div>
-          <div id="campo-oferta-pdf" style="display:none;overflow:hidden;transition:all 0.3s;">
-            <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:120px;font-size:0.85rem;border:2px solid #0f3460;border-radius:12px;"></textarea>
-          </div>
-        </div>
-
-        <!-- Subir CV -->
-        <div style="border-top:1px solid #f0f0f0;padding-top:18px;">
-          <label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;display:block;">📄 Sube tu CV en PDF <span style="color:#ef4444;">*</span></label>
-          <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;">
-            <div style="font-size:2rem;margin-bottom:8px;">📤</div>
-            <h3 style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">Haz clic para subir tu CV</h3>
-            <p style="font-size:0.82rem;color:#718096;">Formato PDF · Máximo 5MB</p>
-          </div>
-          <div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div>
-          <div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div>
-          <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;">Continuar →</button>
-        </div>
+        <div style="margin-bottom:20px;"><p style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:12px;">🎯 ¿Postulas a un trabajo específico?</p><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div id="oferta-btn-si" onclick="toggleOferta(true)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;"><div style="font-size:1.3rem;margin-bottom:4px;">✅</div><div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">Sí tengo</div><div style="font-size:0.72rem;color:#718096;">Optimiza para esa oferta</div></div><div id="oferta-btn-no" onclick="toggleOferta(false)" style="border:2px solid #e2e8f0;border-radius:12px;padding:14px;text-align:center;cursor:pointer;transition:all 0.2s;"><div style="font-size:1.3rem;margin-bottom:4px;">➡️</div><div style="font-size:0.85rem;font-weight:700;color:#1a1a2e;">No por ahora</div><div style="font-size:0.72rem;color:#718096;">CV general profesional</div></div></div><div id="campo-oferta-pdf" style="display:none;"><textarea id="oferta-pdf" placeholder="Pega la descripción de la oferta..." style="height:110px;font-size:0.85rem;border:2px solid #0f3460;border-radius:12px;"></textarea></div></div>
+        <div style="border-top:1px solid #f0f0f0;padding-top:16px;"><label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;display:block;">📄 Sube tu CV en PDF <span style="color:#ef4444;">*</span></label><div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;"><div style="font-size:2rem;margin-bottom:8px;">📤</div><h3 style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">Haz clic para subir tu CV</h3><p style="font-size:0.82rem;color:#718096;">Formato PDF · Máximo 5MB</p></div><div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div><div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div><button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;">Continuar →</button></div>
       </div>
 
       <!-- PASO 1: DATOS PERSONALES + FOTO -->
@@ -490,14 +381,8 @@
         <select id="ciudad" style="margin-bottom:20px;"><option value="">Selecciona tu ciudad</option></select>
         <label>Foto de perfil (opcional)</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">📷 Recomendado · Fondo neutro · Máximo 2MB</p>
-        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="display:none;">
-        <div id="foto-upload-zone" onclick="document.getElementById('foto').click()" style="background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border:2px dashed #0f3460;border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all 0.2s;margin-bottom:8px;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#e8f0ff)'">
-          <div style="font-size:2rem;margin-bottom:8px;">📷</div>
-          <div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu foto</div>
-          <div style="font-size:0.78rem;color:#718096;">JPG, PNG · Máximo 2MB · Fondo neutro recomendado</div>
-        </div>
-        <img id="foto-preview" class="foto-preview" onclick="document.getElementById('foto').click()" style="cursor:pointer;">
-        <div id="foto-nombre" style="display:none;font-size:0.78rem;color:#22c55e;font-weight:700;margin-bottom:8px;text-align:center;"></div>
+        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="margin-bottom:8px;">
+        <img id="foto-preview" class="foto-preview">
       </div>
 
       <!-- PASO 2: EXPERIENCIA -->
@@ -512,35 +397,27 @@
             </div>
             <div id="modo-btn-no" onclick="setModoExperiencia('sin')" style="border:2px solid #e2e8f0;background:white;border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
               <div style="font-size:1.4rem;margin-bottom:4px;">🎓</div>
-              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Sin experiencia laboral</div>
+              <div style="font-size:0.82rem;font-weight:700;color:#718096;">Es mi primer empleo</div>
             </div>
           </div>
         </div>
         <!-- CON EXPERIENCIA -->
         <div id="bloque-con-experiencia">
           <label>Tu experiencia laboral</label>
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Incluye trabajos en planilla, prácticas pre-profesionales, freelance y negocios propios.</p>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
           <div id="lista-trabajos"></div>
-          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:8px;">+ Agregar otra experiencia</button>
-          <button type="button" onclick="mostrarBloqueProyectos()" id="btn-agregar-proyectos" style="width:100%;padding:8px;background:none;border:none;color:#3b82f6;font-size:0.78rem;cursor:pointer;margin-bottom:8px;">+ También tengo proyectos universitarios o voluntariados</button>
-          <div id="bloque-proyectos-extra" style="display:none;">
-            <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:12px;padding:12px;margin-bottom:12px;">
-              <div style="font-size:0.82rem;font-weight:700;color:#0369a1;">🎓 Proyectos / Voluntariados adicionales</div>
-            </div>
-            <div id="lista-proyectos-extra"></div>
-            <button type="button" onclick="agregarProyectoExtra()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar proyecto o voluntariado</button>
-          </div>
+          <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar trabajo</button>
         </div>
         <!-- SIN EXPERIENCIA -->
         <div id="bloque-sin-experiencia" style="display:none;">
           <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px;">
-            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia laboral formal</div>
-            <div style="font-size:0.8rem;color:#0369a1;">Agrega proyectos universitarios o voluntariados. La IA los presentará de forma profesional destacando tus habilidades.</div>
+            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
+            <div style="font-size:0.8rem;color:#0369a1;">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
           </div>
-          <label>Proyectos y voluntariados</label>
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega proyectos académicos, tesis, trabajos de curso o voluntariados.</p>
+          <label>Prácticas / Proyectos / Voluntariados</label>
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
           <div id="lista-proyectos"></div>
-          <button type="button" onclick="agregarProyecto()" style="width:100%;padding:10px;background:white;color:#a0aec0;border:2px dashed #e2e8f0;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro proyecto o voluntariado</button>
+          <button type="button" onclick="agregarProyecto()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar práctica o proyecto</button>
         </div>
       </div>
 
@@ -549,7 +426,7 @@
         <label>Educación *</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
         <div id="lista-educacion"></div>
-        <button type="button" onclick="agregarEducacion()" style="width:100%;padding:10px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:600;cursor:pointer;font-size:0.82rem;margin-bottom:16px;">+ Agregar otro estudio o certificación</button>
+        <button type="button" onclick="agregarEducacion()" style="width:100%;padding:12px;background:white;color:#0f3460;border:2px dashed #0f3460;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">+ Agregar estudio o certificación</button>
       </div>
 
       <!-- PASO 4: HABILIDADES -->
@@ -571,11 +448,7 @@
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
         <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">Las que ya tienes, o usa la IA para sugerirlas según tu cargo.</p>
-        <div style="display:flex;gap:10px;margin-bottom:12px;">
-          <input type="text" id="nueva-blanda" placeholder="Ej: liderazgo, trabajo en equipo..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarBlanda();}">
-          <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#0f3460;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;">+ Agregar</button>
-        </div>
-        <div id="lista-blandas"></div>
+        <input type="text" id="habilidades-blandas" placeholder="Ej: liderazgo, trabajo en equipo, comunicación...">
         <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:linear-gradient(135deg,#0f3460,#1e40af);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;">
           💡 Sugerir habilidades blandas con IA
         </button>
@@ -626,17 +499,9 @@
         <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
         <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
       </div>
-      <div id="estilo-descripcion" style="font-size:0.78rem;color:#718096;margin-top:10px;padding:8px 12px;background:#f8faff;border-radius:8px;transition:all 0.2s;">
-        Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.
-      </div>
     </div>
 
-    <div class="cv-document" id="cv-document" style="position:relative;">
-      <div style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:hidden;">
-        <div style="position:absolute;top:15%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
-        <div style="position:absolute;top:45%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
-        <div style="position:absolute;top:75%;left:-20%;width:140%;transform:rotate(-35deg);font-size:3.5rem;font-weight:900;color:rgba(15,52,96,0.1);white-space:nowrap;letter-spacing:6px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia · TalentIA</div>
-      </div>
+    <div class="cv-document" id="cv-document">
       <div class="cv-sidebar">
         <div class="cv-foto-container"><div class="cv-foto" id="cv-foto">👤</div></div>
         <div class="cv-nombre-sidebar" id="cv-nombre-sidebar"></div><br>
@@ -650,6 +515,7 @@
         <div><div class="cv-section-title">Habilidades Blandas</div><div id="cv-skills-blandas"></div></div>
       </div>
       <div class="cv-main">
+        <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;align-items:center;justify-content:center;pointer-events:none;z-index:10;"><div style="transform:rotate(-35deg);font-size:2.5rem;font-weight:900;color:rgba(15,52,96,0.07);white-space:nowrap;letter-spacing:4px;user-select:none;">TalentIA · Sin licencia · TalentIA · Sin licencia</div></div>
         <div class="cv-main-nombre" id="cv-nombre-main"></div>
         <div class="cv-divider"></div>
         <div class="cv-perfil editable" id="cv-perfil" title="Haz clic para editar"></div>
@@ -658,56 +524,25 @@
       </div>
     </div>
 
-    <div class="cv-actions">
-      <div id="estado-sin-login">
-        <div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;">
-          <div style="font-size:2.5rem;margin-bottom:10px;">🎉</div>
-          <h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo para impresionar!</h3>
-          <p style="color:#4a5568;font-size:0.95rem;margin-bottom:6px;">Miles de reclutadores reciben CVs mediocres cada día.</p>
-          <p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p>
-          <button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión para descargar</button>
-          <p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">Sin spam · Desde S/4.90 · Sin suscripción</p>
-        </div>
-      </div>
-
-      <div id="estado-con-login" style="display:none;">
-        <div style="text-align:center;margin-bottom:16px;">
-          <h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3>
-        </div>
-
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
-
-          <!-- Plan Básico -->
-          <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
-            <div style="font-size:1.3rem;margin-bottom:6px;">🎯</div>
-            <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Básico</div>
-            <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">1 CV · 3 estilos · 30 días</div>
-            <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div>
-            <div style="font-size:0.68rem;color:#a0aec0;margin-bottom:10px;">sin suscripción</div>
-            <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div>
+          <div class="cv-actions">
+        <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo para impresionar!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión para descargar</button><p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">Sin spam · Desde S/4.90 · Sin suscripción</p></div></div>
+        <div id="estado-con-login" style="display:none;">
+          <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
+            <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'"><div style="font-size:1.3rem;margin-bottom:6px;">🎯</div><div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Básico</div><div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">1 CV · 3 estilos · 30 días</div><div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div><div style="font-size:0.68rem;color:#a0aec0;margin-bottom:10px;">sin suscripción</div><div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div></div>
+            <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'"><div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 PACK EMPLEO</div><div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">💼</div><div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div><div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">3 CVs · 3 estilos · 30 días</div><div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div><div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div><div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:10px;">Ahorras S/2.80 🎉</div><div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Llevar pack</div></div>
           </div>
-
-          <!-- Pack Empleo -->
-          <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
-            <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 PACK EMPLEO</div>
-            <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">💼</div>
-            <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div>
-            <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">3 CVs · 3 estilos · 30 días</div>
-            <div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div>
-            <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div>
-            <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:10px;">Ahorras S/2.80 🎉</div>
-            <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Llevar pack</div>
-          </div>
-
+          <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
+          <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
         </div>
-        <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
-        <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
-      </div>
     </div>
   </div>
 </div>
-
 <script>
+  // Google Ads
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+
   let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
   const PASOS=['step-1','step-2','step-3','step-4'];
@@ -715,70 +550,36 @@
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
-  function cambiarEstiloCV(estilo){
-    estiloActual=estilo;
-    const doc=document.getElementById('cv-document');
-    doc.className='cv-document';
-    if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);
-    ['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));
-    const desc=document.getElementById('estilo-descripcion');
-    if(desc){
-      const textos={
-        clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',
-        moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',
-        minimal:'Diseño limpio sin colores — ATS-friendly al máximo, ideal para tecnología, startups o CVs simples.'
-      };
-      desc.textContent=textos[estilo]||'';
-    }
-    // Ejecutivo: nombre en sidebar (visible centrado), ocultar en main
-    // Clásico: nombre en sidebar + main
-    // Minimalista: ocultar sidebar nombre, mostrar en main
-    const nombreSidebar=document.getElementById('cv-nombre-sidebar');
-    if(estilo==='minimal'){
-      nombreSidebar.style.display='none';
-    } else {
-      nombreSidebar.style.display='block';
-    }
-  }
+  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — ATS-friendly al máximo, ideal para tecnología, startups o CVs simples.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
   function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
-  function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session', getLlamadasIA()+1);}catch(e){}}
-  function quedanLlamadasIA(){return LIMITE_IA-getLlamadasIA();}
-  function verificarLimiteIA(){
-    // Si está logueado, el backend controla el límite via Upstash (por usuarioId)
-    // Si no está logueado, usamos sessionStorage como límite temporal (se resetea al cerrar pestaña)
-    // El límite real lo valida el backend en cada llamada
-    if(!window.usuarioActual && getLlamadasIA()>=LIMITE_IA){
-      mostrarError('Límite alcanzado',`Crea una cuenta gratuita para continuar usando las sugerencias con IA.`);
-      setTimeout(()=>abrirModalLogin(),1500);
-      return false;
-    }
-    return true;
+  function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session',getLlamadasIA()+1);}catch(e){}}
+  function verificarLimiteIA(){if(!window.usuarioActual&&getLlamadasIA()>=LIMITE_IA){mostrarError('Límite alcanzado','Crea una cuenta gratuita para continuar usando las sugerencias con IA.');setTimeout(()=>abrirModalLogin(),1500);return false;}return true;}
+  function abrirModalLogin(a=null){if(a)window.accionPendienteLogin=a;document.getElementById('modal-login').classList.add('active');
+    if(typeof gtag!=='undefined')gtag('event','login_modal_abierto');
   }
-  function abrirModalLogin(a=null){if(a)window.accionPendienteLogin=a;document.getElementById('modal-login').classList.add('active');}
   function cerrarModalLogin(){document.getElementById('modal-login').classList.remove('active');}
   function cambiarTabModal(tab){document.getElementById('form-registro').style.display=tab==='registro'?'block':'none';document.getElementById('form-login').style.display=tab==='login'?'block':'none';document.getElementById('tab-registro').classList.toggle('active',tab==='registro');document.getElementById('tab-login').classList.toggle('active',tab==='login');}
   window.loginEmailLogin=async()=>{const email=document.getElementById('modal-email-login').value.trim(),pass=document.getElementById('modal-pass-login').value;if(!email||!pass){document.getElementById('modal-error-login').textContent='Completa email y contraseña.';document.getElementById('modal-error-login').style.display='block';return;}document.getElementById('modal-email').value=email;document.getElementById('modal-pass').value=pass;await loginEmail();};
   window.olvideMiPasswordLogin=async()=>{document.getElementById('modal-email').value=document.getElementById('modal-email-login').value.trim();await olvideMiPassword();};
   function pedirIAConLogin(a){if(!window.usuarioActual){abrirModalLogin(a);return;}a();}
 
-  // OFERTA OPCIONAL
   function mostrarCampoOferta(){document.getElementById('oferta-si-card').classList.add('activa');document.getElementById('oferta-no-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
   function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card').classList.add('activa');document.getElementById('oferta-si-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
-  function iniciarFormulario(){
-    if(camino==='pdf'){
-      // Ir al paso de subir PDF
-      const so=document.getElementById('step-oferta');
-      so.classList.remove('active');
-      setTimeout(()=>{so.style.display='none';},300);
-      document.getElementById('step-pdf').style.display='block';
-      setTimeout(()=>document.getElementById('step-pdf').classList.add('active'),10);
-      document.getElementById('wizard-titulo').textContent='Sube tu CV actual';
-      document.getElementById('btn-next').style.display='none';
-      document.getElementById('btn-prev').style.display='none';
-      pasoActual=-1;
-    } else {
-      pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);
-    }
+  function iniciarFormulario(){pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);}
+
+  function toggleOferta(tiene){
+    const btnSi=document.getElementById('oferta-btn-si'),btnNo=document.getElementById('oferta-btn-no'),campo=document.getElementById('campo-oferta-pdf');
+    if(tiene){btnSi.style.border='2px solid #0f3460';btnSi.style.background='#f0f4ff';btnNo.style.border='2px solid #e2e8f0';btnNo.style.background='white';campo.style.display='block';setTimeout(()=>document.getElementById('oferta-pdf').focus(),100);}
+    else{btnNo.style.border='2px solid #0f3460';btnNo.style.background='#f0f4ff';btnSi.style.border='2px solid #e2e8f0';btnSi.style.background='white';campo.style.display='none';document.getElementById('oferta-pdf').value='';}
+  }
+
+  function continuarDesdePDF(){
+    if(typeof gtag!=='undefined')gtag('event','pdf_continuar');
+    const ofertaPdf=document.getElementById('oferta-pdf').value;
+    document.getElementById('oferta').value=ofertaPdf;
+    document.getElementById('step-pdf').classList.remove('active');
+    document.getElementById('step-pdf').style.display='none';
+    camino='manual';pasoActual=0;mostrarPaso(0);
   }
 
   function detectarPaisPorCodigo(){const c=document.getElementById('codigo-pais').value,m={'+51':'PE','+57':'CO','+52':'MX','+54':'AR','+56':'CL','+593':'EC','+591':'BO'},p=m[c];if(p){document.getElementById('pais').value=p;actualizarCiudades();}}
@@ -788,63 +589,56 @@
   function resetearDatos(){
     habilidadesData=[];blandasData=[];trabajosData=[];educacionData=[];proyectosData=[];
     fotoBase64=null;cvGeneradoData=null;estiloActual='clasico';
-    document.getElementById('nombre').value='';
-    document.getElementById('email').value='';
-    document.getElementById('telefono').value='';
-    document.getElementById('oferta').value='';
-    document.getElementById('lista-habilidades').innerHTML='';
-    document.getElementById('lista-educacion').innerHTML='';
+    document.getElementById('nombre').value='';document.getElementById('email').value='';
+    document.getElementById('telefono').value='';document.getElementById('oferta').value='';
+    document.getElementById('lista-habilidades').innerHTML='';document.getElementById('lista-educacion').innerHTML='';
     document.getElementById('lista-proyectos').innerHTML='';
     document.getElementById('cv-preview').style.display='none';
     document.getElementById('analisis-compatibilidad').style.display='none';
-    const link=document.getElementById('link-descarga');
-    if(link)link.style.display='none';
-    try{renderTrabajoss();}catch(e){}
-    try{renderEducacion();}catch(e){}
+    const link=document.getElementById('link-descarga');if(link)link.style.display='none';
+    try{renderTrabajoss();}catch(e){}try{renderEducacion();}catch(e){}
+  }
+
+  function ocultarWizardCompleto(){
+    const s0=document.getElementById('step-0'),hdr=document.getElementById('wizard-card-header'),nav=document.getElementById('wizard-nav'),pb=document.getElementById('progress-bar-container'),np=document.getElementById('nav-pasos');
+    if(s0){s0.classList.remove('active');s0.style.display='none';}
+    if(hdr)hdr.style.display='none';
+    if(nav)nav.style.display='none';
+    if(pb)pb.style.display='none';
+    if(np)np.style.display='none';
   }
 
   function elegirCamino(tipo){
-    resetearDatos();
-    camino=tipo;
+    resetearDatos();camino=tipo;
+    if(typeof gtag!=='undefined')gtag('event','wizard_inicio',{camino:tipo});
     document.getElementById('step-0').classList.remove('active');
     document.getElementById('wizard-nav').style.display='flex';
     document.getElementById('progress-bar-container').style.display='block';
     document.getElementById('nav-pasos').style.display='flex';
     document.getElementById('nav-back').style.display='block';
+    const wch=document.getElementById('wizard-card-header');if(wch)wch.style.display='';
     if(tipo==='pdf'){
-      // Ir directo al step-pdf (que ya incluye la oferta opcional)
-      const sp=document.getElementById('step-pdf');
-      sp.style.display='block';
-      setTimeout(()=>sp.classList.add('active'),10);
+      const sp=document.getElementById('step-pdf');sp.style.display='block';setTimeout(()=>sp.classList.add('active'),10);
       document.getElementById('wizard-titulo').textContent='Sube tu CV actual';
-      document.getElementById('progress-fill').style.width='10%';
-      document.getElementById('progress-text').textContent='Paso 1 de 1';
-      document.getElementById('btn-prev').style.display='none';
-      document.getElementById('btn-next').style.display='none';
-      pasoActual=-3;
+      document.getElementById('progress-fill').style.width='10%';document.getElementById('progress-text').textContent='Paso 1 de 1';
+      document.getElementById('btn-prev').style.display='none';document.getElementById('btn-next').style.display='none';pasoActual=-3;
     } else {
-      const so=document.getElementById('step-oferta');
-      so.style.display='block';
-      setTimeout(()=>so.classList.add('active'),10);
+      const so=document.getElementById('step-oferta');so.style.display='block';setTimeout(()=>so.classList.add('active'),10);
       document.getElementById('wizard-titulo').textContent='¿Postulas a un trabajo específico?';
-      document.getElementById('progress-fill').style.width='0%';
-      document.getElementById('progress-text').textContent='Paso opcional';
-      document.getElementById('btn-prev').style.display='none';
-      document.getElementById('btn-next').style.display='none';
-      pasoActual=-2;
+      document.getElementById('progress-fill').style.width='0%';document.getElementById('progress-text').textContent='Paso opcional';
+      document.getElementById('btn-prev').style.display='none';document.getElementById('btn-next').style.display='none';pasoActual=-2;
     }
   }
 
   function mostrarPaso(idx){
-    cerrarError();
-    const so=document.getElementById('step-oferta');
-    so.classList.remove('active');so.style.display='none';
+    cerrarError();const so=document.getElementById('step-oferta');so.classList.remove('active');so.style.display='none';
     const activo=document.querySelector('.step.active');
     if(activo){activo.classList.add('saliendo');setTimeout(()=>{activo.classList.remove('active','saliendo');activarPaso(idx);},220);}
     else activarPaso(idx);
   }
 
   function activarPaso(idx){
+    if(typeof gtag!=='undefined')gtag('event','wizard_paso',{paso:idx+1,nombre:TITULOS[idx]});
     PASOS.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','saliendo');if(i===idx){el.style.display='block';setTimeout(()=>el.classList.add('active'),10);}else el.style.display='none';});
     document.getElementById('wizard-titulo').textContent=TITULOS[idx];
     document.getElementById('progress-fill').style.width=((idx+1)/PASOS.length*100)+'%';
@@ -864,12 +658,10 @@
       const so=document.getElementById('step-oferta');so.style.display='block';setTimeout(()=>so.classList.add('active'),10);
       document.getElementById('wizard-titulo').textContent='¿Postulas a un trabajo específico?';
       document.getElementById('progress-fill').style.width='0%';document.getElementById('progress-text').textContent='Paso opcional';
-      document.getElementById('btn-prev').style.display='none';document.getElementById('btn-next').style.display='none';
-      pasoActual=-2;
+      document.getElementById('btn-prev').style.display='none';document.getElementById('btn-next').style.display='none';pasoActual=-2;
     } else if(pasoActual===-3){
-      // Viene del step-pdf directo — volver al step-0
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
-      document.getElementById('step-0').classList.add('active');
+      document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
       document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
@@ -877,7 +669,7 @@
       PASOS.forEach(id=>{document.getElementById(id).classList.remove('active');});
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
       document.getElementById('step-oferta').classList.remove('active');document.getElementById('step-oferta').style.display='none';
-      document.getElementById('step-0').classList.add('active');
+      document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
       document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
@@ -898,10 +690,8 @@
     if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
     if(pasoActual===3&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
-      document.getElementById('error-toast-desc').innerHTML='Los reclutadores y sistemas ATS las usan para filtrar candidatos. Tu CV tendrá más impacto con ellas.';
+      document.getElementById('error-toast-desc').innerHTML='Los reclutadores y sistemas ATS las usan para filtrar candidatos.';
       document.getElementById('error-toast').classList.add('visible');
-      document.getElementById('error-toast').setAttribute('data-sin-habilidades','1');
-      // Cambiar botón cerrar del toast a "Sí, continuar"
       const btnCerrar=document.querySelector('.error-toast button');
       if(btnCerrar){btnCerrar.textContent='Continuar sin habilidades';btnCerrar.style.cssText='background:#e2e8f0;border:none;cursor:pointer;color:#4a5568;font-size:0.78rem;font-weight:700;padding:6px 10px;border-radius:8px;white-space:nowrap;';btnCerrar.onclick=()=>{cerrarError();generarCV();};}
       return false;
@@ -925,387 +715,104 @@
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
   function eliminarLogro(id,idx){const t=trabajosData.find(t=>t.id===id);if(t&&t.logros.length>1){t.logros.splice(idx,1);renderTrabajoss();}}
   function setModoExperiencia(modo){
-    modoExperiencia=modo;
-    const esCon=modo==='con';
+    modoExperiencia=modo;const esCon=modo==='con';
     document.getElementById('bloque-con-experiencia').style.display=esCon?'block':'none';
     document.getElementById('bloque-sin-experiencia').style.display=esCon?'none':'block';
     document.getElementById('modo-btn-si').style.cssText=`border:2px solid ${esCon?'#0f3460':'#e2e8f0'};background:${esCon?'#f0f4ff':'white'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
     document.getElementById('modo-btn-no').style.cssText=`border:2px solid ${!esCon?'#0f3460':'#e2e8f0'};background:${!esCon?'#f0f4ff':'white'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
     document.getElementById('modo-btn-si').querySelector('div:last-child').style.color=esCon?'#0f3460':'#718096';
     document.getElementById('modo-btn-no').querySelector('div:last-child').style.color=!esCon?'#0f3460':'#718096';
-    if(!esCon&&!proyectosData.length)agregarProyecto();
-    if(esCon&&!trabajosData.length)agregarTrabajo();
+    if(!esCon&&!proyectosData.length)agregarProyecto();if(esCon&&!trabajosData.length)agregarTrabajo();
   }
 
-  // PROYECTOS / PRÁCTICAS
   function agregarProyecto(){proyectosData.push({id:Date.now(),tipo:'proyecto',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});renderProyectos();}
   function eliminarProyecto(id){proyectosData=proyectosData.filter(p=>p.id!==id);renderProyectos();}
   function actualizarProyecto(id,campo,valor){const p=proyectosData.find(p=>p.id===id);if(p)p[campo]=valor;}
   function renderProyectos(){
     const c=document.getElementById('lista-proyectos');if(!proyectosData.length){c.innerHTML='';return;}
-    c.innerHTML=proyectosData.map((p,idx)=>`
-      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Experiencia ${idx+1}</span>
-          <button onclick="eliminarProyecto(${p.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
-        </div>
-        <label style="margin-bottom:6px;">Tipo</label>
-        <select onchange="actualizarProyecto(${p.id},'tipo',this.value)" style="margin-bottom:12px;">
-          <option value="proyecto" ${p.tipo==='proyecto'?'selected':''}>🎓 Proyecto universitario / académico</option>
-          <option value="voluntariado" ${p.tipo==='voluntariado'?'selected':''}>🤝 Voluntariado</option>
-          <option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option>
-        </select>
-        <label style="margin-bottom:6px;">Rol o descripción (opcional)</label>
-        <input type="text" placeholder="Ej: Investigador principal, Coordinador, Desarrollador..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value);mostrarBotonSugerenciasProyectoIA(${p.id},this.value)" style="margin-bottom:12px;">
-        <label style="margin-bottom:6px;">Empresa / Institución / Universidad</label>
-        <input type="text" placeholder="Ej: BCP, PUCP, Cruz Roja, Municipalidad de Lima..." value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:12px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-          <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2023" value="${p.desde}" oninput="actualizarProyecto(${p.id},'desde',this.value)" style="margin-bottom:0;"></div>
-          <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o En curso" value="${p.hasta}" oninput="actualizarProyecto(${p.id},'hasta',this.value)" style="margin-bottom:0;"></div>
-        </div>
-        <label style="margin-bottom:6px;">¿Qué hiciste? ¿Qué lograste?</label>
-        <textarea placeholder="Describe brevemente tus funciones o logros. La IA lo mejorará automáticamente." oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:90px;">${p.descripcion}</textarea>
-        <div id="btn-sug-proy-${p.id}" style="display:${p.nombre.trim()?'block':'none'};margin-bottom:8px;">
-          <button onclick="pedirIAConLogin(()=>generarSugerenciasProyectoIA(${p.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
-            💡 Sugerir logros para este rol con IA
-          </button>
-        </div>
-        <div id="sug-proy-box-${p.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:8px;">
-          <div id="sug-proy-titulo-${p.id}" style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;">💡 Sugerencias — selecciona las que aplican:</div>
-          <div id="chips-proy-${p.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-          <div id="sug-proy-actions-${p.id}" style="display:none;gap:8px;">
-            <button onclick="agregarSugerenciasProyectoSeleccionadas(${p.id})" style="flex:1;padding:8px 14px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionadas</button>
-            <button onclick="document.getElementById('sug-proy-box-${p.id}').style.display='none';document.getElementById('btn-sug-proy-${p.id}').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
-          </div>
-        </div>
-      </div>`).join('');
+    c.innerHTML=proyectosData.map((p,idx)=>`<div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Experiencia ${idx+1}</span><button onclick="eliminarProyecto(${p.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarProyecto(${p.id},'tipo',this.value)" style="margin-bottom:12px;"><option value="proyecto" ${p.tipo==='proyecto'?'selected':''}>🎓 Proyecto universitario</option><option value="voluntariado" ${p.tipo==='voluntariado'?'selected':''}>🤝 Voluntariado</option><option value="otro" ${p.tipo==='otro'?'selected':''}>📌 Otro</option></select><label style="margin-bottom:6px;">Rol o descripción</label><input type="text" placeholder="Ej: Investigador principal..." value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:12px;"><label style="margin-bottom:6px;">Institución</label><input type="text" placeholder="Ej: PUCP, Cruz Roja..." value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2023" value="${p.desde}" oninput="actualizarProyecto(${p.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024" value="${p.hasta}" oninput="actualizarProyecto(${p.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">¿Qué hiciste?</label><textarea placeholder="Describe tus funciones o logros." oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:90px;">${p.descripcion}</textarea></div>`).join('');
   }
 
   function obtenerExperienciaParaCV(){
-    if(modoExperiencia==='con'){
-      return trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');
-    } else {
-      return proyectosData.map(p=>{
-        const tipoLabel={proyecto:'Proyecto académico',voluntariado:'Voluntariado',otro:'Experiencia'}[p.tipo]||'Proyecto';
-        return `${tipoLabel}: ${p.nombre}${p.organizacion?' — '+p.organizacion:''}${p.desde||p.hasta?' ('+[p.desde,p.hasta].filter(Boolean).join(' - ')+')':''}\n${p.descripcion?'• '+p.descripcion:''}`;
-      }).join('\n\n');
-    }
+    if(modoExperiencia==='con'){return trabajosData.map(t=>`${t.cargo} — ${t.empresa} (${t.desde} - ${t.hasta})\n${t.logros.filter(l=>l.trim()).map(l=>`• ${l}`).join('\n')}`).join('\n\n');}
+    else{return proyectosData.map(p=>{const tl={proyecto:'Proyecto académico',voluntariado:'Voluntariado',otro:'Experiencia'}[p.tipo]||'Proyecto';return `${tl}: ${p.nombre}${p.organizacion?' — '+p.organizacion:''}${p.desde||p.hasta?' ('+[p.desde,p.hasta].filter(Boolean).join(' - ')+')':''}\n${p.descripcion?'• '+p.descripcion:''}`;}).join('\n\n');}
   }
-  function obtenerCargoPrincipal(){
-    if(modoExperiencia==='con'){const t=trabajosData.find(t=>t.cargo.trim());return t?t.cargo:'';}
-    else{const p=proyectosData.find(p=>p.nombre.trim());return p?p.nombre:'';}
-  }
-  function mostrarBotonSugerenciasProyectoIA(pid,nombre){const btn=document.getElementById(`btn-sug-proy-${pid}`);if(!btn)return;btn.style.display=nombre.trim()?'block':'none';}
-
-  async function generarSugerenciasProyectoIA(pid){
-    if(!verificarLimiteIA())return;
-    const p=proyectosData.find(p=>p.id===pid);
-    if(!p||!p.nombre.trim())return;
-    const box=document.getElementById(`sug-proy-box-${pid}`),chips=document.getElementById(`chips-proy-${pid}`),titulo=document.getElementById(`sug-proy-titulo-${pid}`),btnBox=document.getElementById(`btn-sug-proy-${pid}`);
-    if(!box||!chips)return;
-    btnBox.style.display='none';
-    chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${p.nombre}...</div>`;
-    box.style.display='block';
-    try{
-      const tipoLabel={practica:'Práctica pre-profesional',proyecto:'Proyecto académico',voluntariado:'Voluntariado',freelance:'Freelance',negocio:'Negocio propio',otro:'Experiencia'}[p.tipo]||'Experiencia';
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:p.nombre,empresa:p.organizacion||tipoLabel,usuarioId:window.usuarioActual?.uid||null})});
-      const data=await r.json();const s=data.sugerencias||[];
-      incrementarLlamadasIA();
-      if(titulo)titulo.textContent=`✨ Sugerencias para ${p.nombre} — selecciona las que aplican:`;
-      chips.innerHTML=s.map((sg,i)=>`<button id="sug-proy-${pid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="width:100%;padding:10px 14px;border:2px solid #bfdbfe;border-radius:10px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:6px;line-height:1.5;white-space:normal;">${sg}</button>`).join('');
-      document.getElementById(`sug-proy-actions-${pid}`).style.display='flex';
-    }catch(e){
-      chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
-      btnBox.style.display='block';box.style.display='none';
-    }
-  }
-
-  function agregarSugerenciasProyectoSeleccionadas(pid){
-    const p=proyectosData.find(p=>p.id===pid);if(!p)return;
-    const seleccionadas=[];
-    document.querySelectorAll(`[id^="sug-proy-${pid}-"].seleccionado`).forEach(btn=>seleccionadas.push(btn.getAttribute('data-texto')));
-    if(!seleccionadas.length)return;
-    const actual=p.descripcion?p.descripcion+'\n':'';
-    p.descripcion=actual+seleccionadas.join('\n');
-    renderProyectos();
-  }
-
-  function mostrarBloqueProyectos(){
-    document.getElementById('bloque-proyectos-extra').style.display='block';
-    document.getElementById('btn-agregar-proyectos').style.display='none';
-    if(!proyectosData.length)agregarProyecto();
-    renderProyectosExtra();
-  }
-
-  function agregarProyectoExtra(){
-    proyectosData.push({id:Date.now(),tipo:'proyecto',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});
-    renderProyectosExtra();
-  }
-
-  function renderProyectosExtra(){
-    const c=document.getElementById('lista-proyectos-extra');
-    if(!c||!proyectosData.length){return;}
-    c.innerHTML=proyectosData.map((p,idx)=>`
-      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;">
-          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Proyecto/Voluntariado ${idx+1}</span>
-          <button onclick="eliminarProyecto(${p.id});renderProyectosExtra();" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕</button>
-        </div>
-        <input type="text" placeholder="Nombre del proyecto o rol" value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:8px;">
-        <input type="text" placeholder="Universidad / Organización" value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:8px;">
-        <textarea placeholder="¿Qué hiciste? ¿Qué lograste?" oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:70px;margin-bottom:0;">${p.descripcion}</textarea>
-      </div>`).join('');
-  }
+  function obtenerCargoPrincipal(){if(modoExperiencia==='con'){const t=trabajosData.find(t=>t.cargo.trim());return t?t.cargo:'';}else{const p=proyectosData.find(p=>p.nombre.trim());return p?p.nombre:'';}}
+  function mostrarBloqueProyectos(){document.getElementById('bloque-proyectos-extra').style.display='block';document.getElementById('btn-agregar-proyectos').style.display='none';if(!proyectosData.length)agregarProyecto();renderProyectosExtra();}
+  function agregarProyectoExtra(){proyectosData.push({id:Date.now(),tipo:'proyecto',nombre:'',organizacion:'',desde:'',hasta:'',descripcion:''});renderProyectosExtra();}
+  function renderProyectosExtra(){const c=document.getElementById('lista-proyectos-extra');if(!c||!proyectosData.length)return;c.innerHTML=proyectosData.map((p,idx)=>`<div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:16px;margin-bottom:12px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:10px;"><span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Proyecto ${idx+1}</span><button onclick="eliminarProyecto(${p.id});renderProyectosExtra();" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕</button></div><input type="text" placeholder="Nombre del proyecto" value="${p.nombre}" oninput="actualizarProyecto(${p.id},'nombre',this.value)" style="margin-bottom:8px;"><input type="text" placeholder="Organización" value="${p.organizacion}" oninput="actualizarProyecto(${p.id},'organizacion',this.value)" style="margin-bottom:8px;"><textarea placeholder="¿Qué lograste?" oninput="actualizarProyecto(${p.id},'descripcion',this.value)" style="height:70px;margin-bottom:0;">${p.descripcion}</textarea></div>`).join('');}
 
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
 
   function renderTrabajoss(){
     const c=document.getElementById('lista-trabajos');if(!trabajosData.length){c.innerHTML='';return;}
-    const tipoLabels={trabajo:'Trabajo',practica:'Práctica pre-profesional',freelance:'Freelance',negocio:'Negocio propio'};
-    c.innerHTML=trabajosData.map((t,idx)=>`
-      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">${tipoLabels[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span>
-          <button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
-        </div>
-        <label style="margin-bottom:6px;">Tipo de experiencia</label>
-        <select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;">
-          <option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo (planilla / CAS / contrato)</option>
-          <option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option>
-          <option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance / independiente</option>
-          <option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio familiar / propio</option>
-        </select>
-        <label style="margin-bottom:6px;">${t.tipo==='practica'?'Empresa / Institución *':t.tipo==='freelance'?'Cliente principal / Rubro *':t.tipo==='negocio'?'Nombre del negocio *':'Empresa *'}</label>
-        <input type="text" placeholder="${t.tipo==='practica'?'Ej: BCP, Ministerio de Salud, PUCP...':t.tipo==='freelance'?'Ej: Clientes de diseño gráfico, Desarrollo web...':t.tipo==='negocio'?'Ej: Bodega Don Carlos, Ferretería Pérez...':'Ej: Ripley, Claro, Alicorp, Ministerio de Salud...'}" value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;">
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
-          <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div>
-          <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div>
-        </div>
-        <label style="margin-bottom:6px;">${t.tipo==='practica'?'Rol / Cargo de práctica *':t.tipo==='freelance'?'Descripción del servicio *':t.tipo==='negocio'?'Tu rol en el negocio *':'Cargo *'}</label>
-        <input type="text" placeholder="${t.tipo==='practica'?'Ej: Practicante de Contabilidad, Asistente de Marketing...':t.tipo==='freelance'?'Ej: Diseñador gráfico freelance, Desarrollador web...':t.tipo==='negocio'?'Ej: Administrador, Gerente general...':'Ej: Jefe de Ventas, Analista de RRHH, Enfermero...'}" value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;">
-        <div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;">
-          <button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">
-            💡 Sugerir logros con IA
-          </button>
-        </div>
-        <div id="sug-ia-box-${t.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:14px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;" id="sug-ia-titulo-${t.id}">✨ Sugerencias para ${t.cargo}:</div>
-          <div id="chips-ia-${t.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
-          <div id="sug-ia-actions-${t.id}" style="display:none;gap:8px;">
-            <button onclick="agregarSugerenciasIASeleccionadas(${t.id})" style="flex:1;padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionados</button>
-            <button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
-          </div>
-        </div>
-        <label style="margin-bottom:6px;">Tus logros adicionales</label>
-        <p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Edita los logros sugeridos o agrega los tuyos. Reemplaza <strong>[X]</strong> con tus números reales.</p>
-        ${t.logros.map((l,i)=>`
-          <div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">
-            <textarea placeholder="Ej: Capacité a 15 personas en el nuevo sistema" oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;line-height:1.5;">${l}</textarea>
-            <button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;" title="Eliminar logro">✕</button>
-          </div>`).join('')}
-        <button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button>
-      </div>`).join('');
+    const tl={trabajo:'Trabajo',practica:'Práctica',freelance:'Freelance',negocio:'Negocio'};
+    c.innerHTML=trabajosData.map((t,idx)=>`<div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#0f3460;">${tl[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span><button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;"><option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo</option><option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option><option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance</option><option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio propio</option></select><label style="margin-bottom:6px;">Empresa *</label><input type="text" placeholder="Ej: BCP, Alicorp..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">Cargo *</label><input type="text" placeholder="Ej: Analista de Marketing..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:8px;"><div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-bottom:14px;"><button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);color:#1e40af;border:2px solid #bfdbfe;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">💡 Sugerir logros con IA</button></div><div id="sug-ia-box-${t.id}" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:14px;"><div id="sug-ia-titulo-${t.id}" style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;">✨ Sugerencias:</div><div id="chips-ia-${t.id}" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div><div id="sug-ia-actions-${t.id}" style="display:none;gap:8px;"><button onclick="agregarSugerenciasIASeleccionadas(${t.id})" style="flex:1;padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar</button><button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button></div></div><label style="margin-bottom:6px;">Logros</label><p style="font-size:0.76rem;color:#a0aec0;margin-bottom:8px;">Reemplaza <strong>[X]</strong> con tus números reales.</p>${t.logros.map((l,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;"><textarea placeholder="Ej: Reduje costos en 20%..." oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;">${l}</textarea><button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button></div>`).join('')}<button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#0f3460;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;">+ Agregar otro logro</button></div>`).join('');
   }
 
   async function generarSugerenciasLogrosIA(tid){
     if(!verificarLimiteIA())return;
-    const t=trabajosData.find(t=>t.id===tid);
-    if(!t||!t.cargo.trim())return;
+    const t=trabajosData.find(t=>t.id===tid);if(!t||!t.cargo.trim())return;
     const box=document.getElementById(`sug-ia-box-${tid}`),chips=document.getElementById(`chips-ia-${tid}`),titulo=document.getElementById(`sug-ia-titulo-${tid}`),btnBox=document.getElementById(`btn-sug-ia-${tid}`);
     if(!box||!chips)return;
-    // Ocultar botón, mostrar box con spinner
-    btnBox.style.display='none';
-    chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando sugerencias para ${t.cargo}...</div>`;
-    box.style.display='block';
-    try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:t.cargo,empresa:t.empresa,usuarioId:window.usuarioActual?.uid||null})});
-      const data=await r.json();const s=data.sugerencias||[];
-      incrementarLlamadasIA();
-      if(titulo)titulo.textContent=`✨ Sugerencias para ${t.cargo} — selecciona las que aplican:`;
-      chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="width:100%;padding:10px 14px;border:2px solid #bfdbfe;border-radius:10px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:6px;line-height:1.5;white-space:normal;">${sg}</button>`).join('');
-      document.getElementById(`sug-ia-actions-${tid}`).style.display='flex';
-    }catch(e){
-      chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error. Intenta de nuevo.</div>';
-      // Si hay error, mostrar botón de nuevo
-      btnBox.style.display='block';
-      box.style.display='none';
-    }
+    btnBox.style.display='none';chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando...</div>`;box.style.display='block';
+    try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:t.cargo,empresa:t.empresa,usuarioId:window.usuarioActual?.uid||null})});const data=await r.json();const s=data.sugerencias||[];incrementarLlamadasIA();if(titulo)titulo.textContent=`✨ Sugerencias para ${t.cargo}:`;chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" data-texto="${sg.replace(/"/g,'&quot;').replace(/'/g,'&#39;')}" onclick="this.classList.toggle('seleccionado')" style="width:100%;padding:10px 14px;border:2px solid #bfdbfe;border-radius:10px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.15s;margin-bottom:6px;line-height:1.5;white-space:normal;">${sg}</button>`).join('');document.getElementById(`sug-ia-actions-${tid}`).style.display='flex';}
+    catch(e){chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error.</div>';btnBox.style.display='block';box.style.display='none';}
   }
-
-  function agregarSugerenciasIASeleccionadas(tid){
-    const t=trabajosData.find(t=>t.id===tid);if(!t)return;
-    document.querySelectorAll(`[id^="sug-ia-${tid}-"].seleccionado`).forEach(btn=>{const texto=btn.getAttribute('data-texto');if(!t.logros.includes(texto))t.logros.push(texto);});
-    t.logros=t.logros.filter(l=>l.trim());renderTrabajoss();
-  }
+  function agregarSugerenciasIASeleccionadas(tid){const t=trabajosData.find(t=>t.id===tid);if(!t)return;document.querySelectorAll(`[id^="sug-ia-${tid}-"].seleccionado`).forEach(btn=>{const texto=btn.getAttribute('data-texto');if(!t.logros.includes(texto))t.logros.push(texto);});t.logros=t.logros.filter(l=>l.trim());renderTrabajoss();}
 
   async function sugerirHabilidades(){
     if(!verificarLimiteIA())return;
     const cargo=obtenerCargoPrincipal();if(!cargo){mostrarError('Sin cargo','Agrega primero tu cargo en el paso de experiencia.');return;}
     const btn=document.getElementById('btn-sugerir-habilidades');btn.textContent='⏳ Generando...';btn.disabled=true;
-    try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasHabilidades:true,cargo,usuarioId:window.usuarioActual?.uid||null})});
-      const data=await r.json();const h=data.sugerencias||[];incrementarLlamadasIA();
-      document.getElementById('chips-habilidades').innerHTML=h.map((hab,i)=>`<button id="chip-hab-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;">${hab}</button>`).join('');
-      document.getElementById('habilidades-ia-box').style.display='block';
-    }catch(e){mostrarError('Error','No se pudieron generar sugerencias.');}
+    try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasHabilidades:true,cargo,usuarioId:window.usuarioActual?.uid||null})});const data=await r.json();const h=data.sugerencias||[];incrementarLlamadasIA();document.getElementById('chips-habilidades').innerHTML=h.map((hab,i)=>`<button id="chip-hab-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;">${hab}</button>`).join('');document.getElementById('habilidades-ia-box').style.display='block';}
+    catch(e){mostrarError('Error','No se pudieron generar sugerencias.');}
     finally{btn.textContent='💡 Sugerir habilidades para mi cargo con IA';btn.disabled=false;}
   }
-
   async function sugerirHabilidadesBlandas(){
     if(!verificarLimiteIA())return;
-    const cargo=obtenerCargoPrincipal();
-    const oferta=document.getElementById('oferta').value;
-    if(!cargo&&!oferta){mostrarError('Sin información','Agrega primero tu cargo en el paso de experiencia.');return;}
-    const btn=document.getElementById('btn-sugerir-blandas');
-    btn.textContent='⏳ Generando...';btn.disabled=true;btn.style.display='block';
-    try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta,usuarioId:window.usuarioActual?.uid||null})});
-      const data=await r.json();const b=data.sugerencias||[];
-      incrementarLlamadasIA();
-      btn.style.display='none';
-      const chips=document.getElementById('chips-blandas');
-      chips.innerHTML=b.map((s,i)=>`<button id="chip-bland-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;transition:all 0.15s;">${s}</button>`).join('');
-      document.getElementById('blandas-ia-box').style.display='block';
-      document.getElementById('blandas-ia-actions').style.display='flex';
-    }catch(e){
-      mostrarError('Error','No se pudieron generar sugerencias.');
-      btn.textContent='💡 Sugerir habilidades blandas con IA';btn.disabled=false;
-    }
+    const cargo=obtenerCargoPrincipal(),oferta=document.getElementById('oferta').value;
+    if(!cargo&&!oferta){mostrarError('Sin información','Agrega primero tu cargo.');return;}
+    const btn=document.getElementById('btn-sugerir-blandas');btn.textContent='⏳ Generando...';btn.disabled=true;
+    try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta,usuarioId:window.usuarioActual?.uid||null})});const data=await r.json();const b=data.sugerencias||[];incrementarLlamadasIA();btn.style.display='none';document.getElementById('chips-blandas').innerHTML=b.map((s,i)=>`<button id="chip-bland-${i}" onclick="this.classList.toggle('seleccionado')" style="padding:7px 12px;border:2px solid #bfdbfe;border-radius:20px;background:white;color:#1e40af;font-size:0.82rem;cursor:pointer;">${s}</button>`).join('');document.getElementById('blandas-ia-box').style.display='block';document.getElementById('blandas-ia-actions').style.display='flex';}
+    catch(e){mostrarError('Error','No se pudieron generar sugerencias.');btn.textContent='💡 Sugerir habilidades blandas con IA';btn.disabled=false;}
   }
-
-  function agregarHabilidadesSeleccionadas(){
-    const seleccionadas=[];
-    document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
-    if(!seleccionadas.length)return;
-    seleccionadas.forEach(hab=>{if(!habilidadesData.find(h=>h.nombre===hab))habilidadesData.push({nombre:hab});});
-    renderListaHabilidades();
-    document.getElementById('habilidades-ia-box').style.display='none';
-    document.getElementById('btn-sugerir-habilidades').style.display='block';
-    document.getElementById('btn-sugerir-habilidades').textContent='💡 Sugerir habilidades para mi cargo con IA';
-    document.getElementById('btn-sugerir-habilidades').disabled=false;
-  }
-
-  function agregarBlandasSeleccionadas(){
-    const seleccionadas=[];
-    document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>seleccionadas.push(btn.textContent.trim()));
-    if(!seleccionadas.length)return;
-    seleccionadas.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});
-    renderListaBlandas();
-    document.getElementById('blandas-ia-box').style.display='none';
-    document.getElementById('btn-sugerir-blandas').style.display='block';
-    document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';
-    document.getElementById('btn-sugerir-blandas').disabled=false;
-  }
-
+  function agregarHabilidadesSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(h=>{if(!habilidadesData.find(x=>x.nombre===h))habilidadesData.push({nombre:h});});renderListaHabilidades();document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';document.getElementById('btn-sugerir-habilidades').textContent='💡 Sugerir habilidades para mi cargo con IA';document.getElementById('btn-sugerir-habilidades').disabled=false;}
+  function agregarBlandasSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});renderListaBlandas();document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';document.getElementById('btn-sugerir-blandas').disabled=false;}
   function agregarBlanda(){const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
   function eliminarBlanda(i){blandasData.splice(i,1);renderListaBlandas();}
   function renderListaBlandas(){document.getElementById('lista-blandas').innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
-
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
   function renderListaHabilidades(){document.getElementById('lista-habilidades').innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
 
-  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name+' · Clic en la foto para cambiar';nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
-
-  function toggleOferta(tiene){
-    const btnSi=document.getElementById('oferta-btn-si');
-    const btnNo=document.getElementById('oferta-btn-no');
-    const campo=document.getElementById('campo-oferta-pdf');
-    if(tiene){
-      btnSi.style.border='2px solid #0f3460';btnSi.style.background='#f0f4ff';
-      btnNo.style.border='2px solid #e2e8f0';btnNo.style.background='white';
-      campo.style.display='block';
-      setTimeout(()=>document.getElementById('oferta').focus(),100);
-    } else {
-      btnNo.style.border='2px solid #0f3460';btnNo.style.background='#f0f4ff';
-      btnSi.style.border='2px solid #e2e8f0';btnSi.style.background='white';
-      campo.style.display='none';
-      document.getElementById('oferta').value='';
-    }
-  }
-
-  function continuarDesdePDF(){
-    document.getElementById('step-pdf').classList.remove('active');
-    document.getElementById('step-pdf').style.display='none';
-    camino='manual';pasoActual=0;mostrarPaso(0);
-  }
+  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name;nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
 
   async function procesarCVSubido(input){
     if(!input.files||!input.files[0])return;
     if(input.files[0].size>5*1024*1024){mostrarError('Archivo muy grande','El PDF no debe pesar más de 5MB.');return;}
-
-    // Mostrar nombre del archivo
-    const nombreDiv=document.getElementById('pdf-nombre-archivo');
-    if(nombreDiv){nombreDiv.textContent='📄 '+input.files[0].name;nombreDiv.style.display='block';}
-
+    const nombreDiv=document.getElementById('pdf-nombre-archivo');if(nombreDiv){nombreDiv.textContent='📄 '+input.files[0].name;nombreDiv.style.display='block';}
     document.getElementById('estado-subida').style.display='block';
     document.getElementById('upload-zone-pdf').style.opacity='0.5';
     try{
-      const ab=await input.files[0].arrayBuffer();
-      const pdf=await pdfjsLib.getDocument({data:ab}).promise;
-      let texto='';
+      const ab=await input.files[0].arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab}).promise;let texto='';
       for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();texto+=content.items.map(item=>item.str).join(' ')+'\n';}
       const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
       const data=await r.json();const d=data.datos;
-
-      // Datos personales
-      if(d.nombre)document.getElementById('nombre').value=d.nombre;
-      if(d.email)document.getElementById('email').value=d.email;
-      if(d.telefono)document.getElementById('telefono').value=d.telefono;
+      if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;
       if(d.habilidades_blandas){blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}
-
-      // Habilidades técnicas — incluir certificaciones como habilidades si existen
-      let habs = [];
-      if(d.habilidades_tecnicas?.length) habs = d.habilidades_tecnicas.map(h=>({nombre:h}));
-      if(d.certificaciones?.length) habs = [...habs, ...d.certificaciones.map(c=>({nombre:c}))];
-      if(habs.length){habilidadesData=habs;renderListaHabilidades();}
-
-      // Trabajos estructurados
-      if(d.trabajos?.length){
-        trabajosData=d.trabajos.map((t,i)=>({
-          id:Date.now()+i,
-          cargo:t.cargo||'',
-          empresa:t.empresa||'',
-          desde:t.desde||'',
-          hasta:t.hasta||'',
-          logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']
-        }));
-        setModoExperiencia('con');
-        renderTrabajoss();
-      }
-
-      // Educación estructurada
-      if(d.educacion?.length){
-        educacionData=d.educacion.map((e,i)=>({
-          id:Date.now()+1000+i,
-          tipo:e.tipo||'universitaria',
-          titulo:e.titulo||'',
-          institucion:e.institucion||'',
-          desde:e.desde||'',
-          hasta:e.hasta||''
-        }));
-        renderEducacion();
-      }
-
-      document.getElementById('estado-subida').style.display='none';
-      document.getElementById('upload-zone-pdf').style.opacity='1';
-      // Mostrar botón continuar — el usuario decide cuándo avanzar
+      let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;renderListaHabilidades();}
+      if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));setModoExperiencia('con');renderTrabajoss();}
+      if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));renderEducacion();}
+      document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
       document.getElementById('btn-continuar-pdf').style.display='block';
-      const t=document.createElement('div');
-      t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';
-      t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;
-      document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
-    }catch(e){
-      console.error(e);
-      document.getElementById('estado-subida').style.display='none';
-      mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');
-    }
+      if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
+      const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
+    }catch(e){console.error(e);document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');}
   }
 
   async function generarCV(){
-    // Ocultar botón de descarga — este CV nuevo no ha sido pagado
-    const linkDescarga=document.getElementById('link-descarga');
-    if(linkDescarga) linkDescarga.style.display='none';
+    const linkDescarga=document.getElementById('link-descarga');if(linkDescarga)linkDescarga.style.display='none';
     const nombre=document.getElementById('nombre').value,email=document.getElementById('email').value,codigoPais=document.getElementById('codigo-pais').value;
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
@@ -1313,26 +820,23 @@
     const habilidadesBlandas=blandasData.map(b=>b.nombre).join(', '),oferta=document.getElementById('oferta').value;
     cvCiudad=document.getElementById('ciudad').value;const ps=document.getElementById('pais');cvPais=ps.options[ps.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim()||'';
     document.getElementById('loading-overlay').classList.add('active');iniciarMensajesCarga();
+    if(typeof gtag!=='undefined')gtag('event','cv_generando');
     try{
       const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais,oferta);
+      if(typeof gtag!=='undefined')gtag('event','cv_generado');
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();window._cvDescargaId=gd.id;
-    }catch(e){
-      console.error('Error generarCV:', e);
-      mostrarError('Error al generar tu CV', e.message?.includes('429') ? 'Límite de uso alcanzado. Intenta en unos minutos.' : 'Hubo un problema con la IA. Intenta de nuevo.');
-    }
+    }catch(e){console.error('Error generarCV:',e);mostrarError('Error al generar tu CV',e.message?.includes('429')?'Límite de uso alcanzado.':'Hubo un problema con la IA. Intenta de nuevo.');}
     finally{document.getElementById('loading-overlay').classList.remove('active');}
   }
 
   function renderCV(cv,foto,ciudad,pais,ofertaCtx){
     const ofertaLocal=ofertaCtx||document.getElementById('oferta')?.value||'';
     document.getElementById('cv-foto').innerHTML=foto?`<img src="${foto}" alt="foto">`:'👤';
-    document.getElementById('cv-nombre-sidebar').textContent=cv.nombre||'';
-    document.getElementById('cv-nombre-main').textContent=cv.nombre||'';
-    document.getElementById('cv-email').textContent=cv.email||'';
-    document.getElementById('cv-telefono').textContent=cv.telefono||'';
+    document.getElementById('cv-nombre-sidebar').textContent=cv.nombre||'';document.getElementById('cv-nombre-main').textContent=cv.nombre||'';
+    document.getElementById('cv-email').textContent=cv.email||'';document.getElementById('cv-telefono').textContent=cv.telefono||'';
     document.getElementById('cv-ciudad').textContent=[ciudad,pais].filter(Boolean).join(', ')||'Perú';
     const perfil=document.getElementById('cv-perfil');perfil.textContent=cv.perfil||'';perfil.classList.add('editable');perfil.setAttribute('contenteditable','false');perfil.onclick=function(){this.setAttribute('contenteditable','true');this.focus();};perfil.onblur=function(){this.setAttribute('contenteditable','false');};
     document.getElementById('cv-skills-tecnicas').innerHTML=habilidadesData.map(h=>`<span class="cv-skill-tag">${h.nombre}</span>`).join('');
@@ -1340,30 +844,20 @@
     document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.cargo}</div><div class="exp-empresa editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.empresa}</div><div class="exp-periodo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${l}</div>`).join('')}</div>`).join('');
     document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.titulo}</div><div class="edu-institucion editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.institucion}</div><div class="edu-año editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.año}</div></div>`).join('');
     document.getElementById('cv-preview').style.display='block';
-    if(cv.compatibilidad && typeof ofertaLocal === 'string' && ofertaLocal.trim().length > 0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
+    if(cv.compatibilidad&&typeof ofertaLocal==='string'&&ofertaLocal.trim().length>0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
     else document.getElementById('analisis-compatibilidad').style.display='none';
     cambiarEstiloCV(estiloActual);mostrarEstadoLogin(window.usuarioActual);
     document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
   }
 
-  function verificarLoginParaComprar(plan){if(!window.usuarioActual){abrirModalLogin();return;}alert('Próximamente. Estamos activando los pagos. ¡Gracias por tu interés!');}
-
   function mostrarEstadoLogin(user){const nu=document.getElementById('nav-usuario'),nn=document.getElementById('nav-nombre-usuario');if(user){document.getElementById('estado-sin-login').style.display='none';document.getElementById('estado-con-login').style.display='block';document.getElementById('nombre-usuario-cv').textContent=user.displayName?.split(' ')[0]||'usuario';if(nu)nu.style.display='flex';if(nn)nn.textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';}else{document.getElementById('estado-sin-login').style.display='block';document.getElementById('estado-con-login').style.display='none';if(nu)nu.style.display='none';}}
 
   function guardarProgreso(){try{localStorage.setItem('talentia_progreso',JSON.stringify({nombre:document.getElementById('nombre').value,email:document.getElementById('email').value,telefono:document.getElementById('telefono').value,pais:document.getElementById('pais').value,ciudad:document.getElementById('ciudad').value,oferta:document.getElementById('oferta').value,habilidadesData,blandasData,trabajosData,educacionData}));}catch(e){}}
-
   function cargarProgreso(){
     const guardado=localStorage.getItem('talentia_progreso');if(!guardado)return;
-    try{const d=JSON.parse(guardado);
-    if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;if(d.pais){document.getElementById('pais').value=d.pais;actualizarCiudades();}if(d.ciudad)document.getElementById('ciudad').value=d.ciudad;if(d.oferta)document.getElementById('oferta').value=d.oferta;
-    if(d.habilidadesData?.length){habilidadesData=d.habilidadesData.map(h=>({nombre:h.nombre||h}));renderListaHabilidades();}
-    if(d.blandasData?.length){blandasData=d.blandasData.map(b=>({nombre:b.nombre||b}));renderListaBlandas();}
-    if(d.trabajosData?.length){trabajosData=d.trabajosData;renderTrabajoss();}
-    if(d.educacionData?.length){educacionData=d.educacionData;renderEducacion();}
-    if(d.nombre){const b=document.createElement('div');b.style.cssText='background:#f0fff4;border:1px solid #c6f6d5;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:0.85rem;color:#276749;display:flex;justify-content:space-between;align-items:center;';b.innerHTML=`<span>✅ Recuperamos tu progreso anterior</span><button onclick="limpiarProgreso()" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;">✕ Limpiar</button>`;document.getElementById('step-1').insertBefore(b,document.getElementById('step-1').firstChild);}
+    try{const d=JSON.parse(guardado);if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;if(d.pais){document.getElementById('pais').value=d.pais;actualizarCiudades();}if(d.ciudad)document.getElementById('ciudad').value=d.ciudad;if(d.oferta)document.getElementById('oferta').value=d.oferta;if(d.habilidadesData?.length){habilidadesData=d.habilidadesData.map(h=>({nombre:h.nombre||h}));renderListaHabilidades();}if(d.blandasData?.length){blandasData=d.blandasData.map(b=>({nombre:b.nombre||b}));renderListaBlandas();}if(d.trabajosData?.length){trabajosData=d.trabajosData;renderTrabajoss();}if(d.educacionData?.length){educacionData=d.educacionData;renderEducacion();}if(d.nombre){const b=document.createElement('div');b.style.cssText='background:#f0fff4;border:1px solid #c6f6d5;border-radius:10px;padding:12px 16px;margin-bottom:20px;font-size:0.85rem;color:#276749;display:flex;justify-content:space-between;align-items:center;';b.innerHTML=`<span>✅ Recuperamos tu progreso anterior</span><button onclick="limpiarProgreso()" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;">✕ Limpiar</button>`;document.getElementById('step-1').insertBefore(b,document.getElementById('step-1').firstChild);}
     }catch(e){localStorage.removeItem('talentia_progreso');}
   }
-
   function limpiarProgreso(){localStorage.removeItem('talentia_progreso');location.reload();}
   function iniciarMensajesCarga(){const msgs=['Analizando tu perfil...','Optimizando palabras clave...','Redactando tu experiencia...','Diseñando tu CV...','Aplicando formato profesional...','Casi listo...'];let i=0;const el=document.getElementById('loading-text');if(window.mi)clearInterval(window.mi);window.mi=setInterval(()=>{i++;if(i<msgs.length)el.textContent=msgs[i];else clearInterval(window.mi);},2000);}
   function mostrarError(t,d){document.getElementById('error-toast-titulo').textContent=t;document.getElementById('error-toast-desc').textContent=d;document.getElementById('error-toast').classList.add('visible');}
@@ -1374,323 +868,102 @@
   function actualizarEducacion(id,campo,valor){const e=educacionData.find(e=>e.id===id);if(e)e[campo]=valor;}
   function renderEducacion(){
     const c=document.getElementById('lista-educacion');if(!educacionData.length){c.innerHTML='';return;}
-    c.innerHTML=educacionData.map((e,idx)=>`
-      <div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;">
-        <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;">
-          <span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Estudio ${idx+1}</span>
-          <button onclick="eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button>
-        </div>
-        <label style="margin-bottom:6px;">Tipo</label>
-        <select onchange="actualizarEducacion(${e.id},'tipo',this.value);renderEducacion()" style="margin-bottom:12px;">
-          <option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option>
-          <option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica / Instituto</option>
-          <option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría / Posgrado</option>
-          <option value="certificacion" ${e.tipo==='certificacion'?'selected':''}>📜 Certificación</option>
-          <option value="curso" ${e.tipo==='curso'?'selected':''}>💻 Curso online</option>
-          <option value="colegio" ${e.tipo==='colegio'?'selected':''}>🏫 Colegio / Secundaria</option>
-          <option value="otro" ${e.tipo==='otro'?'selected':''}>📋 Otro</option>
-        </select>
-        ${e.tipo==='otro'?`<label style="margin-bottom:6px;">¿Qué tipo de estudio es?</label><input type="text" placeholder="Ej: Diplomado, Intercambio..." value="${e.tipoCustom||''}" oninput="actualizarEducacion(${e.id},'tipoCustom',this.value)" style="margin-bottom:12px;">`:''}
-        <label style="margin-bottom:6px;">Título o nombre *</label>
-        <input type="text" placeholder="Ej: Ing. de Sistemas, AWS Cloud Practitioner..." value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;">
-        <label style="margin-bottom:6px;">Institución *</label>
-        <input type="text" placeholder="Ej: UPC, Senati, Coursera..." value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" list="lista-instituciones" style="margin-bottom:12px;" autocomplete="off">
-        ${(e.tipo==='universitaria'||e.tipo==='tecnica')&&(!e.hasta||e.hasta.toLowerCase().includes('curso'))?`
-        <label style="margin-bottom:6px;">Ciclo actual (opcional)</label>
-        <input type="text" placeholder="Ej: 7mo ciclo, 8vo semestre, 3er año..." value="${e.ciclo||''}" oninput="actualizarEducacion(${e.id},'ciclo',this.value)" style="margin-bottom:12px;">
-        `:''}
-        <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-          <div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2018" value="${e.desde||''}" oninput="actualizarEducacion(${e.id},'desde',this.value)" style="margin-bottom:0;"></div>
-          <div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2022 o En curso" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div>
-        </div>
-      </div>`).join('');
+    c.innerHTML=educacionData.map((e,idx)=>`<div style="background:#f8faff;border:2px solid #e2e8f0;border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#0f3460;">Estudio ${idx+1}</span><button onclick="eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarEducacion(${e.id},'tipo',this.value);renderEducacion()" style="margin-bottom:12px;"><option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option><option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica</option><option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría</option><option value="certificacion" ${e.tipo==='certificacion'?'selected':''}>📜 Certificación</option><option value="curso" ${e.tipo==='curso'?'selected':''}>💻 Curso online</option><option value="colegio" ${e.tipo==='colegio'?'selected':''}>🏫 Colegio</option><option value="otro" ${e.tipo==='otro'?'selected':''}>📋 Otro</option></select>${e.tipo==='otro'?`<input type="text" placeholder="¿Qué tipo?" value="${e.tipoCustom||''}" oninput="actualizarEducacion(${e.id},'tipoCustom',this.value)" style="margin-bottom:12px;">`:''}  <label style="margin-bottom:6px;">Título *</label><input type="text" placeholder="Ej: Ing. de Sistemas..." value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" style="margin-bottom:12px;"><label style="margin-bottom:6px;">Institución *</label><input type="text" placeholder="Ej: UPC, Senati..." value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" list="lista-instituciones" style="margin-bottom:12px;" autocomplete="off"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2018" value="${e.desde||''}" oninput="actualizarEducacion(${e.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2022 o En curso" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div></div></div>`).join('');
   }
 
   async function descargarCVComoPDF(){
     if(!window.usuarioActual){mostrarError('Sesión requerida','Inicia sesión para descargar.');return;}
-    
-    const btn=document.getElementById('link-descarga');
-    btn.textContent='⏳ Preparando tu CV...';btn.disabled=true;
-
-    // Mensajes de progreso para que el usuario sepa que está procesando
-    const mensajes=['⏳ Preparando tu CV...','⏳ Aplicando el diseño...','⏳ Generando el PDF...','⏳ Casi listo...'];
-    let msgIdx=0;
-    const msgInterval=setInterval(()=>{
-      msgIdx=(msgIdx+1)%mensajes.length;
-      if(btn.disabled)btn.textContent=mensajes[msgIdx];
-    },2000);
-
+    const btn=document.getElementById('link-descarga');btn.textContent='⏳ Preparando tu CV...';btn.disabled=true;
+    const mensajes=['⏳ Preparando tu CV...','⏳ Aplicando el diseño...','⏳ Generando el PDF...','⏳ Casi listo...'];let msgIdx=0;
+    const msgInterval=setInterval(()=>{msgIdx=(msgIdx+1)%mensajes.length;if(btn.disabled)btn.textContent=mensajes[msgIdx];},2000);
     try{
-      // Verificar pago
-      const check=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
-      const checkData=await check.json();
-      if(!checkData.pagado){
-        mostrarError('Pago requerido','Adquiere un plan para descargar tu CV sin marca de agua.');
-        return;
-      }
-
-      // Descargar PDF desde el backend (Browserless)
+      const check=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);const checkData=await check.json();
+      if(!checkData.pagado){mostrarError('Pago requerido','Adquiere un plan para descargar tu CV sin marca de agua.');return;}
       const response=await fetch(`/descargar-cv?uid=${window.usuarioActual.uid}&token=${checkData.token}&estilo=${estiloActual}`);
-      
-      if(!response.ok){
-        const err=await response.json();
-        if(response.status===429){
-          mostrarError('Límite alcanzado', err.error||'Alcanzaste el límite de descargas del día.');
-        } else {
-          mostrarError('Error','No se pudo generar el PDF: '+(err.error||'intenta de nuevo.'));
-        }
-        return;
-      }
-
-      // Descargar el PDF
-      const blob=await response.blob();
-      const url=URL.createObjectURL(blob);
-      const a=document.createElement('a');
-      a.href=url;
-      const nombre=cvGeneradoData?.nombre?.replace(/\s+/g,'-').toLowerCase()||'mi-cv';
-      a.download=`cv-${nombre}-talentia.pdf`;
-      a.click();
-      URL.revokeObjectURL(url);
-
-    }catch(e){
-      console.error('Error descarga PDF:',e);
-      mostrarError('Error al descargar','Hubo un problema generando el PDF. Intenta de nuevo.');
-    }finally{
-      clearInterval(msgInterval);
-      btn.textContent='✅ Descargar mi CV en PDF';btn.disabled=false;
-    }
+      if(!response.ok){const err=await response.json();if(response.status===429){mostrarError('Límite alcanzado',err.error||'Alcanzaste el límite de descargas del día.');}else{mostrarError('Error','No se pudo generar el PDF: '+(err.error||'intenta de nuevo.'));}return;}
+      if(typeof gtag!=='undefined')gtag('event','cv_descargado',{estilo:estiloActual});
+      const blob=await response.blob();const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;const nombre=cvGeneradoData?.nombre?.replace(/\s+/g,'-').toLowerCase()||'mi-cv';a.download=`cv-${nombre}-talentia.pdf`;a.click();URL.revokeObjectURL(url);
+    }catch(e){console.error('Error descarga:',e);mostrarError('Error al descargar','Hubo un problema. Intenta de nuevo.');}
+    finally{clearInterval(msgInterval);btn.textContent='✅ Descargar mi CV en PDF';btn.disabled=false;}
   }
 
   async function iniciarPago(plan){
     if(!window.usuarioActual){abrirModalLogin(()=>iniciarPago(plan));return;}
-    const btns=document.querySelectorAll('.cv-actions button');
-    btns.forEach(b=>{b.textContent='⏳ Redirigiendo...';b.disabled=true;});
+    if(typeof gtag!=='undefined')gtag('event','pago_iniciado',{plan:plan});
+    const btns=document.querySelectorAll('.cv-actions button');btns.forEach(b=>{b.textContent='⏳ Redirigiendo...';b.disabled=true;});
     try{
-      // Guardar estado del wizard para restaurarlo al volver de MP
-      try{
-        sessionStorage.setItem('talentia_wizard_estado', JSON.stringify({
-          cvGenerado: cvGeneradoData,
-          habilidades: habilidadesData,
-          blandas: blandasData,
-          estilo: estiloActual,
-          foto: fotoBase64,
-          nombre: document.getElementById('nombre')?.value||'',
-          email: document.getElementById('email')?.value||''
-        }));
-      }catch(e){}
-
+      try{sessionStorage.setItem('talentia_wizard_estado',JSON.stringify({cvGenerado:cvGeneradoData,habilidades:habilidadesData,blandas:blandasData,estilo:estiloActual,foto:fotoBase64,nombre:document.getElementById('nombre')?.value||'',email:document.getElementById('email')?.value||''}));}catch(e){}
       const r=await fetch('/crear-preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,usuarioId:window.usuarioActual.uid,email:window.usuarioActual.email})});
-      const data=await r.json();
-      if(data.init_point)window.location.href=data.init_point;
-      else throw new Error('Sin link de pago');
-    }catch(e){
-      mostrarError('Error al iniciar pago','Intenta de nuevo en un momento.');
-      btns.forEach(b=>{b.textContent='Comprar';b.disabled=false;});
-    }
+      const data=await r.json();if(data.init_point)window.location.href=data.init_point;else throw new Error('Sin link de pago');
+    }catch(e){mostrarError('Error al iniciar pago','Intenta de nuevo en un momento.');btns.forEach(b=>{b.textContent='Comprar';b.disabled=false;});}
   }
 
   function restaurarEstadoWizard(){
     try{
-      const estadoStr=sessionStorage.getItem('talentia_wizard_estado');
-      if(!estadoStr)return false;
-      const estado=JSON.parse(estadoStr);
-      if(!estado.cvGenerado)return false;
-
-      // Restaurar variables globales
-      cvGeneradoData=estado.cvGenerado;
-      if(estado.habilidades?.length) habilidadesData=estado.habilidades;
-      if(estado.blandas?.length) blandasData=estado.blandas;
-      if(estado.foto) fotoBase64=estado.foto;
-      estiloActual=estado.estilo||'clasico';
-
-      // Ocultar el wizard — mostrar solo el CV con planes de pago
-      document.getElementById('step-0').classList.remove('active');
-      document.getElementById('wizard-nav').style.display='none';
-      document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';
-
-      // Renderizar el CV
-      renderCV(estado.cvGenerado, estado.foto||null, estado.cvGenerado.ciudad||'', '');
-      cambiarEstiloCV(estiloActual);
-      mostrarEstadoLogin(window.usuarioActual);
-      document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
-
-      // Limpiar sessionStorage
-      sessionStorage.removeItem('talentia_wizard_estado');
-      return true;
-    }catch(e){
-      console.log('No se pudo restaurar estado:',e);
-      return false;
-    }
+      const estadoStr=sessionStorage.getItem('talentia_wizard_estado');if(!estadoStr)return false;
+      const estado=JSON.parse(estadoStr);if(!estado.cvGenerado)return false;
+      cvGeneradoData=estado.cvGenerado;if(estado.habilidades?.length)habilidadesData=estado.habilidades;if(estado.blandas?.length)blandasData=estado.blandas;if(estado.foto)fotoBase64=estado.foto;estiloActual=estado.estilo||'clasico';
+      ocultarWizardCompleto();
+      renderCV(estado.cvGenerado,estado.foto||null,estado.cvGenerado.ciudad||'','');cambiarEstiloCV(estiloActual);mostrarEstadoLogin(window.usuarioActual);
+      setTimeout(()=>document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'}),300);
+      sessionStorage.removeItem('talentia_wizard_estado');return true;
+    }catch(e){console.log('Error restaurando:',e);return false;}
   }
 
-  let cvGuardadoCache = null;
-
+  let cvGuardadoCache=null;
   async function mostrarCVGuardado(){
     if(!window.usuarioActual)return;
-    try{
-      if(!cvGuardadoCache){
-        const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
-        if(!cvR.ok)return;
-        cvGuardadoCache=await cvR.json();
-      }
-      const cvData=cvGuardadoCache;
-      if(cvData.cvData){
-        cvGeneradoData=cvData.cvData;
-        if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
-        if(cvData.blandasData?.length) blandasData=cvData.blandasData;
-        renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
-        cambiarEstiloCV(cvData.estilo||'clasico');
-        mostrarEstadoLogin(window.usuarioActual);
-        document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
-      }
-    }catch(e){console.log('Error mostrarCVGuardado:',e);}
+    try{if(!cvGuardadoCache){const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(!cvR.ok)return;cvGuardadoCache=await cvR.json();}const cvData=cvGuardadoCache;if(cvData.cvData){cvGeneradoData=cvData.cvData;if(cvData.habilidades?.length)habilidadesData=cvData.habilidades;if(cvData.blandasData?.length)blandasData=cvData.blandasData;renderCV(cvData.cvData,cvData.foto||null,cvData.cvData.ciudad||'','');cambiarEstiloCV(cvData.estilo||'clasico');mostrarEstadoLogin(window.usuarioActual);document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});}}catch(e){}
   }
 
   async function verificarPagoUsuario(){
-    if(!window.usuarioActual)return;
-    window.verificarPagoUsuario=verificarPagoUsuario;
+    if(!window.usuarioActual)return;window.verificarPagoUsuario=verificarPagoUsuario;
     try{
-      const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);
-      const data=await r.json();
-
-      const params=new URLSearchParams(window.location.search);
-      const paramPago=params.get('pago');
-      if(paramPago) window.history.replaceState({},'','/crear');
+      const r=await fetch(`/verificar-pago?uid=${window.usuarioActual.uid}`);const data=await r.json();
+      const params=new URLSearchParams(window.location.search);const paramPago=params.get('pago');
+      if(paramPago)window.history.replaceState({},'','/crear');
 
       if(paramPago==='error'){
-        // Primero intentar restaurar desde sessionStorage (estado exacto antes de ir a MP)
         const restaurado=restaurarEstadoWizard();
-        // Si no hay estado en sessionStorage, recuperar de Redis
-        if(!restaurado && data.tieneCv){
-          try{
-            const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
-            if(cvR.ok){
-              const cvData=await cvR.json();
-              if(cvData.cvData){
-                cvGeneradoData=cvData.cvData;
-                if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
-                if(cvData.blandasData?.length) blandasData=cvData.blandasData;
-                renderCV(cvData.cvData,cvData.foto||null,cvData.cvData.ciudad||'','');
-                cambiarEstiloCV(cvData.estilo||estiloActual);
-                mostrarEstadoLogin(window.usuarioActual);
-                document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
-              }
-            }
-          }catch(e){console.log('No se pudo recuperar CV:',e);}
-        }
-        // Mostrar error después de recuperar el CV
+        if(!restaurado&&data.tieneCv){try{const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(cvR.ok){const cvData=await cvR.json();if(cvData.cvData){cvGeneradoData=cvData.cvData;if(cvData.habilidades?.length)habilidadesData=cvData.habilidades;if(cvData.blandasData?.length)blandasData=cvData.blandasData;renderCV(cvData.cvData,cvData.foto||null,cvData.cvData.ciudad||'','');cambiarEstiloCV(cvData.estilo||estiloActual);mostrarEstadoLogin(window.usuarioActual);document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});}}}catch(e){}}
         setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),500);
       } else if(paramPago==='pendiente'){
-        restaurarEstadoWizard();
-        mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
+        restaurarEstadoWizard();mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
       }
 
-      // Mostrar banner si tiene CV guardado y pago activo (sin venir de MP)
-      if(data.pagado && data.tieneCv && !paramPago){
-        try{
-          const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
-          if(cvR.ok){
-            cvGuardadoCache=await cvR.json();
-            const banner=document.getElementById('banner-cv-guardado');
-            if(banner){
-              banner.style.display='block';
-              document.getElementById('banner-nombre-cv').textContent=cvGuardadoCache?.cvData?.nombre||'Tu CV profesional';
-              document.getElementById('banner-plan-cv').textContent=`Plan ${data.plan||'Básico'} activo · Descarga sin marca de agua`;
-            }
-          }
-        }catch(e){}
+      if(data.pagado&&data.tieneCv&&!paramPago){
+        try{const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(cvR.ok){cvGuardadoCache=await cvR.json();const banner=document.getElementById('banner-cv-guardado');if(banner){banner.style.display='block';document.getElementById('banner-nombre-cv').textContent=cvGuardadoCache?.cvData?.nombre||'Tu CV profesional';document.getElementById('banner-plan-cv').textContent=`Plan ${data.plan||'Básico'} activo · Descarga sin marca de agua`;}}}catch(e){}
       }
 
-      // Recuperar CV cuando viene de pago — primero sessionStorage, luego Redis
       if(paramPago==='ok'){
         const restaurado=restaurarEstadoWizard();
-        if(!restaurado){
-          try{
-            const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
-            if(cvR.ok){
-              const cvData=await cvR.json();
-              if(cvData.cvData){
-                cvGeneradoData=cvData.cvData;
-                if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
-                if(cvData.blandasData?.length) blandasData=cvData.blandasData;
-                renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
-                cambiarEstiloCV(cvData.estilo||estiloActual);
-                mostrarEstadoLogin(window.usuarioActual);
-                document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
-              }
-            }
-          }catch(e){console.log('No se pudo recuperar CV:',e);}
-        }
+        if(!restaurado){try{const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(cvR.ok){const cvData=await cvR.json();if(cvData.cvData){cvGeneradoData=cvData.cvData;if(cvData.habilidades?.length)habilidadesData=cvData.habilidades;if(cvData.blandasData?.length)blandasData=cvData.blandasData;renderCV(cvData.cvData,cvData.foto||null,cvData.cvData.ciudad||'','');cambiarEstiloCV(cvData.estilo||estiloActual);mostrarEstadoLogin(window.usuarioActual);document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});}}}catch(e){}}
       }
 
-      // Habilitar botón descarga solo si el CV actual es el que fue pagado
-      if(data.pagado && data.cvActualPagado){
-        const link=document.getElementById('link-descarga');
-        if(link) link.style.display='block';
-        if(paramPago==='ok'){
-          const t=document.createElement('div');
-          t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';
-          t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';
-          document.body.appendChild(t);setTimeout(()=>t.remove(),5000);
-        }
+      if(data.pagado&&data.cvActualPagado){
+        const link=document.getElementById('link-descarga');if(link)link.style.display='block';
+        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);}
       }
     }catch(e){console.log('verificarPago error:',e);}
   }
 
   function verificarRetornoMP(){
-    const params=new URLSearchParams(window.location.search);
-    const pago=params.get('pago');
-    if(!pago)return;
-
-    // Restaurar el CV inmediatamente — antes de que Firebase confirme sesión
-    // Así el wizard no aparece ni por un instante
+    const params=new URLSearchParams(window.location.search);const pago=params.get('pago');if(!pago)return;
+    // Ocultar wizard SIEMPRE que viene de MP
+    ocultarWizardCompleto();
     if(pago==='error'||pago==='ok'||pago==='pendiente'){
       const estadoStr=sessionStorage.getItem('talentia_wizard_estado');
       if(estadoStr){
-        try{
-          const estado=JSON.parse(estadoStr);
-          if(estado.cvGenerado){
-            cvGeneradoData=estado.cvGenerado;
-            if(estado.habilidades?.length) habilidadesData=estado.habilidades;
-            if(estado.blandas?.length) blandasData=estado.blandas;
-            if(estado.foto) fotoBase64=estado.foto;
-            estiloActual=estado.estilo||'clasico';
-
-            // Ocultar wizard inmediatamente
-            document.getElementById('step-0').classList.remove('active');
-            document.getElementById('wizard-nav').style.display='none';
-            document.getElementById('progress-bar-container').style.display='none';
-            document.getElementById('nav-pasos').style.display='none';
-
-            // Renderizar CV
-            renderCV(estado.cvGenerado, estado.foto||null, estado.cvGenerado.ciudad||'', '');
-            cambiarEstiloCV(estiloActual);
-            setTimeout(()=>document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'}), 300);
-          }
-        }catch(e){console.log('Error restaurando estado:',e);}
+        try{const estado=JSON.parse(estadoStr);if(estado.cvGenerado){cvGeneradoData=estado.cvGenerado;if(estado.habilidades?.length)habilidadesData=estado.habilidades;if(estado.blandas?.length)blandasData=estado.blandas;if(estado.foto)fotoBase64=estado.foto;estiloActual=estado.estilo||'clasico';renderCV(estado.cvGenerado,estado.foto||null,estado.cvGenerado.ciudad||'','');cambiarEstiloCV(estiloActual);setTimeout(()=>document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'}),300);}}catch(e){console.log('Error restaurando:',e);}
       }
     }
-
-    if(pago==='ok'){
-      if(typeof gtag !== 'undefined'){
-        gtag('event', 'conversion_event_purchase', {
-          'send_to': 'AW-3807168634',
-          'value': 9.90,
-          'currency': 'PEN'
-        });
-      }
-    }
-    if(pago==='error'){
-      setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),400);
-    } else if(pago==='pendiente'){
-      setTimeout(()=>mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.'),400);
-    }
+    if(pago==='ok'){if(typeof gtag!=='undefined'){gtag('event','conversion_event_purchase',{'send_to':'AW-3807168634','value':9.90,'currency':'PEN'});}}
+    if(pago==='error'){setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),400);}
+    else if(pago==='pendiente'){setTimeout(()=>mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.'),400);}
   }
 
   detectarPaisPorCodigo();
   verificarRetornoMP();
-  // verificarPagoUsuario se llama desde onAuthStateChanged en el módulo Firebase del head
 </script>
 </body>
 </html>
