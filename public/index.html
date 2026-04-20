@@ -379,16 +379,16 @@
       </div>
 
       <!-- BANNER CV GUARDADO - aparece cuando el usuario tiene CV + pago activo -->
-      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;">
-        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;">
+      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;">
+        <button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button>
+        <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;">
           <div>
             <div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div>
             <div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div>
             <div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div>
           </div>
-          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+          <div>
             <button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button>
-            <button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="padding:10px 18px;background:rgba(255,255,255,0.15);color:white;border:none;border-radius:10px;font-size:0.85rem;cursor:pointer;">Crear nuevo</button>
           </div>
         </div>
       </div>
@@ -400,35 +400,7 @@
           <div class="choice-card" onclick="elegirCamino('manual')"><div class="icon">✍️</div><h3>Crear desde cero</h3><p>Completa el formulario paso a paso y la IA genera tu CV</p></div>
           <div class="choice-card" onclick="elegirCamino('pdf')"><div class="icon">📄</div><h3>Subir mi CV actual</h3><p>Sube tu CV en PDF y lo mejoramos con IA automáticamente</p></div>
         </div>
-        <!-- Modo rápido -->
-        <div onclick="elegirCamino('rapido')" style="margin-top:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);border-radius:14px;padding:18px 20px;cursor:pointer;display:flex;align-items:center;gap:16px;transition:opacity 0.2s;" onmouseover="this.style.opacity='0.9'" onmouseout="this.style.opacity='1'">
-          <div style="font-size:2rem;">⚡</div>
-          <div>
-            <div style="font-weight:800;color:white;font-size:0.95rem;">Modo rápido — CV en 30 segundos</div>
-            <div style="font-size:0.78rem;color:#60a5fa;margin-top:3px;">Solo tu nombre y cargo · La IA hace el resto</div>
-          </div>
-          <div style="margin-left:auto;background:#60a5fa;color:#1a1a2e;padding:6px 14px;border-radius:8px;font-size:0.78rem;font-weight:700;white-space:nowrap;">Probar →</div>
-        </div>
         <p style="text-align:center;color:#a0aec0;font-size:0.78rem;margin-top:16px;">👆 Toca una opción para comenzar</p>
-      </div>
-
-      <!-- PASO MODO RÁPIDO -->
-      <div class="step" id="step-rapido">
-        <div style="text-align:center;margin-bottom:24px;">
-          <div style="font-size:2rem;margin-bottom:8px;">⚡</div>
-          <h3 style="font-size:1.1rem;font-weight:800;color:#1a1a2e;margin-bottom:6px;">CV en 30 segundos</h3>
-          <p style="font-size:0.85rem;color:#718096;">Solo necesitamos 3 datos — la IA genera todo lo demás</p>
-        </div>
-        <label>Tu nombre completo *</label>
-        <input type="text" id="rapido-nombre" placeholder="Ej: María García López" style="margin-bottom:16px;">
-        <label>Tu cargo o puesto actual *</label>
-        <input type="text" id="rapido-cargo" placeholder="Ej: Analista de Marketing, Ingeniero de Sistemas..." style="margin-bottom:16px;">
-        <label>Empresa donde trabajas (opcional)</label>
-        <input type="text" id="rapido-empresa" placeholder="Ej: BBVA, Interbank, startup propia..." style="margin-bottom:16px;">
-        <label>Email *</label>
-        <input type="email" id="rapido-email" placeholder="tu@email.com" style="margin-bottom:24px;">
-        <button onclick="generarCVRapido()" style="width:100%;padding:16px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:1rem;font-weight:700;cursor:pointer;">⚡ Generar mi CV ahora</button>
-        <p style="text-align:center;font-size:0.75rem;color:#a0aec0;margin-top:12px;">Puedes agregar más detalles después de ver el resultado</p>
       </div>
 
       <!-- PASO OFERTA OPCIONAL -->
@@ -796,8 +768,6 @@
     document.getElementById('lista-habilidades').innerHTML='';
     document.getElementById('lista-educacion').innerHTML='';
     document.getElementById('lista-proyectos').innerHTML='';
-    const sr=document.getElementById('step-rapido');
-    if(sr){sr.classList.remove('active');sr.style.display='none';}
     document.getElementById('cv-preview').style.display='none';
     document.getElementById('analisis-compatibilidad').style.display='none';
     const link=document.getElementById('link-descarga');
@@ -814,17 +784,7 @@
     document.getElementById('progress-bar-container').style.display='block';
     document.getElementById('nav-pasos').style.display='flex';
     document.getElementById('nav-back').style.display='block';
-    if(tipo==='rapido'){
-      const sr=document.getElementById('step-rapido');
-      sr.style.display='block';
-      setTimeout(()=>sr.classList.add('active'),10);
-      document.getElementById('wizard-titulo').textContent='CV en 30 segundos';
-      document.getElementById('progress-fill').style.width='50%';
-      document.getElementById('progress-text').textContent='Paso 1 de 1';
-      document.getElementById('btn-prev').style.display='none';
-      document.getElementById('btn-next').style.display='none';
-      pasoActual=-3;
-    } else if(tipo==='pdf'){
+    if(tipo==='pdf'){
       // Primero mostrar paso de oferta, luego el PDF
       const so=document.getElementById('step-oferta');
       so.style.display='block';
@@ -1277,59 +1237,6 @@
       console.error(e);
       document.getElementById('estado-subida').style.display='none';
       mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');
-    }
-  }
-
-  async function generarCVRapido(){
-    const nombre=document.getElementById('rapido-nombre').value.trim();
-    const cargo=document.getElementById('rapido-cargo').value.trim();
-    const empresa=document.getElementById('rapido-empresa').value.trim();
-    const email=document.getElementById('rapido-email').value.trim();
-
-    if(!nombre){mostrarError('Nombre requerido','Ingresa tu nombre completo.');return;}
-    if(!cargo){mostrarError('Cargo requerido','Ingresa tu cargo o puesto actual.');return;}
-    if(!email||!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){mostrarError('Email inválido','Ingresa un email válido.');return;}
-
-    document.getElementById('loading-overlay').classList.add('active');
-    iniciarMensajesCarga();
-
-    try{
-      const experiencia=empresa ? `${cargo} en ${empresa}` : cargo;
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({
-        nombre, email,
-        telefono:'',
-        experiencia,
-        educacion:'',
-        habilidades:'',
-        habilidadesBlandas:'',
-        oferta:'',
-        foto:null,
-        usuarioId:window.usuarioActual?.uid||null,
-        modoRapido:true
-      })});
-
-      if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
-      const data=await r.json();
-      cvGeneradoData=data.cv;
-
-      // Precargar datos para modo manual por si quiere completar después
-      document.getElementById('nombre').value=nombre;
-      document.getElementById('email').value=email;
-      habilidadesData=[];blandasData=[];trabajosData=[];educacionData=[];
-
-      renderCV(data.cv,null,'','','');
-      const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:null,habilidades:[],blandasData:[],estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
-      const gd=await gr.json();window._cvDescargaId=gd.id;
-
-      // Ocultar el step-rapido
-      document.getElementById('step-rapido').classList.remove('active');
-      document.getElementById('step-rapido').style.display='none';
-
-    }catch(e){
-      console.error('Error generarCVRapido:',e);
-      mostrarError('Error al generar tu CV','Hubo un problema con la IA. Intenta de nuevo.');
-    }finally{
-      document.getElementById('loading-overlay').classList.remove('active');
     }
   }
 
