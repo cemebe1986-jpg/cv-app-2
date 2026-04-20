@@ -1497,6 +1497,19 @@
     const btns=document.querySelectorAll('.cv-actions button');
     btns.forEach(b=>{b.textContent='⏳ Redirigiendo...';b.disabled=true;});
     try{
+      // Guardar estado del wizard para restaurarlo al volver de MP
+      try{
+        sessionStorage.setItem('talentia_wizard_estado', JSON.stringify({
+          cvGenerado: cvGeneradoData,
+          habilidades: habilidadesData,
+          blandas: blandasData,
+          estilo: estiloActual,
+          foto: fotoBase64,
+          nombre: document.getElementById('nombre')?.value||'',
+          email: document.getElementById('email')?.value||''
+        }));
+      }catch(e){}
+
       const r=await fetch('/crear-preferencia',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({plan,usuarioId:window.usuarioActual.uid,email:window.usuarioActual.email})});
       const data=await r.json();
       if(data.init_point)window.location.href=data.init_point;
@@ -1504,6 +1517,35 @@
     }catch(e){
       mostrarError('Error al iniciar pago','Intenta de nuevo en un momento.');
       btns.forEach(b=>{b.textContent='Comprar';b.disabled=false;});
+    }
+  }
+
+  function restaurarEstadoWizard(){
+    try{
+      const estadoStr=sessionStorage.getItem('talentia_wizard_estado');
+      if(!estadoStr)return false;
+      const estado=JSON.parse(estadoStr);
+      if(!estado.cvGenerado)return false;
+
+      // Restaurar variables globales
+      cvGeneradoData=estado.cvGenerado;
+      if(estado.habilidades?.length) habilidadesData=estado.habilidades;
+      if(estado.blandas?.length) blandasData=estado.blandas;
+      if(estado.foto) fotoBase64=estado.foto;
+      estiloActual=estado.estilo||'clasico';
+
+      // Renderizar el CV
+      renderCV(estado.cvGenerado, estado.foto||null, estado.cvGenerado.ciudad||'', '');
+      cambiarEstiloCV(estiloActual);
+      mostrarEstadoLogin(window.usuarioActual);
+      document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+
+      // Limpiar sessionStorage
+      sessionStorage.removeItem('talentia_wizard_estado');
+      return true;
+    }catch(e){
+      console.log('No se pudo restaurar estado:',e);
+      return false;
     }
   }
 
@@ -1542,8 +1584,10 @@
       if(paramPago) window.history.replaceState({},'','/crear');
 
       if(paramPago==='error'){
-        // Recuperar CV antes de mostrar el error
-        if(data.tieneCv){
+        // Primero intentar restaurar desde sessionStorage (estado exacto antes de ir a MP)
+        const restaurado=restaurarEstadoWizard();
+        // Si no hay estado en sessionStorage, recuperar de Redis
+        if(!restaurado && data.tieneCv){
           try{
             const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
             if(cvR.ok){
@@ -1563,6 +1607,7 @@
         // Mostrar error después de recuperar el CV
         setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),500);
       } else if(paramPago==='pendiente'){
+        restaurarEstadoWizard();
         mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
       }
 
@@ -1582,23 +1627,26 @@
         }catch(e){}
       }
 
-      // Recuperar CV y mostrar botón descarga cuando viene de pago
+      // Recuperar CV cuando viene de pago — primero sessionStorage, luego Redis
       if(paramPago==='ok'){
-        try{
-          const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
-          if(cvR.ok){
-            const cvData=await cvR.json();
-            if(cvData.cvData){
-              cvGeneradoData=cvData.cvData;
-              if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
-              if(cvData.blandasData?.length) blandasData=cvData.blandasData;
-              renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
-              cambiarEstiloCV(cvData.estilo||estiloActual);
-              mostrarEstadoLogin(window.usuarioActual);
-              document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+        const restaurado=restaurarEstadoWizard();
+        if(!restaurado){
+          try{
+            const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
+            if(cvR.ok){
+              const cvData=await cvR.json();
+              if(cvData.cvData){
+                cvGeneradoData=cvData.cvData;
+                if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
+                if(cvData.blandasData?.length) blandasData=cvData.blandasData;
+                renderCV(cvData.cvData, cvData.foto||null, cvData.cvData.ciudad||'', '');
+                cambiarEstiloCV(cvData.estilo||estiloActual);
+                mostrarEstadoLogin(window.usuarioActual);
+                document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+              }
             }
-          }
-        }catch(e){console.log('No se pudo recuperar CV:',e);}
+          }catch(e){console.log('No se pudo recuperar CV:',e);}
+        }
       }
 
       // Habilitar botón descarga solo si el CV actual es el que fue pagado
