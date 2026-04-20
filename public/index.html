@@ -1542,7 +1542,26 @@
       if(paramPago) window.history.replaceState({},'','/crear');
 
       if(paramPago==='error'){
-        mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.');
+        // Recuperar CV antes de mostrar el error
+        if(data.tieneCv){
+          try{
+            const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);
+            if(cvR.ok){
+              const cvData=await cvR.json();
+              if(cvData.cvData){
+                cvGeneradoData=cvData.cvData;
+                if(cvData.habilidades?.length) habilidadesData=cvData.habilidades;
+                if(cvData.blandasData?.length) blandasData=cvData.blandasData;
+                renderCV(cvData.cvData,cvData.foto||null,cvData.cvData.ciudad||'','');
+                cambiarEstiloCV(cvData.estilo||estiloActual);
+                mostrarEstadoLogin(window.usuarioActual);
+                document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
+              }
+            }
+          }catch(e){console.log('No se pudo recuperar CV:',e);}
+        }
+        // Mostrar error después de recuperar el CV
+        setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),500);
       } else if(paramPago==='pendiente'){
         mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
       }
