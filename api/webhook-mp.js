@@ -30,8 +30,8 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: true });
     }
 
-    const planes = { esencial: 1, basico: 1, popular: 3 };
-    const limiteDescargasDia = { esencial: 1, basico: 3, popular: 5 };
+    const planes = { basico: 1, popular: 3 };
+    const limiteDescargasDia = { basico: 3, popular: 5 };
     const cvs = planes[plan] || 1;
     const token = `mp_${payment.id}_${Date.now()}`;
 
@@ -44,13 +44,18 @@ module.exports = async (req, res) => {
     }));
 
     // Congelar el CV actual al momento del pago
-    // Así la descarga siempre corresponde al CV por el que se pagó
+    // Congelar el CV actual al momento del pago
     const cvActual = await redis.get(`cv:usuario:${usuarioId}`);
+    const cvIdActual = await redis.get(`cv:actual:${usuarioId}`);
     if (cvActual) {
       await redis.setex(`cv:pagado:${usuarioId}`, 60 * 60 * 24 * 30, 
         typeof cvActual === 'string' ? cvActual : JSON.stringify(cvActual)
       );
-      console.log(`✅ CV congelado para: ${usuarioId}`);
+      // Guardar el ID del CV pagado para verificar en descargas futuras
+      if (cvIdActual) {
+        await redis.setex(`cv:pagado:id:${usuarioId}`, 60 * 60 * 24 * 30, String(cvIdActual));
+      }
+      console.log(`✅ CV congelado para: ${usuarioId}, cvId: ${cvIdActual}`);
     }
 
     console.log(`✅ Pago guardado: ${usuarioId} → ${plan} (${cvs} CVs, ${limiteDescargasDia[plan]} descargas/día)`);
