@@ -903,10 +903,10 @@
   function agregarBlandasSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});renderListaBlandas();document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';document.getElementById('btn-sugerir-blandas').disabled=false;}
   function agregarBlanda(){const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
   function eliminarBlanda(i){blandasData.splice(i,1);renderListaBlandas();}
-  function renderListaBlandas(){document.getElementById('lista-blandas').innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
+  function renderListaBlandas(){const el=document.getElementById('lista-blandas');if(!el)return;el.innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
-  function renderListaHabilidades(){document.getElementById('lista-habilidades').innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
+  function renderListaHabilidades(){const el=document.getElementById('lista-habilidades');if(!el)return;el.innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
 
   function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name;nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
 
@@ -917,9 +917,30 @@
     document.getElementById('estado-subida').style.display='block';
     document.getElementById('upload-zone-pdf').style.opacity='0.5';
     try{
-      const ab=await input.files[0].arrayBuffer();const pdf=await pdfjsLib.getDocument({data:ab}).promise;let texto='';
-      for(let i=1;i<=pdf.numPages;i++){const page=await pdf.getPage(i);const content=await page.getTextContent();texto+=content.items.map(item=>item.str).join(' ')+'\n';}
+      let texto='';
+      try{
+        const ab=await input.files[0].arrayBuffer();
+        const pdf=await pdfjsLib.getDocument({data:ab}).promise;
+        for(let i=1;i<=pdf.numPages;i++){
+          const page=await pdf.getPage(i);
+          const content=await page.getTextContent();
+          texto+=content.items.map(item=>item.str).join(' ')+'\n';
+        }
+      }catch(pdfErr){
+        console.error('PDF.js error:',pdfErr);
+        document.getElementById('estado-subida').style.display='none';
+        document.getElementById('upload-zone-pdf').style.opacity='1';
+        mostrarError('No pudimos leer el PDF','El PDF puede estar protegido o escaneado. Intenta con otro archivo o usa la opción "Crear desde cero".');
+        return;
+      }
+      if(!texto.trim()||texto.trim().length<50){
+        document.getElementById('estado-subida').style.display='none';
+        document.getElementById('upload-zone-pdf').style.opacity='1';
+        mostrarError('PDF sin texto legible','El PDF parece ser una imagen escaneada. Usa la opción "Crear desde cero" e ingresa tus datos manualmente.');
+        return;
+      }
       const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
+      if(!r.ok){throw new Error('Error en extraer-cv: '+r.status);}
       const data=await r.json();const d=data.datos;
       if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;
       if(d.habilidades_blandas){blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}
