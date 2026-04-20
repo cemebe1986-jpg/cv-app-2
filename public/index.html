@@ -425,30 +425,33 @@
         </div>
       </div>
 
-      <!-- PASO PDF: subir CV + oferta opcional (combinados) -->
+      <!-- PASO PDF: oferta opcional arriba + subir CV abajo -->
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
 
-        <!-- Upload zona — obligatorio -->
+        <!-- Oferta laboral — opcional, arriba -->
         <div style="margin-bottom:20px;">
-          <label style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;display:block;">📄 Sube tu CV en PDF <span style="color:#ef4444;">*</span></label>
-          <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:0;">
+          <label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:6px;display:block;">🎯 ¿Postulas a un trabajo específico?</label>
+          <p style="font-size:0.78rem;color:#718096;margin-bottom:10px;">Si pegas la oferta, la IA optimizará tu CV y analizará tu compatibilidad automáticamente</p>
+          <textarea id="oferta" placeholder="Pega aquí la descripción de la oferta de trabajo..." style="height:110px;font-size:0.85rem;margin-bottom:10px;"></textarea>
+          <label style="display:flex;align-items:center;gap:8px;cursor:pointer;font-size:0.82rem;color:#718096;">
+            <input type="checkbox" id="sin-oferta-check" onchange="document.getElementById('oferta').disabled=this.checked;document.getElementById('oferta').style.opacity=this.checked?'0.4':'1';" style="width:16px;height:16px;cursor:pointer;">
+            No tengo una oferta laboral específica
+          </label>
+        </div>
+
+        <!-- Subir CV — abajo -->
+        <div style="border-top:1px solid #f0f0f0;padding-top:18px;">
+          <label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;display:block;">📄 Sube tu CV en PDF <span style="color:#ef4444;">*</span></label>
+          <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;">
             <div style="font-size:2rem;margin-bottom:8px;">📤</div>
             <h3 style="font-weight:700;color:#1a1a2e;margin-bottom:6px;">Haz clic para subir tu CV</h3>
             <p style="font-size:0.82rem;color:#718096;">Formato PDF · Máximo 5MB</p>
           </div>
-          <div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-top:8px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div>
-          <div id="estado-subida" style="text-align:center;display:none;margin-top:15px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div>
-        </div>
-
-        <!-- Oferta laboral — opcional -->
-        <div style="border-top:1px solid #f0f0f0;padding-top:18px;">
-          <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;">
-            <label style="font-size:0.88rem;font-weight:700;color:#1a1a2e;margin:0;">🎯 ¿Postulas a un trabajo específico?</label>
-            <span style="font-size:0.72rem;color:#a0aec0;">Opcional</span>
-          </div>
-          <p style="font-size:0.78rem;color:#718096;margin-bottom:12px;">Si pegas la oferta, la IA optimizará tu CV y analizará compatibilidad automáticamente</p>
-          <textarea id="oferta" placeholder="Pega aquí la descripción de la oferta de trabajo (opcional)..." style="height:110px;font-size:0.85rem;"></textarea>
+          <div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div>
+          <div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:#0f3460;font-size:0.85rem;">Analizando tu CV con IA...</p></div>
+          <!-- Botón continuar — aparece después de cargar el PDF -->
+          <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;">Continuar →</button>
         </div>
       </div>
 
@@ -1196,6 +1199,16 @@
 
   function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name+' · Clic en la foto para cambiar';nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
 
+  function continuarDesdePDF(){
+    // Si marcó "sin oferta", limpiar el campo
+    if(document.getElementById('sin-oferta-check')?.checked){
+      document.getElementById('oferta').value='';
+    }
+    document.getElementById('step-pdf').classList.remove('active');
+    document.getElementById('step-pdf').style.display='none';
+    camino='manual';pasoActual=0;mostrarPaso(0);
+  }
+
   async function procesarCVSubido(input){
     if(!input.files||!input.files[0])return;
     if(input.files[0].size>5*1024*1024){mostrarError('Archivo muy grande','El PDF no debe pesar más de 5MB.');return;}
@@ -1255,10 +1268,8 @@
 
       document.getElementById('estado-subida').style.display='none';
       document.getElementById('upload-zone-pdf').style.opacity='1';
-      document.getElementById('step-pdf').classList.remove('active');
-      document.getElementById('step-pdf').style.display='none';
-      camino='manual';pasoActual=0;mostrarPaso(0);
-      // Toast silencioso en vez de alert bloqueante
+      // Mostrar botón continuar — el usuario decide cuándo avanzar
+      document.getElementById('btn-continuar-pdf').style.display='block';
       const t=document.createElement('div');
       t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';
       t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;
