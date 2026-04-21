@@ -336,12 +336,13 @@
           <h3 style="font-size:1.05rem;font-weight:800;color:#1a1a2e;margin-bottom:6px;">¿Postulas a un trabajo específico? <span style="font-size:0.75rem;font-weight:600;color:#a0aec0;background:#f0f0f0;padding:2px 8px;border-radius:10px;margin-left:4px;">Opcional</span></h3>
           <p style="font-size:0.82rem;color:#718096;">Si tienes una oferta, la IA optimizará tu CV para ese puesto. Si no, igual generamos un excelente CV.</p>
         </div>
-        <button onclick="toggleOfertaManual()" id="btn-toggle-oferta" style="width:100%;text-align:left;background:#f8faff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;transition:all 0.2s;">
-          <div style="display:flex;align-items:center;gap:12px;">
-            <span style="font-size:1.2rem;">📋</span>
-            <div style="text-align:left;"><div style="font-weight:700;color:#1a1a2e;font-size:0.88rem;">Agregar oferta de trabajo</div><div style="font-size:0.75rem;color:#718096;">La IA analizará compatibilidad automáticamente</div></div>
+        <button onclick="toggleOfertaManual()" id="btn-toggle-oferta" style="width:100%;text-align:left;background:white;border:1.5px solid #1a1a2e;border-radius:10px;padding:13px 16px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:12px;transition:all 0.2s;font-family:'Segoe UI',sans-serif;">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#1a1a2e" stroke-width="2" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          <div style="flex:1;">
+            <div style="font-weight:700;color:#1a1a2e;font-size:0.88rem;">+ Agregar oferta de trabajo</div>
+            <div style="font-size:0.75rem;color:#718096;">La IA optimizará tu CV para ese puesto</div>
           </div>
-          <span id="oferta-toggle-icon-manual" style="color:#a0aec0;font-size:1.1rem;">＋</span>
+          <span id="oferta-toggle-icon-manual" style="color:#1a1a2e;font-size:1rem;">▾</span>
         </button>
         <div id="campo-oferta" style="display:none;margin-bottom:16px;">
           <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:130px;"></textarea>
@@ -630,9 +631,9 @@
     const btn=document.getElementById('btn-toggle-oferta');
     const visible=campo.style.display!=='none';
     campo.style.display=visible?'none':'block';
-    icon.textContent=visible?'＋':'－';
-    btn.style.borderColor=visible?'#e2e8f0':'#0f3460';
-    btn.style.background=visible?'#f8faff':'#f0f4ff';
+    icon.textContent=visible?'▾':'▴';
+    btn.style.background=visible?'white':'#f0f4ff';
+    btn.style.borderColor='#1a1a2e';
     if(visible)document.getElementById('oferta').value='';
   }
   function mostrarCampoOferta(){document.getElementById('oferta-si-card')?.classList.add('activa');document.getElementById('oferta-no-card')?.classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
