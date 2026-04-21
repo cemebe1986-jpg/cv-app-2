@@ -320,6 +320,7 @@
       <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;"><button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;"><div><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div><div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div><div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div></div><div><button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button></div></div></div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
+        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:#a0aec0;text-decoration:none;margin-bottom:16px;">← Volver al inicio</a>
         <p style="color:#718096;font-size:0.9rem;margin-bottom:6px;">¿A qué puesto quieres postular?</p>
         <input type="text" id="cargo-inicio" placeholder="Ej: Analista de sistemas, Contador, Enfermera..." style="margin-bottom:20px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';">
         <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#1a1a2e;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:20px;opacity:0.5;transition:opacity 0.2s;">La IA redacta mi CV →</button>
@@ -331,23 +332,21 @@
 
       <!-- PASO OFERTA OPCIONAL -->
       <div class="step" id="step-oferta">
-        <div style="text-align:center;margin-bottom:24px;">
-          <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
-          <h3 style="font-size:1.1rem;font-weight:800;color:#1a1a2e;margin-bottom:6px;">¿Postulas a un trabajo específico?</h3>
-          <p style="font-size:0.85rem;color:#718096;">Si tienes una oferta, la IA optimizará tu CV para ese puesto y analizará tu compatibilidad</p>
+        <div style="margin-bottom:20px;">
+          <h3 style="font-size:1.05rem;font-weight:800;color:#1a1a2e;margin-bottom:6px;">¿Postulas a un trabajo específico? <span style="font-size:0.75rem;font-weight:600;color:#a0aec0;background:#f0f0f0;padding:2px 8px;border-radius:10px;margin-left:4px;">Opcional</span></h3>
+          <p style="font-size:0.82rem;color:#718096;">Si tienes una oferta, la IA optimizará tu CV para ese puesto. Si no, igual generamos un excelente CV.</p>
         </div>
-        <div class="oferta-card" id="oferta-si-card" onclick="mostrarCampoOferta()">
-          <div style="font-size:1.5rem;">📋</div>
-          <div><div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">Sí, tengo una oferta de trabajo</div><div style="font-size:0.78rem;color:#718096;">La IA analizará compatibilidad y optimizará keywords automáticamente</div></div>
-        </div>
+        <button onclick="toggleOfertaManual()" id="btn-toggle-oferta" style="width:100%;text-align:left;background:#f8faff;border:1.5px solid #e2e8f0;border-radius:12px;padding:16px;cursor:pointer;display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;transition:all 0.2s;">
+          <div style="display:flex;align-items:center;gap:12px;">
+            <span style="font-size:1.2rem;">📋</span>
+            <div style="text-align:left;"><div style="font-weight:700;color:#1a1a2e;font-size:0.88rem;">Agregar oferta de trabajo</div><div style="font-size:0.75rem;color:#718096;">La IA analizará compatibilidad automáticamente</div></div>
+          </div>
+          <span id="oferta-toggle-icon-manual" style="color:#a0aec0;font-size:1.1rem;">＋</span>
+        </button>
         <div id="campo-oferta" style="display:none;margin-bottom:16px;">
-          <label>Pega la descripción del trabajo</label>
-          <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:150px;"></textarea>
+          <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:130px;"></textarea>
         </div>
-        <div class="oferta-card" id="oferta-no-card" onclick="continuarSinOferta()">
-          <div style="font-size:1.5rem;">➡️</div>
-          <div><div style="font-weight:700;color:#1a1a2e;font-size:0.9rem;">No, crear CV general</div><div style="font-size:0.78rem;color:#718096;">CV profesional optimizado sin targetear una oferta específica</div></div>
-        </div>
+        <button onclick="iniciarFormulario()" style="width:100%;padding:14px;background:#1a1a2e;color:white;border:none;border-radius:10px;font-size:0.95rem;font-weight:700;cursor:pointer;">Continuar →</button>
       </div>
 
       <!-- PASO PDF -->
@@ -625,8 +624,19 @@
   window.olvideMiPasswordLogin=async()=>{document.getElementById('modal-email').value=document.getElementById('modal-email-login').value.trim();await olvideMiPassword();};
   function pedirIAConLogin(a){if(!window.usuarioActual){abrirModalLogin(a);return;}a();}
 
-  function mostrarCampoOferta(){document.getElementById('oferta-si-card').classList.add('activa');document.getElementById('oferta-no-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
-  function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card').classList.add('activa');document.getElementById('oferta-si-card').classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
+  function toggleOfertaManual(){
+    const campo=document.getElementById('campo-oferta');
+    const icon=document.getElementById('oferta-toggle-icon-manual');
+    const btn=document.getElementById('btn-toggle-oferta');
+    const visible=campo.style.display!=='none';
+    campo.style.display=visible?'none':'block';
+    icon.textContent=visible?'＋':'－';
+    btn.style.borderColor=visible?'#e2e8f0':'#0f3460';
+    btn.style.background=visible?'#f8faff':'#f0f4ff';
+    if(visible)document.getElementById('oferta').value='';
+  }
+  function mostrarCampoOferta(){document.getElementById('oferta-si-card')?.classList.add('activa');document.getElementById('oferta-no-card')?.classList.remove('activa');document.getElementById('campo-oferta').style.display='block';document.getElementById('btn-next').style.display='flex';document.getElementById('btn-next').textContent='Continuar →';}
+  function continuarSinOferta(){document.getElementById('oferta').value='';document.getElementById('oferta-no-card')?.classList.add('activa');document.getElementById('oferta-si-card')?.classList.remove('activa');document.getElementById('campo-oferta').style.display='none';iniciarFormulario();}
   function iniciarFormulario(){pasoActual=0;mostrarPaso(0);setTimeout(cargarProgreso,100);}
 
   function toggleOfertaPDF(){
@@ -822,7 +832,7 @@
     document.getElementById('wizard-titulo').textContent=TITULOS[idx];
     document.getElementById('progress-fill').style.width=((idx+1)/PASOS.length*100)+'%';
     document.getElementById('progress-text').textContent=`Paso ${idx+1} de ${PASOS.length}`;
-    document.getElementById('btn-prev').style.display=idx===0?'none':'flex';
+    document.getElementById('btn-prev').style.display=idx===0?'flex':'flex';
     document.getElementById('btn-next').style.display='flex';
     document.getElementById('btn-next').textContent=idx===PASOS.length-1?'✨ Generar CV':'Continuar →';
     document.getElementById('btn-next').disabled=false;
