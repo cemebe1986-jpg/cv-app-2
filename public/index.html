@@ -727,12 +727,12 @@
   function iniciarDesdeInicio(){
     const cargo=document.getElementById('cargo-inicio').value.trim();
     if(cargo.length<2)return;
+    const ofertaInicio=document.getElementById('oferta-inicio').value.trim();
+    elegirCamino('manual');
     const campoCargo=document.getElementById('cargo');
     if(campoCargo)campoCargo.value=cargo;
-    const ofertaInicio=document.getElementById('oferta-inicio').value.trim();
     const ofertaPrincipal=document.getElementById('oferta');
     if(ofertaPrincipal&&ofertaInicio)ofertaPrincipal.value=ofertaInicio;
-    elegirCamino('manual');
   }
 
   function elegirCamino(tipo){
