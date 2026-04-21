@@ -20,13 +20,14 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>TalentIA — Crear mi CV</title>
-<!-- Google Analytics GA4 -->
+<!-- Google Analytics GA4 + Google Ads -->
 <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB"></script>
 <script>
   window.dataLayer = window.dataLayer || [];
   function gtag(){dataLayer.push(arguments);}
   gtag('js', new Date());
   gtag('config', 'G-7Z85X742GB');
+  gtag('config', 'AW-3807168634');
 </script>
 <style>
   *{margin:0;padding:0;box-sizing:border-box;}
@@ -1123,7 +1124,7 @@
 
       if(data.pagado&&data.cvActualPagado){
         const link=document.getElementById('link-descarga');if(link)link.style.display='block';
-        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);}
+        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?11.90:4.90;const nombrePlan=data.plan==='popular'?'Pack Empleo':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
       }
     }catch(e){console.log('verificarPago error:',e);}
   }
@@ -1138,7 +1139,7 @@
         try{const estado=JSON.parse(estadoStr);if(estado.cvGenerado){cvGeneradoData=estado.cvGenerado;if(estado.habilidades?.length)habilidadesData=estado.habilidades;if(estado.blandas?.length)blandasData=estado.blandas;if(estado.foto)fotoBase64=estado.foto;estiloActual=estado.estilo||'clasico';renderCV(estado.cvGenerado,estado.foto||null,estado.cvGenerado.ciudad||'','');cambiarEstiloCV(estiloActual);setTimeout(()=>document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'}),300);}}catch(e){console.log('Error restaurando:',e);}
       }
     }
-    if(pago==='ok'){if(typeof gtag!=='undefined'){gtag('event','conversion_event_purchase',{'send_to':'AW-3807168634','value':9.90,'currency':'PEN'});}}
+    if(pago==='ok'){window._pagoOkPendiente=true;}
     if(pago==='error'){setTimeout(()=>mostrarError('Pago no completado','Hubo un problema con el pago. Intenta de nuevo.'),400);}
     else if(pago==='pendiente'){setTimeout(()=>mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.'),400);}
   }
