@@ -275,6 +275,7 @@
       </div>
 
       <!-- PASO PDF -->
+      <textarea id="oferta" style="display:none;"></textarea>
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
 
@@ -695,7 +696,7 @@
     habilidadesData=[];blandasData=[];trabajosData=[];educacionData=[];proyectosData=[];
     fotoBase64=null;cvGeneradoData=null;estiloActual='clasico';
     document.getElementById('nombre').value='';document.getElementById('email').value='';
-    document.getElementById('telefono').value='';document.getElementById('oferta').value='';
+    document.getElementById('telefono').value='';const ofertaEl=document.getElementById('oferta');if(ofertaEl)ofertaEl.value='';
     document.getElementById('lista-habilidades').innerHTML='';document.getElementById('lista-educacion').innerHTML='';
     document.getElementById('lista-proyectos').innerHTML='';
     document.getElementById('cv-preview').style.display='none';
