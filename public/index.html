@@ -258,7 +258,101 @@
       <div class="step active" id="step-0">
         <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
         <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">¿A qué puesto postulas?</p>
-        <input type="text" id="cargo-inicio" placeholder="Ej: Analista de sistemas, Contador, Enfermera..." style="margin-bottom:12px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';">
+        <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:12px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
+        <datalist id="lista-puestos-peru">
+          <!-- Administración y finanzas -->
+          <option value="Asistente administrativo">
+          <option value="Auxiliar administrativo">
+          <option value="Analista administrativo">
+          <option value="Secretaria ejecutiva">
+          <option value="Recepcionista">
+          <option value="Asistente de gerencia">
+          <option value="Contador general">
+          <option value="Asistente contable">
+          <option value="Analista contable">
+          <option value="Analista financiero">
+          <option value="Tesorero">
+          <option value="Asistente de tesorería">
+          <option value="Auditor interno">
+          <option value="Analista de costos">
+          <option value="Jefe de contabilidad">
+          <!-- Recursos humanos -->
+          <option value="Analista de recursos humanos">
+          <option value="Asistente de recursos humanos">
+          <option value="Analista de selección de personal">
+          <option value="Gestor de planillas">
+          <option value="Analista de capacitación">
+          <!-- Logística y operaciones -->
+          <option value="Asistente logístico">
+          <option value="Analista de logística">
+          <option value="Coordinador logístico">
+          <option value="Almacenero">
+          <option value="Despachador">
+          <option value="Jefe de almacén">
+          <option value="Analista de supply chain">
+          <option value="Operario de producción">
+          <option value="Supervisor de operaciones">
+          <!-- Ventas y marketing -->
+          <option value="Ejecutivo de ventas">
+          <option value="Asesor comercial">
+          <option value="Vendedor">
+          <option value="Analista de marketing">
+          <option value="Community manager">
+          <option value="Ejecutivo de cuentas">
+          <option value="Supervisor de ventas">
+          <option value="Jefe de ventas">
+          <option value="Analista de marketing digital">
+          <!-- Tecnología -->
+          <option value="Analista de sistemas">
+          <option value="Desarrollador web">
+          <option value="Desarrollador frontend">
+          <option value="Desarrollador backend">
+          <option value="Ingeniero de software">
+          <option value="Analista programador">
+          <option value="Soporte técnico">
+          <option value="Analista de datos">
+          <option value="Analista de seguridad informática">
+          <option value="Project manager TI">
+          <!-- Ingeniería -->
+          <option value="Ingeniero civil">
+          <option value="Ingeniero industrial">
+          <option value="Ingeniero de sistemas">
+          <option value="Ingeniero eléctrico">
+          <option value="Ingeniero mecánico">
+          <option value="Residente de obra">
+          <option value="Supervisor de obra">
+          <option value="Ingeniero ambiental">
+          <option value="Ingeniero de minas">
+          <option value="Ingeniero de seguridad">
+          <!-- Salud -->
+          <option value="Enfermera">
+          <option value="Médico general">
+          <option value="Técnico en enfermería">
+          <option value="Químico farmacéutico">
+          <option value="Nutricionista">
+          <option value="Psicólogo">
+          <option value="Fisioterapeuta">
+          <option value="Médico especialista">
+          <!-- Educación -->
+          <option value="Docente de primaria">
+          <option value="Docente de secundaria">
+          <option value="Profesor de inglés">
+          <option value="Coordinador académico">
+          <option value="Tutor virtual">
+          <!-- Legal -->
+          <option value="Abogado">
+          <option value="Asistente legal">
+          <option value="Analista legal">
+          <!-- Otros comunes -->
+          <option value="Asistente de servicio al cliente">
+          <option value="Asesor de atención al cliente">
+          <option value="Cajero">
+          <option value="Técnico de mantenimiento">
+          <option value="Chofer">
+          <option value="Guardián de seguridad">
+          <option value="Practicante profesional">
+          <option value="Practicante pre-profesional">
+        </datalist>
         <button onclick="toggleOfertaInicio()" id="btn-toggle-oferta-inicio" style="width:100%;text-align:left;background:transparent;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:12px;transition:all 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
           <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           <span style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:600;">+ Tengo una oferta de trabajo (opcional)</span>
