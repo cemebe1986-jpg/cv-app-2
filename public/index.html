@@ -610,8 +610,26 @@
         <div id="estado-con-login" style="display:none;">
           <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
-            <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'"><div style="font-size:1.3rem;margin-bottom:6px;">🎯</div><div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Básico</div><div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">1 CV · 3 estilos · 30 días</div><div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div><div style="font-size:0.68rem;color:#a0aec0;margin-bottom:10px;">sin suscripción</div><div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Comprar</div></div>
-            <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'"><div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 PACK EMPLEO</div><div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">💼</div><div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div><div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">3 CVs · 3 estilos · 30 días</div><div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div><div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div><div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:10px;">Ahorras S/2.80 🎉</div><div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Llevar pack</div></div>
+            <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
+              <div style="font-size:1.3rem;margin-bottom:6px;">📄</div>
+              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Plan Básico</div>
+              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para una búsqueda de trabajo</div>
+              <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div>
+              <div style="font-size:0.68rem;color:#a0aec0;margin-bottom:6px;">sin suscripción</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV cuando quieras,<br>en el estilo que prefieras</div>
+              <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Quiero este →</div>
+            </div>
+            <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
+              <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 MÁS ELEGIDO</div>
+              <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">📦</div>
+              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div>
+              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para postular a distintos puestos</div>
+              <div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div>
+              <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div>
+              <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorras S/2.80 🎉</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Crea hasta 3 CVs distintos y descarga<br>cada uno en el estilo que prefieras</div>
+              <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Me llevo el pack →</div>
+            </div>
           </div>
           <div style="margin-top:16px;padding:14px 16px;background:#f8faff;border-radius:12px;border:1px solid #e2e8f0;text-align:center;">
             <p style="font-size:0.78rem;color:#4a5568;margin-bottom:4px;">🛡️ Si no quedas conforme, te devolvemos el pago dentro de los 7 días.</p>
