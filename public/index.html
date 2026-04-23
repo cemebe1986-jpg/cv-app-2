@@ -1216,6 +1216,19 @@
 
   detectarPaisPorCodigo();
   verificarRetornoMP();
+
+  // Detectar cargo desde landing
+  (function detectarCargoDesideLanding(){
+    const params=new URLSearchParams(window.location.search);
+    const cargo=params.get('cargo');
+    if(cargo&&cargo.trim().length>1){
+      elegirCamino('manual');
+      setTimeout(()=>{
+        const campoCargo=document.getElementById('cargo');
+        if(campoCargo)campoCargo.value=decodeURIComponent(cargo);
+      },100);
+    }
+  })();
 </script>
 </body>
 </html>

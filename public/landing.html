@@ -4,24 +4,23 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>TalentIA — El CV que te consigue la entrevista | Generador de CV con IA Perú</title>
-  <meta name="description" content="Crea tu CV profesional con inteligencia artificial en minutos. Redacción con IA, diseño profesional en PDF. Hecho para el mercado laboral de Perú. Sin suscripción.">
+  <meta name="description" content="Crea tu CV profesional con inteligencia artificial en 5 minutos. Optimizado para reclutadores de Perú y Latinoamérica. Análisis ATS incluido. Sin suscripción.">
   <meta name="keywords" content="curriculum vitae peru, hacer cv peru, cv con ia, generador cv peru, curriculum vitae lima, como hacer un cv peru 2026">
   <meta name="author" content="TalentIA">
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://talentia.com.pe/">
   <meta name="google-site-verification" content="3OqyLAeEe3kQI9_rtpF89LKXaINz_AXQOZDz3vE-aW8" />
-  <!-- Google Analytics GA4 + Google Ads -->
+  <!-- Google Analytics GA4 -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
     gtag('config', 'G-7Z85X742GB');
-    gtag('config', 'AW-3807168634');
   </script>
   <!-- Open Graph para WhatsApp, Facebook, LinkedIn -->
   <meta property="og:title" content="TalentIA — El CV que te consigue la entrevista">
-  <meta property="og:description" content="Crea tu CV profesional con IA en minutos. Redacción con inteligencia artificial, diseño profesional en PDF. Hecho para Perú.">
+  <meta property="og:description" content="Crea tu CV profesional con IA en 5 minutos. Optimizado para el mercado peruano. Análisis ATS incluido.">
   <meta property="og:url" content="https://talentia.com.pe/">
   <meta property="og:type" content="website">
   <meta property="og:locale" content="es_PE">
@@ -71,21 +70,21 @@
     "applicationCategory": "BusinessApplication",
     "operatingSystem": "Web",
     "url": "https://talentia.com.pe/crear",
-    "description": "Crea tu curriculum vitae profesional con inteligencia artificial. Redacción con IA y diseño profesional para el mercado laboral peruano.",
+    "description": "Crea tu curriculum vitae profesional con inteligencia artificial. Optimizado para ATS y el mercado laboral peruano.",
     "offers": [
       {
         "@type": "Offer",
         "name": "Plan Básico",
         "price": "4.90",
         "priceCurrency": "PEN",
-        "description": "1 CV sin marca de agua por 30 días"
+        "description": "1 CV sin marca de agua para 1 postulación"
       },
       {
         "@type": "Offer",
-        "name": "Pack Empleo",
-        "price": "11.90",
+        "name": "Plan Popular",
+        "price": "24.90",
         "priceCurrency": "PEN",
-        "description": "3 CVs sin marca de agua por 30 días"
+        "description": "3 CVs sin marca de agua para 3 postulaciones"
       }
     ],
     "aggregateRating": {
@@ -107,7 +106,7 @@
         "name": "¿Cuánto cuesta hacer mi CV con TalentIA?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Crear y previsualizar tu CV es completamente gratis. Solo pagas cuando quieres descargar el PDF sin marca de agua. El plan Básico cuesta S/4.90 para 1 CV descargable por 30 días, y el Pack Empleo S/11.90 para 3 CVs descargables por 30 días. Sin suscripción ni cobros recurrentes."
+          "text": "Crear y previsualizar tu CV es completamente gratis. Solo pagas cuando quieres descargar el PDF sin marca de agua. El plan Esencial cuesta S/4.90 para 1 descarga, el plan Básico S/9.90 con descargas ilimitadas por 30 días, y el plan Popular S/24.90. Sin suscripción ni cobros recurrentes."
         }
       },
       {
@@ -131,7 +130,7 @@
         "name": "¿El CV está optimizado para pasar filtros ATS?",
         "acceptedAnswer": {
           "@type": "Answer",
-          "text": "Sí. Los estilos Ejecutivo y Minimalista usan una sola columna y texto limpio, que es el formato que prefieren los sistemas de selección de empresas grandes como BCP, Alicorp, Claro y Ripley."
+          "text": "Sí. Los estilos Ejecutivo y Minimalista son especialmente ATS-friendly porque usan una sola columna y texto limpio. Evitamos tablas y elementos gráficos que confunden a los sistemas de seguimiento de candidatos que usan empresas como BCP, Alicorp, Claro y Ripley."
         }
       },
       {
@@ -329,7 +328,32 @@
       </div>
       <div class="demo-texto" id="demo-texto"><span class="demo-cursor"></span></div>
     </div>
-    <a href="/crear" class="hero-cta">✨ Crear mi CV gratis</a>
+    <div style="max-width:480px;margin:0 auto 16px;">
+      <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas?" autocomplete="off"
+          style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
+          onkeydown="if(event.key==='Enter'&&this.value.trim().length>1)irAlWizard()">
+        <button onclick="irAlWizard()" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Empecemos →</button>
+      </div>
+      <datalist id="lista-puestos-hero">
+        <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
+        <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
+        <option value="Asistente contable"><option value="Analista contable"><option value="Analista financiero">
+        <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
+        <option value="Asistente logístico"><option value="Analista de logística"><option value="Almacenero">
+        <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
+        <option value="Analista de marketing"><option value="Community manager"><option value="Analista de marketing digital">
+        <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Ingeniero de software">
+        <option value="Soporte técnico"><option value="Analista de datos">
+        <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
+        <option value="Residente de obra"><option value="Supervisor de obra">
+        <option value="Enfermera"><option value="Médico general"><option value="Técnico en enfermería">
+        <option value="Psicólogo"><option value="Nutricionista">
+        <option value="Docente de primaria"><option value="Docente de secundaria"><option value="Profesor de inglés">
+        <option value="Abogado"><option value="Asistente legal">
+        <option value="Cajero"><option value="Practicante profesional"><option value="Practicante pre-profesional">
+      </datalist>
+    </div>
     <div class="hero-cta-sub">Gratis para crear · Desde S/4.90 para descargar · Sin suscripción</div>
     <div style="margin-top:20px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
       <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;display:flex;align-items:center;gap:6px;">⏱️ <span>Listo en 5 minutos</span></div>
@@ -370,7 +394,7 @@
       <p>La IA no solo cambia el diseño — reescribe tu experiencia con el lenguaje que los reclutadores quieren ver.</p>
       <div class="cv-feature">
         <div class="cv-feature-icon">🎯</div>
-        <div class="cv-feature-text"><strong>Formato que prefieren los reclutadores</strong>Diseño limpio de una columna, el que eligen empresas como BCP, Alicorp, Ripley y Claro</div>
+        <div class="cv-feature-text"><strong>Optimizado para ATS</strong>Pasa los filtros automáticos que usan empresas como BCP, Alicorp, Ripley y Claro</div>
       </div>
       <div class="cv-feature">
         <div class="cv-feature-icon">✍️</div>
@@ -477,9 +501,23 @@
   <h2 class="section-title">Simple y transparente</h2>
   <p class="section-sub">Genera tu CV gratis. Descárgalo cuando estés listo.</p>
   <div class="precios-grid">
-    <div class="precio-card">
+    <div class="precio-card" style="border:2px solid #22c55e;">
       <div class="precio-icono">🟢</div>
-      <div class="precio-nombre">Plan Básico</div>
+      <div class="precio-nombre">Esencial</div>
+      <div class="precio-desc">Para probar · 1 descarga</div>
+      <div class="precio-monto"><span>S/</span>4.90</div>
+      <div class="precio-ahorro">&nbsp;</div>
+      <div class="precio-features">
+        <div class="precio-feature">1 descarga sin marca de agua</div>
+        <div class="precio-feature">Sugerencias IA de logros</div>
+        <div class="precio-feature">3 estilos de diseño</div>
+        <div class="precio-feature">Sin vencimiento</div>
+      </div>
+      <a href="/crear" class="precio-btn" style="background:#22c55e;">Crear mi CV →</a>
+    </div>
+    <div class="precio-card">
+      <div class="precio-icono">🎯</div>
+      <div class="precio-nombre">Básico</div>
       <div class="precio-desc">1 CV · 3 estilos · 30 días</div>
       <div class="precio-monto"><span>S/</span>4.90</div>
       <div class="precio-ahorro">&nbsp;</div>
@@ -488,7 +526,7 @@
         <div class="precio-feature">Descarga cuando quieras por 30 días</div>
         <div class="precio-feature">3 estilos de diseño</div>
         <div class="precio-feature">Sugerencias IA de logros</div>
-        <div class="precio-feature">Formato limpio para empresas grandes</div>
+        <div class="precio-feature">Análisis de compatibilidad ATS</div>
       </div>
       <a href="/crear" class="precio-btn">Crear mi CV →</a>
     </div>
@@ -507,7 +545,7 @@
         <div class="precio-feature">Descarga cuando quieras por 30 días</div>
         <div class="precio-feature">3 estilos de diseño</div>
         <div class="precio-feature">Sugerencias IA de logros</div>
-        <div class="precio-feature">Formato limpio para empresas grandes</div>
+        <div class="precio-feature">Análisis de compatibilidad ATS</div>
       </div>
       <a href="/crear" class="precio-btn">Llevar pack →</a>
     </div>
@@ -532,8 +570,8 @@
       <div class="articulo-img">🤖</div>
       <div class="articulo-body">
         <div class="articulo-tag">Tecnología</div>
-        <div class="articulo-titulo">Por qué tu CV no llega a un humano en BCP, Alicorp o Ripley (y cómo evitarlo)</div>
-        <div class="articulo-desc">Muchas empresas usan software para filtrar CVs antes de que un reclutador los vea. Aprende qué formato y redacción necesitas para pasar esa primera barrera.</div>
+        <div class="articulo-titulo">¿Qué es un ATS y por qué tu CV no pasa los filtros de BCP, Alicorp o Ripley?</div>
+        <div class="articulo-desc">El 75% de CVs son rechazados por un software antes de llegar a un humano. Aprende cómo optimizar tu CV para pasar estos filtros.</div>
         <div class="articulo-meta">📖 4 min de lectura · Abril 2026</div>
       </div>
     </a>
@@ -569,7 +607,7 @@
     <p style="color:#4a5568;line-height:1.8;margin-bottom:20px;font-size:0.95rem;">Si tienes título universitario o técnico, no es necesario mencionar el colegio. Los reclutadores peruanos asumen la secundaria. Sí incluye: universidad, carrera, año de egreso, y si tienes GPA sobresaliente (16+ sobre 20). Las certificaciones internacionales como AWS, PMP, CISSP o similares tienen mucho peso — ponlas en una sección separada.</p>
 
     <h3 style="font-size:1.1rem;font-weight:700;color:#1a1a2e;margin:28px 0 12px;">5. Habilidades: sin barras ni estrellas</h3>
-    <p style="color:#4a5568;line-height:1.8;margin-bottom:20px;font-size:0.95rem;">Las barras de progreso y los sistemas de estrellas para habilidades (●●●○○) son visualmente atractivos pero problemáticos. Los sistemas de selección de muchas empresas no pueden leerlos, y los reclutadores no les dan credibilidad porque son auto-evaluados. Lista tus habilidades como texto simple: Excel avanzado, SAP FI, Power BI, SQL. Es más honesto, más legible y más fácil de procesar.</p>
+    <p style="color:#4a5568;line-height:1.8;margin-bottom:32px;font-size:0.95rem;">Las barras de progreso y los sistemas de estrellas para habilidades (●●●○○) son visualmente atractivos pero problemáticos. Los sistemas ATS no pueden leerlos, y los reclutadores no les dan credibilidad porque son auto-evaluados. Lista tus habilidades como texto simple: Excel avanzado, SAP FI, Power BI, SQL. Es más honesto, más legible y más ATS-friendly.</p>
 
     <div style="background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border:2px solid #bfdbfe;border-radius:16px;padding:24px;text-align:center;">
       <div style="font-size:1.1rem;font-weight:800;color:#1a1a2e;margin-bottom:8px;">¿Listo para aplicar estos consejos?</div>
@@ -598,8 +636,8 @@
       <div class="faq-respuesta">No. La IA usa únicamente los datos que tú ingresas. Lo que hace es mejorar la redacción: convierte listas de tareas en logros con impacto, usa verbos de acción profesionales y optimiza el lenguaje para que suene más sólido. Los cargos, empresas, fechas y datos reales nunca se modifican.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
-      <div class="faq-pregunta">¿El CV funciona para postular a empresas grandes?</div>
-      <div class="faq-respuesta">Sí. Los estilos Ejecutivo y Minimalista usan una sola columna con texto limpio, que es el formato que prefieren los sistemas de selección de empresas como BCP, Alicorp, Claro y Ripley. Evitamos tablas, columnas complejas y elementos gráficos que pueden causar problemas de lectura en esos sistemas.</div>
+      <div class="faq-pregunta">¿El CV está optimizado para pasar filtros ATS?</div>
+      <div class="faq-respuesta">Sí. Los estilos Ejecutivo y Minimalista son especialmente ATS-friendly porque usan una sola columna y texto limpio. Evitamos tablas, columnas complejas y elementos gráficos que confunden a los sistemas de seguimiento de candidatos que usan empresas como BCP, Alicorp, Claro y Ripley.</div>
     </div>
     <div class="faq-item" onclick="toggleFaq(this)">
       <div class="faq-pregunta">¿Puedo subir mi CV actual y mejorarlo?</div>
@@ -628,10 +666,37 @@
     <a href="/terminos" style="color:rgba(255,255,255,0.4);text-decoration:none;margin:0 8px;">Términos y condiciones</a>
     <span style="color:rgba(255,255,255,0.2);">·</span>
     <a href="/privacidad" style="color:rgba(255,255,255,0.4);text-decoration:none;margin:0 8px;">Política de privacidad</a>
+    <span style="color:rgba(255,255,255,0.2);">·</span>
+    <a href="https://wa.me/51997532149" target="_blank" style="color:rgba(255,255,255,0.4);text-decoration:none;margin:0 8px;">Contacto</a>
   </p>
 </footer>
 
-<!-- Botón WhatsApp pendiente de configurar -->
+<!-- BOTÓN FLOTANTE WHATSAPP — reemplaza 51997532149 con tu número -->
+<a href="https://wa.me/51997532149?text=Hola%2C%20tengo%20una%20consulta%20sobre%20TalentIA" 
+   target="_blank"
+   id="btn-whatsapp"
+   style="display:none;position:fixed;bottom:24px;right:24px;z-index:9999;
+          background:#25d366;color:white;border-radius:50px;
+          padding:14px 20px;text-decoration:none;font-weight:700;font-size:0.9rem;
+          box-shadow:0 4px 20px rgba(37,211,102,0.4);
+          display:flex;align-items:center;gap:10px;
+          transition:transform 0.2s,box-shadow 0.2s;"
+   onmouseover="this.style.transform='translateY(-2px)';this.style.boxShadow='0 8px 28px rgba(37,211,102,0.5)'"
+   onmouseout="this.style.transform='none';this.style.boxShadow='0 4px 20px rgba(37,211,102,0.4)'">
+  <svg width="22" height="22" viewBox="0 0 24 24" fill="white" xmlns="http://www.w3.org/2000/svg">
+    <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+  </svg>
+  ¿Tienes dudas?
+</a>
+
+<script>
+  // Mostrar botón WhatsApp después de 5 segundos
+  // IMPORTANTE: reemplaza 51997532149 con tu número real antes de deployar
+  setTimeout(() => {
+    const btn = document.getElementById('btn-whatsapp');
+    if (btn) btn.style.display = 'flex';
+  }, 5000);
+</script>
 
 <script>
   function toggleFaq(item) {
@@ -667,6 +732,12 @@
     }
   }
   setInterval(animarDemo, 30);
+
+  function irAlWizard(){
+    const cargo=document.getElementById('cargo-hero').value.trim();
+    if(cargo.length<2){document.getElementById('cargo-hero').focus();return;}
+    window.location.href='/crear?cargo='+encodeURIComponent(cargo);
+  }
 </script>
 </body>
 </html>
