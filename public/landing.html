@@ -337,11 +337,22 @@
       <div class="demo-texto" id="demo-texto"><span class="demo-cursor"></span></div>
     </div>
     <div style="max-width:480px;margin:0 auto 16px;">
-      <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
-        <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas?" autocomplete="off"
-          style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
-          onkeydown="if(event.key==='Enter'&&this.value.trim().length>1)irAlWizard()">
-        <button onclick="irAlWizard()" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Empecemos →</button>
+      <p style="color:rgba(255,255,255,0.7);font-size:0.88rem;font-weight:600;margin-bottom:14px;text-align:center;">¿Ya sabes a qué puesto postulas?</p>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
+        <button onclick="mostrarCampoCargoHero()" id="btn-si-puesto" style="padding:20px 16px;background:#3b82f6;border:2px solid #3b82f6;border-radius:14px;color:white;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;transition:all 0.2s;text-align:center;line-height:1.4;" onmouseover="this.style.background='#2563eb';this.style.borderColor='#2563eb'" onmouseout="if(!window.siPuestoActivo){this.style.background='#3b82f6';this.style.borderColor='#3b82f6'}">
+          Tengo una oferta<br>en mente
+        </button>
+        <button onclick="irAlWizardGeneral()" style="padding:20px 16px;background:#3b82f6;border:2px solid #3b82f6;border-radius:14px;color:white;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;transition:all 0.2s;text-align:center;line-height:1.4;" onmouseover="this.style.background='#2563eb';this.style.borderColor='#2563eb'" onmouseout="this.style.background='#3b82f6';this.style.borderColor='#3b82f6'">
+          No tengo una<br>oferta específica
+        </button>
+      </div>
+      <div id="campo-cargo-hero" style="display:none;margin-top:4px;">
+        <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+          <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Contador, Vendedor, Enfermera..." autocomplete="off"
+            style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
+            onkeydown="if(event.key==='Enter'&&this.value.trim().length>1)irAlWizard()">
+          <button onclick="irAlWizard()" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Empecemos →</button>
+        </div>
       </div>
       <datalist id="lista-puestos-hero">
         <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
@@ -686,6 +697,20 @@
     }
   }
   setInterval(animarDemo, 30);
+
+  function mostrarCampoCargoHero(){
+    window.siPuestoActivo=true;
+    const campo=document.getElementById('campo-cargo-hero');
+    campo.style.display='block';
+    setTimeout(()=>document.getElementById('cargo-hero').focus(),100);
+    const btn=document.getElementById('btn-si-puesto');
+    btn.style.background='rgba(96,165,250,0.15)';
+    btn.style.borderColor='#60a5fa';
+  }
+
+  function irAlWizardGeneral(){
+    window.location.href='/crear';
+  }
 
   function irAlWizard(){
     const cargo=document.getElementById('cargo-hero').value.trim();
