@@ -261,7 +261,7 @@
         <div class="progress-text" id="progress-text"></div>
       </div>
 
-      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;"><button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;"><div><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div><div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div><div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div></div><div><button onclick="mostrarCVGuardado()" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button></div></div></div>
+      <div id="banner-cv-guardado" style="display:none;background:linear-gradient(135deg,#0f3460,#1a1a2e);border-radius:16px;padding:20px 24px;margin-bottom:20px;color:white;position:relative;"><button onclick="document.getElementById('banner-cv-guardado').style.display='none'" style="position:absolute;top:10px;right:12px;background:rgba(255,255,255,0.15);border:none;color:white;width:24px;height:24px;border-radius:50%;cursor:pointer;font-size:0.85rem;display:flex;align-items:center;justify-content:center;line-height:1;">✕</button><div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;padding-right:20px;"><div><div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">✅ TIENES UN CV LISTO</div><div style="font-size:0.95rem;font-weight:700;" id="banner-nombre-cv">Tu CV profesional</div><div style="font-size:0.78rem;opacity:0.7;margin-top:2px;" id="banner-plan-cv">Plan activo · Puedes descargarlo sin marca de agua</div></div><div><button onclick="this.textContent='⏳ Cargando...';this.disabled=true;mostrarCVGuardado().finally(()=>{this.textContent='Ver y descargar';this.disabled=false;})" style="padding:10px 18px;background:#22c55e;color:white;border:none;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;">Ver y descargar</button></div></div></div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
         <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
@@ -1052,6 +1052,7 @@
     try{
       let texto='';
       try{
+        if(typeof pdfjsLib==='undefined') throw new Error('PDF reader no disponible. Intenta recargar la página.');
         const ab=await input.files[0].arrayBuffer();
         const pdf=await pdfjsLib.getDocument({data:ab}).promise;
         for(let i=1;i<=pdf.numPages;i++){
