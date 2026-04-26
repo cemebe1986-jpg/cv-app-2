@@ -443,37 +443,25 @@
 
       <!-- PASO 2: EXPERIENCIA -->
       <div class="step" id="step-2">
-        <!-- SELECTOR MODO -->
-        <div id="modo-experiencia-selector" style="margin-bottom:20px;">
-          <p style="font-size:0.88rem;color:rgba(255,255,255,0.6);margin-bottom:12px;font-weight:600;">¿Tienes experiencia laboral?</p>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;">
-            <div id="modo-btn-si" onclick="setModoExperiencia('con')" style="border:1.5px solid rgba(96,165,250,0.5);background:rgba(96,165,250,0.1);border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
-              <div style="font-size:1.4rem;margin-bottom:4px;">💼</div>
-              <div style="font-size:0.82rem;font-weight:700;color:#60a5fa;">Sí tengo</div>
-            </div>
-            <div id="modo-btn-no" onclick="setModoExperiencia('sin')" style="border:1.5px solid rgba(255,255,255,0.1);background:rgba(255,255,255,0.04);border-radius:12px;padding:14px;text-align:center;cursor:pointer;">
-              <div style="font-size:1.4rem;margin-bottom:4px;">🎓</div>
-              <div style="font-size:0.82rem;font-weight:700;color:rgba(255,255,255,0.5);">Es mi primer empleo</div>
-            </div>
-          </div>
-        </div>
-        <!-- CON EXPERIENCIA -->
+        <!-- CON EXPERIENCIA — visible por defecto -->
         <div id="bloque-con-experiencia">
           <label>Tu experiencia laboral</label>
           <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
           <div id="lista-trabajos"></div>
           <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:transparent;color:#60a5fa;border:1.5px dashed rgba(96,165,250,0.4);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar trabajo</button>
+          <button type="button" onclick="setModoExperiencia('sin')" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.3);border:none;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">No tengo experiencia laboral →</button>
         </div>
         <!-- SIN EXPERIENCIA -->
         <div id="bloque-sin-experiencia" style="display:none;">
-          <div style="background:#f0f9ff;border:2px solid #bae6fd;border-radius:14px;padding:16px;margin-bottom:20px;">
-            <div style="font-size:0.85rem;font-weight:700;color:#0369a1;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
-            <div style="font-size:0.8rem;color:#0369a1;">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
+          <div style="background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:14px;padding:16px;margin-bottom:20px;">
+            <div style="font-size:0.85rem;font-weight:700;color:#60a5fa;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
+            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
           </div>
           <label>Prácticas / Proyectos / Voluntariados</label>
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
           <div id="lista-proyectos"></div>
           <button type="button" onclick="agregarProyecto()" style="width:100%;padding:12px;background:transparent;color:#60a5fa;border:1.5px dashed rgba(96,165,250,0.4);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar práctica o proyecto</button>
+          <button type="button" onclick="setModoExperiencia('con')" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.3);border:none;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">← Tengo experiencia laboral</button>
         </div>
       </div>
 
@@ -1273,14 +1261,20 @@
       // No tiene oferta específica → salta step-0 directo al paso 1
       elegirCamino('manual');
     } else if(oferta==='si'){
-      // Tiene oferta en mente → muestra step-0 con el toggle de oferta ya abierto
+      // Tiene oferta en mente → oculta campo de puesto, muestra solo oferta
       setTimeout(()=>{
+        const campoPuesto=document.querySelector('#step-0 p');
+        const inputCargo=document.getElementById('cargo-inicio');
+        if(campoPuesto)campoPuesto.style.display='none';
+        if(inputCargo)inputCargo.style.display='none';
         const campo=document.getElementById('campo-oferta-inicio');
         const icon=document.getElementById('oferta-inicio-icon');
-        const btn=document.getElementById('btn-toggle-oferta-inicio');
+        const btnToggle=document.getElementById('btn-toggle-oferta-inicio');
+        const btnEmpezar=document.getElementById('btn-empezar');
         if(campo){campo.style.display='block';}
         if(icon){icon.textContent='▴';}
-        if(btn){btn.style.borderColor='rgba(96,165,250,0.4)';}
+        if(btnToggle){btnToggle.style.display='none';}
+        if(btnEmpezar){btnEmpezar.disabled=false;btnEmpezar.style.opacity='1';}
         window.siPuestoActivo=true;
       },100);
     }
