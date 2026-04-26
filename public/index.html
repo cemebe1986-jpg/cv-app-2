@@ -784,25 +784,15 @@
     const panel=document.getElementById('sidebar-cv-panel');
     panel.style.display=panel.style.display==='none'?'block':'none';
   }
-    const campo=document.getElementById('campo-oferta-inicio');
-    const icon=document.getElementById('oferta-inicio-icon');
-    const btn=document.getElementById('btn-toggle-oferta-inicio');
-    const visible=campo.style.display!=='none';
-    campo.style.display=visible?'none':'block';
-    icon.textContent=visible?'▾':'▴';
-    btn.style.borderColor=visible?'rgba(255,255,255,0.12)':'rgba(96,165,250,0.4)';
-    if(visible)document.getElementById('oferta-inicio').value='';
-  }
 
   function iniciarDesdeInicio(){
     const cargo=document.getElementById('cargo-inicio').value.trim();
     if(cargo.length<2)return;
-    const ofertaInicio=document.getElementById('oferta-inicio').value.trim();
     elegirCamino('manual');
-    const campoCargo=document.getElementById('cargo');
-    if(campoCargo)campoCargo.value=cargo;
-    const ofertaPrincipal=document.getElementById('oferta');
-    if(ofertaPrincipal&&ofertaInicio)ofertaPrincipal.value=ofertaInicio;
+    setTimeout(()=>{
+      const campoCargo=document.getElementById('cargo');
+      if(campoCargo){campoCargo.value=cargo;campoCargo.dispatchEvent(new Event('input'));}
+    },200);
   }
 
   function elegirCamino(tipo){
@@ -1201,12 +1191,15 @@
     const oferta=params.get('oferta');
 
     if(cargo&&cargo.trim().length>1){
-      // Vino con cargo específico → arranca wizard directo
+      // Vino con cargo específico → salta step-0 directo al paso 1
       elegirCamino('manual');
       setTimeout(()=>{
         const campoCargo=document.getElementById('cargo');
-        if(campoCargo)campoCargo.value=decodeURIComponent(cargo);
-      },100);
+        if(campoCargo){
+          campoCargo.value=decodeURIComponent(cargo);
+          campoCargo.dispatchEvent(new Event('input'));
+        }
+      },200);
     } else if(skip==='true'){
       // No tiene oferta específica → salta step-0 directo al paso 1
       elegirCamino('manual');
