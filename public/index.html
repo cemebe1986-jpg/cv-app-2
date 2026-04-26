@@ -275,116 +275,42 @@
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
         <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
-        <p style="color:rgba(255,255,255,0.5);font-size:0.82rem;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;font-weight:600;">¿A qué puesto postulas?</p>
-        <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:12px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
+        <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:8px;font-weight:600;">¿A qué puesto postulas?</p>
+        <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:6px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
         <datalist id="lista-puestos-peru">
-          <!-- Administración y finanzas -->
-          <option value="Asistente administrativo">
-          <option value="Auxiliar administrativo">
-          <option value="Analista administrativo">
-          <option value="Secretaria ejecutiva">
-          <option value="Recepcionista">
-          <option value="Asistente de gerencia">
-          <option value="Contador general">
-          <option value="Asistente contable">
-          <option value="Analista contable">
-          <option value="Analista financiero">
-          <option value="Tesorero">
-          <option value="Asistente de tesorería">
-          <option value="Auditor interno">
-          <option value="Analista de costos">
-          <option value="Jefe de contabilidad">
-          <!-- Recursos humanos -->
-          <option value="Analista de recursos humanos">
-          <option value="Asistente de recursos humanos">
-          <option value="Analista de selección de personal">
-          <option value="Gestor de planillas">
-          <option value="Analista de capacitación">
-          <!-- Logística y operaciones -->
-          <option value="Asistente logístico">
-          <option value="Analista de logística">
-          <option value="Coordinador logístico">
-          <option value="Almacenero">
-          <option value="Despachador">
-          <option value="Jefe de almacén">
-          <option value="Analista de supply chain">
-          <option value="Operario de producción">
-          <option value="Supervisor de operaciones">
-          <!-- Ventas y marketing -->
-          <option value="Ejecutivo de ventas">
-          <option value="Asesor comercial">
-          <option value="Vendedor">
-          <option value="Analista de marketing">
-          <option value="Community manager">
-          <option value="Ejecutivo de cuentas">
-          <option value="Supervisor de ventas">
-          <option value="Jefe de ventas">
-          <option value="Analista de marketing digital">
-          <!-- Tecnología -->
-          <option value="Analista de sistemas">
-          <option value="Desarrollador web">
-          <option value="Desarrollador frontend">
-          <option value="Desarrollador backend">
-          <option value="Ingeniero de software">
-          <option value="Analista programador">
-          <option value="Soporte técnico">
-          <option value="Analista de datos">
-          <option value="Analista de seguridad informática">
-          <option value="Project manager TI">
-          <!-- Ingeniería -->
-          <option value="Ingeniero civil">
-          <option value="Ingeniero industrial">
-          <option value="Ingeniero de sistemas">
-          <option value="Ingeniero eléctrico">
-          <option value="Ingeniero mecánico">
-          <option value="Residente de obra">
-          <option value="Supervisor de obra">
-          <option value="Ingeniero ambiental">
-          <option value="Ingeniero de minas">
-          <option value="Ingeniero de seguridad">
-          <!-- Salud -->
-          <option value="Médico general">
-          <option value="Médico especialista">
-          <option value="Doctor en medicina">
-          <option value="Médico cirujano">
-          <option value="Enfermera">
-          <option value="Técnico en enfermería">
-          <option value="Obstetra">
-          <option value="Químico farmacéutico">
-          <option value="Nutricionista">
-          <option value="Psicólogo">
-          <option value="Fisioterapeuta">
-          <option value="Odontólogo">
-          <option value="Biólogo">
-          <option value="Tecnólogo médico">
-          <!-- Educación -->
-          <option value="Docente de primaria">
-          <option value="Docente de secundaria">
-          <option value="Profesor de inglés">
-          <option value="Coordinador académico">
-          <option value="Tutor virtual">
-          <!-- Legal -->
-          <option value="Abogado">
-          <option value="Asistente legal">
-          <option value="Analista legal">
-          <!-- Otros comunes -->
-          <option value="Asistente de servicio al cliente">
-          <option value="Asesor de atención al cliente">
-          <option value="Cajero">
-          <option value="Técnico de mantenimiento">
-          <option value="Chofer">
-          <option value="Guardián de seguridad">
-          <option value="Practicante profesional">
-          <option value="Practicante pre-profesional">
+          <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
+          <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Asistente de gerencia">
+          <option value="Contador general"><option value="Asistente contable"><option value="Analista contable">
+          <option value="Analista financiero"><option value="Tesorero"><option value="Asistente de tesorería">
+          <option value="Auditor interno"><option value="Analista de costos"><option value="Jefe de contabilidad">
+          <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
+          <option value="Analista de selección de personal"><option value="Gestor de planillas"><option value="Analista de capacitación">
+          <option value="Asistente logístico"><option value="Analista de logística"><option value="Coordinador logístico">
+          <option value="Almacenero"><option value="Despachador"><option value="Jefe de almacén">
+          <option value="Analista de supply chain"><option value="Operario de producción"><option value="Supervisor de operaciones">
+          <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
+          <option value="Analista de marketing"><option value="Community manager"><option value="Ejecutivo de cuentas">
+          <option value="Supervisor de ventas"><option value="Jefe de ventas"><option value="Analista de marketing digital">
+          <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Desarrollador frontend">
+          <option value="Desarrollador backend"><option value="Ingeniero de software"><option value="Analista programador">
+          <option value="Soporte técnico"><option value="Analista de datos"><option value="Analista de seguridad informática">
+          <option value="Project manager TI"><option value="Ingeniero civil"><option value="Ingeniero industrial">
+          <option value="Ingeniero de sistemas"><option value="Ingeniero eléctrico"><option value="Ingeniero mecánico">
+          <option value="Residente de obra"><option value="Supervisor de obra"><option value="Ingeniero ambiental">
+          <option value="Ingeniero de minas"><option value="Ingeniero de seguridad">
+          <option value="Médico general"><option value="Médico especialista"><option value="Doctor en medicina">
+          <option value="Médico cirujano"><option value="Enfermera"><option value="Técnico en enfermería">
+          <option value="Obstetra"><option value="Químico farmacéutico"><option value="Nutricionista">
+          <option value="Psicólogo"><option value="Fisioterapeuta"><option value="Odontólogo">
+          <option value="Biólogo"><option value="Tecnólogo médico">
+          <option value="Docente de primaria"><option value="Docente de secundaria"><option value="Profesor de inglés">
+          <option value="Coordinador académico"><option value="Tutor virtual">
+          <option value="Abogado"><option value="Asistente legal"><option value="Analista legal">
+          <option value="Asistente de servicio al cliente"><option value="Asesor de atención al cliente">
+          <option value="Cajero"><option value="Técnico de mantenimiento"><option value="Chofer">
+          <option value="Guardián de seguridad"><option value="Practicante profesional"><option value="Practicante pre-profesional">
         </datalist>
-        <button onclick="toggleOfertaInicio()" id="btn-toggle-oferta-inicio" style="width:100%;text-align:left;background:transparent;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:11px 14px;cursor:pointer;display:flex;align-items:center;gap:10px;margin-bottom:12px;transition:all 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="rgba(255,255,255,0.4)" stroke-width="2" style="flex-shrink:0;"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
-          <span style="font-size:0.82rem;color:rgba(255,255,255,0.4);font-weight:600;">+ Tengo una oferta de trabajo (opcional)</span>
-          <span id="oferta-inicio-icon" style="color:rgba(255,255,255,0.3);font-size:0.9rem;margin-left:auto;">▾</span>
-        </button>
-        <div id="campo-oferta-inicio" style="display:none;margin-bottom:12px;">
-          <textarea id="oferta-inicio" placeholder="Pega aquí la descripción de la oferta..." style="height:110px;font-size:0.85rem;"></textarea>
-        </div>
         <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:16px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
         <div style="text-align:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;">
           <p style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-bottom:10px;">¿Ya tienes un CV en PDF? Súbelo y la IA extrae todo automáticamente</p>
@@ -514,6 +440,17 @@
             <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:8px 12px;background:white;color:#718096;border:2px solid #e2e8f0;border-radius:8px;font-size:0.82rem;cursor:pointer;">✕</button>
           </div>
         </div>
+      </div>
+
+      <!-- PASO 5: OFERTA LABORAL OPCIONAL -->
+      <div class="step" id="step-5">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
+          <h3 style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">¿Postulas a un trabajo específico?</h3>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Opcional. Si pegas la oferta, la IA optimiza tu CV para esa empresa.</p>
+        </div>
+        <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:160px;margin-bottom:8px;"></textarea>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-bottom:16px;">Si no tienes una oferta, haz clic en "Ver mi CV →" para continuar.</p>
       </div>
 
       <div class="error-toast" id="error-toast">
@@ -661,8 +598,8 @@
 
   let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
-  const PASOS=['step-1','step-2','step-3','step-4'];
-  const TITULOS=['Quién eres','Tu experiencia','Tu educación','Tus habilidades'];
+  const PASOS=['step-1','step-2','step-3','step-4','step-5'];
+  const TITULOS=['Quién eres','Tu experiencia','Tu educación','Tus habilidades','¿Tienes una oferta?'];
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
