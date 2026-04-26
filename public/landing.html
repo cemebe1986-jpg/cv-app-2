@@ -319,12 +319,11 @@
 
 <nav>
   <div class="nav-logo">Talent<span>IA</span></div>
-  <a href="/crear" class="nav-cta">Crear mi CV →</a>
 </nav>
 
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge" onclick="document.querySelector('.section').scrollIntoView({behavior:'smooth'})" style="cursor:pointer;">⚡ Potenciado con Inteligencia Artificial</div>
+    <div class="hero-badge" onclick="document.getElementById('btn-si-puesto').scrollIntoView({behavior:'smooth',block:'center'})" style="cursor:pointer;">⚡ Potenciado con Inteligencia Artificial</div>
     <h1>Tu experiencia merece<br><span>un CV profesional</span></h1>
     <p class="hero-sub">Cuéntale a la IA lo que hiciste. Ella lo convierte en el CV que los reclutadores de Perú quieren ver.</p>
     <div style="max-width:480px;margin:0 auto 16px;">
@@ -701,17 +700,20 @@
     campo.style.display='block';
     setTimeout(()=>document.getElementById('cargo-hero').focus(),100);
     const btn=document.getElementById('btn-si-puesto');
-    btn.style.background='rgba(96,165,250,0.15)';
-    btn.style.borderColor='#60a5fa';
+    btn.style.background='#2563eb';
   }
 
   function irAlWizardGeneral(){
-    window.location.href='/crear';
+    window.location.href='/crear?skip=true';
   }
 
   function irAlWizard(){
     const cargo=document.getElementById('cargo-hero').value.trim();
-    if(cargo.length<2){document.getElementById('cargo-hero').focus();return;}
+    if(cargo.length<2){
+      // Sin cargo → va con oferta=si para mostrar el toggle
+      window.location.href='/crear?oferta=si';
+      return;
+    }
     window.location.href='/crear?cargo='+encodeURIComponent(cargo);
   }
 </script>

@@ -1255,15 +1255,33 @@
   detectarPaisPorCodigo();
   verificarRetornoMP();
 
-  // Detectar cargo desde landing
+  // Detectar cargo y opciones desde landing
   (function detectarCargoDesideLanding(){
     const params=new URLSearchParams(window.location.search);
     const cargo=params.get('cargo');
+    const skip=params.get('skip');
+    const oferta=params.get('oferta');
+
     if(cargo&&cargo.trim().length>1){
+      // Vino con cargo específico → arranca wizard directo
       elegirCamino('manual');
       setTimeout(()=>{
         const campoCargo=document.getElementById('cargo');
         if(campoCargo)campoCargo.value=decodeURIComponent(cargo);
+      },100);
+    } else if(skip==='true'){
+      // No tiene oferta específica → salta step-0 directo al paso 1
+      elegirCamino('manual');
+    } else if(oferta==='si'){
+      // Tiene oferta en mente → muestra step-0 con el toggle de oferta ya abierto
+      setTimeout(()=>{
+        const campo=document.getElementById('campo-oferta-inicio');
+        const icon=document.getElementById('oferta-inicio-icon');
+        const btn=document.getElementById('btn-toggle-oferta-inicio');
+        if(campo){campo.style.display='block';}
+        if(icon){icon.textContent='▴';}
+        if(btn){btn.style.borderColor='rgba(96,165,250,0.4)';}
+        window.siPuestoActivo=true;
       },100);
     }
   })();
