@@ -54,7 +54,7 @@
   .wizard-card-header h2{font-size:1rem;font-weight:700;color:white;margin-bottom:12px;letter-spacing:-0.2px;}
   .progress-bar{background:rgba(255,255,255,0.08);border-radius:10px;height:4px;margin-bottom:8px;}
   .progress-fill{background:#60a5fa;border-radius:10px;height:100%;transition:width 0.4s ease;}
-  .progress-text{font-size:0.75rem;color:rgba(255,255,255,0.35);}
+  .progress-text{font-size:0.75rem;color:rgba(255,255,255,0.55);}
   .step{display:none;padding:28px 32px;opacity:0;transform:translateX(16px);transition:opacity 0.22s ease,transform 0.22s ease;}
   .step.active{display:block;opacity:1;transform:translateX(0);}
   .step.saliendo{opacity:0;transform:translateX(-20px);}
@@ -82,7 +82,7 @@
   .foto-preview{width:80px;height:80px;border-radius:50%;object-fit:cover;border:3px solid #60a5fa;display:none;margin-top:10px;}
   .wizard-nav{display:flex;gap:12px;padding:20px 32px;background:rgba(255,255,255,0.03);border-top:1px solid rgba(255,255,255,0.06);border-radius:0 0 20px 20px;justify-content:center;}
   .btn-prev{padding:12px 28px;background:transparent;color:rgba(255,255,255,0.6);border:1.5px solid rgba(255,255,255,0.15);border-radius:10px;font-size:0.88rem;font-weight:600;cursor:pointer;min-width:110px;transition:all 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;}
-  .btn-prev:hover{border-color:rgba(255,255,255,0.35);color:white;}
+  .btn-prev:hover{border-color:rgba(255,255,255,0.55);color:white;}
   .btn-next{padding:13px 32px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;min-width:150px;letter-spacing:-0.2px;transition:background 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;}
   .btn-next:hover{background:#2563eb;}
   .error-toast{display:none;background:rgba(220,38,38,0.1);border:1.5px solid rgba(220,38,38,0.3);border-radius:12px;padding:16px 20px;margin:0 32px 16px;}
@@ -130,13 +130,13 @@
   .exp-item{margin-bottom:18px;}
   .exp-cargo{font-size:0.95rem;font-weight:700;color:#1a1a2e;}
   .exp-empresa{font-size:0.85rem;color:#0f3460;font-weight:600;}
-  .exp-periodo{font-size:0.75rem;color:#718096;margin-bottom:6px;}
+  .exp-periodo{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:6px;}
   .exp-logro{font-size:0.82rem;color:#4a5568;margin-left:12px;margin-bottom:3px;position:relative;}
   .exp-logro::before{content:'▸';position:absolute;left:-12px;color:#0f3460;}
   .edu-item{margin-bottom:12px;}
   .edu-titulo{font-size:0.9rem;font-weight:700;color:#1a1a2e;}
   .edu-institucion{font-size:0.82rem;color:#0f3460;}
-  .edu-año{font-size:0.75rem;color:#718096;}
+  .edu-año{font-size:0.75rem;color:rgba(255,255,255,0.55);}
   .editable{cursor:pointer;border-radius:4px;transition:background 0.2s;}
   .editable:hover{background:rgba(15,52,96,0.07);}
   .editable:hover::after{content:' ✏️';font-size:0.75rem;}
@@ -167,7 +167,7 @@
   .cv-estilo-moderno .cv-main-section-title{font-size:0.82rem;font-weight:900;text-transform:uppercase;letter-spacing:1.5px;color:#1a1a2e;border-bottom:2px solid #1a1a2e;padding-bottom:5px;margin-bottom:14px;text-align:center;}
   .cv-estilo-moderno .exp-cargo{font-size:0.95rem;font-weight:800;color:#1a1a2e;}
   .cv-estilo-moderno .exp-empresa{color:#4a5568;font-weight:600;font-size:0.85rem;}
-  .cv-estilo-moderno .exp-periodo{color:#718096;}
+  .cv-estilo-moderno .exp-periodo{color:rgba(255,255,255,0.55);}
   .cv-estilo-moderno .exp-logro{color:#4a5568;}
   .cv-estilo-moderno .exp-logro::before{color:#1a1a2e;}
   .cv-estilo-moderno .edu-titulo{font-weight:800;color:#1a1a2e;}
@@ -201,7 +201,7 @@
     <div style="text-align:center;margin-bottom:20px;">
       <div style="font-size:1.8rem;margin-bottom:6px;">✨</div>
       <h3 style="font-size:1.1rem;font-weight:800;color:#1a1a2e;" id="modal-titulo">Activa las sugerencias con IA</h3>
-      <p style="font-size:0.82rem;color:#718096;margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita y obtén 10 sugerencias con IA</p>
+      <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-top:6px;" id="modal-subtitulo">Crea tu cuenta gratuita y obtén 10 sugerencias con IA</p>
     </div>
     <div class="modal-tabs">
       <button class="modal-tab active" onclick="cambiarTabModal('registro')" id="tab-registro">Crear cuenta</button>
@@ -277,7 +277,7 @@
         <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
         <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:8px;font-weight:600;">¿A qué puesto postulas?</p>
         <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:6px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
-        <p style="font-size:0.75rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
         <datalist id="lista-puestos-peru">
           <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
           <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Asistente de gerencia">
@@ -444,7 +444,7 @@
         <!-- CON EXPERIENCIA — visible por defecto -->
         <div id="bloque-con-experiencia">
           <label>Tu experiencia laboral</label>
-          <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Agrega cada trabajo. La IA lo convertirá en texto profesional.</p>
           <div id="lista-trabajos"></div>
           <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:transparent;color:#60a5fa;border:1.5px dashed rgba(96,165,250,0.4);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar trabajo</button>
           <button type="button" onclick="setModoExperiencia('sin')" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.3);border:none;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">No tengo experiencia laboral →</button>
@@ -456,7 +456,7 @@
             <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
           </div>
           <label>Prácticas / Proyectos / Voluntariados</label>
-          <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
           <div id="lista-proyectos"></div>
           <button type="button" onclick="agregarProyecto()" style="width:100%;padding:12px;background:transparent;color:#60a5fa;border:1.5px dashed rgba(96,165,250,0.4);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar práctica o proyecto</button>
           <button type="button" onclick="setModoExperiencia('con')" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.3);border:none;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">← Tengo experiencia laboral</button>
@@ -466,7 +466,7 @@
       <!-- PASO 3: EDUCACIÓN -->
       <div class="step" id="step-3">
         <label>Educación *</label>
-        <p style="font-size:0.82rem;color:#718096;margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
         <div id="lista-educacion"></div>
         <button type="button" onclick="agregarEducacion()" style="width:100%;padding:12px;background:transparent;color:#60a5fa;border:1.5px dashed rgba(96,165,250,0.4);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar estudio o certificación</button>
       </div>
@@ -474,19 +474,29 @@
       <!-- PASO 4: HABILIDADES -->
       <div class="step" id="step-4">
         <label>Habilidades técnicas *</label>
-        <p style="font-size:0.82rem;color:#718096;margin-bottom:12px;">Agrega las herramientas y tecnologías que dominas.</p>
+        <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:12px;">Herramientas y tecnologías que dominas.</p>
         <div style="display:flex;gap:10px;margin-bottom:12px;">
-          <input type="text" id="nueva-habilidad" placeholder="Ej: Excel, Python, SQL..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarHabilidad();}">
-          <button type="button" onclick="agregarHabilidad()" style="padding:12px 20px;background:#0f3460;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;">+ Agregar</button>
+          <input type="text" id="nueva-habilidad" list="lista-habilidades-tecnicas-sugeridas" placeholder="Ej: Excel, Python, SQL..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarHabilidad();}" autocomplete="off">
+          <button type="button" onclick="agregarHabilidad()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
         </div>
+        <datalist id="lista-habilidades-tecnicas-sugeridas">
+          <option value="Microsoft Excel"><option value="Microsoft Word"><option value="Microsoft PowerPoint">
+          <option value="Google Sheets"><option value="SAP"><option value="Oracle"><option value="SQL">
+          <option value="Python"><option value="JavaScript"><option value="Java"><option value="PHP">
+          <option value="Power BI"><option value="Tableau"><option value="AutoCAD"><option value="Revit">
+          <option value="Adobe Photoshop"><option value="Adobe Illustrator"><option value="Canva">
+          <option value="WordPress"><option value="Salesforce"><option value="HubSpot">
+          <option value="SPSS"><option value="R"><option value="MATLAB">
+          <option value="Primavera"><option value="MS Project"><option value="Scrum"><option value="Agile">
+        </datalist>
         <div id="lista-habilidades"></div>
-        <button type="button" onclick="pedirIAConLogin(sugerirHabilidades)" id="btn-sugerir-habilidades" style="width:100%;padding:12px;background:linear-gradient(135deg,#0f3460,#1e40af);color:white;border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-top:8px;margin-bottom:16px;">
+        <button type="button" onclick="pedirIAConLogin(sugerirHabilidades)" id="btn-sugerir-habilidades" style="width:100%;padding:12px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-top:8px;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
           💡 Sugerir habilidades para mi cargo con IA
         </button>
-        <div id="habilidades-ia-box" style="display:none;background:#f0f4ff;border:2px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:10px;">💡 Habilidades sugeridas — selecciona las que tienes:</div>
-          <div id="chips-habilidades" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:12px;"></div>
-          <button onclick="agregarHabilidadesSeleccionadas()" style="padding:8px 16px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;">✅ Agregar seleccionadas</button>
+        <div id="habilidades-ia-box" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
+          <div id="chips-habilidades" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+          <button onclick="document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button>
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
         <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:12px;">Agrégalas una por una o usa la IA para sugerirlas.</p>
@@ -495,14 +505,13 @@
           <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
         </div>
         <div id="lista-blandas" style="margin-bottom:12px;"></div>
-        <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border:none;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
+        <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
           💡 Sugerir habilidades blandas con IA
         </button>
         <div id="blandas-ia-box" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">💡 Toca una sugerencia para agregarla:</div>
-          <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:8px;"></div>
-          <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Cerrar</button>
-        </div>
+          <div style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
+          <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+          <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button>
         </div>
       </div>
 
@@ -555,7 +564,7 @@
       <h3 style="color:#1a1a2e;margin-bottom:15px;font-size:1rem;">🎯 Análisis de compatibilidad con la oferta</h3>
       <div style="display:flex;align-items:center;gap:15px;margin-bottom:15px;">
         <div style="font-size:2.5rem;font-weight:900;" id="comp-score">0%</div>
-        <div style="flex:1;"><div style="background:#e2e8f0;border-radius:10px;height:12px;overflow:hidden;"><div id="comp-barra" style="height:100%;border-radius:10px;transition:width 1s ease;width:0%;"></div></div><div style="font-size:0.8rem;color:#718096;margin-top:5px;">Compatibilidad con la oferta</div></div>
+        <div style="flex:1;"><div style="background:#e2e8f0;border-radius:10px;height:12px;overflow:hidden;"><div id="comp-barra" style="height:100%;border-radius:10px;transition:width 1s ease;width:0%;"></div></div><div style="font-size:0.8rem;color:rgba(255,255,255,0.55);margin-top:5px;">Compatibilidad con la oferta</div></div>
       </div>
       <div style="display:grid;grid-template-columns:1fr 1fr;gap:15px;margin-bottom:15px;">
         <div style="background:#f0fff4;border:1px solid #c6f6d5;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#276749;margin-bottom:6px;">✅ KEYWORDS ENCONTRADAS</div><div style="font-size:0.85rem;color:#2d3748;" id="comp-keywords"></div></div>
@@ -578,7 +587,7 @@
           </svg>
           <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
             <div id="score-numero" style="font-size:1.5rem;font-weight:900;color:#1a1a2e;line-height:1;">0</div>
-            <div style="font-size:0.6rem;color:#718096;font-weight:700;">/100</div>
+            <div style="font-size:0.6rem;color:rgba(255,255,255,0.55);font-weight:700;">/100</div>
           </div>
         </div>
         <!-- Detalle del score -->
@@ -643,7 +652,7 @@
             <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
               <div style="font-size:1.3rem;margin-bottom:6px;">📄</div>
               <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Plan Básico</div>
-              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para una búsqueda de trabajo</div>
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">Para una búsqueda de trabajo</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div>
               <div style="font-size:0.68rem;color:#a0aec0;margin-bottom:6px;">sin suscripción</div>
               <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV cuando quieras,<br>en el estilo que prefieras</div>
@@ -653,7 +662,7 @@
               <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 MÁS ELEGIDO</div>
               <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">📦</div>
               <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div>
-              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para postular a distintos puestos</div>
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">Para postular a distintos puestos</div>
               <div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div>
               <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorras S/2.80 🎉</div>
@@ -846,8 +855,8 @@
         ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
         ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
         ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
-        ${keywordsOk?`<div style="font-size:0.72rem;color:#718096;margin-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
-        ${keywordsFalta?`<div style="font-size:0.72rem;color:#718096;margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
+        ${keywordsOk?`<div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
+        ${keywordsFalta?`<div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
         <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
           Calidad del CV: ${scoreCalidad}/100 · Compatibilidad: ${compIA.score}/100
         </div>`;
@@ -1005,7 +1014,7 @@
   function navegarDominios(e){const dd=document.getElementById('email-dropdown');if(dd.style.display==='none')return;const ops=dd.querySelectorAll('div');if(!ops.length)return;if(e.key==='ArrowDown'){e.preventDefault();if(emailOpcionActiva>=0)ops[emailOpcionActiva].style.background='white';emailOpcionActiva=Math.min(emailOpcionActiva+1,ops.length-1);ops[emailOpcionActiva].style.background='#f0f4ff';}else if(e.key==='ArrowUp'){e.preventDefault();if(emailOpcionActiva>=0)ops[emailOpcionActiva].style.background='white';emailOpcionActiva=Math.max(emailOpcionActiva-1,0);ops[emailOpcionActiva].style.background='#f0f4ff';}else if(e.key==='Enter'&&emailOpcionActiva>=0){e.preventDefault();ops[emailOpcionActiva].click();emailOpcionActiva=-1;}else if(e.key==='Escape'){dd.style.display='none';emailOpcionActiva=-1;}}
   document.addEventListener('click',e=>{if(!e.target.closest('#email')&&!e.target.closest('#email-dropdown')){const dd=document.getElementById('email-dropdown');if(dd)dd.style.display='none';}});
 
-  function agregarTrabajo(){trabajosData.push({id:Date.now(),cargo:'',empresa:'',desde:'',hasta:'',logros:['','']});renderTrabajoss();}
+  function agregarTrabajo(){trabajosData.push({id:Date.now(),cargo:'',empresa:'',desde:'',hasta:'',logros:['']});renderTrabajoss();}
   function eliminarTrabajo(id){trabajosData=trabajosData.filter(t=>t.id!==id);renderTrabajoss();}
   function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
@@ -1044,7 +1053,7 @@
   function renderTrabajoss(){
     const c=document.getElementById('lista-trabajos');if(!trabajosData.length){c.innerHTML='';return;}
     const tl={trabajo:'Trabajo',practica:'Práctica',freelance:'Freelance',negocio:'Negocio'};
-    c.innerHTML=trabajosData.map((t,idx)=>`<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#60a5fa;">${tl[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span><button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;"><option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo</option><option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option><option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance</option><option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio propio</option></select><label style="margin-bottom:6px;">Empresa *</label><input type="text" placeholder="Ej: BCP, Alicorp..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">Cargo *</label><input type="text" placeholder="Ej: Analista de Marketing..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:12px;"><label style="margin-bottom:6px;">Logros</label><p style="font-size:0.76rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">Reemplaza <strong>[X]</strong> con tus números reales.</p>${t.logros.map((l,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;"><textarea placeholder="Ej: Reduje costos en 20%..." oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;">${l}</textarea><button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button></div>`).join('')}<button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#60a5fa;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button><div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-top:4px;"><button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button></div><div id="sug-ia-box-${t.id}" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:14px;margin-top:8px;"><div id="sug-ia-titulo-${t.id}" style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">✨ Toca para agregar:</div><div id="chips-ia-${t.id}" style="display:flex;flex-direction:column;gap:6px;margin-bottom:8px;"></div><div id="sug-ia-actions-${t.id}" style="display:none;"></div></div></div>`).join('');
+    c.innerHTML=trabajosData.map((t,idx)=>`<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#60a5fa;">${tl[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span><button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;"><option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo</option><option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option><option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance</option><option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio propio</option></select><label style="margin-bottom:6px;">Empresa *</label><input type="text" placeholder="Ej: BCP, Alicorp..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">Cargo *</label><input type="text" list="lista-puestos-peru" placeholder="Ej: Analista de Marketing..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:12px;" autocomplete="off"><label style="margin-bottom:6px;">Logros</label>${t.logros.map((l,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;"><textarea placeholder="Ej: Reduje costos en 20%..." oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;">${l}</textarea><button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button></div>`).join('')}<button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#60a5fa;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button><div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-top:4px;"><button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button></div><div id="sug-ia-box-${t.id}" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:14px;margin-top:8px;"><div id="sug-ia-titulo-${t.id}" style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">✨ Toca para agregar — puedes elegir varios:</div><div id="chips-ia-${t.id}" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div><button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button></div></div>`).join('');
   }
 
   async function generarSugerenciasLogrosIA(tid){
@@ -1052,7 +1061,7 @@
     const t=trabajosData.find(t=>t.id===tid);if(!t||!t.cargo.trim())return;
     const box=document.getElementById(`sug-ia-box-${tid}`),chips=document.getElementById(`chips-ia-${tid}`),titulo=document.getElementById(`sug-ia-titulo-${tid}`),btnBox=document.getElementById(`btn-sug-ia-${tid}`);
     if(!box||!chips)return;
-    btnBox.style.display='none';chips.innerHTML=`<div style="color:#718096;font-size:0.82rem;padding:8px;">✨ Generando...</div>`;box.style.display='block';
+    btnBox.style.display='none';chips.innerHTML=`<div style="color:rgba(255,255,255,0.55);font-size:0.82rem;padding:8px;">✨ Generando...</div>`;box.style.display='block';
     try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasLogros:true,cargo:t.cargo,empresa:t.empresa,usuarioId:window.usuarioActual?.uid||null})});const data=await r.json();const s=data.sugerencias||[];incrementarLlamadasIA();if(titulo)titulo.textContent=`✨ Toca para agregar — ${t.cargo}:`;chips.innerHTML=s.map((sg,i)=>`<button id="sug-ia-${tid}-${i}" onclick="agregarLogroDirecto(${tid},'${sg.replace(/'/g,"\\'").replace(/"/g,'&quot;')}');this.style.background='rgba(96,165,250,0.2)';this.style.borderColor='#60a5fa';this.style.color='#60a5fa';this.disabled=true;" style="width:100%;padding:10px 14px;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;background:rgba(255,255,255,0.06);color:rgba(255,255,255,0.7);font-size:0.82rem;cursor:pointer;text-align:left;transition:all 0.2s;margin-bottom:6px;line-height:1.5;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">${sg}</button>`).join('');document.getElementById(`sug-ia-actions-${tid}`).style.display='none';}
     catch(e){chips.innerHTML='<div style="color:#e53e3e;font-size:0.82rem;padding:8px;">Error.</div>';btnBox.style.display='block';box.style.display='none';}
   }
