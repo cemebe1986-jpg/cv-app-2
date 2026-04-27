@@ -887,16 +887,17 @@
   }
 
   function validarPaso(){
-    if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
-    if(pasoActual===1&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
-    if(pasoActual===1&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Sin experiencia','Agrega al menos un proyecto, voluntariado o experiencia.');return false;}
-    if(pasoActual===2&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
-    if(pasoActual===3&&habilidadesData.length===0){
+    if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}}
+    if(pasoActual===1){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
+    if(pasoActual===2&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
+    if(pasoActual===2&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Sin experiencia','Agrega al menos un proyecto, voluntariado o experiencia.');return false;}
+    if(pasoActual===3&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
+    if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
       document.getElementById('error-toast').classList.add('visible');
       const btnCerrar=document.querySelector('.error-toast button');
-      if(btnCerrar){btnCerrar.textContent='Continuar sin habilidades';btnCerrar.style.cssText='background:#e2e8f0;border:none;cursor:pointer;color:#4a5568;font-size:0.78rem;font-weight:700;padding:6px 10px;border-radius:8px;white-space:nowrap;';btnCerrar.onclick=()=>{cerrarError();generarCV();};}
+      if(btnCerrar){btnCerrar.textContent='Continuar sin habilidades';btnCerrar.style.cssText='background:#e2e8f0;border:none;cursor:pointer;color:#4a5568;font-size:0.78rem;font-weight:700;padding:6px 10px;border-radius:8px;white-space:nowrap;';btnCerrar.onclick=()=>{cerrarError();pasoActual++;mostrarPaso(pasoActual);};}
       return false;
     }
     return true;
