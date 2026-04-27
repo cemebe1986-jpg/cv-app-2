@@ -496,7 +496,7 @@
         <div id="habilidades-ia-box" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
           <div style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
           <div id="chips-habilidades" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-          <button onclick="document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button>
+          <button onclick="document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
         <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:12px;">Agrégalas una por una o usa la IA para sugerirlas.</p>
@@ -511,7 +511,7 @@
         <div id="blandas-ia-box" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:16px;margin-bottom:16px;">
           <div style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
           <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-          <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button>
+          <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
         </div>
       </div>
 
@@ -855,8 +855,8 @@
         ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
         ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
         ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
-        ${keywordsOk?`<div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
-        ${keywordsFalta?`<div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
+        ${keywordsOk?`<div style="font-size:0.72rem;color:#4a5568;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
+        ${keywordsFalta?`<div style="font-size:0.72rem;color:#4a5568;margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
         <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
           Calidad del CV: ${scoreCalidad}/100 · Compatibilidad: ${compIA.score}/100
         </div>`;
@@ -1087,7 +1087,19 @@
   function agregarBlandasSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});renderListaBlandas();document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';document.getElementById('btn-sugerir-blandas').disabled=false;}
   function agregarBlandaDirecta(nombre){if(!blandasData.find(b=>b.nombre===nombre))blandasData.push({nombre});renderListaBlandas();}
   function agregarHabilidadDirecta(nombre){if(!habilidadesData.find(h=>h.nombre===nombre))habilidadesData.push({nombre});renderListaHabilidades();}
-  function agregarLogroDirecto(tid,texto){const t=trabajosData.find(t=>t.id===tid);if(!t)return;if(!t.logros.includes(texto))t.logros.push(texto);t.logros=t.logros.filter(l=>l.trim());renderTrabajoss();}
+  function agregarLogroDirecto(tid,texto){
+    const t=trabajosData.find(t=>t.id===tid);
+    if(!t)return;
+    if(!t.logros.includes(texto))t.logros.push(texto);
+    t.logros=t.logros.filter(l=>l.trim());
+    // No llamar renderTrabajoss() — solo actualizar el textarea visualmente
+    const logrosContainer=document.querySelector(`#btn-sug-ia-${tid}`)?.previousElementSibling?.previousElementSibling;
+    const nuevoLogro=document.createElement('div');
+    nuevoLogro.style.cssText='display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;';
+    nuevoLogro.innerHTML=`<textarea style="margin-bottom:0;flex:1;height:64px;resize:none;">${texto}</textarea><button onclick="this.parentElement.remove()" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button>`;
+    const btnAgregar=document.getElementById(`btn-sug-ia-${tid}`)?.previousElementSibling;
+    if(btnAgregar)btnAgregar.parentElement.insertBefore(nuevoLogro,btnAgregar);
+  }
   function agregarBlanda(){const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
   function eliminarBlanda(i){blandasData.splice(i,1);renderListaBlandas();}
   function renderListaBlandas(){const el=document.getElementById('lista-blandas');if(!el)return;el.innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
