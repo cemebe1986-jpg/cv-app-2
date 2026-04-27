@@ -685,50 +685,57 @@
 
 
   function calcularTalentiaScore(cv, habilidades, blandas, foto, oferta){
-    let score = 0;
+    let scoreCalidad = 0;
     const items = [];
 
     // Perfil profesional (20 pts)
     const perfil = cv.perfil || '';
-    if(perfil.length > 100){ score+=20; items.push({ok:true, texto:'Perfil profesional completo'}); }
-    else if(perfil.length > 50){ score+=12; items.push({ok:'parcial', texto:'Perfil podría ser más detallado'}); }
-    else{ score+=0; items.push({ok:false, texto:'Perfil profesional muy corto'}); }
+    if(perfil.length > 100){ scoreCalidad+=20; items.push({ok:true, texto:'Perfil profesional completo'}); }
+    else if(perfil.length > 50){ scoreCalidad+=12; items.push({ok:'parcial', texto:'Perfil podría ser más detallado'}); }
+    else{ items.push({ok:false, texto:'Perfil profesional muy corto'}); }
 
     // Experiencia laboral (25 pts)
     const exp = cv.experiencia || [];
-    if(exp.length >= 2){ score+=25; items.push({ok:true, texto:'Buena trayectoria laboral'}); }
-    else if(exp.length === 1){ score+=15; items.push({ok:'parcial', texto:'Agrega más experiencias si tienes'}); }
-    else{ score+=5; items.push({ok:false, texto:'Sin experiencia laboral'}); }
+    if(exp.length >= 2){ scoreCalidad+=25; items.push({ok:true, texto:'Buena trayectoria laboral'}); }
+    else if(exp.length === 1){ scoreCalidad+=15; items.push({ok:'parcial', texto:'Agrega más experiencias si tienes'}); }
+    else{ scoreCalidad+=5; items.push({ok:false, texto:'Sin experiencia laboral'}); }
 
     // Logros con métricas (15 pts)
     const todosLogros = exp.flatMap(e=>e.logros||[]).join(' ');
     const tieneNumeros = /\d+%|\d+ (personas|clientes|usuarios|proyectos|soles|millones)/.test(todosLogros);
-    if(tieneNumeros){ score+=15; items.push({ok:true, texto:'Logros con números y métricas'}); }
-    else{ score+=5; items.push({ok:false, texto:'Agrega números a tus logros (ej: 20%)'}); }
+    if(tieneNumeros){ scoreCalidad+=15; items.push({ok:true, texto:'Logros con números y métricas'}); }
+    else{ scoreCalidad+=5; items.push({ok:false, texto:'Agrega números a tus logros (ej: 20%)'}); }
 
     // Habilidades técnicas (15 pts)
-    if(habilidades.length >= 5){ score+=15; items.push({ok:true, texto:'Habilidades técnicas completas'}); }
-    else if(habilidades.length >= 2){ score+=8; items.push({ok:'parcial', texto:'Agrega más habilidades técnicas'}); }
-    else{ score+=0; items.push({ok:false, texto:'Sin habilidades técnicas'}); }
+    if(habilidades.length >= 5){ scoreCalidad+=15; items.push({ok:true, texto:'Habilidades técnicas completas'}); }
+    else if(habilidades.length >= 2){ scoreCalidad+=8; items.push({ok:'parcial', texto:'Agrega más habilidades técnicas'}); }
+    else{ items.push({ok:false, texto:'Sin habilidades técnicas'}); }
 
     // Educación (10 pts)
     const edu = cv.educacion || [];
-    if(edu.length >= 1){ score+=10; items.push({ok:true, texto:'Educación registrada'}); }
-    else{ score+=0; items.push({ok:false, texto:'Sin educación registrada'}); }
+    if(edu.length >= 1){ scoreCalidad+=10; items.push({ok:true, texto:'Educación registrada'}); }
+    else{ items.push({ok:false, texto:'Sin educación registrada'}); }
 
     // Foto (5 pts)
-    if(foto){ score+=5; items.push({ok:true, texto:'Foto de perfil incluida'}); }
+    if(foto){ scoreCalidad+=5; items.push({ok:true, texto:'Foto de perfil incluida'}); }
     else{ items.push({ok:false, texto:'Agrega foto para destacar'}); }
 
-    // Análisis de oferta (10 pts)
-    if(oferta && oferta.trim().length > 50){ score+=10; items.push({ok:true, texto:'CV optimizado para la oferta'}); }
-    else{ items.push({ok:'parcial', texto:'Pega una oferta para optimizar más'}); }
+    // Si hay compatibilidad de IA, fusionar (40% calidad, 60% compatibilidad)
+    const compIA = cv.compatibilidad;
+    let scoreFinal, tipoScore;
+    if(compIA && compIA.score > 0){
+      scoreFinal = Math.round(scoreCalidad * 0.4 + compIA.score * 0.6);
+      tipoScore = compIA.puesto_analizado === 'oferta específica' ? 'vs oferta' : `para ${compIA.puesto_analizado}`;
+    } else {
+      scoreFinal = scoreCalidad;
+      tipoScore = 'calidad del CV';
+    }
 
-    return {score: Math.min(score, 100), items};
+    return {score: Math.min(scoreFinal, 100), scoreCalidad, compIA, items, tipoScore};
   }
 
   function mostrarTalentiaScore(cv, habilidades, blandas, foto, oferta){
-    const {score, items} = calcularTalentiaScore(cv, habilidades, blandas, foto, oferta);
+    const {score, scoreCalidad, compIA, items, tipoScore} = calcularTalentiaScore(cv, habilidades, blandas, foto, oferta);
     const box = document.getElementById('talentia-score-box');
     if(!box) return;
     box.style.display='block';
@@ -756,21 +763,46 @@
     document.getElementById('score-badge').style.background = score>=80?'#f0fdf4':score>=60?'#fefce8':'#fff5f5';
     document.getElementById('score-badge').style.color = score>=80?'#15803d':score>=60?'#92400e':'#b91c1c';
     document.getElementById('score-badge').textContent = label;
+    document.getElementById('score-label').textContent = `TalentIA Score ${tipoScore}`;
 
-    // Items
-    const itemsEl = document.getElementById('score-items');
-    itemsEl.innerHTML = items.map(item=>`
-      <div style="display:flex;align-items:flex-start;gap:6px;font-size:0.75rem;color:${item.ok===true?'#15803d':item.ok==='parcial'?'#92400e':'#b91c1c'};">
-        <span style="flex-shrink:0;">${item.ok===true?'✅':item.ok==='parcial'?'⚡':'❌'}</span>
-        <span>${item.texto}</span>
-      </div>`).join('');
-
-    // Consejo principal
+    // Si hay análisis de compatibilidad IA — mostrar justificación detallada
     const consejo = document.getElementById('score-consejo');
-    const mejorar = items.filter(i=>i.ok!==true);
-    if(mejorar.length > 0){
+    if(compIA && (compIA.fortalezas?.length || compIA.brechas?.length)){
+      const fortalezas = (compIA.fortalezas||[]).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
+      const brechas = (compIA.brechas||[]).map(b=>`<li style="margin-bottom:4px;">⚠️ ${b}</li>`).join('');
+      const recs = (compIA.recomendaciones||[]).map(r=>`<li style="margin-bottom:4px;">💡 ${r}</li>`).join('');
+      const keywordsOk = (compIA.keywords_encontradas||[]).slice(0,5).join(', ');
+      const keywordsFalta = (compIA.keywords_faltantes||[]).slice(0,5).join(', ');
+
       consejo.style.display='block';
-      consejo.innerHTML = `<strong>💡 Para subir tu score:</strong> ${mejorar[0].texto}.`;
+      consejo.style.background='#f8faff';
+      consejo.style.borderLeft='3px solid #60a5fa';
+      consejo.style.padding='16px';
+      consejo.innerHTML=`
+        <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
+          📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
+        </div>
+        ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
+        ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
+        ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
+        ${keywordsOk?`<div style="font-size:0.72rem;color:#718096;margin-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
+        ${keywordsFalta?`<div style="font-size:0.72rem;color:#718096;margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
+        <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
+          Calidad del CV: ${scoreCalidad}/100 · Compatibilidad: ${compIA.score}/100
+        </div>`;
+    } else {
+      // Sin compatibilidad — mostrar items de calidad
+      const itemsEl = document.getElementById('score-items');
+      itemsEl.innerHTML = items.map(item=>`
+        <div style="display:flex;align-items:flex-start;gap:6px;font-size:0.75rem;color:${item.ok===true?'#15803d':item.ok==='parcial'?'#92400e':'#b91c1c'};">
+          <span style="flex-shrink:0;">${item.ok===true?'✅':item.ok==='parcial'?'⚡':'❌'}</span>
+          <span>${item.texto}</span>
+        </div>`).join('');
+      const mejorar = items.filter(i=>i.ok!==true);
+      if(mejorar.length > 0){
+        consejo.style.display='block';
+        consejo.innerHTML = `<strong>💡 Para subir tu score:</strong> ${mejorar[0].texto}.`;
+      }
     }
   }
 
@@ -1048,7 +1080,7 @@
     document.getElementById('loading-overlay').classList.add('active');iniciarMensajesCarga();
     if(typeof gtag!=='undefined')gtag('event','cv_generando');
     try{
-      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
+      const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({nombre,email,telefono,cargo:document.getElementById('cargo')?.value||window._cargoInicial||'',experiencia,educacion,habilidades:habilidadesData.map(h=>h.nombre).join(', '),habilidadesBlandas,oferta,foto:fotoBase64,usuarioId:window.usuarioActual?.uid||null})});
       if(r.status===429){const e=await r.json();mostrarError('Límite alcanzado',e.error);return;}
       const data=await r.json();cvGeneradoData=data.cv;renderCV(data.cv,fotoBase64,cvCiudad,cvPais,oferta);
       if(typeof gtag!=='undefined')gtag('event','cv_generado');
@@ -1212,7 +1244,7 @@
     const oferta=params.get('oferta');
 
     if(cargo&&cargo.trim().length>1){
-      // Vino con cargo específico → salta step-0 directo al paso 1
+      window._cargoInicial = decodeURIComponent(cargo);
       elegirCamino('manual');
       setTimeout(()=>{
         const campoCargo=document.getElementById('cargo');

@@ -134,12 +134,32 @@ INSTRUCCIONES:
 
     // GENERAR CV COMPLETO
     const tieneOferta = oferta && oferta.trim().length > 0;
-    const promptBase = `Eres un experto en CVs peruanos. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
+    const tienePuesto = cargo && cargo.trim().length > 0;
+    const tieneCompatibilidad = tieneOferta || tienePuesto;
+
+    const instruccionCompatibilidad = tieneOferta ? 
+`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: La oferta puede ser de una empresa de cualquier rubro pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto: herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías. Compara esas keywords con la experiencia y habilidades del candidato. El score (0-100) debe ser honesto y preciso.` 
+: tienePuesto ?
+`- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargo}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Evalúa: ¿tiene la experiencia típica para este puesto? ¿tiene las habilidades técnicas más demandadas? ¿su perfil está orientado a este cargo? Sé específico y honesto. El score (0-100) debe reflejar la realidad del mercado laboral peruano para este puesto.`
+: '';
+
+    const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
+    "score": 0,
+    "puesto_analizado": "${tieneOferta ? 'oferta específica' : cargo}",
+    "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
+    "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
+    "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],
+    "keywords_encontradas": ["keywords del puesto que sí tiene el candidato"],
+    "keywords_faltantes": ["keywords importantes del puesto que le faltan al candidato"]
+  }` : '';
+
+    const promptBase = `Eres un experto en CVs peruanos y reclutamiento. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
 DATOS DEL CANDIDATO:
 - Nombre: ${nombre}
 - Email: ${email}
 - Teléfono: ${telefono}
+- Cargo deseado: ${cargo || 'No especificado'}
 - Experiencia: ${experiencia}
 - Educación: ${educacion}
 - Habilidades técnicas: ${habilidades}
@@ -148,24 +168,19 @@ ${tieneOferta ? `\nOFERTA DE TRABAJO A LA QUE POSTULA:\n${oferta}` : ''}
 
 INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
-- Perfil: 3 líneas impactantes basadas en la experiencia real
+- Perfil: 3 líneas impactantes basadas en la experiencia real, orientadas al cargo deseado
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
-${tieneOferta ? `- ANÁLISIS DE COMPATIBILIDAD: La oferta puede ser de una empresa de cualquier rubro (portuario, minero, retail, etc.) pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto (no de la empresa): herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías mencionadas en funciones y requisitos. Compara esas keywords con la experiencia y habilidades del candidato. NO uses keywords relacionadas al rubro de la empresa si no son parte del puesto. El score (0-100) debe ser honesto.` : ''}
+${instruccionCompatibilidad}
 - Responde SOLO con JSON válido sin markdown
 
 {
   "nombre": "${nombre}",
   "email": "${email}",
   "telefono": "${telefono}",
-  "perfil": "párrafo de 3 líneas",
+  "perfil": "párrafo de 3 líneas orientado al cargo deseado",
   "experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}],
   "educacion": [{"titulo": "...", "institucion": "...", "año": "..."}]
-  ${tieneOferta ? `,"compatibilidad": {
-    "score": 0,
-    "keywords_encontradas": ["keywords que están TANTO en la oferta como en el perfil del candidato"],
-    "keywords_faltantes": ["keywords importantes de la oferta que el candidato NO tiene"],
-    "recomendaciones": ["consejo específico y accionable para mejorar compatibilidad con esta oferta específica"]
-  }` : ''}
+  ${campoCompatibilidad}
 }`;
 
     const message = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:2000, messages:[{role:'user',content:promptBase}] });
