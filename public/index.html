@@ -346,17 +346,25 @@
         <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:12px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:14px;">Continuar →</button>
       </div>
 
-          <!-- PASO 1: DATOS PERSONALES + FOTO -->
+      <!-- PASO 1: SOLO NOMBRE -->
       <div class="step" id="step-1">
-        <p style="font-size:0.75rem;color:#a0aec0;margin-bottom:20px;">* Campos obligatorios</p>
-        <label>Nombre completo *</label>
-        <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)">
+        <div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
+          <span style="font-size:1.1rem;">⏱️</span>
+          <span style="font-size:0.82rem;color:#60a5fa;font-weight:600;">En unos minutos tendrás tu CV listo</span>
+        </div>
+        <label>¿Cómo te llamas? *</label>
+        <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="font-size:1.1rem;">
+        <div class="microcopy">Así aparecerá en tu CV profesional</div>
+      </div>
+
+      <!-- PASO 1B: CONTACTO -->
+      <div class="step" id="step-1b">
         <label>Email *</label>
         <div style="position:relative;">
           <input type="email" id="email" placeholder="juan@gmail.com" onblur="validarCampoLive(this)" oninput="marcarProgreso(this);mostrarDominios(this)" onkeydown="navegarDominios(event)" autocomplete="off" style="margin-bottom:0;">
-          <div id="email-dropdown" style="display:none;position:absolute;background:white;border:2px solid #0f3460;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.12);z-index:9999;width:100%;top:calc(100% + 4px);left:0;overflow:hidden;"></div>
+          <div id="email-dropdown" style="display:none;position:absolute;background:#1a1f2e;border:1.5px solid rgba(96,165,250,0.3);border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.3);z-index:9999;width:100%;top:calc(100% + 4px);left:0;overflow:hidden;"></div>
         </div>
-        <div class="microcopy">📩 Tu email aparecerá en tu CV para que los reclutadores te contacten</div>
+        <div class="microcopy">📩 Para que los reclutadores te contacten</div>
         <label>Teléfono</label>
         <div style="display:flex;gap:8px;margin-bottom:6px;">
           <select id="codigo-pais" onchange="detectarPaisPorCodigo()" style="width:140px;margin-bottom:0;flex-shrink:0;">
@@ -364,19 +372,14 @@
           </select>
           <input type="text" id="telefono" placeholder="999 888 777" onblur="validarCampoLive(this)" oninput="this.value=this.value.replace(/[^\d\s]/g,'');marcarProgreso(this)" style="margin-bottom:0;flex:1;">
         </div>
-        <div class="microcopy" style="margin-bottom:20px;">📱 Para que el reclutador pueda contactarte directamente</div>
+        <div class="microcopy" style="margin-bottom:20px;">📱 Para que el reclutador pueda contactarte</div>
         <label>País</label>
         <select id="pais" onchange="actualizarCiudades()">
           <option value="PE">🇵🇪 Perú</option><option value="CO">🇨🇴 Colombia</option><option value="MX">🇲🇽 México</option><option value="AR">🇦🇷 Argentina</option><option value="CL">🇨🇱 Chile</option><option value="EC">🇪🇨 Ecuador</option><option value="BO">🇧🇴 Bolivia</option>
         </select>
         <label>Ciudad</label>
         <select id="ciudad" style="margin-bottom:20px;"><option value="">Selecciona tu ciudad</option></select>
-        <label>Foto de perfil (opcional)</label>
-        <p style="font-size:0.82rem;color:rgba(255,255,255,0.35);margin-bottom:12px;">📷 Recomendado · Fondo neutro · Máximo 2MB</p>
-        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="margin-bottom:8px;">
-        <img id="foto-preview" class="foto-preview">
       </div>
-
       <!-- PASO 2: EXPERIENCIA -->
       <div class="step" id="step-2">
         <!-- CON EXPERIENCIA — visible por defecto -->
@@ -442,7 +445,24 @@
         </div>
       </div>
 
-      <!-- PASO 5: OFERTA LABORAL OPCIONAL -->
+      <!-- PASO 5: FOTO OPCIONAL -->
+      <div class="step" id="step-5foto">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:2rem;margin-bottom:8px;">📷</div>
+          <h3 style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">¿Quieres agregar tu foto?</h3>
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Opcional. Fondo neutro · Máximo 2MB</p>
+        </div>
+        <div id="foto-upload-zone" class="upload-zone" onclick="document.getElementById('foto').click()" style="margin-bottom:12px;">
+          <div style="font-size:2rem;margin-bottom:8px;">🤳</div>
+          <div style="font-weight:700;color:white;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu foto</div>
+          <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);">JPG, PNG · Fondo blanco o neutro recomendado</div>
+        </div>
+        <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="display:none;">
+        <div id="foto-nombre" style="display:none;text-align:center;font-size:0.82rem;color:#22c55e;font-weight:700;margin-bottom:8px;"></div>
+        <img id="foto-preview" class="foto-preview" style="display:none;margin:0 auto 12px;">
+      </div>
+
+      <!-- PASO 6: OFERTA LABORAL OPCIONAL -->
       <div class="step" id="step-5">
         <div style="text-align:center;margin-bottom:20px;">
           <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
@@ -598,8 +618,8 @@
 
   let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
-  const PASOS=['step-1','step-2','step-3','step-4','step-5'];
-  const TITULOS=['Quién eres','Tu experiencia','Tu educación','Tus habilidades','¿Tienes una oferta?'];
+  const PASOS=['step-1','step-1b','step-2','step-3','step-4','step-5foto','step-5'];
+  const TITULOS=['¿Cómo te llamas?','Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
@@ -826,7 +846,7 @@
     PASOS.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','saliendo');if(i===idx){el.style.display='block';setTimeout(()=>el.classList.add('active'),10);}else el.style.display='none';});
     document.getElementById('wizard-titulo').textContent=TITULOS[idx];
     document.getElementById('progress-fill').style.width=((idx+1)/PASOS.length*100)+'%';
-    document.getElementById('progress-text').textContent=`Paso ${idx+1} de ${PASOS.length}`;
+    document.getElementById('progress-text').textContent=idx===0?'¡Empezamos! Solo unos minutos más':idx===PASOS.length-1?'¡Último paso! Tu CV está casi listo':`Paso ${idx+1} de ${PASOS.length} · ¡Vas muy bien!`;
     document.getElementById('btn-prev').style.display=idx===0?'flex':'flex';
     document.getElementById('btn-next').style.display='flex';
     document.getElementById('btn-next').textContent=idx===PASOS.length-1?'Ver mi CV →':'Siguiente →';
