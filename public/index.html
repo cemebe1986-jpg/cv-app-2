@@ -663,7 +663,6 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
-          <button onclick="volverAlWizard()" style="width:100%;padding:12px;background:transparent;color:#4a5568;border:1.5px solid #e2e8f0;border-radius:12px;text-align:center;font-weight:600;font-size:0.88rem;cursor:pointer;margin-top:10px;">✏️ Volver a editar mi CV</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
         </div>
 
@@ -921,10 +920,10 @@
         ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
         ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
         ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
-        ${keywordsOk?`<div style="font-size:0.72rem;color:#4a5568;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">✅ Keywords encontradas: <strong>${keywordsOk}</strong></div>`:''}
-        ${keywordsFalta?`<div style="font-size:0.72rem;color:#4a5568;margin-top:4px;">❌ Keywords que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
+        ${keywordsOk?`<div style="font-size:0.72rem;color:#4a5568;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">✅ Habilidades que coinciden: <strong>${keywordsOk}</strong></div>`:''}
+        ${keywordsFalta?`<div style="font-size:0.72rem;color:#4a5568;margin-top:4px;">❌ Habilidades que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
         <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
-          Calidad del CV: ${scoreCalidad}/100 · Compatibilidad: ${compIA.score}/100
+          Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
         </div>`;
     } else {
       // Sin compatibilidad — mostrar items de calidad
