@@ -722,17 +722,39 @@
     document.getElementById('entrevista-loading').style.display='block';
     if(respuesta){agregarMensajeChat(respuesta,'juan');historialEntrevista.push(respuesta);}
     try{
-      const r=await fetch('/simular-entrevista',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuarioId:window.usuarioActual?.uid,respuesta:respuesta||'',historial:historialEntrevista})});
+      const r=await fetch('/simular-entrevista',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuarioId:window.usuarioActual?.uid,respuesta:respuesta||'',historial:historialEntrevista,puestoManual:window._cargoInicial||''})});
       const data=await r.json();
       document.getElementById('entrevista-loading').style.display='none';
-      if(data.feedback)agregarMensajeChat('💬 '+data.feedback,'ia');
-      if(data.finalizado){
-        document.getElementById('entrevista-progreso').textContent='Entrevista finalizada';
+
+      // Sin puesto ni oferta — pedir puesto
+      if(data.necesitaPuesto){
+        const div=document.getElementById('entrevista-input-area');
+        div.style.display='block';
+        div.innerHTML=`
+          <p style="font-size:0.82rem;color:rgba(255,255,255,0.6);margin-bottom:8px;">Para una simulación más precisa, ¿a qué puesto postulas?</p>
+          <input type="text" id="entrevista-puesto" placeholder="Ej: Analista Contable, Enfermera, Vendedor..." style="margin-bottom:8px;">
+          <button onclick="iniciarEntrevistaConPuesto()" style="width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Iniciar simulación →</button>
+          <button onclick="iniciarEntrevistaSinPuesto()" style="width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.4);border:none;font-size:0.78rem;cursor:pointer;margin-top:4px;">Continuar con preguntas generales</button>`;
+        return;
+      }
+
+      // Agotó intentos
+      if(data.agotado){
+        agregarMensajeChat('Has usado tus 2 simulaciones disponibles. ¡Mucho éxito en tu entrevista real!','ia');
+        document.getElementById('entrevista-input-area').style.display='none';
         entrevistaActiva=false;
-      }else{
+        return;
+      }
+
+      if(data.finalizado&&data.resumen){
+        mostrarResumenEntrevista(data.resumen);
+        document.getElementById('entrevista-progreso').textContent='Simulación finalizada';
+        entrevistaActiva=false;
+      } else {
         agregarMensajeChat(data.pregunta,'ia');
         historialEntrevista.push(data.pregunta);
         document.getElementById('entrevista-progreso').textContent=`Pregunta ${data.numeroPreguntas} de 7`;
+        if(data.intentosRestantes!==undefined)document.getElementById('entrevista-progreso').textContent+=` · ${data.intentosRestantes} simulación${data.intentosRestantes===1?'':'es'} restante${data.intentosRestantes===1?'':'s'}`;
         document.getElementById('entrevista-input-area').style.display='block';
         document.getElementById('entrevista-respuesta').value='';
         document.getElementById('entrevista-respuesta').focus();
@@ -744,10 +766,53 @@
     }
   }
 
-  async function enviarRespuestaEntrevista(){
-    const respuesta=document.getElementById('entrevista-respuesta').value.trim();
-    if(!respuesta)return;
-    await pedirSiguientePregunta(respuesta);
+  function mostrarResumenEntrevista(resumen){
+    const chat=document.getElementById('entrevista-chat');
+    const estrellas=n=>'⭐'.repeat(n)+'☆'.repeat(5-n);
+    const div=document.createElement('div');
+    div.style.cssText='background:white;border-radius:12px;padding:16px;margin-top:8px;border:1px solid #e2e8f0;';
+    div.innerHTML=`
+      <div style="font-size:0.88rem;font-weight:700;color:#0f3460;margin-bottom:12px;text-align:center;">📊 Resultado de tu simulación</div>
+      <div style="text-align:center;margin-bottom:14px;">
+        <div style="font-size:2rem;font-weight:900;color:#0f3460;">${resumen.calificacionGeneral}/5</div>
+        <div style="font-size:1.2rem;color:#f59e0b;">${estrellas(Math.round(resumen.calificacionGeneral))}</div>
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">✅ Fortalezas</div>
+        ${(resumen.fortalezas||[]).map(f=>`<div style="font-size:0.78rem;color:#4a5568;margin-bottom:3px;">· ${f}</div>`).join('')}
+      </div>
+      <div style="margin-bottom:10px;">
+        <div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">⚠️ Áreas de mejora</div>
+        ${(resumen.areasMejora||[]).map(a=>`<div style="font-size:0.78rem;color:#4a5568;margin-bottom:3px;">· ${a}</div>`).join('')}
+      </div>
+      <div style="background:#f8faff;border-radius:8px;padding:10px;margin-bottom:12px;">
+        <div style="font-size:0.75rem;font-weight:700;color:#0f3460;margin-bottom:4px;">💡 Recomendación</div>
+        <div style="font-size:0.78rem;color:#4a5568;line-height:1.5;">${resumen.recomendacionFinal}</div>
+      </div>
+      <div style="border-top:1px solid #e2e8f0;padding-top:10px;">
+        <div style="font-size:0.75rem;font-weight:700;color:#718096;margin-bottom:6px;">Detalle por pregunta</div>
+        ${(resumen.calificacionPorPregunta||[]).map(p=>`
+          <div style="display:flex;align-items:flex-start;gap:8px;margin-bottom:6px;">
+            <span style="font-size:0.72rem;color:#718096;flex-shrink:0;width:16px;">P${p.numero}</span>
+            <span style="font-size:0.75rem;color:#f59e0b;flex-shrink:0;">${estrellas(p.estrellas)}</span>
+            <span style="font-size:0.72rem;color:#4a5568;">${p.comentario}</span>
+          </div>`).join('')}
+      </div>`;
+    chat.appendChild(div);
+    chat.scrollTop=chat.scrollHeight;
+  }
+
+  async function iniciarEntrevistaConPuesto(){
+    const puesto=document.getElementById('entrevista-puesto')?.value?.trim();
+    if(puesto)window._cargoInicial=puesto;
+    document.getElementById('entrevista-input-area').innerHTML=`<textarea id="entrevista-respuesta" placeholder="Escribe tu respuesta aquí..." style="width:100%;height:100px;resize:none;margin-bottom:8px;font-size:0.88rem;"></textarea><button onclick="enviarRespuestaEntrevista()" style="width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Enviar respuesta →</button>`;
+    await pedirSiguientePregunta(null);
+  }
+
+  async function iniciarEntrevistaSinPuesto(){
+    window._cargoInicial='';
+    document.getElementById('entrevista-input-area').innerHTML=`<textarea id="entrevista-respuesta" placeholder="Escribe tu respuesta aquí..." style="width:100%;height:100px;resize:none;margin-bottom:8px;font-size:0.88rem;"></textarea><button onclick="enviarRespuestaEntrevista()" style="width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Enviar respuesta →</button>`;
+    await pedirSiguientePregunta(null);
   }
   const PASOS=['step-1b','step-2','step-3','step-4','step-5foto','step-5'];
   const TITULOS=['Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
