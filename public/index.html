@@ -243,7 +243,6 @@
       <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
     </div>
     <button style="color:rgba(255,255,255,0.6);font-size:0.82rem;cursor:pointer;background:none;border:none;display:none;" onclick="pasoAnterior()" id="nav-back">← Volver</button>
-    <button onclick="elegirCamino('pdf')" id="nav-pdf-btn" style="display:none;font-size:0.78rem;color:rgba(255,255,255,0.5);background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">📄 Subir PDF</button>
   </div>
 </nav>
 
@@ -1001,7 +1000,7 @@
     document.getElementById('progress-bar-container').style.display='block';
     document.getElementById('nav-pasos').style.display='flex';
     document.getElementById('nav-back').style.display='block';
-    document.getElementById('nav-pdf-btn').style.display='block';
+    
     const wch=document.getElementById('wizard-card-header');if(wch)wch.style.display='';
     if(tipo==='pdf'){
       const sp=document.getElementById('step-pdf');sp.style.display='block';setTimeout(()=>sp.classList.add('active'),10);
@@ -1048,21 +1047,21 @@
       PASOS.forEach(id=>{document.getElementById(id).classList.remove('active');document.getElementById(id).style.display='none';});
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
       pasoActual=-1;
     } else if(pasoActual===-3){
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
     } else if(pasoActual<0){
       PASOS.forEach(id=>{document.getElementById(id).classList.remove('active');});
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
     } else {pasoActual--;mostrarPaso(pasoActual);}
   }
@@ -1226,7 +1225,12 @@
       const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
       if(!r.ok){throw new Error('Error en extraer-cv: '+r.status);}
       const data=await r.json();const d=data.datos;
-      if(d.nombre)document.getElementById('nombre').value=d.nombre;if(d.email)document.getElementById('email').value=d.email;if(d.telefono)document.getElementById('telefono').value=d.telefono;
+      const campoNombre=document.getElementById('nombre');
+      const campoEmail=document.getElementById('email');
+      const campoTel=document.getElementById('telefono');
+      if(d.nombre&&campoNombre)campoNombre.value=d.nombre;
+      if(d.email&&campoEmail)campoEmail.value=d.email;
+      if(d.telefono&&campoTel)campoTel.value=d.telefono;
       if(d.habilidades_blandas){blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}
       let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;renderListaHabilidades();}
       if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));setModoExperiencia('con');renderTrabajoss();}
