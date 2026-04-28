@@ -352,19 +352,11 @@
         <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:12px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:14px;">Continuar →</button>
       </div>
 
-      <!-- PASO 1: SOLO NOMBRE -->
-      <div class="step" id="step-1">
-        <div style="background:rgba(96,165,250,0.08);border:1px solid rgba(96,165,250,0.2);border-radius:12px;padding:12px 16px;margin-bottom:20px;display:flex;align-items:center;gap:10px;">
-          <span style="font-size:1.1rem;">⏱️</span>
-          <span style="font-size:0.82rem;color:#60a5fa;font-weight:600;">En unos minutos tendrás tu CV listo</span>
-        </div>
-        <label>¿Cómo te llamas? *</label>
-        <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="font-size:1.1rem;">
-        <div class="microcopy">Así aparecerá en tu CV profesional</div>
-      </div>
-
-      <!-- PASO 1B: CONTACTO -->
+      <!-- PASO 1B: CONTACTO (primer paso del wizard) -->
       <div class="step" id="step-1b">
+        <label>Nombre completo *</label>
+        <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="font-size:1rem;margin-bottom:4px;">
+        <div class="microcopy">Así aparecerá en tu CV profesional</div>
         <label>Email *</label>
         <div style="position:relative;">
           <input type="email" id="email" placeholder="juan@gmail.com" onblur="validarCampoLive(this)" oninput="marcarProgreso(this);mostrarDominios(this)" onkeydown="navegarDominios(event)" autocomplete="off" style="margin-bottom:0;">
@@ -774,8 +766,8 @@
     if(!respuesta)return;
     await pedirSiguientePregunta(respuesta);
   }
-  const PASOS=['step-1','step-1b','step-2','step-3','step-4','step-5foto','step-5'];
-  const TITULOS=['¿Cómo te llamas?','Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
+  const PASOS=['step-1b','step-2','step-3','step-4','step-5foto','step-5'];
+  const TITULOS=['Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
@@ -832,11 +824,15 @@
 
   function continuarDesdePDF(){
     if(typeof gtag!=='undefined')gtag('event','pdf_continuar');
-    const ofertaPdf=document.getElementById('oferta-pdf').value;
+    const ofertaPdf=document.getElementById('oferta-pdf')?.value||'';
     document.getElementById('oferta').value=ofertaPdf;
     document.getElementById('step-pdf').classList.remove('active');
     document.getElementById('step-pdf').style.display='none';
-    camino='manual';pasoActual=0;mostrarPaso(0);
+    // Saltar directo a foto — nombre, contacto, experiencia, educación y habilidades
+    // ya vienen del PDF extraído
+    camino='manual';
+    pasoActual=PASOS.indexOf('step-5foto');
+    mostrarPaso(pasoActual);
   }
 
 
@@ -996,12 +992,18 @@
   function iniciarDesdeInicio(){
     const nombre=document.getElementById('nombre-inicio')?.value.trim();
     elegirCamino('manual');
-    if(nombre&&nombre.length>=2){
-      setTimeout(()=>{
+    setTimeout(()=>{
+      // Pre-llenar nombre en step-1b
+      if(nombre&&nombre.length>=2){
         const campoNombre=document.getElementById('nombre');
         if(campoNombre){campoNombre.value=nombre;campoNombre.dispatchEvent(new Event('input'));}
-      },200);
-    }
+      }
+      // Pre-llenar cargo si vino de la landing
+      if(window._cargoInicial){
+        const campoCargo=document.getElementById('cargo');
+        if(campoCargo){campoCargo.value=window._cargoInicial;campoCargo.dispatchEvent(new Event('input'));}
+      }
+    },200);
   }
 
   function elegirCamino(tipo){
@@ -1085,8 +1087,7 @@
   }
 
   function validarPaso(){
-    if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}}
-    if(pasoActual===1){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
+    if(pasoActual===0){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
     if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Completa el cargo y empresa, o elimina el trabajo si no aplica.');return false;}
     if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Experiencia incompleta','Completa al menos una práctica o proyecto, o elimínalo.');return false;}
     if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Completa al menos un estudio con título e institución, o elimínalo si no aplica.');return false;}
@@ -1440,34 +1441,12 @@
 
     if(cargo&&cargo.trim().length>1){
       window._cargoInicial = decodeURIComponent(cargo);
-      elegirCamino('manual');
-      setTimeout(()=>{
-        const campoCargo=document.getElementById('cargo');
-        if(campoCargo){
-          campoCargo.value=decodeURIComponent(cargo);
-          campoCargo.dispatchEvent(new Event('input'));
-        }
-      },200);
+      // Guardar cargo para usarlo al generar el CV — no saltar step-0
     } else if(skip==='true'){
-      // No tiene oferta específica → salta step-0 directo al paso 1
-      elegirCamino('manual');
+      // No saltar step-0 — Juan ve el nombre primero
     } else if(oferta==='si'){
-      // Tiene oferta en mente → oculta campo de puesto, muestra solo oferta
-      setTimeout(()=>{
-        const campoPuesto=document.querySelector('#step-0 p');
-        const inputCargo=document.getElementById('cargo-inicio');
-        if(campoPuesto)campoPuesto.style.display='none';
-        if(inputCargo)inputCargo.style.display='none';
-        const campo=document.getElementById('campo-oferta-inicio');
-        const icon=document.getElementById('oferta-inicio-icon');
-        const btnToggle=document.getElementById('btn-toggle-oferta-inicio');
-        const btnEmpezar=document.getElementById('btn-empezar');
-        if(campo){campo.style.display='block';}
-        if(icon){icon.textContent='▴';}
-        if(btnToggle){btnToggle.style.display='none';}
-        if(btnEmpezar){btnEmpezar.disabled=false;btnEmpezar.style.opacity='1';}
-        window.siPuestoActivo=true;
-      },100);
+      // Guardar que tiene oferta — se pedirá en el último paso
+      window._tieneOferta = true;
     }
   })();
 </script>
