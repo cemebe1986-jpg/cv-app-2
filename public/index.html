@@ -647,11 +647,12 @@
             <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
               <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">🎯 MÁS COMPLETO</div>
               <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">🎯</div>
-              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">CV + Entrevista</div>
-              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para postular con confianza</div>
+              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">CV + Simulación de entrevista</div>
+              <div style="font-size:0.72rem;color:#718096;margin-bottom:6px;">Para postular con confianza</div>
+              <div style="font-size:0.78rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">S/13.80</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/9.90</div>
-              <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">CV + práctica de entrevista con IA</div>
-              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV y practica tu<br>entrevista con IA adaptativa</div>
+              <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorras S/3.90 🎉</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV + practica con una<br>simulación de entrevista con IA</div>
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Me llevo el pack →</div>
             </div>
           </div>
@@ -663,7 +664,7 @@
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
           <button onclick="volverAlWizard()" style="width:100%;padding:12px;background:transparent;color:#4a5568;border:1.5px solid #e2e8f0;border-radius:12px;text-align:center;font-weight:600;font-size:0.88rem;cursor:pointer;margin-top:10px;">✏️ Volver a editar mi CV</button>
-          <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Practicar mi entrevista con IA</button>
+          <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
         </div>
 
         <!-- UI DE SIMULACIÓN DE ENTREVISTA -->
@@ -671,8 +672,8 @@
           <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1);">
             <div style="width:36px;height:36px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🤖</div>
             <div>
-              <div style="font-size:0.88rem;font-weight:700;color:white;">Entrevistador IA</div>
-              <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);">Simulación basada en tu CV y puesto</div>
+              <div style="font-size:0.88rem;font-weight:700;color:white;">Simulador de entrevista IA</div>
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);">Simulación basada en tu CV — no es una entrevista real</div>
             </div>
             <div id="entrevista-progreso" style="margin-left:auto;font-size:0.72rem;color:rgba(255,255,255,0.4);"></div>
           </div>

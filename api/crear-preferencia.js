@@ -8,7 +8,7 @@ module.exports = async (req, res) => {
 
   const planes = {
     basico:  { titulo: 'TalentIA — Plan Básico (CV)',              precio: 4.90,  cvs: 1, entrevista: false },
-    popular: { titulo: 'TalentIA — CV + Simulación de Entrevista', precio: 9.90,  cvs: 1, entrevista: true  }
+    popular: { titulo: 'TalentIA — CV + Simulación de Entrevista con IA', precio: 9.90,  cvs: 1, entrevista: true  }
   };
 
   const planData = planes[plan];
