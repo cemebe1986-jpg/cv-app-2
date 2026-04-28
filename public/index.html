@@ -1243,7 +1243,9 @@
       if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
       const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;document.body.appendChild(t);
       setTimeout(()=>{t.remove();
-        // Llevar por los pasos normales para que Juan revise lo extraído
+        // Ocultar step-pdf y llevar al paso 1
+        const stepPdf=document.getElementById('step-pdf');
+        if(stepPdf){stepPdf.classList.remove('active');stepPdf.style.display='none';}
         camino='manual';pasoActual=0;mostrarPaso(0);
       },2000);
     }catch(e){console.error(e);document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');}

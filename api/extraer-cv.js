@@ -51,11 +51,40 @@ Devuelve exactamente esta estructura:
 
 REGLAS:
 - Extrae TODOS los trabajos como objetos separados en el array trabajos
-- Para cada trabajo, separa cargo y empresa correctamente
+- Para cada trabajo, separa cargo y empresa correctamente aunque estén en la misma línea
 - Los logros deben ser strings individuales, no un solo texto largo
 - Para educación, el tipo puede ser: universitaria, maestria, certificacion, tecnica
 - Si hay certificaciones separadas de la educación, ponlas en el array certificaciones
-- Responde SOLO con el JSON, sin explicaciones`
+
+REGLAS DE FECHAS — extrae SOLO el año en "desde" y "hasta":
+- "Nov 2019 - presente" → desde: "2019", hasta: "Actualidad"
+- "11/2019 - 10/2023" → desde: "2019", hasta: "2023"  
+- "Noviembre 2019 – Octubre 2023" → desde: "2019", hasta: "2023"
+- "2019 - 2023" → desde: "2019", hasta: "2023"
+- "Agosto 2015 - Mayo 2018" → desde: "2015", hasta: "2018"
+- "presente", "actual", "a la fecha", "current", "la actualidad" → hasta: "Actualidad"
+- Si no hay fecha de inicio → desde: ""
+- Si no hay fecha de fin → hasta: ""
+
+REGLAS DE EMPRESA Y CARGO — separa correctamente:
+- "BBVA Perú, Nov 2019 - presente" → empresa: "BBVA Perú" (sin la fecha)
+- "Arquitecto de Seguridad | BBVA Perú" → cargo: "Arquitecto de Seguridad", empresa: "BBVA Perú"
+- "BBVA Perú (Nov 2019 - presente)" → empresa: "BBVA Perú" (sin paréntesis ni fecha)
+- "Experis/Rimac Seguros" → empresa: "Experis/Rimac Seguros" (mantener tal cual)
+
+REGLAS DE EDUCACIÓN:
+- "Candidato MBA en Administración" → tipo: "maestria", titulo: "MBA en Administración", hasta: "En curso"
+- "Titulado en Ingeniería de Sistemas" → tipo: "universitaria", titulo: "Ingeniería de Sistemas"
+- "Maestría en Dirección de TI" → tipo: "maestria"
+- Si dice "candidato", "en curso", "cursando" → hasta: "En curso"
+- Certificaciones con ID → ponlas en el array certificaciones con su ID
+
+REGLAS DE TELÉFONO:
+- "+51 997532149" → "997532149" (sin código de país)
+- "(+51) 997532149" → "997532149"
+- "997-532-149" → "997532149"
+
+Responde SOLO con el JSON, sin explicaciones`
       }]
     });
 
