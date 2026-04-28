@@ -500,7 +500,6 @@
           <button onclick="document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
         </div>
         <label style="margin-top:8px;">Habilidades blandas</label>
-        <p style="font-size:0.82rem;color:rgba(255,255,255,0.55);margin-bottom:12px;">Agrégalas una por una o usa la IA para sugerirlas.</p>
         <div style="display:flex;gap:10px;margin-bottom:12px;">
           <input type="text" id="nueva-blanda" placeholder="Ej: Liderazgo, Trabajo en equipo..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarBlanda();}">
           <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
@@ -948,9 +947,17 @@
   function activarPaso(idx){
     if(typeof gtag!=='undefined')gtag('event','wizard_paso',{paso:idx+1,nombre:TITULOS[idx]});
     PASOS.forEach((id,i)=>{const el=document.getElementById(id);el.classList.remove('active','saliendo');if(i===idx){el.style.display='block';setTimeout(()=>el.classList.add('active'),10);}else el.style.display='none';});
-    document.getElementById('wizard-titulo').textContent=TITULOS[idx];
+    const nombreUser=window.usuarioActual?.displayName?.split(' ')[0]||null;
+    document.getElementById('wizard-titulo').textContent=nombreUser&&idx===0?`${TITULOS[idx]}, ${nombreUser}`:TITULOS[idx];
     document.getElementById('progress-fill').style.width=((idx+1)/PASOS.length*100)+'%';
     document.getElementById('progress-text').textContent=idx===0?'¡Empezamos! Solo unos minutos más':idx===PASOS.length-1?'¡Último paso! Tu CV está casi listo':`Paso ${idx+1} de ${PASOS.length} · ¡Vas muy bien!`;
+    // Trato personalizado si está logueado
+    const nombre=window.usuarioActual?.displayName?.split(' ')[0]||null;
+    if(nombre){
+      const saludos=['¡Vamos '+nombre+'!','¡Tú puedes '+nombre+'!','¡Casi listo '+nombre+'!'];
+      if(idx===0)document.getElementById('progress-text').textContent='¡Empezamos '+nombre+'! Solo unos minutos más';
+      if(idx===PASOS.length-1)document.getElementById('progress-text').textContent='¡Último paso '+nombre+'! Tu CV está casi listo';
+    }
     document.getElementById('btn-prev').style.display=idx===0?'flex':'flex';
     document.getElementById('btn-next').style.display='flex';
     document.getElementById('btn-next').textContent=idx===PASOS.length-1?'Ver mi CV →':'Siguiente →';
