@@ -1087,8 +1087,8 @@
   function validarPaso(){
     if(pasoActual===0){if(document.getElementById('nombre').value.trim().length<3){mostrarError('Nombre incompleto','Ingresa tu nombre completo.');return false;}}
     if(pasoActual===1){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
-    if(pasoActual===2&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
-    if(pasoActual===2&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Sin experiencia','Agrega al menos un proyecto, voluntariado o experiencia.');return false;}
+    if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Completa el cargo y empresa, o elimina el trabajo si no aplica.');return false;}
+    if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Experiencia incompleta','Completa al menos una práctica o proyecto, o elimínalo.');return false;}
     if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Completa al menos un estudio con título e institución, o elimínalo si no aplica.');return false;}
     if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
@@ -1305,7 +1305,16 @@
 
   function agregarEducacion(){educacionData.push({id:Date.now(),tipo:'universitaria',titulo:'',institucion:'',desde:'',hasta:''});renderEducacion();}
   function eliminarEducacion(id){educacionData=educacionData.filter(e=>e.id!==id);renderEducacion();}
-  function actualizarEducacion(id,campo,valor){const e=educacionData.find(e=>e.id===id);if(e)e[campo]=valor;}
+  function actualizarEducacion(id,campo,valor){
+    const e=educacionData.find(e=>e.id===id);
+    if(!e)return;
+    if(campo==='tipo'){
+      // Al cambiar tipo, limpiar campos que no aplican al nuevo tipo
+      e.titulo='';e.institucion='';e.desde='';e.hasta='';
+      e.estado='';e.certId='';e.certUrl='';e.tipoCustom='';
+    }
+    e[campo]=valor;
+  }
   function renderEducacion(){
     const c=document.getElementById('lista-educacion');if(!educacionData.length){c.innerHTML='';return;}
     c.innerHTML=educacionData.map((e,idx)=>{
