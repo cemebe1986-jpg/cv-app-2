@@ -70,7 +70,7 @@
   input:focus,textarea:focus,select:focus{outline:none;border-color:#60a5fa;background:rgba(96,165,250,0.06);box-shadow:0 0 0 3px rgba(96,165,250,0.1);}
   select option{background:#1a1f2e;color:white;}
   textarea{height:130px;resize:vertical;}
-  .microcopy{font-size:0.75rem;color:rgba(255,255,255,0.3);margin-top:6px;margin-bottom:16px;}
+  .microcopy{font-size:0.75rem;color:rgba(255,255,255,0.55);margin-top:6px;margin-bottom:16px;}
   .error-msg{color:#f87171;font-size:0.78rem;margin-top:-14px;margin-bottom:16px;}
   .habilidad-item{display:flex;align-items:center;gap:12px;background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.08);border-radius:10px;padding:10px 14px;margin-bottom:8px;}
   .habilidad-nombre{font-size:0.9rem;font-weight:600;color:white;flex:1;}
@@ -243,6 +243,7 @@
       <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
     </div>
     <button style="color:rgba(255,255,255,0.6);font-size:0.82rem;cursor:pointer;background:none;border:none;display:none;" onclick="pasoAnterior()" id="nav-back">← Volver</button>
+    <button onclick="elegirCamino('pdf')" id="nav-pdf-btn" style="display:none;font-size:0.78rem;color:rgba(255,255,255,0.5);background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;padding:6px 12px;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">📄 Subir PDF</button>
   </div>
 </nav>
 
@@ -274,7 +275,7 @@
       </div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
-        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.3);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
+        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.55);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
         <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:8px;font-weight:600;">¿A qué puesto postulas?</p>
         <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:6px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
         <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
@@ -313,7 +314,7 @@
         </datalist>
         <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:16px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
         <div style="text-align:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;">
-          <p style="font-size:0.75rem;color:rgba(255,255,255,0.25);margin-bottom:10px;">¿Ya tienes un CV en PDF? Súbelo y la IA extrae todo automáticamente</p>
+          <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:10px;">¿Ya tienes un CV en PDF? Súbelo y la IA extrae todo automáticamente</p>
           <button onclick="elegirCamino('pdf')" style="background:transparent;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 20px;color:rgba(255,255,255,0.4);font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">📄 Subir mi CV en PDF</button>
         </div>
       </div>
@@ -540,7 +541,7 @@
           <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Opcional. Si pegas la oferta, la IA optimiza tu CV para esa empresa.</p>
         </div>
         <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:160px;margin-bottom:8px;"></textarea>
-        <p style="font-size:0.75rem;color:rgba(255,255,255,0.3);margin-bottom:16px;">Si no tienes una oferta, haz clic en "Ver mi CV →" para continuar.</p>
+        <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Si no tienes una oferta, haz clic en "Ver mi CV →" para continuar.</p>
       </div>
 
       <div class="error-toast" id="error-toast">
@@ -925,6 +926,7 @@
     document.getElementById('progress-bar-container').style.display='block';
     document.getElementById('nav-pasos').style.display='flex';
     document.getElementById('nav-back').style.display='block';
+    document.getElementById('nav-pdf-btn').style.display='block';
     const wch=document.getElementById('wizard-card-header');if(wch)wch.style.display='';
     if(tipo==='pdf'){
       const sp=document.getElementById('step-pdf');sp.style.display='block';setTimeout(()=>sp.classList.add('active'),10);
@@ -963,21 +965,21 @@
       PASOS.forEach(id=>{document.getElementById(id).classList.remove('active');document.getElementById(id).style.display='none';});
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
       pasoActual=-1;
     } else if(pasoActual===-3){
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
     } else if(pasoActual<0){
       PASOS.forEach(id=>{document.getElementById(id).classList.remove('active');});
       document.getElementById('step-pdf').classList.remove('active');document.getElementById('step-pdf').style.display='none';
       document.getElementById('step-0').style.display='block';document.getElementById('step-0').classList.add('active');
       document.getElementById('wizard-nav').style.display='none';document.getElementById('progress-bar-container').style.display='none';
-      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';
+      document.getElementById('nav-pasos').style.display='none';document.getElementById('nav-back').style.display='none';document.getElementById('nav-pdf-btn').style.display='none';
       document.getElementById('wizard-titulo').textContent='¿Cómo quieres crear tu CV?';
     } else {pasoActual--;mostrarPaso(pasoActual);}
   }
@@ -993,7 +995,7 @@
     if(pasoActual===1){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
     if(pasoActual===2&&modoExperiencia==='con'&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Agrega al menos un trabajo con cargo y empresa.');return false;}
     if(pasoActual===2&&modoExperiencia==='sin'&&!proyectosData.some(p=>p.nombre.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Sin experiencia','Agrega al menos un proyecto, voluntariado o experiencia.');return false;}
-    if(pasoActual===3&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Agrega al menos un estudio con título e institución.');return false;}
+    if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Completa al menos un estudio con título e institución, o elimínalo si no aplica.');return false;}
     if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
