@@ -662,6 +662,7 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
+          <button onclick="volverAlWizard()" style="width:100%;padding:12px;background:transparent;color:#4a5568;border:1.5px solid #e2e8f0;border-radius:12px;text-align:center;font-weight:600;font-size:0.88rem;cursor:pointer;margin-top:10px;">✏️ Volver a editar mi CV</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Practicar mi entrevista con IA</button>
         </div>
 
@@ -966,7 +967,14 @@
     if(np)np.style.display='none';
   }
 
-  function toggleSidebarCV(){
+  function volverAlWizard(){
+    // Ocultar el CV generado y volver al último paso del wizard
+    document.getElementById('cv-resultado').style.display='none';
+    document.getElementById('wizard-container').style.display='block';
+    pasoActual=PASOS.length-1;
+    mostrarPaso(pasoActual);
+    window.scrollTo({top:0,behavior:'smooth'});
+  }
     const panel=document.getElementById('sidebar-cv-panel');
     panel.style.display=panel.style.display==='none'?'block':'none';
   }
@@ -1284,11 +1292,11 @@
     document.getElementById('cv-nombre-sidebar').textContent=cv.nombre||'';document.getElementById('cv-nombre-main').textContent=cv.nombre||'';
     document.getElementById('cv-email').textContent=cv.email||'';document.getElementById('cv-telefono').textContent=cv.telefono||'';
     document.getElementById('cv-ciudad').textContent=[ciudad,pais].filter(Boolean).join(', ')||'Perú';
-    const perfil=document.getElementById('cv-perfil');perfil.textContent=cv.perfil||'';perfil.classList.add('editable');perfil.setAttribute('contenteditable','false');perfil.onclick=function(){this.setAttribute('contenteditable','true');this.focus();};perfil.onblur=function(){this.setAttribute('contenteditable','false');};
+    const perfil=document.getElementById('cv-perfil');perfil.textContent=cv.perfil||'';
     document.getElementById('cv-skills-tecnicas').innerHTML=habilidadesData.map(h=>`<span class="cv-skill-tag">${h.nombre}</span>`).join('');
     document.getElementById('cv-skills-blandas').innerHTML=blandasData.map(b=>`<span class="soft-skill">${b.nombre}</span>`).join('');
-    document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.cargo}</div><div class="exp-empresa editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.empresa}</div><div class="exp-periodo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${l}</div>`).join('')}</div>`).join('');
-    document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.titulo}</div><div class="edu-institucion editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.institucion}</div><div class="edu-año editable" contenteditable="false" onclick="this.setAttribute('contenteditable','true')" onblur="this.setAttribute('contenteditable','false')">${edu.año}</div></div>`).join('');
+    document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo">${exp.cargo}</div><div class="exp-empresa">${exp.empresa}</div><div class="exp-periodo">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro">${l}</div>`).join('')}</div>`).join('');
+    document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo">${edu.titulo}</div><div class="edu-institucion">${edu.institucion}</div><div class="edu-año">${edu.año}</div></div>`).join('');
     document.getElementById('cv-preview').style.display='block';
     if(cv.compatibilidad&&typeof ofertaLocal==='string'&&ofertaLocal.trim().length>0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
     else document.getElementById('analisis-compatibilidad').style.display='none';
