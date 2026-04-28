@@ -328,8 +328,6 @@
       <textarea id="oferta" style="display:none;"></textarea>
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
-
-        <!-- PDF primero — lo obligatorio -->
         <label style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block;">Sube tu CV en PDF</label>
         <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;">
           <div style="font-size:2rem;margin-bottom:8px;">📤</div>
@@ -338,18 +336,7 @@
         </div>
         <div id="pdf-nombre-archivo" style="display:none;text-align:center;margin-bottom:10px;font-size:0.82rem;color:#22c55e;font-weight:700;"></div>
         <div id="estado-subida" style="text-align:center;display:none;margin-bottom:10px;"><div class="spinner"></div><p style="color:rgba(255,255,255,0.6);font-size:0.85rem;">Analizando tu CV con IA...</p></div>
-
-        <!-- Oferta opcional — discreta -->
-        <div style="margin-top:16px;border-top:1px solid #f0f0f0;padding-top:14px;">
-          <button onclick="toggleOfertaPDF()" id="btn-agregar-oferta" style="background:none;border:none;color:#60a5fa;font-size:0.82rem;cursor:pointer;font-weight:600;padding:0;display:flex;align-items:center;gap:6px;">
-            <span id="oferta-toggle-icon">＋</span> ¿Tienes una oferta laboral? Agrégala para optimizar tu CV
-          </button>
-          <div id="campo-oferta-pdf" style="display:none;margin-top:12px;">
-            <textarea id="oferta-pdf" placeholder="Pega aquí la descripción de la oferta de trabajo..." style="height:110px;font-size:0.85rem;border:1.5px solid #e2e8f0;border-radius:8px;margin-bottom:0;"></textarea>
-          </div>
-        </div>
-
-        <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:12px;background:#1a1a2e;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:14px;">Continuar →</button>
+        <button id="btn-continuar-pdf" onclick="continuarDesdePDF()" style="display:none;width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.92rem;font-weight:700;cursor:pointer;margin-top:14px;">Continuar →</button>
       </div>
 
       <!-- PASO 1B: CONTACTO (primer paso del wizard) -->
