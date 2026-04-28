@@ -275,10 +275,20 @@
       </div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
-        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.55);text-decoration:none;margin-bottom:20px;">← Volver al inicio</a>
-        <p style="color:rgba(255,255,255,0.65);font-size:0.9rem;margin-bottom:8px;font-weight:600;">¿A qué puesto postulas?</p>
-        <input type="text" id="cargo-inicio" list="lista-puestos-peru" placeholder="Ej: Analista contable, Enfermera, Ingeniero civil..." style="margin-bottom:6px;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
-        <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
+        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.55);text-decoration:none;margin-bottom:24px;">← Volver al inicio</a>
+        <p style="color:white;font-size:1.1rem;font-weight:700;margin-bottom:6px;text-align:center;">¡Hola! ¿Cómo te llamas?</p>
+        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-bottom:20px;text-align:center;">Empieza escribiendo tu nombre y te guiamos paso a paso</p>
+        <input type="text" id="nombre-inicio" placeholder="Ej: María García, Carlos Mendoza..." style="margin-bottom:8px;font-size:1rem;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
+        <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:20px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+          <span style="color:rgba(255,255,255,0.35);font-size:0.78rem;">o si ya tienes un CV</span>
+          <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+        </div>
+        <button onclick="elegirCamino('pdf')" style="width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+          Subir mi CV en PDF y la IA lo mejora
+        </button>
         <datalist id="lista-puestos-peru">
           <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
           <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Asistente de gerencia">
@@ -312,11 +322,6 @@
           <option value="Cajero"><option value="Técnico de mantenimiento"><option value="Chofer">
           <option value="Guardián de seguridad"><option value="Practicante profesional"><option value="Practicante pre-profesional">
         </datalist>
-        <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:16px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
-        <div style="text-align:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;">
-          <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:10px;">¿Ya tienes un CV en PDF? Súbelo y la IA extrae todo automáticamente</p>
-          <button onclick="elegirCamino('pdf')" style="background:transparent;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 20px;color:rgba(255,255,255,0.4);font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">📄 Subir mi CV en PDF</button>
-        </div>
       </div>
 
       <!-- PASO PDF -->
@@ -989,13 +994,14 @@
   }
 
   function iniciarDesdeInicio(){
-    const cargo=document.getElementById('cargo-inicio').value.trim();
-    if(cargo.length<2)return;
+    const nombre=document.getElementById('nombre-inicio')?.value.trim();
     elegirCamino('manual');
-    setTimeout(()=>{
-      const campoCargo=document.getElementById('cargo');
-      if(campoCargo){campoCargo.value=cargo;campoCargo.dispatchEvent(new Event('input'));}
-    },200);
+    if(nombre&&nombre.length>=2){
+      setTimeout(()=>{
+        const campoNombre=document.getElementById('nombre');
+        if(campoNombre){campoNombre.value=nombre;campoNombre.dispatchEvent(new Event('input'));}
+      },200);
+    }
   }
 
   function elegirCamino(tipo){
