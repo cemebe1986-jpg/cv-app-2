@@ -1134,7 +1134,7 @@
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
 
   function renderTrabajoss(){
-    const c=document.getElementById('lista-trabajos');if(!trabajosData.length){c.innerHTML='';return;}
+    const c=document.getElementById('lista-trabajos');if(!c)return;if(!trabajosData.length){c.innerHTML='';return;}
     const tl={trabajo:'Trabajo',practica:'Práctica',freelance:'Freelance',negocio:'Negocio'};
     c.innerHTML=trabajosData.map((t,idx)=>`<div style="background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#60a5fa;">${tl[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span><button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;"><option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo</option><option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option><option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance</option><option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio propio</option></select><label style="margin-bottom:6px;">Empresa *</label><input type="text" placeholder="Ej: BCP, Alicorp..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">Cargo *</label><input type="text" list="lista-puestos-peru" placeholder="Ej: Analista de Marketing..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:12px;" autocomplete="off"><label style="margin-bottom:6px;">Logros</label>${t.logros.map((l,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;"><textarea placeholder="Ej: Reduje costos en 20%..." oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;">${l}</textarea><button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button></div>`).join('')}<button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#60a5fa;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button><div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-top:4px;"><button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:rgba(96,165,250,0.1);color:#60a5fa;border:1.5px solid rgba(96,165,250,0.3);border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button></div><div id="sug-ia-box-${t.id}" style="display:none;background:rgba(96,165,250,0.08);border:1.5px solid rgba(96,165,250,0.2);border-radius:12px;padding:14px;margin-top:8px;"><div id="sug-ia-titulo-${t.id}" style="font-size:0.78rem;font-weight:700;color:#60a5fa;margin-bottom:10px;">✨ Toca para agregar — puedes elegir varios:</div><div id="chips-ia-${t.id}" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div><button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:6px 12px;background:transparent;color:rgba(255,255,255,0.4);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button></div></div>`).join('');
   }
@@ -1224,17 +1224,25 @@
       }
       const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
       if(!r.ok){throw new Error('Error en extraer-cv: '+r.status);}
-      const data=await r.json();const d=data.datos;
-      const campoNombre=document.getElementById('nombre');
+      const data=await r.json();
+      if(!data||!data.datos){throw new Error('Respuesta inválida del servidor');}
+      const d=data.datos;
+      // Guardar nombre para pre-llenar en step-0 y step-1b
+      if(d.nombre){
+        window._nombreDesdeCV=d.nombre;
+        const campoNombreInicio=document.getElementById('nombre-inicio');
+        if(campoNombreInicio)campoNombreInicio.value=d.nombre;
+        const campoNombre=document.getElementById('nombre');
+        if(campoNombre)campoNombre.value=d.nombre;
+      }
       const campoEmail=document.getElementById('email');
       const campoTel=document.getElementById('telefono');
-      if(d.nombre&&campoNombre)campoNombre.value=d.nombre;
       if(d.email&&campoEmail)campoEmail.value=d.email;
       if(d.telefono&&campoTel)campoTel.value=d.telefono;
-      if(d.habilidades_blandas){blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}
-      let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;renderListaHabilidades();}
-      if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));setModoExperiencia('con');renderTrabajoss();}
-      if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));renderEducacion();}
+      if(d.habilidades_blandas){try{blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}catch(e){console.warn('Error blandas:',e);}}
+      let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;try{renderListaHabilidades();}catch(e){console.warn('Error habilidades:',e);}}
+      if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));try{setModoExperiencia('con');renderTrabajoss();}catch(e){console.warn('Error trabajos:',e);}}
+      if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));try{renderEducacion();}catch(e){console.warn('Error educacion:',e);}}
       document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
       document.getElementById('btn-continuar-pdf').style.display='block';
       if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
@@ -1308,7 +1316,7 @@
     e[campo]=valor;
   }
   function renderEducacion(){
-    const c=document.getElementById('lista-educacion');if(!educacionData.length){c.innerHTML='';return;}
+    const c=document.getElementById('lista-educacion');if(!c)return;if(!educacionData.length){c.innerHTML='';return;}
     c.innerHTML=educacionData.map((e,idx)=>{
       const esCertificacion=e.tipo==='certificacion';
       const esCurso=e.tipo==='curso';
