@@ -968,13 +968,14 @@
   }
 
   function volverAlWizard(){
-    // Ocultar el CV generado y volver al último paso del wizard
     document.getElementById('cv-resultado').style.display='none';
     document.getElementById('wizard-container').style.display='block';
     pasoActual=PASOS.length-1;
     mostrarPaso(pasoActual);
     window.scrollTo({top:0,behavior:'smooth'});
   }
+
+  function toggleSidebarCV(){
     const panel=document.getElementById('sidebar-cv-panel');
     panel.style.display=panel.style.display==='none'?'block':'none';
   }
