@@ -52,6 +52,10 @@
       "dest": "/api/extraer-cv.js"
     },
     {
+      "src": "/simular-entrevista",
+      "dest": "/api/simular-entrevista.js"
+    },
+    {
       "src": "/crear",
       "dest": "/public/index.html"
     },
