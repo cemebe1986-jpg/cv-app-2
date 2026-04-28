@@ -30,8 +30,9 @@ module.exports = async (req, res) => {
       return res.status(200).json({ ok: true });
     }
 
-    const planes = { basico: 1, popular: 3 };
-    const limiteDescargasDia = { basico: 3, popular: 5 };
+    const planes = { basico: 1, popular: 1 };
+    const limiteDescargasDia = { basico: 3, popular: 3 };
+    const tieneEntrevista = { basico: false, popular: true };
     const cvs = planes[plan] || 1;
     const token = `mp_${payment.id}_${Date.now()}`;
 
@@ -39,6 +40,7 @@ module.exports = async (req, res) => {
     await redis.setex(`descarga:${usuarioId}`, 60 * 60 * 24 * 30, JSON.stringify({
       token, cvs, plan,
       limiteDia: limiteDescargasDia[plan] || 3,
+      entrevista: tieneEntrevista[plan] || false,
       pagoId: payment.id,
       fecha: new Date().toISOString()
     }));

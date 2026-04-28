@@ -666,14 +666,13 @@
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Quiero este →</div>
             </div>
             <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
-              <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">💼 MÁS ELEGIDO</div>
-              <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">📦</div>
-              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Pack Empleo</div>
-              <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">Para postular a distintos puestos</div>
-              <div style="font-size:0.72rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">3x S/4.90 = S/14.70</div>
-              <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/11.90</div>
-              <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorras S/2.80 🎉</div>
-              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Crea hasta 3 CVs distintos y descarga<br>cada uno en el estilo que prefieras</div>
+              <div style="position:absolute;top:-12px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:3px 12px;border-radius:20px;font-size:0.68rem;font-weight:800;white-space:nowrap;">🎯 MÁS COMPLETO</div>
+              <div style="font-size:1.3rem;margin-bottom:6px;margin-top:4px;">🎯</div>
+              <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">CV + Entrevista</div>
+              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para postular con confianza</div>
+              <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/9.90</div>
+              <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">CV + práctica de entrevista con IA</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV y practica tu<br>entrevista con IA adaptativa</div>
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Me llevo el pack →</div>
             </div>
           </div>
@@ -684,6 +683,28 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
+          <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Practicar mi entrevista con IA</button>
+        </div>
+
+        <!-- UI DE SIMULACIÓN DE ENTREVISTA -->
+        <div id="entrevista-container" style="display:none;margin-top:20px;background:#0f1117;border-radius:16px;padding:20px;border:1px solid rgba(255,255,255,0.1);">
+          <div style="display:flex;align-items:center;gap:10px;margin-bottom:16px;padding-bottom:12px;border-bottom:1px solid rgba(255,255,255,0.1);">
+            <div style="width:36px;height:36px;background:#3b82f6;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0;">🤖</div>
+            <div>
+              <div style="font-size:0.88rem;font-weight:700;color:white;">Entrevistador IA</div>
+              <div style="font-size:0.72rem;color:rgba(255,255,255,0.4);">Simulación basada en tu CV y puesto</div>
+            </div>
+            <div id="entrevista-progreso" style="margin-left:auto;font-size:0.72rem;color:rgba(255,255,255,0.4);"></div>
+          </div>
+          <div id="entrevista-chat" style="max-height:400px;overflow-y:auto;margin-bottom:16px;display:flex;flex-direction:column;gap:12px;"></div>
+          <div id="entrevista-input-area" style="display:none;">
+            <textarea id="entrevista-respuesta" placeholder="Escribe tu respuesta aquí..." style="width:100%;height:100px;resize:none;margin-bottom:8px;font-size:0.88rem;"></textarea>
+            <button onclick="enviarRespuestaEntrevista()" style="width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Enviar respuesta →</button>
+          </div>
+          <div id="entrevista-loading" style="display:none;text-align:center;padding:16px;">
+            <div class="spinner"></div>
+            <p style="color:rgba(255,255,255,0.6);font-size:0.85rem;margin-top:8px;">El entrevistador está pensando...</p>
+          </div>
         </div>
     </div>
   </div>
@@ -695,6 +716,59 @@
 
   let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
+  let historialEntrevista=[],entrevistaActiva=false;
+
+  async function iniciarEntrevista(){
+    document.getElementById('entrevista-container').style.display='block';
+    document.getElementById('btn-entrevista').style.display='none';
+    document.getElementById('entrevista-container').scrollIntoView({behavior:'smooth'});
+    historialEntrevista=[];entrevistaActiva=true;
+    await pedirSiguientePregunta(null);
+  }
+
+  function agregarMensajeChat(texto,tipo){
+    const chat=document.getElementById('entrevista-chat');
+    const div=document.createElement('div');
+    div.style.cssText=tipo==='ia'
+      ?'background:rgba(59,130,246,0.1);border:1px solid rgba(59,130,246,0.2);border-radius:12px 12px 12px 0;padding:12px 14px;font-size:0.85rem;color:rgba(255,255,255,0.9);line-height:1.6;'
+      :'background:rgba(255,255,255,0.06);border:1px solid rgba(255,255,255,0.1);border-radius:12px 12px 0 12px;padding:12px 14px;font-size:0.85rem;color:rgba(255,255,255,0.9);line-height:1.6;align-self:flex-end;max-width:85%;';
+    div.textContent=texto;
+    chat.appendChild(div);
+    chat.scrollTop=chat.scrollHeight;
+  }
+
+  async function pedirSiguientePregunta(respuesta){
+    document.getElementById('entrevista-input-area').style.display='none';
+    document.getElementById('entrevista-loading').style.display='block';
+    if(respuesta){agregarMensajeChat(respuesta,'juan');historialEntrevista.push(respuesta);}
+    try{
+      const r=await fetch('/simular-entrevista',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({usuarioId:window.usuarioActual?.uid,respuesta:respuesta||'',historial:historialEntrevista})});
+      const data=await r.json();
+      document.getElementById('entrevista-loading').style.display='none';
+      if(data.feedback)agregarMensajeChat('💬 '+data.feedback,'ia');
+      if(data.finalizado){
+        document.getElementById('entrevista-progreso').textContent='Entrevista finalizada';
+        entrevistaActiva=false;
+      }else{
+        agregarMensajeChat(data.pregunta,'ia');
+        historialEntrevista.push(data.pregunta);
+        document.getElementById('entrevista-progreso').textContent=`Pregunta ${data.numeroPreguntas} de 7`;
+        document.getElementById('entrevista-input-area').style.display='block';
+        document.getElementById('entrevista-respuesta').value='';
+        document.getElementById('entrevista-respuesta').focus();
+      }
+    }catch(e){
+      document.getElementById('entrevista-loading').style.display='none';
+      agregarMensajeChat('Hubo un error. Intenta de nuevo.','ia');
+      document.getElementById('entrevista-input-area').style.display='block';
+    }
+  }
+
+  async function enviarRespuestaEntrevista(){
+    const respuesta=document.getElementById('entrevista-respuesta').value.trim();
+    if(!respuesta)return;
+    await pedirSiguientePregunta(respuesta);
+  }
   const PASOS=['step-1','step-1b','step-2','step-3','step-4','step-5foto','step-5'];
   const TITULOS=['¿Cómo te llamas?','Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
   const LIMITE_IA=10;
@@ -1318,7 +1392,8 @@
 
       if(data.pagado&&data.cvActualPagado){
         const link=document.getElementById('link-descarga');if(link)link.style.display='block';
-        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?11.90:4.90;const nombrePlan=data.plan==='popular'?'Pack Empleo':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
+        if(data.tieneEntrevista){const btnE=document.getElementById('btn-entrevista');if(btnE)btnE.style.display='block';}
+        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?9.90:4.90;const nombrePlan=data.plan==='popular'?'CV + Entrevista':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
       }
     }catch(e){console.log('verificarPago error:',e);}
   }

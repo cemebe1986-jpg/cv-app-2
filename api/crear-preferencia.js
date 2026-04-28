@@ -7,8 +7,8 @@ module.exports = async (req, res) => {
   if (!plan || !usuarioId) return res.status(400).json({ error: 'Plan y usuarioId requeridos' });
 
   const planes = {
-    basico:  { titulo: 'TalentIA — Plan Básico (1 CV)',      precio: 4.90,  cvs: 1 },
-    popular: { titulo: 'TalentIA — Pack Empleo (3 CVs)',     precio: 11.90, cvs: 3 }
+    basico:  { titulo: 'TalentIA — Plan Básico (CV)',              precio: 4.90,  cvs: 1, entrevista: false },
+    popular: { titulo: 'TalentIA — CV + Simulación de Entrevista', precio: 9.90,  cvs: 1, entrevista: true  }
   };
 
   const planData = planes[plan];
