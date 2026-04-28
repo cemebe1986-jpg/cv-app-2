@@ -524,10 +524,6 @@
         </div>
         <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:160px;margin-bottom:8px;"></textarea>
         <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Si no tienes una oferta, haz clic en "Ver mi CV →" para continuar.</p>
-        <div style="text-align:center;border-top:1px solid rgba(255,255,255,0.06);padding-top:14px;">
-          <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:10px;">¿Ya tienes un CV en PDF? Súbelo y la IA extrae todo automáticamente</p>
-          <button onclick="elegirCamino('pdf')" style="background:transparent;border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;padding:10px 20px;color:rgba(255,255,255,0.55);font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">📄 Subir mi CV en PDF</button>
-        </div>
       </div>
 
       <div class="error-toast" id="error-toast">
@@ -1244,9 +1240,12 @@
       if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));try{setModoExperiencia('con');renderTrabajoss();}catch(e){console.warn('Error trabajos:',e);}}
       if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));try{renderEducacion();}catch(e){console.warn('Error educacion:',e);}}
       document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
-      document.getElementById('btn-continuar-pdf').style.display='block';
       if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
-      const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;document.body.appendChild(t);setTimeout(()=>t.remove(),4000);
+      const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;document.body.appendChild(t);
+      setTimeout(()=>{t.remove();
+        // Llevar por los pasos normales para que Juan revise lo extraído
+        camino='manual';pasoActual=0;mostrarPaso(0);
+      },2000);
     }catch(e){console.error(e);document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');}
   }
 
