@@ -3,7 +3,7 @@ const { Redis } = require('@upstash/redis');
 module.exports = async (req, res) => {
   if (req.method !== 'POST') return res.status(405).end();
 
-  const { cvData, foto, habilidades, blandasData, estilo, usuarioId } = req.body;
+  const { cvData, foto, habilidades, blandasData, estilo, usuarioId, congelar } = req.body;
   
   try {
     const redis = new Redis({
@@ -21,12 +21,19 @@ module.exports = async (req, res) => {
     if (usuarioId) {
       await redis.set(`cv:usuario:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
 
-      // Si el usuario ya tiene un pago activo, actualizar también el CV congelado
-      // Así el PDF descargado siempre corresponde al CV más reciente generado
-      const pagoExistente = await redis.get(`descarga:${usuarioId}`);
-      if (pagoExistente) {
-        await redis.set(`cv:pagado:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
-        console.log(`CV pagado actualizado para: ${usuarioId}`);
+      // Si el usuario eligió esta versión para descargar — congelar
+      if (congelar) {
+        const pagoExistente = await redis.get(`descarga:${usuarioId}`);
+        if (pagoExistente) {
+          await redis.set(`cv:pagado:${usuarioId}`, cvPayload, { ex: 60 * 60 * 24 * 30 });
+          console.log(`CV congelado manualmente para: ${usuarioId}`);
+        }
+      } else {
+        // Si el usuario ya tiene un pago activo pero NO congeló — actualizar cv:usuario pero NO cv:pagado
+        const pagoExistente = await redis.get(`descarga:${usuarioId}`);
+        if (pagoExistente) {
+          console.log(`CV usuario actualizado (sin congelar) para: ${usuarioId}`);
+        }
       }
     }
 

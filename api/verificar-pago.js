@@ -19,12 +19,16 @@ module.exports = async (req, res) => {
     // Verificar si tiene CV guardado
     const tieneCv = await redis.exists(`cv:usuario:${uid}`);
 
+    // Verificar si tiene CV congelado para descarga
+    const tieneCvPagado = await redis.exists(`cv:pagado:${uid}`);
+
     return res.json({
       pagado: !!pago,
       cvs: pago?.cvs || 1,
       plan: pago?.plan || 'basico',
       token: pago?.token || null,
       tieneCv: tieneCv === 1,
+      cvActualPagado: tieneCvPagado === 1,
       tieneEntrevista: pago?.entrevista || false
     });
   } catch (error) {

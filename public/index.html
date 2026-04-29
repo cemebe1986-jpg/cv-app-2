@@ -36,6 +36,7 @@
   gtag('js', new Date());
   gtag('config', 'G-7Z85X742GB');
   gtag('config', 'AW-3807168634');
+  gtag('config', 'AW-18098341981');
 </script>
 <style>
   @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -638,10 +639,10 @@
             <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
               <div style="font-size:1.3rem;margin-bottom:6px;">📄</div>
               <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Plan Básico</div>
-              <div style="font-size:0.72rem;color:rgba(255,255,255,0.55);margin-bottom:8px;">Para una búsqueda de trabajo</div>
+              <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para una búsqueda de trabajo</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div>
               <div style="font-size:0.68rem;color:#a0aec0;margin-bottom:6px;">sin suscripción</div>
-              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV cuando quieras,<br>en el estilo que prefieras</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Desbloquea recomendaciones, edita<br>las veces que quieras y descarga tu CV</div>
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Quiero este →</div>
             </div>
             <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
@@ -652,7 +653,7 @@
               <div style="font-size:0.78rem;color:#a0aec0;text-decoration:line-through;margin-bottom:2px;">S/13.80</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/9.90</div>
               <div style="font-size:0.72rem;color:#22c55e;font-weight:700;margin-bottom:6px;">Ahorras S/3.90 🎉</div>
-              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Descarga tu CV + practica con una<br>simulación de entrevista con IA</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Todo lo anterior + simulación<br>de entrevista con IA</div>
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Me llevo el pack →</div>
             </div>
           </div>
@@ -663,6 +664,7 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
+          <button onclick="elegirVersionDescarga()" id="btn-elegir-version" style="display:none;width:100%;padding:12px;background:#0f3460;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:0.88rem;border:none;cursor:pointer;margin-top:10px;">📌 Usar esta versión para descargar</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
         </div>
 
@@ -1038,6 +1040,22 @@
     pasoActual=PASOS.length-1;
     mostrarPaso(pasoActual);
     window.scrollTo({top:0,behavior:'smooth'});
+  }
+
+  async function elegirVersionDescarga(){
+    const btn=document.getElementById('btn-elegir-version');
+    btn.textContent='⏳ Guardando...';btn.disabled=true;
+    try{
+      const r=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:cvGeneradoData,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid,congelar:true})});
+      if(r.ok){
+        btn.textContent='✅ Versión guardada para descarga';
+        btn.style.background='#22c55e';
+        document.getElementById('link-descarga').style.display='block';
+      }
+    }catch(e){
+      btn.textContent='📌 Usar esta versión para descargar';
+      btn.disabled=false;
+    }
   }
 
   function toggleSidebarCV(){
@@ -1496,8 +1514,13 @@
 
       if(data.pagado&&data.cvActualPagado){
         const link=document.getElementById('link-descarga');if(link)link.style.display='block';
+        const btnV=document.getElementById('btn-elegir-version');if(btnV)btnV.style.display='none';
         if(data.tieneEntrevista){const btnE=document.getElementById('btn-entrevista');if(btnE)btnE.style.display='block';}
-        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?9.90:4.90;const nombrePlan=data.plan==='popular'?'CV + Entrevista':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
+        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?9.90:4.90;const nombrePlan=data.plan==='popular'?'CV + Simulación de Entrevista con IA':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
+      } else if(data.pagado&&!data.cvActualPagado){
+        // Pagó pero aún no eligió versión para descargar
+        const btnV=document.getElementById('btn-elegir-version');if(btnV)btnV.style.display='block';
+        if(data.tieneEntrevista){const btnE=document.getElementById('btn-entrevista');if(btnE)btnE.style.display='block';}
       }
     }catch(e){console.log('verificarPago error:',e);}
   }
