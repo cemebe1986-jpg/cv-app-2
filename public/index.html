@@ -554,7 +554,16 @@
         <div style="background:#f0fff4;border:1px solid #c6f6d5;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#276749;margin-bottom:6px;">✅ KEYWORDS ENCONTRADAS</div><div style="font-size:0.85rem;color:#2d3748;" id="comp-keywords"></div></div>
         <div style="background:#fff5f5;border:1px solid #fed7d7;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#c53030;margin-bottom:6px;">❌ KEYWORDS FALTANTES</div><div style="font-size:0.85rem;color:#2d3748;" id="comp-faltantes"></div></div>
       </div>
-      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;"><div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:8px;">💡 RECOMENDACIONES</div><ul style="font-size:0.85rem;color:#2d3748;padding-left:18px;line-height:1.8;" id="comp-recomendaciones"></ul></div>
+      <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:12px;" id="comp-recomendaciones-box">
+        <div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:8px;">💡 RECOMENDACIONES</div>
+        <ul style="font-size:0.85rem;color:#2d3748;padding-left:18px;line-height:1.8;" id="comp-recomendaciones"></ul>
+      </div>
+      <!-- RECOMENDACIONES BLOQUEADAS -->
+      <div id="comp-recomendaciones-locked" style="display:none;background:#f8faff;border:1.5px dashed #cbd5e0;border-radius:10px;padding:16px;text-align:center;">
+        <div style="font-size:1.2rem;margin-bottom:6px;">🔒</div>
+        <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Recomendaciones bloqueadas</div>
+        <div style="font-size:0.75rem;color:#718096;">Desbloquea para ver exactamente qué mejorar en tu CV</div>
+      </div>
     </div>
 
 
@@ -969,6 +978,8 @@
 
     // Si hay análisis de compatibilidad IA — mostrar justificación detallada
     const consejo = document.getElementById('score-consejo');
+    // Bloquear recomendaciones si no ha pagado
+    const haPagado = window._haPagado || false;
     if(compIA && (compIA.fortalezas?.length || compIA.brechas?.length)){
       const fortalezas = (compIA.fortalezas||[]).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
       const brechas = (compIA.brechas||[]).map(b=>`<li style="margin-bottom:4px;">⚠️ ${b}</li>`).join('');
@@ -980,18 +991,36 @@
       consejo.style.background='#f8faff';
       consejo.style.borderLeft='3px solid #60a5fa';
       consejo.style.padding='16px';
-      consejo.innerHTML=`
-        <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
-          📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
-        </div>
-        ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
-        ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
-        ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
-        ${keywordsOk?`<div style="font-size:0.72rem;color:#4a5568;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">✅ Habilidades que coinciden: <strong>${keywordsOk}</strong></div>`:''}
-        ${keywordsFalta?`<div style="font-size:0.72rem;color:#4a5568;margin-top:4px;">❌ Habilidades que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
-        <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
-          Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
-        </div>`;
+
+      if(haPagado){
+        consejo.innerHTML=`
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
+            📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
+          </div>
+          ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
+          ${brechas?`<div style="font-size:0.75rem;font-weight:700;color:#b91c1c;margin-bottom:4px;">Lo que te falta:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${brechas}</ul>`:''}
+          ${recs?`<div style="font-size:0.75rem;font-weight:700;color:#92400e;margin-bottom:4px;">Acciones recomendadas:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${recs}</ul>`:''}
+          ${keywordsOk?`<div style="font-size:0.72rem;color:#4a5568;margin-top:6px;border-top:1px solid #e2e8f0;padding-top:6px;">✅ Habilidades que coinciden: <strong>${keywordsOk}</strong></div>`:''}
+          ${keywordsFalta?`<div style="font-size:0.72rem;color:#4a5568;margin-top:4px;">❌ Habilidades que te faltan: <strong>${keywordsFalta}</strong></div>`:''}
+          <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
+            Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
+          </div>`;
+      } else {
+        // Mostrar solo fortalezas — bloquear brechas y recomendaciones
+        consejo.innerHTML=`
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
+            📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
+          </div>
+          ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
+          <div style="background:#f0f4ff;border:1.5px dashed #cbd5e0;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
+            <div style="font-size:1rem;margin-bottom:6px;">🔒</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Desbloquea las recomendaciones</div>
+            <div style="font-size:0.75rem;color:#718096;">Descubre exactamente qué mejorar para este puesto</div>
+          </div>
+          <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
+            Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
+          </div>`;
+      }
     } else {
       // Sin compatibilidad — mostrar items de calidad
       const itemsEl = document.getElementById('score-items');
@@ -1503,6 +1532,7 @@
         restaurarEstadoWizard();mostrarError('Pago pendiente','Tu pago está siendo procesado. Recibirás confirmación pronto.');
       }
 
+      window._haPagado = data.pagado || false;
       if(data.pagado&&data.tieneCv&&!paramPago){
         try{const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(cvR.ok){cvGuardadoCache=await cvR.json();const sidebar=document.getElementById('sidebar-cv');if(sidebar){sidebar.style.display='block';document.getElementById('sidebar-nombre-cv').textContent=cvGuardadoCache?.cvData?.nombre||'Tu CV';document.getElementById('sidebar-plan-cv').textContent=`Plan ${data.plan||'Básico'} activo · Descarga sin marca de agua`;}}}catch(e){}
       }
