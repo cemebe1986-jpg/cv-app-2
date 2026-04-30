@@ -158,7 +158,7 @@ INSTRUCCIONES:
 
     const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
     "score": 0,
-    "puesto_analizado": "${tieneOferta ? '' : cargo}",
+    "puesto_analizado": "${tieneOferta ? 'EXTRAER_DE_OFERTA' : cargo}",
     "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
     "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
     "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],

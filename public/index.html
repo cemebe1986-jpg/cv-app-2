@@ -937,7 +937,10 @@
     if(compIA && compIA.score > 0){
       scoreFinal = Math.round(scoreCalidad * 0.4 + compIA.score * 0.6);
       // Si puesto_analizado viene vacío o genérico, usar cargoInicial como fallback
-      const puestoMostrar = (compIA.puesto_analizado && compIA.puesto_analizado !== 'el puesto de la oferta' && compIA.puesto_analizado.length > 1)
+      const puestoMostrar = (compIA.puesto_analizado && 
+        compIA.puesto_analizado !== 'EXTRAER_DE_OFERTA' && 
+        compIA.puesto_analizado !== 'el puesto de la oferta' && 
+        compIA.puesto_analizado.length > 1)
         ? compIA.puesto_analizado
         : (window._cargoInicial || 'el puesto');
       tipoScore = `para ${puestoMostrar}`;
