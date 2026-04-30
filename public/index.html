@@ -641,7 +641,7 @@
     </div>
 
           <div class="cv-actions">
-        <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo para impresionar!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión para descargar</button><p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">Sin spam · Desde S/4.90 · Sin suscripción</p></div></div>
+        <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">Inicia sesión para ver tus recomendaciones y descargarlo.</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión con Google</button></div></div>
         <div id="estado-con-login" style="display:none;">
           <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
           <div id="planes-pago" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
@@ -651,7 +651,7 @@
               <div style="font-size:0.72rem;color:#718096;margin-bottom:8px;">Para una búsqueda de trabajo</div>
               <div style="font-size:1.6rem;font-weight:900;color:#0f3460;line-height:1;">S/4.90</div>
               <div style="font-size:0.68rem;color:#a0aec0;margin-bottom:6px;">sin suscripción</div>
-              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Desbloquea recomendaciones, edita<br>las veces que quieras y descarga tu CV</div>
+              <div style="font-size:0.7rem;color:#4a5568;margin-bottom:10px;line-height:1.6;">Ve tus recomendaciones, edita<br>las veces que quieras y descarga tu CV</div>
               <div style="background:#0f3460;color:white;padding:9px;border-radius:8px;font-size:0.82rem;font-weight:700;">Quiero este →</div>
             </div>
             <div onclick="iniciarPago('popular')" style="border:3px solid #0f3460;border-radius:14px;padding:16px;text-align:center;background:linear-gradient(135deg,#f0f4ff,#fff);position:relative;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.background='#e8f0ff'" onmouseout="this.style.background='linear-gradient(135deg,#f0f4ff,#fff)'">
@@ -1393,13 +1393,10 @@
       if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));try{renderEducacion();}catch(e){console.warn('Error educacion:',e);}}
       document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
       if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
-      const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#0f3460;color:white;padding:12px 24px;border-radius:20px;font-size:0.85rem;font-weight:700;z-index:9999;';t.textContent=`✅ CV cargado — ${trabajosData.length} trabajo(s) y ${educacionData.length} estudio(s) encontrados`;document.body.appendChild(t);
-      setTimeout(()=>{t.remove();
-        // Ocultar step-pdf y llevar al paso 1
-        const stepPdf=document.getElementById('step-pdf');
-        if(stepPdf){stepPdf.classList.remove('active');stepPdf.style.display='none';}
-        camino='manual';pasoActual=0;mostrarPaso(0);
-      },2000);
+      // Ir directo al paso 1 sin popup
+      const stepPdf=document.getElementById('step-pdf');
+      if(stepPdf){stepPdf.classList.remove('active');stepPdf.style.display='none';}
+      camino='manual';pasoActual=0;mostrarPaso(0);
     }catch(e){console.error(e);document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');}
   }
 
