@@ -523,7 +523,7 @@
           <h3 style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">¿Postulas a un trabajo específico?</h3>
           <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Opcional. Si pegas la oferta, la IA optimiza tu CV para esa empresa.</p>
         </div>
-        <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:160px;margin-bottom:8px;"></textarea>
+        <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta de trabajo..." style="height:160px;margin-bottom:8px;" oninput="extraerPuestoDeOferta(this.value)"></textarea>
         <p style="font-size:0.75rem;color:rgba(255,255,255,0.55);margin-bottom:16px;">Si no tienes una oferta, haz clic en "Ver mi CV →" para continuar.</p>
       </div>
 
@@ -644,7 +644,7 @@
         <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo para impresionar!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">El tuyo acaba de subir de nivel. 🚀</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión para descargar</button><p style="color:#a0aec0;font-size:0.78rem;margin-top:12px;">Sin spam · Desde S/4.90 · Sin suscripción</p></div></div>
         <div id="estado-con-login" style="display:none;">
           <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
-          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
+          <div id="planes-pago" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
             <div onclick="iniciarPago('basico')" style="border:2px solid #e2e8f0;border-radius:14px;padding:16px;text-align:center;cursor:pointer;transition:all 0.2s;" onmouseover="this.style.borderColor='#0f3460';this.style.background='#f0f4ff'" onmouseout="this.style.borderColor='#e2e8f0';this.style.background='white'">
               <div style="font-size:1.3rem;margin-bottom:6px;">📄</div>
               <div style="font-weight:800;color:#1a1a2e;font-size:0.95rem;">Plan Básico</div>
@@ -1015,7 +1015,8 @@
           <div style="background:#f0f4ff;border:1.5px dashed #cbd5e0;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
             <div style="font-size:1rem;margin-bottom:6px;">🔒</div>
             <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Desbloquea las recomendaciones</div>
-            <div style="font-size:0.75rem;color:#718096;">Descubre exactamente qué mejorar para este puesto</div>
+            <div style="font-size:0.75rem;color:#718096;margin-bottom:10px;">Descubre exactamente qué mejorar para este puesto</div>
+            <button onclick="document.getElementById('planes-pago').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver planes →</button>
           </div>
           <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
             Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
@@ -1085,6 +1086,23 @@
       btn.textContent='📌 Usar esta versión para descargar';
       btn.disabled=false;
     }
+  }
+
+  // Extrae el puesto de la oferta y actualiza _cargoInicial
+  window._extraerPuestoTimeout=null;
+  async function extraerPuestoDeOferta(texto){
+    if(!texto||texto.trim().length<50)return;
+    clearTimeout(window._extraerPuestoTimeout);
+    window._extraerPuestoTimeout=setTimeout(async()=>{
+      try{
+        const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({extraerPuestoOferta:true,oferta:texto,usuarioId:window.usuarioActual?.uid||null})});
+        const data=await r.json();
+        if(data.puesto&&data.puesto.trim().length>1){
+          window._cargoInicial=data.puesto;
+          console.log('Puesto extraído de oferta:',data.puesto);
+        }
+      }catch(e){console.warn('No se pudo extraer puesto de oferta');}
+    },1500);
   }
 
   function toggleSidebarCV(){

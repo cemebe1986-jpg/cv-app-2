@@ -12,6 +12,19 @@ module.exports = async (req, res) => {
 
   try {
 
+    // EXTRAER PUESTO DE OFERTA
+    if (req.body.extraerPuestoOferta) {
+      const prompt = `Extrae SOLO el nombre del puesto de trabajo de esta oferta laboral. 
+Responde SOLO con JSON: {"puesto": "nombre del puesto"}
+Si no puedes identificar el puesto claramente, responde: {"puesto": ""}
+
+OFERTA:
+${oferta?.substring(0, 500) || ''}`;
+      const msg = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:100, messages:[{role:'user',content:prompt}] });
+      try { return res.json(JSON.parse(msg.content[0].text.replace(/```json|```/g,'').trim())); }
+      catch(e) { return res.json({ puesto: '' }); }
+    }
+
     // SUGERENCIAS DE LOGROS POR CARGO
     if (sugerenciasLogros) {
       if (!cargo) return res.status(400).json({ error: 'Cargo requerido' });
