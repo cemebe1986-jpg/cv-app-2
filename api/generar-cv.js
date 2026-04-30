@@ -151,14 +151,14 @@ INSTRUCCIONES:
     const tieneCompatibilidad = tieneOferta || tienePuesto;
 
     const instruccionCompatibilidad = tieneOferta ? 
-`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: La oferta puede ser de una empresa de cualquier rubro pero el PUESTO puede ser tecnológico, administrativo u otro. IGNORA el rubro de la empresa. Enfócate ÚNICAMENTE en las funciones, requisitos y competencias técnicas del PUESTO en sí. Extrae keywords del puesto: herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías. Compara esas keywords con la experiencia y habilidades del candidato. El score (0-100) debe ser honesto y preciso.` 
+`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: Lee la oferta de trabajo y extrae el PUESTO REAL que busca (ignora completamente el cargo "${cargo}" que viene del candidato — puede ser diferente al puesto de la oferta). Analiza ÚNICAMENTE las funciones, requisitos y competencias técnicas del puesto en la oferta. Extrae keywords del puesto de la oferta: herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías. Compara esas keywords con la experiencia y habilidades del candidato. El score (0-100) debe ser honesto — si el candidato no tiene nada que ver con la oferta, el score debe ser muy bajo. En "puesto_analizado" pon el nombre del puesto que encontraste en la oferta.`
 : tienePuesto ?
 `- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargo}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Evalúa: ¿tiene la experiencia típica para este puesto? ¿tiene las habilidades técnicas más demandadas? ¿su perfil está orientado a este cargo? Sé específico y honesto. El score (0-100) debe reflejar la realidad del mercado laboral peruano para este puesto.`
 : '';
 
     const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
     "score": 0,
-    "puesto_analizado": "${tieneOferta ? 'oferta específica' : cargo}",
+    "puesto_analizado": "${tieneOferta ? 'el puesto de la oferta' : cargo}",
     "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
     "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
     "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],

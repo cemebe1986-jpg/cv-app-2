@@ -936,7 +936,7 @@
     let scoreFinal, tipoScore;
     if(compIA && compIA.score > 0){
       scoreFinal = Math.round(scoreCalidad * 0.4 + compIA.score * 0.6);
-      tipoScore = compIA.puesto_analizado === 'oferta específica' ? 'vs oferta' : `para ${compIA.puesto_analizado}`;
+      tipoScore = `para ${compIA.puesto_analizado}`;
     } else {
       scoreFinal = scoreCalidad;
       tipoScore = 'calidad del CV';
