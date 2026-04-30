@@ -146,46 +146,25 @@ INSTRUCCIONES:
     }
 
     // GENERAR CV COMPLETO
-    let cargoFinal = cargo || '';
-
-    // Si hay oferta, extraer el puesto real de la oferta
-    if (oferta && oferta.trim().length > 50) {
-      try {
-        const extractMsg = await client.messages.create({
-          model: 'claude-haiku-4-5',
-          max_tokens: 50,
-          messages: [{ role: 'user', content: `Extrae SOLO el nombre del puesto de esta oferta. Responde SOLO con el nombre del puesto, sin más texto.\n\nOFERTA:\n${oferta.substring(0, 300)}` }]
-        });
-        const puestoExtraido = extractMsg.content[0].text.trim();
-        if (puestoExtraido && puestoExtraido.length > 1 && puestoExtraido.length < 50) {
-          cargoFinal = puestoExtraido;
-        }
-      } catch(e) {
-        console.log('No se pudo extraer puesto de oferta:', e.message);
-      }
-    }
-
     const tieneOferta = oferta && oferta.trim().length > 0;
-    const tienePuesto = cargoFinal && cargoFinal.trim().length > 0;
+    const tienePuesto = cargo && cargo.trim().length > 0;
     const tieneCompatibilidad = tieneOferta || tienePuesto;
 
-    const instruccionCompatibilidad = tieneOferta ? 
-`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: El puesto de la oferta es "${cargoFinal}". Analiza qué tan bien encaja el CV del candidato para este puesto. Extrae keywords del puesto: herramientas, tecnologías, habilidades técnicas, certificaciones. Compara con la experiencia y habilidades del candidato. El score debe ser honesto.`
+    const instruccionCompatibilidad = tieneOferta ?
+`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: Analiza qué tan bien encaja el CV del candidato con la oferta. Extrae keywords del puesto: herramientas, tecnologías, habilidades técnicas, certificaciones. Compara con la experiencia y habilidades del candidato. El score debe ser honesto.`
 : tienePuesto ?
-`- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargoFinal}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Sé específico y honesto.`
+`- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargo}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Sé específico y honesto.`
 : '';
 
     const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
     "score": 0,
-    "puesto_analizado": "${cargoFinal || 'el puesto'}",
+    "puesto_analizado": "${tieneOferta ? cargo : cargo}",
     "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
     "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
     "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],
     "keywords_encontradas": ["keywords del puesto que sí tiene el candidato"],
     "keywords_faltantes": ["keywords importantes del puesto que le faltan al candidato"]
   }` : '';
-
-    const instruccionPuestoAnalizado = '';
 
     const promptBase = `Eres un experto en CVs peruanos y reclutamiento. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
@@ -205,7 +184,6 @@ INSTRUCCIONES:
 - Perfil: 3 líneas impactantes basadas en la experiencia real, orientadas al cargo deseado
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
 ${instruccionCompatibilidad}
-${instruccionPuestoAnalizado}
 - Responde SOLO con JSON válido sin markdown
 
 {
