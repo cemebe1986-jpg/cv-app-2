@@ -978,8 +978,8 @@
 
     // Si hay análisis de compatibilidad IA — mostrar justificación detallada
     const consejo = document.getElementById('score-consejo');
-    // Bloquear recomendaciones si no ha pagado
-    const haPagado = window._haPagado || false;
+    // Bloquear recomendaciones si no ha pagado — verificar en tiempo real
+    const haPagado = window._haPagado === true;
     if(compIA && (compIA.fortalezas?.length || compIA.brechas?.length)){
       const fortalezas = (compIA.fortalezas||[]).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
       const brechas = (compIA.brechas||[]).map(b=>`<li style="margin-bottom:4px;">⚠️ ${b}</li>`).join('');
@@ -1410,7 +1410,7 @@
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
     const educacion=educacionData.map(e=>{const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?(e.tipoCustom||'Otros estudios'):'Universidad';const periodo=e.desde&&e.hasta?` (${e.desde} - ${e.hasta})`:e.hasta?` (${e.hasta})`:e.desde?` (${e.desde})`:'';return `${tipo}: ${e.titulo} — ${e.institucion}${periodo}`;}).join('. ');
-    const habilidadesBlandas=blandasData.map(b=>b.nombre).join(', '),oferta=document.getElementById('oferta').value;
+    const habilidadesBlandas=blandasData.map(b=>b.nombre).join(', '),oferta=document.getElementById('oferta')?.value||'';
     cvCiudad=document.getElementById('ciudad').value;const ps=document.getElementById('pais');cvPais=ps.options[ps.selectedIndex]?.text?.replace(/🇵🇪|🇨🇴|🇲🇽|🇦🇷|🇨🇱|🇪🇨|🇧🇴/g,'').trim()||'';
     document.getElementById('loading-overlay').classList.add('active');iniciarMensajesCarga();
     if(typeof gtag!=='undefined')gtag('event','cv_generando');
@@ -1438,7 +1438,28 @@
     document.getElementById('cv-experiencia').innerHTML=(cv.experiencia||[]).map(exp=>`<div class="exp-item"><div class="exp-cargo">${exp.cargo}</div><div class="exp-empresa">${exp.empresa}</div><div class="exp-periodo">${exp.periodo}</div>${(exp.logros||[]).map(l=>`<div class="exp-logro">${l}</div>`).join('')}</div>`).join('');
     document.getElementById('cv-educacion').innerHTML=(cv.educacion||[]).map(edu=>`<div class="edu-item"><div class="edu-titulo">${edu.titulo}</div><div class="edu-institucion">${edu.institucion}</div><div class="edu-año">${edu.año}</div></div>`).join('');
     document.getElementById('cv-preview').style.display='block';
-    if(cv.compatibilidad&&typeof ofertaLocal==='string'&&ofertaLocal.trim().length>0){const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';document.getElementById('analisis-compatibilidad').style.display='block';document.getElementById('comp-score').textContent=comp.score+'%';document.getElementById('comp-score').style.color=color;document.getElementById('comp-barra').style.width=comp.score+'%';document.getElementById('comp-barra').style.background=color;document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');}
+    if(cv.compatibilidad&&typeof ofertaLocal==='string'&&ofertaLocal.trim().length>0){
+      const comp=cv.compatibilidad,color=comp.score>=80?'#22c55e':comp.score>=60?'#f59e0b':'#ef4444';
+      document.getElementById('analisis-compatibilidad').style.display='block';
+      document.getElementById('comp-score').textContent=comp.score+'%';
+      document.getElementById('comp-score').style.color=color;
+      document.getElementById('comp-barra').style.width=comp.score+'%';
+      document.getElementById('comp-barra').style.background=color;
+      document.getElementById('comp-keywords').textContent=(comp.keywords_encontradas||[]).join(', ')||'Ninguna';
+      document.getElementById('comp-faltantes').textContent=(comp.keywords_faltantes||[]).join(', ')||'Ninguna';
+      // Bloquear recomendaciones si no pagó
+      const haPagadoRender = window._haPagado === true;
+      const recBox = document.getElementById('comp-recomendaciones-box');
+      const recLocked = document.getElementById('comp-recomendaciones-locked');
+      if(haPagadoRender){
+        if(recBox)recBox.style.display='block';
+        if(recLocked)recLocked.style.display='none';
+        document.getElementById('comp-recomendaciones').innerHTML=(comp.recomendaciones||[]).map(r=>`<li>${r}</li>`).join('');
+      } else {
+        if(recBox)recBox.style.display='none';
+        if(recLocked)recLocked.style.display='block';
+      }
+    }
     else document.getElementById('analisis-compatibilidad').style.display='none';
     cambiarEstiloCV(estiloActual);mostrarEstadoLogin(window.usuarioActual);
     document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
