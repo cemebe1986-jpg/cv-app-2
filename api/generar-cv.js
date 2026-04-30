@@ -146,19 +146,38 @@ INSTRUCCIONES:
     }
 
     // GENERAR CV COMPLETO
+    let cargoFinal = cargo || '';
+
+    // Si hay oferta, extraer el puesto real de la oferta
+    if (oferta && oferta.trim().length > 50) {
+      try {
+        const extractMsg = await client.messages.create({
+          model: 'claude-haiku-4-5',
+          max_tokens: 50,
+          messages: [{ role: 'user', content: `Extrae SOLO el nombre del puesto de esta oferta. Responde SOLO con el nombre del puesto, sin más texto.\n\nOFERTA:\n${oferta.substring(0, 300)}` }]
+        });
+        const puestoExtraido = extractMsg.content[0].text.trim();
+        if (puestoExtraido && puestoExtraido.length > 1 && puestoExtraido.length < 50) {
+          cargoFinal = puestoExtraido;
+        }
+      } catch(e) {
+        console.log('No se pudo extraer puesto de oferta:', e.message);
+      }
+    }
+
     const tieneOferta = oferta && oferta.trim().length > 0;
-    const tienePuesto = cargo && cargo.trim().length > 0;
+    const tienePuesto = cargoFinal && cargoFinal.trim().length > 0;
     const tieneCompatibilidad = tieneOferta || tienePuesto;
 
     const instruccionCompatibilidad = tieneOferta ? 
-`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: Lee la oferta de trabajo y extrae el PUESTO REAL que busca (ignora completamente el cargo "${cargo}" que viene del candidato — puede ser diferente al puesto de la oferta). Analiza ÚNICAMENTE las funciones, requisitos y competencias técnicas del puesto en la oferta. Extrae keywords del puesto de la oferta: herramientas, tecnologías, habilidades técnicas, certificaciones, metodologías. Compara esas keywords con la experiencia y habilidades del candidato. El score (0-100) debe ser honesto — si el candidato no tiene nada que ver con la oferta, el score debe ser muy bajo. En "puesto_analizado" pon el nombre del puesto que encontraste en la oferta.`
+`- ANÁLISIS DE COMPATIBILIDAD CON OFERTA: El puesto de la oferta es "${cargoFinal}". Analiza qué tan bien encaja el CV del candidato para este puesto. Extrae keywords del puesto: herramientas, tecnologías, habilidades técnicas, certificaciones. Compara con la experiencia y habilidades del candidato. El score debe ser honesto.`
 : tienePuesto ?
-`- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargo}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Evalúa: ¿tiene la experiencia típica para este puesto? ¿tiene las habilidades técnicas más demandadas? ¿su perfil está orientado a este cargo? Sé específico y honesto. El score (0-100) debe reflejar la realidad del mercado laboral peruano para este puesto.`
+`- ANÁLISIS DE COMPATIBILIDAD CON PUESTO: El candidato postula a "${cargoFinal}". Analiza qué tan bien encaja su CV para este cargo en el mercado peruano. Sé específico y honesto.`
 : '';
 
     const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
     "score": 0,
-    "puesto_analizado": "${tieneOferta ? 'EXTRAER_DE_OFERTA' : cargo}",
+    "puesto_analizado": "${cargoFinal || 'el puesto'}",
     "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
     "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
     "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],
@@ -166,9 +185,7 @@ INSTRUCCIONES:
     "keywords_faltantes": ["keywords importantes del puesto que le faltan al candidato"]
   }` : '';
 
-    // Instrucción adicional para cuando hay oferta
-    const instruccionPuestoAnalizado = tieneOferta ? 
-`IMPORTANTE: En el campo "puesto_analizado" del JSON, escribe EXACTAMENTE el nombre del puesto que encontraste en la oferta de trabajo (ejemplo: "Pediatra", "Analista de Sistemas", "Contador"). NO escribas "el puesto de la oferta" ni ningún texto genérico.` : '';
+    const instruccionPuestoAnalizado = '';
 
     const promptBase = `Eres un experto en CVs peruanos y reclutamiento. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
@@ -176,7 +193,7 @@ DATOS DEL CANDIDATO:
 - Nombre: ${nombre}
 - Email: ${email}
 - Teléfono: ${telefono}
-- Cargo deseado: ${cargo || 'No especificado'}
+- Cargo deseado: ${cargoFinal || "No especificado"}
 - Experiencia: ${experiencia}
 - Educación: ${educacion}
 - Habilidades técnicas: ${habilidades}
