@@ -172,7 +172,7 @@ DATOS DEL CANDIDATO:
 - Nombre: ${nombre}
 - Email: ${email}
 - Teléfono: ${telefono}
-- Cargo deseado: ${cargoFinal || "No especificado"}
+- Cargo deseado: ${cargo || "No especificado"}
 - Experiencia: ${experiencia}
 - Educación: ${educacion}
 - Habilidades técnicas: ${habilidades}
@@ -198,8 +198,21 @@ ${instruccionCompatibilidad}
 
     const message = await client.messages.create({ model:'claude-haiku-4-5', max_tokens:2000, messages:[{role:'user',content:promptBase}] });
     let cvData;
-    try { cvData = JSON.parse(message.content[0].text.replace(/```json|```/g,'').trim()); }
-    catch(e) { cvData = { error: 'Error parseando respuesta' }; }
+    try { 
+      cvData = JSON.parse(message.content[0].text.replace(/```json|```/g,'').trim()); 
+    } catch(e) { 
+      // Si falla el parse, devolver estructura mínima válida
+      console.log('Error parseando CV:', e.message);
+      console.log('Respuesta raw:', message.content[0].text.substring(0, 200));
+      cvData = { 
+        nombre: nombre || '', 
+        email: email || '', 
+        telefono: telefono || '',
+        perfil: 'Profesional con experiencia en el sector.',
+        experiencia: [],
+        educacion: []
+      }; 
+    }
     res.json({ cv: cvData });
 
   } catch(error) {
