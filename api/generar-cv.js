@@ -158,13 +158,17 @@ INSTRUCCIONES:
 
     const campoCompatibilidad = tieneCompatibilidad ? `,"compatibilidad": {
     "score": 0,
-    "puesto_analizado": "${tieneOferta ? 'el puesto de la oferta' : cargo}",
+    "puesto_analizado": "${tieneOferta ? '' : cargo}",
     "fortalezas": ["fortaleza específica 1 del CV para este puesto", "fortaleza específica 2"],
     "brechas": ["habilidad o experiencia importante que le falta para este puesto", "otra brecha específica"],
     "recomendaciones": ["acción concreta y específica para mejorar compatibilidad", "otra acción específica"],
     "keywords_encontradas": ["keywords del puesto que sí tiene el candidato"],
     "keywords_faltantes": ["keywords importantes del puesto que le faltan al candidato"]
   }` : '';
+
+    // Instrucción adicional para cuando hay oferta
+    const instruccionPuestoAnalizado = tieneOferta ? 
+`IMPORTANTE: En el campo "puesto_analizado" del JSON, escribe EXACTAMENTE el nombre del puesto que encontraste en la oferta de trabajo (ejemplo: "Pediatra", "Analista de Sistemas", "Contador"). NO escribas "el puesto de la oferta" ni ningún texto genérico.` : '';
 
     const promptBase = `Eres un experto en CVs peruanos y reclutamiento. Genera un CV COMPLETO usando EXACTAMENTE los datos dados. NO uses placeholders.
 
@@ -184,6 +188,7 @@ INSTRUCCIONES:
 - Perfil: 3 líneas impactantes basadas en la experiencia real, orientadas al cargo deseado
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
 ${instruccionCompatibilidad}
+${instruccionPuestoAnalizado}
 - Responde SOLO con JSON válido sin markdown
 
 {
