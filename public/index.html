@@ -1016,7 +1016,7 @@
             <div style="font-size:1rem;margin-bottom:6px;">🔒</div>
             <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">Desbloquea las recomendaciones</div>
             <div style="font-size:0.75rem;color:#718096;margin-bottom:10px;">Descubre exactamente qué mejorar para este puesto</div>
-            <button onclick="document.getElementById('planes-pago').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver planes →</button>
+            <button onclick="const logueado=document.getElementById('estado-con-login').style.display!=='none';document.getElementById(logueado?'planes-pago':'estado-sin-login').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver planes →</button>
           </div>
           <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
             Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
@@ -1397,6 +1397,15 @@
 
   async function generarCV(){
     const linkDescarga=document.getElementById('link-descarga');if(linkDescarga)linkDescarga.style.display='none';
+    // Si hay oferta, extraer el puesto antes de generar
+    const ofertaTexto=document.getElementById('oferta')?.value?.trim()||'';
+    if(ofertaTexto.length>50){
+      try{
+        const rp=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({extraerPuestoOferta:true,oferta:ofertaTexto,usuarioId:window.usuarioActual?.uid||null})});
+        const dp=await rp.json();
+        if(dp.puesto&&dp.puesto.trim().length>1){window._cargoInicial=dp.puesto;}
+      }catch(e){console.warn('No se pudo extraer puesto de oferta');}
+    }
     const nombre=document.getElementById('nombre')?.value||window._nombreDesdeCV||'';const email=document.getElementById('email')?.value||'';const codigoPais=document.getElementById('codigo-pais')?.value||'+51';
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
