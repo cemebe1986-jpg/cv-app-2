@@ -1251,12 +1251,14 @@
   function eliminarLogro(id,idx){const t=trabajosData.find(t=>t.id===id);if(t&&t.logros.length>1){t.logros.splice(idx,1);renderTrabajoss();}}
   function setModoExperiencia(modo){
     modoExperiencia=modo;const esCon=modo==='con';
-    document.getElementById('bloque-con-experiencia').style.display=esCon?'block':'none';
-    document.getElementById('bloque-sin-experiencia').style.display=esCon?'none':'block';
-    document.getElementById('modo-btn-si').style.cssText=`border:1.5px solid ${esCon?'rgba(96,165,250,0.5)':'rgba(255,255,255,0.1)'};background:${esCon?'rgba(96,165,250,0.1)':'rgba(255,255,255,0.04)'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
-    document.getElementById('modo-btn-no').style.cssText=`border:1.5px solid ${!esCon?'rgba(96,165,250,0.5)':'rgba(255,255,255,0.1)'};background:${!esCon?'rgba(96,165,250,0.1)':'rgba(255,255,255,0.04)'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
-    document.getElementById('modo-btn-si').querySelector('div:last-child').style.color=esCon?'#60a5fa':'rgba(255,255,255,0.4)';
-    document.getElementById('modo-btn-no').querySelector('div:last-child').style.color=!esCon?'#60a5fa':'rgba(255,255,255,0.4)';
+    const bCon=document.getElementById('bloque-con-experiencia');const bSin=document.getElementById('bloque-sin-experiencia');
+    const btnSi=document.getElementById('modo-btn-si');const btnNo=document.getElementById('modo-btn-no');
+    if(bCon)bCon.style.display=esCon?'block':'none';
+    if(bSin)bSin.style.display=esCon?'none':'block';
+    if(btnSi)btnSi.style.cssText=`border:1.5px solid ${esCon?'rgba(96,165,250,0.5)':'rgba(255,255,255,0.1)'};background:${esCon?'rgba(96,165,250,0.1)':'rgba(255,255,255,0.04)'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
+    if(btnNo)btnNo.style.cssText=`border:1.5px solid ${!esCon?'rgba(96,165,250,0.5)':'rgba(255,255,255,0.1)'};background:${!esCon?'rgba(96,165,250,0.1)':'rgba(255,255,255,0.04)'};border-radius:12px;padding:14px;text-align:center;cursor:pointer;`;
+    if(btnSi&&btnSi.querySelector('div:last-child'))btnSi.querySelector('div:last-child').style.color=esCon?'#60a5fa':'rgba(255,255,255,0.4)';
+    if(btnNo&&btnNo.querySelector('div:last-child'))btnNo.querySelector('div:last-child').style.color=!esCon?'#60a5fa':'rgba(255,255,255,0.4)';
     if(!esCon&&!proyectosData.length)agregarProyecto();if(esCon&&!trabajosData.length)agregarTrabajo();
   }
 
@@ -1403,15 +1405,6 @@
 
   async function generarCV(){
     const linkDescarga=document.getElementById('link-descarga');if(linkDescarga)linkDescarga.style.display='none';
-    // Si hay oferta, extraer el puesto antes de generar
-    const ofertaTexto=document.getElementById('oferta')?.value?.trim()||'';
-    if(ofertaTexto.length>50){
-      try{
-        const rp=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({extraerPuestoOferta:true,oferta:ofertaTexto,usuarioId:window.usuarioActual?.uid||null})});
-        const dp=await rp.json();
-        if(dp.puesto&&dp.puesto.trim().length>1){window._cargoInicial=dp.puesto;}
-      }catch(e){console.warn('No se pudo extraer puesto de oferta');}
-    }
     const nombre=document.getElementById('nombre')?.value||window._nombreDesdeCV||'';const email=document.getElementById('email')?.value||'';const codigoPais=document.getElementById('codigo-pais')?.value||'+51';
     const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
