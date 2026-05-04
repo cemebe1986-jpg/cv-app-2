@@ -41,6 +41,7 @@ module.exports = async (req, res) => {
       token, cvs, plan,
       limiteDia: limiteDescargasDia[plan] || 3,
       entrevista: tieneEntrevista[plan] || false,
+      regeneraciones: 5,
       pagoId: payment.id,
       fecha: new Date().toISOString()
     }));

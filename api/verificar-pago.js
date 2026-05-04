@@ -29,7 +29,8 @@ module.exports = async (req, res) => {
       token: pago?.token || null,
       tieneCv: tieneCv === 1,
       cvActualPagado: tieneCvPagado === 1,
-      tieneEntrevista: pago?.entrevista || false
+      tieneEntrevista: pago?.entrevista || false,
+      regeneracionesRestantes: pago?.regeneraciones ?? 5
     });
   } catch (error) {
     console.error('Error verificar-pago:', error.message);

@@ -672,7 +672,8 @@
           </div>
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
-          <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;">✅ Descargar mi CV en PDF</button>
+          <div id="contador-regeneraciones" style="text-align:center;margin-top:8px;"></div>
+          <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:8px;">✅ Descargar mi CV en PDF</button>
           <button onclick="elegirVersionDescarga()" id="btn-elegir-version" style="display:none;width:100%;padding:12px;background:#0f3460;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:0.88rem;border:none;cursor:pointer;margin-top:10px;">📌 Usar esta versión para descargar</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
         </div>
@@ -1403,7 +1404,7 @@
   async function generarCV(){
     const linkDescarga=document.getElementById('link-descarga');if(linkDescarga)linkDescarga.style.display='none';
     const nombre=document.getElementById('nombre')?.value||window._nombreDesdeCV||'';const email=document.getElementById('email')?.value||'';const codigoPais=document.getElementById('codigo-pais')?.value||'+51';
-    const telefono=document.getElementById('telefono').value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
+    const telefono=document.getElementById('telefono')?.value?`${codigoPais} ${document.getElementById('telefono').value}`:'';
     const experiencia=obtenerExperienciaParaCV();
     const educacion=educacionData.map(e=>{const tipo=e.tipo==='certificacion'?'Certificación':e.tipo==='curso'?'Curso online':e.tipo==='maestria'?'Maestría':e.tipo==='tecnica'?'Instituto técnico':e.tipo==='colegio'?'Colegio':e.tipo==='otro'?(e.tipoCustom||'Otros estudios'):'Universidad';const periodo=e.desde&&e.hasta?` (${e.desde} - ${e.hasta})`:e.hasta?` (${e.hasta})`:e.desde?` (${e.desde})`:'';return `${tipo}: ${e.titulo} — ${e.institucion}${periodo}`;}).join('. ');
     const habilidadesBlandas=blandasData.map(b=>b.nombre).join(', '),oferta=document.getElementById('oferta')?.value||'';
@@ -1590,11 +1591,24 @@
         const link=document.getElementById('link-descarga');if(link)link.style.display='block';
         const btnV=document.getElementById('btn-elegir-version');if(btnV)btnV.style.display='none';
         if(data.tieneEntrevista){const btnE=document.getElementById('btn-entrevista');if(btnE)btnE.style.display='block';}
-        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Ya puedes descargar tu CV.';document.body.appendChild(t);setTimeout(()=>t.remove(),5000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?9.90:4.90;const nombrePlan=data.plan==='popular'?'CV + Simulación de Entrevista con IA':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
+        if(paramPago==='ok'){const t=document.createElement('div');t.style.cssText='position:fixed;top:90px;left:50%;transform:translateX(-50%);background:#22c55e;color:white;padding:14px 28px;border-radius:20px;font-size:0.9rem;font-weight:700;z-index:9999;box-shadow:0 4px 20px rgba(34,197,94,0.4);';t.textContent='✅ ¡Pago confirmado! Tu pago no se pierde al editar.';document.body.appendChild(t);setTimeout(()=>t.remove(),6000);if(window._pagoOkPendiente&&typeof gtag!=='undefined'){const valorPlan=data.plan==='popular'?9.90:4.90;const nombrePlan=data.plan==='popular'?'CV + Simulación de Entrevista con IA':'Plan Básico';gtag('event','purchase',{'transaction_id':window.usuarioActual.uid+'_'+Date.now(),'value':valorPlan,'currency':'PEN','items':[{'item_name':nombrePlan,'price':valorPlan,'quantity':1}]});window._pagoOkPendiente=false;}}
       } else if(data.pagado&&!data.cvActualPagado){
-        // Pagó pero aún no eligió versión para descargar
         const btnV=document.getElementById('btn-elegir-version');if(btnV)btnV.style.display='block';
         if(data.tieneEntrevista){const btnE=document.getElementById('btn-entrevista');if(btnE)btnE.style.display='block';}
+      }
+      // Mostrar contador de regeneraciones
+      if(data.pagado){
+        window._regeneracionesRestantes=data.regeneracionesRestantes??5;
+        const contador=document.getElementById('contador-regeneraciones');
+        if(contador){
+          if(window._regeneracionesRestantes<=0){
+            contador.innerHTML='<span style="color:#e53e3e;font-size:0.78rem;">Has usado todas tus regeneraciones</span>';
+            const btnG=document.querySelector('button[onclick*="generarCV"]');
+            if(btnG){btnG.disabled=true;btnG.style.opacity='0.5';}
+          } else {
+            contador.innerHTML=`<span style="color:#718096;font-size:0.78rem;">✏️ ${window._regeneracionesRestantes} regeneración${window._regeneracionesRestantes===1?'':'es'} restante${window._regeneracionesRestantes===1?'':'s'}</span>`;
+          }
+        }
       }
     }catch(e){console.log('verificarPago error:',e);}
   }

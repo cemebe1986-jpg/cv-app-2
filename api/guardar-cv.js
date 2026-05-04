@@ -29,10 +29,15 @@ module.exports = async (req, res) => {
           console.log(`CV congelado manualmente para: ${usuarioId}`);
         }
       } else {
-        // Si el usuario ya tiene un pago activo pero NO congeló — actualizar cv:usuario pero NO cv:pagado
-        const pagoExistente = await redis.get(`descarga:${usuarioId}`);
-        if (pagoExistente) {
-          console.log(`CV usuario actualizado (sin congelar) para: ${usuarioId}`);
+        // Decrementar regeneraciones si tiene pago activo
+        const pagoRaw = await redis.get(`descarga:${usuarioId}`);
+        if (pagoRaw) {
+          const pago = typeof pagoRaw === 'string' ? JSON.parse(pagoRaw) : pagoRaw;
+          if (pago.regeneraciones > 0) {
+            pago.regeneraciones = pago.regeneraciones - 1;
+            await redis.setex(`descarga:${usuarioId}`, 60 * 60 * 24 * 30, JSON.stringify(pago));
+            console.log(`Regeneraciones restantes para ${usuarioId}: ${pago.regeneraciones}`);
+          }
         }
       }
     }

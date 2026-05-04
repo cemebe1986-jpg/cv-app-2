@@ -66,11 +66,14 @@ REGLAS DE FECHAS — extrae SOLO el año en "desde" y "hasta":
 - Si no hay fecha de inicio → desde: ""
 - Si no hay fecha de fin → hasta: ""
 
-REGLAS DE EMPRESA Y CARGO — separa correctamente:
-- "BBVA Perú, Nov 2019 - presente" → empresa: "BBVA Perú" (sin la fecha)
-- "Arquitecto de Seguridad | BBVA Perú" → cargo: "Arquitecto de Seguridad", empresa: "BBVA Perú"
-- "BBVA Perú (Nov 2019 - presente)" → empresa: "BBVA Perú" (sin paréntesis ni fecha)
-- "Experis/Rimac Seguros" → empresa: "Experis/Rimac Seguros" (mantener tal cual)
+REGLAS DE EMPRESA Y CARGO — separa correctamente independientemente del formato:
+- "Analista Contable - BCP, 2020 - 2023" → cargo: "Analista Contable", empresa: "BCP"
+- "Empresa SAC | Vendedor Senior" → cargo: "Vendedor Senior", empresa: "Empresa SAC"
+- "Empresa SAC (2019 - presente)" → empresa: "Empresa SAC" (sin paréntesis ni fecha)
+- "Empresa1/Empresa2 SAC" → empresa: "Empresa1/Empresa2 SAC" (mantener tal cual)
+- "CARGO: Enfermera EMPRESA: Clínica San Pablo" → cargo: "Enfermera", empresa: "Clínica San Pablo"
+- Si cargo y empresa están en líneas separadas, identifícalos por contexto
+- Nunca incluyas fechas dentro del nombre de empresa o cargo
 
 REGLAS DE EDUCACIÓN:
 - "Candidato MBA en Administración" → tipo: "maestria", titulo: "MBA en Administración", hasta: "En curso"
@@ -80,17 +83,22 @@ REGLAS DE EDUCACIÓN:
 - Certificaciones con ID → ponlas en el array certificaciones con su ID
 
 REGLAS DE TELÉFONO:
-- "+51 997532149" → "997532149" (sin código de país)
-- "(+51) 997532149" → "997532149"
-- "997-532-149" → "997532149"
+- "+51 999888777" → "999888777" (sin código de país)
+- "(+51) 999888777" → "999888777"
+- "999-888-777" → "999888777"
 
 Responde SOLO con el JSON, sin explicaciones`
       }]
     });
 
     const text = message.content[0].text.replace(/```json|```/g, '').trim();
-    const datos = JSON.parse(text);
-
+    let datos;
+    try {
+      datos = JSON.parse(text);
+    } catch(e) {
+      console.log('Error parseando JSON de CV:', e.message);
+      return res.status(500).json({ error: 'No se pudo procesar el CV. Intenta de nuevo.' });
+    }
     res.json({ datos });
   } catch (error) {
     console.log('ERROR extraer CV:', error.message);
