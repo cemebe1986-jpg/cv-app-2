@@ -10,15 +10,17 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://talentia.com.pe/">
   <meta name="google-site-verification" content="3OqyLAeEe3kQI9_rtpF89LKXaINz_AXQOZDz3vE-aW8" />
-  <!-- Microsoft Clarity -->
-  <script type="text/javascript">
+  <!-- Microsoft Clarity — defer para no bloquear render -->
+  <script>
+    window.addEventListener('load', function(){
       (function(c,l,a,r,i,t,y){
-          c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-          t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-          y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
       })(window, document, "clarity", "script", "wgp1hkid1i");
+    });
   </script>
-  <!-- Google Analytics GA4 -->
+  <!-- Google Analytics GA4 — async -->
   <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
@@ -38,6 +40,9 @@
   <meta name="twitter:title" content="TalentIA — El CV que te consigue la entrevista">
   <meta name="twitter:description" content="Crea tu CV profesional con IA en 5 minutos. Optimizado para el mercado peruano. Sin suscripción.">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <link rel="preconnect" href="https://www.googletagmanager.com">
+  <link rel="preconnect" href="https://www.clarity.ms">
+  <link rel="dns-prefetch" href="https://www.google-analytics.com">
   <!-- Schema JSON-LD: Organización -->
   <script type="application/ld+json">
   {
@@ -675,26 +680,38 @@
     { cargo: 'Ingeniero Civil', texto: 'Ingeniero Civil con experiencia en supervisión de obras, gestión de proyectos de infraestructura y control de calidad. Especializado en proyectos con presupuestos superiores a S/2M.' },
     { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas que aumentaron el rendimiento estudiantil en un 40%.' }
   ];
-  let demoIdx = 0, charIdx = 0, pausando = false;
-  function animarDemo() {
-    if (pausando) return;
+  // Demo con fade in
+  // Demo con fade in — muestra texto completo, no simula escritura
+  let demoIdx = 0;
+  function mostrarSiguienteDemo() {
     const el = document.getElementById('demo-texto');
     const cargoEl = document.getElementById('demo-cargo-texto');
     const demo = demos[demoIdx];
-    charIdx++;
-    el.innerHTML = demo.texto.substring(0, charIdx) + '<span class="demo-cursor"></span>';
-    if (charIdx === demo.texto.length) {
-      pausando = true;
-      setTimeout(() => {
-        demoIdx = (demoIdx + 1) % demos.length;
-        cargoEl.textContent = demos[demoIdx].cargo;
-        charIdx = 0;
-        el.innerHTML = '<span class="demo-cursor"></span>';
-        pausando = false;
-      }, 2500);
-    }
+    cargoEl.textContent = demo.cargo;
+    el.style.opacity = '0';
+    el.style.transition = 'opacity 0.5s ease';
+    setTimeout(() => {
+      el.innerHTML = demo.texto;
+      el.style.opacity = '1';
+    }, 300);
+    demoIdx = (demoIdx + 1) % demos.length;
+    setTimeout(mostrarSiguienteDemo, 4000);
   }
-  setInterval(animarDemo, 30);
+  // Iniciar demo solo cuando sea visible
+  const demoEl = document.getElementById('demo-cv-preview');
+  if(demoEl){
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if(entry.isIntersecting){
+          observer.disconnect();
+          mostrarSiguienteDemo();
+        }
+      });
+    });
+    observer.observe(demoEl);
+  } else {
+    mostrarSiguienteDemo();
+  }
 
   function mostrarCampoCargoHero(){
     window.siPuestoActivo=true;
