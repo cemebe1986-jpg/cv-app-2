@@ -86,12 +86,17 @@
   .btn-prev:hover{border-color:rgba(255,255,255,0.55);color:white;}
   .btn-next{padding:13px 32px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;min-width:150px;letter-spacing:-0.2px;transition:background 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;}
   .btn-next:hover{background:#2563eb;}
-  .error-toast{display:none;background:rgba(220,38,38,0.1);border:1.5px solid rgba(220,38,38,0.3);border-radius:12px;padding:16px 20px;margin:0 32px 16px;}
-  .error-toast.visible{display:flex;align-items:center;gap:12px;}
-  .error-toast-icono{font-size:1.3rem;}
+  .error-toast{display:none;background:white;border:0.5px solid #fca5a5;border-left:3px solid #ef4444;border-radius:0 12px 12px 0;padding:12px 16px;margin:0 24px 16px;}
+  .error-toast.visible{display:flex;align-items:flex-start;gap:10px;animation:slideIn 0.2s ease;}
+  @keyframes slideIn{from{opacity:0;transform:translateY(-6px);}to{opacity:1;transform:translateY(0);}}
+  .error-toast-icono{font-size:1rem;margin-top:1px;flex-shrink:0;}
   .error-toast-texto{flex:1;}
-  .error-toast-titulo{font-size:0.88rem;font-weight:700;color:#f87171;margin-bottom:3px;}
-  .error-toast-desc{font-size:0.8rem;color:rgba(255,255,255,0.45);}
+  .error-toast-titulo{font-size:0.82rem;font-weight:700;color:#b91c1c;margin-bottom:2px;}
+  .error-toast-desc{font-size:0.76rem;color:#6b7280;line-height:1.4;}
+  .success-toast{display:none;background:white;border:0.5px solid #86efac;border-left:3px solid #22c55e;border-radius:0 12px 12px 0;padding:12px 16px;margin:0 24px 16px;}
+  .success-toast.visible{display:flex;align-items:flex-start;gap:10px;animation:slideIn 0.2s ease;}
+  .success-toast-titulo{font-size:0.82rem;font-weight:700;color:#15803d;margin-bottom:2px;}
+  .success-toast-desc{font-size:0.76rem;color:#6b7280;line-height:1.4;}
   .modal-overlay{display:none;position:fixed;top:0;left:0;right:0;bottom:0;background:rgba(0,0,0,0.8);z-index:2000;align-items:center;justify-content:center;padding:20px;}
   .modal-overlay.active{display:flex;}
   .modal-box{background:#1a1f2e;border-radius:24px;padding:36px;max-width:420px;width:100%;border:1px solid rgba(255,255,255,0.1);}
@@ -567,12 +572,19 @@
       </div>
 
       <div class="error-toast" id="error-toast">
-        <div class="error-toast-icono">⚠️</div>
+        <div class="error-toast-icono">⚠</div>
         <div class="error-toast-texto">
           <div class="error-toast-titulo" id="error-toast-titulo"></div>
           <div class="error-toast-desc" id="error-toast-desc"></div>
         </div>
-        <button onclick="cerrarError()" style="background:none;border:none;cursor:pointer;color:#a0aec0;font-size:1.1rem;">✕</button>
+        <button onclick="cerrarError()" style="background:none;border:none;cursor:pointer;color:#9ca3af;font-size:0.9rem;padding:0;flex-shrink:0;">✕</button>
+      </div>
+      <div class="success-toast" id="success-toast">
+        <div style="font-size:1rem;margin-top:1px;flex-shrink:0;color:#15803d;">✓</div>
+        <div class="error-toast-texto">
+          <div class="success-toast-titulo" id="success-toast-titulo"></div>
+          <div class="success-toast-desc" id="success-toast-desc"></div>
+        </div>
       </div>
       <div class="wizard-nav" id="wizard-nav" style="display:none;">
         <button class="btn-prev" id="btn-prev" onclick="pasoAnterior()">← Volver</button>
@@ -722,6 +734,17 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <div id="contador-regeneraciones" style="text-align:center;margin-top:8px;"></div>
+
+          <!-- Oferta post-CV -->
+          <div id="oferta-post-cv-box" style="background:#f8faff;border:0.5px solid #e2e8f0;border-radius:12px;padding:14px;margin-top:12px;">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
+              <span style="font-size:0.8rem;font-weight:600;color:#1a1a2e;">¿Tienes una oferta específica?</span>
+              <span style="font-size:0.72rem;color:#a0aec0;">Opcional</span>
+            </div>
+            <p style="font-size:0.75rem;color:#718096;margin-bottom:10px;">Pégala para que la IA optimice tu CV y calcule tu score de compatibilidad.</p>
+            <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta..." style="height:100px;font-size:0.82rem;margin-bottom:8px;background:white;color:#1a1a2e;border:0.5px solid #e2e8f0;border-radius:8px;"></textarea>
+            <button onclick="regenerarConOferta()" style="width:100%;padding:10px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">🎯 Optimizar mi CV con esta oferta</button>
+          </div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:8px;">✅ Descargar mi CV en PDF</button>
           <button onclick="elegirVersionDescarga()" id="btn-elegir-version" style="display:none;width:100%;padding:12px;background:#0f3460;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:0.88rem;border:none;cursor:pointer;margin-top:10px;">📌 Usar esta versión para descargar</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
@@ -875,8 +898,8 @@
     document.getElementById('entrevista-input-area').innerHTML=`<textarea id="entrevista-respuesta" placeholder="Escribe tu respuesta aquí..." style="width:100%;height:100px;resize:none;margin-bottom:8px;font-size:0.88rem;"></textarea><button onclick="enviarRespuestaEntrevista()" style="width:100%;padding:12px;background:#3b82f6;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Enviar respuesta →</button>`;
     await pedirSiguientePregunta(null);
   }
-  const PASOS=['step-1b','step-2','step-3','step-4','step-5foto','step-5'];
-  const TITULOS=['Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto','¿Tienes una oferta?'];
+  const PASOS=['step-1b','step-2','step-3','step-4','step-5foto'];
+  const TITULOS=['Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto'];
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
@@ -1120,6 +1143,12 @@
     if(np)np.style.display='none';
   }
 
+  async function regenerarConOferta(){
+    const oferta=document.getElementById('oferta')?.value?.trim();
+    if(!oferta){mostrarError('Sin oferta','Pega la descripción de la oferta primero.');return;}
+    await generarCV();
+  }
+
   function volverAlWizard(){
     document.getElementById('cv-resultado').style.display='none';
     document.getElementById('wizard-container').style.display='block';
@@ -1272,9 +1301,9 @@
 
   function validarPaso(){
     if(pasoActual===0){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
-    if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Experiencia incompleta','Completa el cargo y empresa, o elimina el trabajo si no aplica.');return false;}
-    if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Experiencia incompleta','Completa al menos una práctica o proyecto, o elimínalo.');return false;}
-    if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Educación incompleta','Completa al menos un estudio con título e institución, o elimínalo si no aplica.');return false;}
+    if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
+    if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
+    if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Estudio incompleto','Complétalo o elimínalo para continuar.');return false;}
     if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
@@ -1523,7 +1552,20 @@
   }
   function limpiarProgreso(){localStorage.removeItem('talentia_progreso');location.reload();}
   function iniciarMensajesCarga(){const msgs=['Leyendo tu historia...','Eligiendo las palabras exactas...','Escribiendo tu experiencia...','Armando tu CV...','Aplicando el toque final...','Un momento más...'];let i=0;const el=document.getElementById('loading-text');if(window.mi)clearInterval(window.mi);window.mi=setInterval(()=>{i++;if(i<msgs.length)el.textContent=msgs[i];else clearInterval(window.mi);},2000);}
-  function mostrarError(t,d){document.getElementById('error-toast-titulo').textContent=t;document.getElementById('error-toast-desc').textContent=d;document.getElementById('error-toast').classList.add('visible');}
+  function mostrarError(t,d){
+    const toast=document.getElementById('error-toast');
+    document.getElementById('error-toast-titulo').textContent=t;
+    document.getElementById('error-toast-desc').textContent=d;
+    toast.classList.add('visible');
+    setTimeout(()=>toast.classList.remove('visible'),5000);
+  }
+  function mostrarExito(t,d){
+    const toast=document.getElementById('success-toast');
+    document.getElementById('success-toast-titulo').textContent=t;
+    document.getElementById('success-toast-desc').textContent=d;
+    toast.classList.add('visible');
+    setTimeout(()=>toast.classList.remove('visible'),3000);
+  }
   function cerrarError(){document.getElementById('error-toast').classList.remove('visible');}
 
   function agregarEducacion(){educacionData.push({id:Date.now(),tipo:'universitaria',titulo:'',institucion:'',desde:'',hasta:''});renderEducacion();}
