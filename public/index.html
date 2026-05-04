@@ -558,6 +558,7 @@
         <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="display:none;">
         <div id="foto-nombre" style="display:none;text-align:center;font-size:0.82rem;color:#22c55e;font-weight:700;margin-bottom:8px;"></div>
         <img id="foto-preview" class="foto-preview" style="display:none;margin:0 auto 12px;">
+        <button id="btn-cambiar-foto" onclick="document.getElementById('foto').click()" style="display:none;width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;margin-top:4px;">🔄 Cambiar foto</button>
       </div>
 
       <!-- PASO 6: OFERTA LABORAL OPCIONAL -->
@@ -594,6 +595,7 @@
   </div>
 
   <!-- CV PREVIEW -->
+  <input type="hidden" id="oferta" value="">
   <div class="cv-preview" id="cv-preview" style="display:none;">
     <div class="analisis-box" id="analisis-compatibilidad" style="display:none;">
       <h3 style="color:#1a1a2e;margin-bottom:15px;font-size:1rem;">🎯 Análisis de compatibilidad con la oferta</h3>
@@ -734,28 +736,6 @@
           </div>
           <div style="text-align:center;font-size:0.72rem;color:#a0aec0;margin-bottom:12px;">💳 Pago seguro con Mercado Pago · Sin cobros recurrentes</div>
           <div id="contador-regeneraciones" style="text-align:center;margin-top:8px;"></div>
-
-          <!-- Cambiar foto -->
-          <div style="background:#f8faff;border:0.5px solid #e2e8f0;border-radius:12px;padding:14px;margin-top:12px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-              <span style="font-size:0.8rem;font-weight:600;color:#1a1a2e;">📷 Cambiar foto</span>
-              <span style="font-size:0.72rem;color:#a0aec0;">Opcional</span>
-            </div>
-            <p style="font-size:0.75rem;color:#718096;margin-bottom:10px;">Sube una nueva foto y regenera tu CV.</p>
-            <input type="file" id="foto-cambiar" accept="image/*" style="display:none;" onchange="cambiarFotoYRegenerara(this)">
-            <button onclick="document.getElementById('foto-cambiar').click()" style="width:100%;padding:10px;background:transparent;color:#0f3460;border:1px solid #0f3460;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Subir nueva foto</button>
-          </div>
-
-          <!-- Oferta post-CV -->
-          <div id="oferta-post-cv-box" style="background:#f8faff;border:0.5px solid #e2e8f0;border-radius:12px;padding:14px;margin-top:12px;">
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">
-              <span style="font-size:0.8rem;font-weight:600;color:#1a1a2e;">¿Tienes una oferta específica?</span>
-              <span style="font-size:0.72rem;color:#a0aec0;">Opcional</span>
-            </div>
-            <p style="font-size:0.75rem;color:#718096;margin-bottom:10px;">Pégala para que la IA optimice tu CV y calcule tu score de compatibilidad.</p>
-            <textarea id="oferta" placeholder="Pega aquí la descripción completa de la oferta..." style="height:100px;font-size:0.82rem;margin-bottom:8px;background:white;color:#1a1a2e;border:0.5px solid #e2e8f0;border-radius:8px;"></textarea>
-            <button onclick="regenerarConOferta()" style="width:100%;padding:10px;background:#0f3460;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">🎯 Optimizar mi CV con esta oferta</button>
-          </div>
           <button onclick="descargarCVComoPDF()" id="link-descarga" style="display:none;width:100%;padding:14px;background:#22c55e;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:8px;">✅ Descargar mi CV en PDF</button>
           <button onclick="elegirVersionDescarga()" id="btn-elegir-version" style="display:none;width:100%;padding:12px;background:#0f3460;color:white;border-radius:12px;text-align:center;font-weight:700;font-size:0.88rem;border:none;cursor:pointer;margin-top:10px;">📌 Usar esta versión para descargar</button>
           <button onclick="iniciarEntrevista()" id="btn-entrevista" style="display:none;width:100%;padding:14px;background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border-radius:12px;text-align:center;font-weight:700;font-size:1rem;border:none;cursor:pointer;margin-top:10px;">🎯 Iniciar simulación de entrevista con IA</button>
@@ -1154,27 +1134,10 @@
     if(np)np.style.display='none';
   }
 
-  async function cambiarFotoYRegenerara(input){
-    if(!input.files||!input.files[0])return;
-    if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');return;}
-    const reader=new FileReader();
-    reader.onload=async(e)=>{
-      fotoBase64=e.target.result;
-      mostrarExito('Foto actualizada','Regenerando tu CV...');
-      await generarCV();
-    };
-    reader.readAsDataURL(input.files[0]);
-  }
-
-  async function regenerarConOferta(){
-    const oferta=document.getElementById('oferta')?.value?.trim();
-    if(!oferta){mostrarError('Sin oferta','Pega la descripción de la oferta primero.');return;}
-    await generarCV();
-  }
 
   function volverAlWizard(){
     document.getElementById('cv-preview').style.display='none';
-    document.getElementById('wizard-container').style.display='block';
+    document.getElementById('wizard-box').style.display='block';
     pasoActual=PASOS.length-1;
     mostrarPaso(pasoActual);
     window.scrollTo({top:0,behavior:'smooth'});
@@ -1442,7 +1405,7 @@
   function eliminarHabilidad(i){habilidadesData.splice(i,1);renderListaHabilidades();}
   function renderListaHabilidades(){const el=document.getElementById('lista-habilidades');if(!el)return;el.innerHTML=habilidadesData.map((h,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${h.nombre}</span><button class="habilidad-delete" onclick="eliminarHabilidad(${i})">✕</button></div>`).join('');}
 
-  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name;nombre.style.display='block';}};reader.readAsDataURL(input.files[0]);}}
+  function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name;nombre.style.display='block';}const btnCambiar=document.getElementById('btn-cambiar-foto');if(btnCambiar)btnCambiar.style.display='block';};reader.readAsDataURL(input.files[0]);}}
 
   async function procesarCVSubido(input){
     if(!input.files||!input.files[0])return;
@@ -1521,7 +1484,7 @@
       if(typeof gtag!=='undefined')gtag('event','cv_generado');
       mostrarTalentiaScore(data.cv,habilidadesData,blandasData,fotoBase64,oferta);
       // Ocultar wizard y mostrar CV
-      document.getElementById('wizard-container').style.display='none';
+      document.getElementById('wizard-box').style.display='none';
       const cvRes=document.getElementById('cv-preview');if(cvRes)cvRes.style.display='block';
       window.scrollTo({top:0,behavior:'smooth'});
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
