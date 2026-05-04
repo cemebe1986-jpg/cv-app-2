@@ -189,6 +189,37 @@
   .cv-estilo-minimal .exp-empresa{color:#1a1a2e;font-weight:400;}
   .cv-estilo-minimal .exp-logro::before{color:#1a1a2e;}
   .cv-estilo-minimal .edu-institucion{color:#4a5568;}
+
+  /* ESTILO MODERNO — dos columnas con acento azul */
+  .cv-estilo-moderno2 .cv-document{grid-template-columns:200px 1fr;}
+  .cv-estilo-moderno2 .cv-sidebar{background:#2563eb;color:white;padding:28px 20px;}
+  .cv-estilo-moderno2 .cv-nombre-sidebar{color:white;font-size:1rem;font-weight:700;}
+  .cv-estilo-moderno2 .cv-section-title{color:rgba(255,255,255,0.7);font-size:0.65rem;border-bottom:1px solid rgba(255,255,255,0.3);}
+  .cv-estilo-moderno2 .cv-contacto p{color:rgba(255,255,255,0.85);font-size:0.78rem;}
+  .cv-estilo-moderno2 .cv-skill-tag{background:rgba(255,255,255,0.15);color:white;border-color:rgba(255,255,255,0.3);}
+  .cv-estilo-moderno2 .cv-main{padding:28px 32px;}
+  .cv-estilo-moderno2 .cv-main-nombre{font-size:1.8rem;font-weight:900;color:#1e3a5f;}
+  .cv-estilo-moderno2 .cv-cargo-principal{color:#2563eb;font-weight:700;letter-spacing:1px;}
+  .cv-estilo-moderno2 .cv-main-section-title{color:#2563eb;border-bottom:2px solid #2563eb;font-size:0.75rem;}
+  .cv-estilo-moderno2 .exp-cargo{color:#1e3a5f;font-weight:700;}
+  .cv-estilo-moderno2 .exp-empresa{color:#2563eb;}
+
+  /* ESTILO CRONOLÓGICO — una columna simple */
+  .cv-estilo-cronologico .cv-document{grid-template-columns:1fr;}
+  .cv-estilo-cronologico .cv-sidebar{background:white;color:#1a1a2e;padding:28px 48px 0;border-bottom:3px solid #374151;min-height:auto;display:flex;flex-direction:row;align-items:center;gap:24px;flex-wrap:wrap;}
+  .cv-estilo-cronologico .cv-foto-container{order:-1;}
+  .cv-estilo-cronologico .cv-foto{width:70px;height:70px;border:2px solid #374151;font-size:24px;}
+  .cv-estilo-cronologico .cv-nombre-sidebar{display:none;}
+  .cv-estilo-cronologico .cv-section-title{font-size:0.68rem;color:#374151;border-bottom:1px solid #374151;}
+  .cv-estilo-cronologico .cv-contacto{display:flex;flex-wrap:wrap;gap:8px;}
+  .cv-estilo-cronologico .cv-contacto p{font-size:0.78rem;color:#374151;margin:0;}
+  .cv-estilo-cronologico .cv-skills-section{display:flex;gap:16px;flex-wrap:wrap;}
+  .cv-estilo-cronologico .cv-main{padding:24px 48px;}
+  .cv-estilo-cronologico .cv-main-nombre{font-size:1.8rem;font-weight:900;color:#111827;}
+  .cv-estilo-cronologico .cv-cargo-principal{color:#374151;font-weight:600;letter-spacing:1px;}
+  .cv-estilo-cronologico .cv-main-section-title{color:#111827;border-bottom:1.5px solid #374151;font-size:0.72rem;}
+  .cv-estilo-cronologico .exp-cargo{font-weight:700;color:#111827;}
+  .cv-estilo-cronologico .exp-empresa{color:#374151;}
   @media(max-width:600px){nav{padding:14px 20px;}.choice-cards{grid-template-columns:1fr;}.cv-document{grid-template-columns:1fr;}.cv-sidebar{padding:25px;}.step{padding:20px;}.wizard-nav{padding:16px 20px;}.wizard-card-header{padding:18px 20px 14px;}.estilos-grid{gap:8px;}}
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -603,6 +634,8 @@
         <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>Clásico</button>
         <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
         <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno2')" id="estilo-btn-moderno2"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#2563eb;margin-right:6px;vertical-align:middle;"></span>Moderno</button>
+        <button class="estilo-btn" onclick="cambiarEstiloCV('cronologico')" id="estilo-btn-cronologico"><span style="display:inline-block;width:12px;height:12px;border-radius:0;background:#374151;margin-right:6px;vertical-align:middle;"></span>Cronológico</button>
       </div>
     </div>
 
@@ -620,7 +653,13 @@
         </div>
       </div>
       <!-- DEGRADADO — visible solo para no pagados -->
-      <div id="cv-degradado" style="display:block;position:absolute;bottom:0;left:0;width:100%;height:55%;background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.97) 50%, rgba(255,255,255,1) 100%);pointer-events:none;z-index:11;"></div>
+      <div id="cv-degradado" style="display:block;position:absolute;bottom:0;left:0;width:100%;height:55%;pointer-events:none;z-index:11;">
+        <div style="width:100%;height:100%;background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 40%, rgba(255,255,255,1) 100%);"></div>
+        <div style="position:absolute;bottom:24px;left:0;width:100%;text-align:center;pointer-events:all;">
+          <p style="font-size:0.82rem;color:#718096;margin-bottom:10px;">Tu CV completo está listo</p>
+          <button onclick="const logueado=document.getElementById('estado-con-login').style.display!=='none';document.getElementById(logueado?'planes-pago':'estado-sin-login').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:12px 28px;background:#0f3460;color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;box-shadow:0 4px 16px rgba(15,52,96,0.3);">🔓 Ver CV completo →</button>
+        </div>
+      </div>
       <div class="cv-sidebar">
         <div class="cv-foto-container"><div class="cv-foto" id="cv-foto">👤</div></div>
         <div class="cv-nombre-sidebar" id="cv-nombre-sidebar"></div><br>
@@ -833,7 +872,7 @@
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
-  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal'].forEach(e=>document.getElementById(`estilo-btn-${e}`).classList.toggle('activo',e===estilo));const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
+  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal','moderno2','cronologico'].forEach(e=>{const btn=document.getElementById(`estilo-btn-${e}`);if(btn)btn.classList.toggle('activo',e===estilo);});const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.',moderno2:'Dos columnas con acento azul — moderno y llamativo, ideal para marketing, ventas y perfiles creativos.',cronologico:'Una columna simple y directa — ideal para técnicos, egresados de institutos y primer empleo.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal'||estilo==='moderno'||estilo==='cronologico')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
   function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
   function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session',getLlamadasIA()+1);}catch(e){}}
   function verificarLimiteIA(){if(!window.usuarioActual&&getLlamadasIA()>=LIMITE_IA){mostrarError('Límite alcanzado','Crea una cuenta gratuita para continuar usando las sugerencias con IA.');setTimeout(()=>abrirModalLogin(),1500);return false;}return true;}
