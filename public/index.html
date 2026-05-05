@@ -233,7 +233,28 @@
   .cv-estilo-cronologico .cv-main-section-title{color:#111827;border-bottom:1.5px solid #374151;font-size:0.72rem;}
   .cv-estilo-cronologico .exp-cargo{font-weight:700;color:#111827;}
   .cv-estilo-cronologico .exp-empresa{color:#374151;}
-  @media(max-width:600px){nav{padding:14px 20px;}.choice-cards{grid-template-columns:1fr;}.cv-document{grid-template-columns:1fr;}.cv-sidebar{padding:25px;}.step{padding:20px;}.wizard-nav{padding:16px 20px;}.wizard-card-header{padding:18px 20px 14px;}.estilos-grid{gap:8px;}}
+  @media(max-width:600px){
+    nav{padding:14px 20px;}
+    .choice-cards{grid-template-columns:1fr;}
+    .cv-document{grid-template-columns:1fr;}
+    .cv-sidebar{padding:20px 24px;min-height:auto;}
+    .cv-foto-container{margin-bottom:8px;}
+    .cv-foto{width:60px;height:60px;font-size:20px;}
+    .cv-nombre-sidebar{font-size:1rem;margin-bottom:8px;}
+    .cv-section-title{font-size:0.6rem;margin-top:10px;}
+    .cv-main{padding:20px 24px;}
+    .cv-main-nombre{font-size:1.4rem;}
+    .cv-cargo-principal{font-size:0.72rem;}
+    .cv-preview-container{padding:0 12px 20px;}
+    .cv-actions{padding:16px;}
+    .step{padding:20px;}
+    .wizard-nav{padding:16px 20px;}
+    .wizard-card-header{padding:18px 20px 14px;}
+    .estilos-grid{gap:8px;}
+    .cv-estilo-moderno2 .cv-document{grid-template-columns:1fr;}
+    .cv-estilo-moderno2 .cv-sidebar{padding:20px 24px;}
+    .cv-estilo-cronologico .cv-sidebar{flex-direction:column;align-items:flex-start;padding:16px 24px;}
+  }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
 <script>pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';</script>
@@ -1292,7 +1313,7 @@
     if(pasoActual===0){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
     if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
     if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
-    if(pasoActual===3&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Estudio incompleto','Complétalo o elimínalo para continuar.');return false;}
+    if(pasoActual===2&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Estudio incompleto','Complétalo o elimínalo para continuar.');return false;}
     if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
