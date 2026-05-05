@@ -287,7 +287,7 @@
       <span id="nav-nombre-usuario" style="color:rgba(255,255,255,0.8);font-size:0.82rem;"></span>
       <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
     </div>
-    <button style="color:rgba(255,255,255,0.6);font-size:0.82rem;cursor:pointer;background:none;border:none;display:none;" onclick="pasoAnterior()" id="nav-back">← Volver</button>
+    <button style="color:white;font-size:0.82rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 14px;display:none;" onclick="volverAlWizard()" id="nav-back">← Editar CV</button>
   </div>
 </nav>
 
@@ -623,6 +623,8 @@
 
     <!-- TALENTIA SCORE -->
     <div id="talentia-score-box" style="display:none;padding:24px 36px;background:white;border-bottom:2px solid #f0f0f0;">
+      <!-- Botón volver - visible y arriba del score -->
+      <button onclick="volverAlWizard()" style="width:100%;padding:11px;background:#f0f4ff;color:#0f3460;border:1.5px solid #bfdbfe;border-radius:10px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;margin-bottom:16px;display:flex;align-items:center;justify-content:center;gap:6px;">← Volver a editar mi CV</button>
       <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;">
         <!-- Score circular -->
         <div style="position:relative;width:90px;height:90px;flex-shrink:0;">
@@ -705,8 +707,6 @@
     </div>
 
           <div class="cv-actions">
-          <!-- Botón volver al wizard — siempre visible -->
-          <button onclick="volverAlWizard()" style="width:100%;padding:11px;background:transparent;color:#718096;border:1px solid #e2e8f0;border-radius:10px;font-size:0.82rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;margin-bottom:14px;display:flex;align-items:center;justify-content:center;gap:6px;">← Volver a editar mi CV</button>
         <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">Inicia sesión para ver tus recomendaciones y descargarlo.</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión con Google</button></div></div>
         <div id="estado-con-login" style="display:none;">
           <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
