@@ -299,8 +299,9 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
       * { margin:0; padding:0; box-sizing:border-box; }
       body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
       .header { padding:24px 40px 16px; border-bottom:3px solid #374151; display:flex; align-items:center; gap:20px; }
-      .foto-wrap img { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid #374151; }
-      .foto-initials { width:70px; height:70px; border-radius:50%; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+      .foto-wrap { flex-shrink:0; }
+      .foto-wrap img { width:90px; height:90px; border-radius:50%; object-fit:cover; border:2px solid #374151; display:block; }
+      .foto-initials { width:90px; height:90px; border-radius:50%; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:28px; flex-shrink:0; }
       .header-info { flex:1; }
       .nombre { font-size:24px; font-weight:900; color:#111827; margin-bottom:4px; }
       .contacto { display:flex; flex-wrap:wrap; gap:12px; }
