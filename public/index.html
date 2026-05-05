@@ -685,7 +685,8 @@
       </div>
     </div>
 
-    <div class="cv-document" id="cv-document" style="user-select:none;-webkit-user-select:none;" oncontextmenu="return false;" onselectstart="return false;">
+    <div id="cv-scale-wrapper" style="overflow:hidden;width:100%;padding:0 8px 8px;">
+    <div class="cv-document" id="cv-document" style="user-select:none;-webkit-user-select:none;transform-origin:top left;" oncontextmenu="return false;" onselectstart="return false;">
       <div id="marca-agua-cv" style="position:absolute;top:0;left:0;width:100%;height:100%;pointer-events:none;z-index:10;overflow:hidden;">
         <div style="position:absolute;top:0;left:0;width:100%;height:100%;display:flex;flex-direction:column;justify-content:space-around;align-items:center;">
           <div style="transform:rotate(-35deg);font-size:1.4rem;font-weight:900;color:rgba(15,52,96,0.25);white-space:nowrap;letter-spacing:3px;user-select:none;">TALENTIA · VISTA PREVIA · TALENTIA · VISTA PREVIA · TALENTIA · VISTA PREVIA</div>
@@ -726,6 +727,7 @@
         <div class="cv-main-section"><div class="cv-main-section-title">Educación</div><div id="cv-educacion"></div></div>
       </div>
     </div>
+    </div> <!-- cierre cv-scale-wrapper -->
 
           <div class="cv-actions">
         <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:linear-gradient(135deg,#f0f4ff,#e8f0ff);border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">Inicia sesión para ver tus recomendaciones y descargarlo.</p><button onclick="abrirModalLogin()" style="background:linear-gradient(135deg,#1a1a2e,#0f3460);color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión con Google</button></div></div>
@@ -918,7 +920,7 @@
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
 
-  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal','moderno2','cronologico'].forEach(e=>{const btn=document.getElementById(`estilo-btn-${e}`);if(btn)btn.classList.toggle('activo',e===estilo);});const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.',moderno2:'Dos columnas con acento azul — moderno y llamativo, ideal para marketing, ventas y perfiles creativos.',cronologico:'Una columna simple y directa — ideal para técnicos, egresados de institutos y primer empleo.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal'||estilo==='moderno'||estilo==='cronologico')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';}
+  function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal','moderno2','cronologico'].forEach(e=>{const btn=document.getElementById(`estilo-btn-${e}`);if(btn)btn.classList.toggle('activo',e===estilo);});const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.',moderno2:'Dos columnas con acento azul — moderno y llamativo, ideal para marketing, ventas y perfiles creativos.',cronologico:'Una columna simple y directa — ideal para técnicos, egresados de institutos y primer empleo.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal'||estilo==='moderno'||estilo==='cronologico')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';setTimeout(ajustarEscalaCV,50);}
   function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
   function incrementarLlamadasIA(){try{sessionStorage.setItem('talentia_ia_calls_session',getLlamadasIA()+1);}catch(e){}}
   function verificarLimiteIA(){if(!window.usuarioActual&&getLlamadasIA()>=LIMITE_IA){mostrarError('Límite alcanzado','Crea una cuenta gratuita para continuar usando las sugerencias con IA.');setTimeout(()=>abrirModalLogin(),1500);return false;}return true;}
@@ -1159,6 +1161,26 @@
   }
 
 
+  window.addEventListener('resize', ajustarEscalaCV);
+
+  function ajustarEscalaCV(){
+    const doc=document.getElementById('cv-document');
+    const wrapper=document.getElementById('cv-scale-wrapper');
+    if(!doc||!wrapper)return;
+    const anchoWrapper=wrapper.offsetWidth-16;
+    const anchoCV=doc.scrollWidth||820;
+    if(anchoWrapper<anchoCV){
+      const escala=anchoWrapper/anchoCV;
+      doc.style.transform=`scale(${escala})`;
+      doc.style.width=(anchoCV)+'px';
+      wrapper.style.height=(doc.scrollHeight*escala)+'px';
+    } else {
+      doc.style.transform='';
+      doc.style.width='';
+      wrapper.style.height='';
+    }
+  }
+
   function volverAlWizard(){
     document.getElementById('cv-preview').style.display='none';
     document.getElementById('wizard-box').style.display='block';
@@ -1313,7 +1335,7 @@
     if(pasoActual===0){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
     if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
     if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
-    if(pasoActual===2&&educacionData.length>0&&!educacionData.some(e=>e.titulo.trim()&&e.institucion.trim())){mostrarError('Estudio incompleto','Complétalo o elimínalo para continuar.');return false;}
+    // Educación es completamente opcional — no validar
     if(pasoActual===4&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
@@ -1527,6 +1549,7 @@
       // Ocultar wizard y mostrar CV
       document.getElementById('wizard-box').style.display='none';
       const cvRes=document.getElementById('cv-preview');if(cvRes)cvRes.style.display='block';
+      setTimeout(ajustarEscalaCV,100);
       window.scrollTo({top:0,behavior:'smooth'});
       const gr=await fetch('/guardar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({cvData:data.cv,foto:fotoBase64,habilidades:habilidadesData,blandasData,estilo:estiloActual,usuarioId:window.usuarioActual?.uid||null})});
       const gd=await gr.json();window._cvDescargaId=gd.id;
