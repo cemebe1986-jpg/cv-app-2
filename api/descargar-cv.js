@@ -240,4 +240,105 @@ function generarHTMLCV(cv, habilidades, blandas, foto, estilo) {
     </div>
     </body></html>`;
   }
+
+  // ESTILO MODERNO2 — dos columnas sidebar azul marino profesional
+  if (estilo === 'moderno2') {
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
+      .cv { display:grid; grid-template-columns:200px 1fr; min-height:100vh; }
+      .sidebar { background:#1e3a5f; color:white; padding:28px 18px; }
+      .foto-wrap { text-align:center; margin-bottom:16px; }
+      .foto-wrap img { width:80px; height:80px; border-radius:50%; object-fit:cover; border:2px solid rgba(255,255,255,0.3); }
+      .foto-initials { width:80px; height:80px; border-radius:50%; background:rgba(255,255,255,0.1); display:flex; align-items:center; justify-content:center; font-size:24px; margin:0 auto; }
+      .nombre-sidebar { font-size:13px; font-weight:700; color:white; text-align:center; margin-bottom:16px; }
+      .section-label { font-size:8px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:rgba(255,255,255,0.5); margin-bottom:8px; padding-bottom:4px; border-bottom:1px solid rgba(255,255,255,0.15); margin-top:14px; }
+      .contact-item { font-size:10px; color:rgba(255,255,255,0.8); margin-bottom:5px; }
+      .skill-tag { display:inline-block; background:rgba(255,255,255,0.12); color:rgba(255,255,255,0.9); padding:2px 8px; border-radius:10px; font-size:9px; margin:2px; }
+      .soft-tag { display:inline-block; background:rgba(255,255,255,0.08); color:rgba(255,255,255,0.8); padding:2px 8px; border-radius:10px; font-size:9px; margin:2px; }
+      .main { padding:28px 32px; }
+      .nombre-main { font-size:22px; font-weight:900; color:#1e3a5f; margin-bottom:4px; }
+      .divider { width:50px; height:3px; background:#1e3a5f; border-radius:2px; margin-bottom:14px; }
+      .perfil { font-size:11px; color:#4a5568; line-height:1.7; margin-bottom:20px; }
+      .section-title { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#1e3a5f; margin-bottom:10px; padding-bottom:4px; border-bottom:2px solid #1e3a5f; }
+      .section { margin-bottom:20px; page-break-inside:avoid; }
+      .exp-cargo { font-size:12px; font-weight:700; color:#1e3a5f; }
+      .exp-empresa { font-size:10px; color:#2d5986; font-weight:600; }
+      .exp-periodo { font-size:10px; color:#718096; margin-bottom:4px; }
+      .exp-logro { font-size:10px; color:#4a5568; margin-left:10px; margin-bottom:3px; }
+      .edu-titulo { font-size:11px; font-weight:700; color:#1e3a5f; }
+      .edu-inst { font-size:10px; color:#2d5986; }
+      .edu-año { font-size:10px; color:#718096; }
+    </style></head><body>
+    <div class="cv">
+      <div class="sidebar">
+        <div class="foto-wrap">${fotoHTML}</div>
+        <div class="nombre-sidebar">${cv.nombre||''}</div>
+        <div class="section-label">Contacto</div>
+        ${cv.email?`<div class="contact-item">📧 ${cv.email}</div>`:''}
+        ${cv.telefono?`<div class="contact-item">📱 ${cv.telefono}</div>`:''}
+        ${skills?`<div class="section-label">Habilidades Técnicas</div><div style="margin-bottom:8px;">${skills}</div>`:''}
+        ${softSkills?`<div class="section-label">Habilidades Blandas</div><div>${softSkills}</div>`:''}
+      </div>
+      <div class="main">
+        <div class="nombre-main">${cv.nombre||''}</div>
+        <div class="divider"></div>
+        <div class="perfil">${cv.perfil||''}</div>
+        <div class="section"><div class="section-title">Experiencia Laboral</div>${experienciaHTML}</div>
+        <div class="section"><div class="section-title">Educación</div>${educacionHTML}</div>
+      </div>
+    </div>
+    </body></html>`;
+  }
+
+  // ESTILO CRONOLÓGICO — una columna simple y directa
+  if (estilo === 'cronologico') {
+    return `<!DOCTYPE html><html><head><meta charset="UTF-8">
+    <style>
+      * { margin:0; padding:0; box-sizing:border-box; }
+      body { font-family: 'Segoe UI', Arial, sans-serif; background:white; }
+      .header { padding:24px 40px 16px; border-bottom:3px solid #374151; display:flex; align-items:center; gap:20px; }
+      .foto-wrap img { width:70px; height:70px; border-radius:50%; object-fit:cover; border:2px solid #374151; }
+      .foto-initials { width:70px; height:70px; border-radius:50%; background:#f1f5f9; display:flex; align-items:center; justify-content:center; font-size:20px; flex-shrink:0; }
+      .header-info { flex:1; }
+      .nombre { font-size:24px; font-weight:900; color:#111827; margin-bottom:4px; }
+      .contacto { display:flex; flex-wrap:wrap; gap:12px; }
+      .contacto span { font-size:10px; color:#374151; }
+      .main { padding:20px 40px; }
+      .section-title { font-size:9px; font-weight:700; text-transform:uppercase; letter-spacing:1.5px; color:#111827; border-bottom:1.5px solid #374151; padding-bottom:4px; margin-bottom:12px; margin-top:18px; }
+      .skills-row { display:flex; flex-wrap:wrap; gap:4px; margin-bottom:4px; }
+      .skill-tag { background:#f1f5f9; color:#1e293b; border:1px solid #e2e8f0; padding:2px 8px; border-radius:4px; font-size:10px; }
+      .soft-tag { background:#f1f5f9; color:#1e293b; border:1px solid #e2e8f0; padding:2px 8px; border-radius:4px; font-size:10px; }
+      .perfil { font-size:11px; color:#4a5568; line-height:1.7; }
+      .exp-cargo { font-size:12px; font-weight:700; color:#111827; }
+      .exp-empresa { font-size:10px; color:#374151; font-weight:600; }
+      .exp-periodo { font-size:10px; color:#718096; margin-bottom:4px; }
+      .exp-logro { font-size:10px; color:#4a5568; margin-left:10px; margin-bottom:3px; }
+      .edu-titulo { font-size:11px; font-weight:700; color:#111827; }
+      .edu-inst { font-size:10px; color:#374151; }
+      .edu-año { font-size:10px; color:#718096; }
+    </style></head><body>
+    <div class="header">
+      <div class="foto-wrap">${fotoHTML}</div>
+      <div class="header-info">
+        <div class="nombre">${cv.nombre||''}</div>
+        <div class="contacto">
+          ${cv.email?`<span>📧 ${cv.email}</span>`:''}
+          ${cv.telefono?`<span>📱 ${cv.telefono}</span>`:''}
+        </div>
+      </div>
+    </div>
+    <div class="main">
+      <div class="section-title">Perfil Profesional</div>
+      <div class="perfil">${cv.perfil||''}</div>
+      ${skills||softSkills?`<div class="section-title">Habilidades</div><div class="skills-row">${skills}${softSkills}</div>`:''}
+      <div class="section-title">Experiencia Laboral</div>
+      ${experienciaHTML}
+      <div class="section-title">Educación</div>
+      ${educacionHTML}
+    </div>
+    </body></html>`;
+  }
+
 }
