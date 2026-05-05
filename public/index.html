@@ -1477,6 +1477,12 @@
       // Ir directo al paso 1 sin popup
       const stepPdf=document.getElementById('step-pdf');
       if(stepPdf){stepPdf.classList.remove('active');stepPdf.style.display='none';}
+      // Mostrar navegación del wizard
+      document.getElementById('wizard-nav').style.display='flex';
+      document.getElementById('progress-bar-container').style.display='block';
+      document.getElementById('nav-pasos').style.display='flex';
+      document.getElementById('nav-back').style.display='block';
+      const wch=document.getElementById('wizard-card-header');if(wch)wch.style.display='';
       camino='manual';pasoActual=0;mostrarPaso(0);
     }catch(e){console.error(e);document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';mostrarError('Error al procesar tu PDF','No pudimos leer el archivo. Asegúrate que sea un PDF válido y menor a 5MB.');}
   }
