@@ -213,8 +213,8 @@
   /* ESTILO CRONOLÓGICO — una columna simple */
   .cv-estilo-cronologico .cv-document{grid-template-columns:1fr;}
   .cv-estilo-cronologico .cv-sidebar{background:white;color:#1a1a2e;padding:28px 48px 0;border-bottom:3px solid #374151;min-height:auto;display:flex;flex-direction:row;align-items:center;gap:24px;flex-wrap:wrap;}
-  .cv-estilo-cronologico .cv-foto-container{order:-1;}
-  .cv-estilo-cronologico .cv-foto{width:70px;height:70px;border:2px solid #374151;font-size:24px;}
+  .cv-estilo-cronologico .cv-foto-container{order:-1;flex-shrink:0;}
+  .cv-estilo-cronologico .cv-foto{width:90px;height:90px;border:2px solid #374151;font-size:28px;}
   .cv-estilo-cronologico .cv-nombre-sidebar{display:none;}
   .cv-estilo-cronologico .cv-section-title{font-size:0.68rem;color:#374151;border-bottom:1px solid #374151;}
   .cv-estilo-cronologico .cv-contacto{display:flex;flex-wrap:wrap;gap:8px;}
@@ -329,10 +329,11 @@
           <span style="color:rgba(255,255,255,0.35);font-size:0.78rem;">o si ya tienes un CV</span>
           <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
         </div>
-        <button onclick="elegirCamino('pdf')" style="width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <button onclick="document.getElementById('archivo-cv-inline').click()" style="width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Subir mi CV en PDF y la IA lo mejora
         </button>
+        <input type="file" id="archivo-cv-inline" accept=".pdf" style="display:none;" onchange="procesarCVSubidoInline(this)">
         <datalist id="lista-puestos-peru">
           <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
           <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Asistente de gerencia">
@@ -1409,8 +1410,19 @@
 
   function previewFoto(input){if(input.files&&input.files[0]){if(input.files[0].size>2*1024*1024){mostrarError('Foto muy grande','La foto no debe pesar más de 2MB.');input.value='';return;}const reader=new FileReader();reader.onload=e=>{fotoBase64=e.target.result;const p=document.getElementById('foto-preview');p.src=fotoBase64;p.style.display='block';const zona=document.getElementById('foto-upload-zone');if(zona)zona.style.display='none';const nombre=document.getElementById('foto-nombre');if(nombre){nombre.textContent='✅ '+input.files[0].name;nombre.style.display='block';}const btnCambiar=document.getElementById('btn-cambiar-foto');if(btnCambiar)btnCambiar.style.display='block';};reader.readAsDataURL(input.files[0]);}}
 
-  async function procesarCVSubido(input){
+  async function procesarCVSubidoInline(input){
     if(!input.files||!input.files[0])return;
+    const btn=document.querySelector('button[onclick*="archivo-cv-inline"]');
+    if(btn){btn.textContent='⏳ Procesando tu CV...';btn.disabled=true;}
+    try{
+      await procesarCVSubido(input);
+    }catch(e){mostrarError('Error al procesar','No pudimos leer el archivo. Intenta de nuevo.');}
+    finally{
+      if(btn){btn.innerHTML='<svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg> Subir mi CV en PDF y la IA lo mejora';btn.disabled=false;}
+    }
+  }
+
+  async function procesarCVSubido(input){
     if(input.files[0].size>5*1024*1024){mostrarError('Archivo muy grande','El PDF no debe pesar más de 5MB.');return;}
     const nombreDiv=document.getElementById('pdf-nombre-archivo');if(nombreDiv){nombreDiv.textContent='📄 '+input.files[0].name;nombreDiv.style.display='block';}
     document.getElementById('estado-subida').style.display='block';
