@@ -1328,7 +1328,7 @@
     if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
     if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
     // Educación es completamente opcional — no validar
-    if(pasoActual===4&&habilidadesData.length===0){
+    if(pasoActual===3&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
       document.getElementById('error-toast-desc').innerHTML='Las empresas grandes usan estas palabras para filtrar candidatos automáticamente.';
       document.getElementById('error-toast').classList.add('visible');
