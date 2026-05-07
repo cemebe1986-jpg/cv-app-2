@@ -181,125 +181,154 @@
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #1a1a2e; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(26,26,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); }
-    .nav-logo { font-size: 1.3rem; font-weight: 900; color: white; letter-spacing: -0.5px; }
-    .nav-logo span { color: #60a5fa; }
-    .nav-cta { background: #3b82f6; color: white; padding: 10px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
-    .nav-cta:hover { opacity: 0.9; }
-    .hero { background: #1a1a2e; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; }
-    .hero-content { max-width: 800px; }
-    .hero-badge { display: inline-block; background: rgba(96,165,250,0.2); color: #60a5fa; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(96,165,250,0.3); }
-    .hero h1 { font-size: 3.5rem; font-weight: 900; color: white; line-height: 1.15; margin-bottom: 20px; }
-    .hero h1 span { color: #60a5fa; }
-    .hero-sub { font-size: 1.2rem; color: rgba(255,255,255,0.75); margin-bottom: 40px; line-height: 1.6; max-width: 600px; margin-left: auto; margin-right: auto; }
-    .demo-box { background: rgba(255,255,255,0.05); border: 1px solid rgba(255,255,255,0.15); border-radius: 16px; padding: 24px; max-width: 600px; margin: 0 auto 24px; text-align: left; }
-    .demo-header { display: flex; align-items: center; gap: 10px; margin-bottom: 16px; }
-    .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
-    .demo-cargo { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
-    .demo-cargo span { color: #60a5fa; font-weight: 700; }
-    .demo-texto { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; min-height: 56px; overflow: hidden; }
-    .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: #3b82f6; color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; }
-    .hero-cta:hover { opacity: 0.9; }
-    .hero-cta-sub { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
-    .section { padding: 100px 40px; }
-    .section-label { font-size: 0.82rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; text-align: center; }
-    .section-title { font-size: 2.2rem; font-weight: 800; text-align: center; margin-bottom: 16px; color: #1a1a2e; }
-    .section-sub { font-size: 1rem; color: #718096; text-align: center; margin-bottom: 60px; max-width: 500px; margin-left: auto; margin-right: auto; }
-    .pasos { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; max-width: 900px; margin: 0 auto; }
-    .paso { text-align: center; padding: 30px 20px; }
-    .paso-num { width: 56px; height: 56px; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; font-weight: 900; margin: 0 auto 20px; }
-    .paso h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 10px; color: #1a1a2e; }
-    .paso p { font-size: 0.88rem; color: #718096; line-height: 1.6; }
-    .cv-demo-section { background: #f8faff; padding: 100px 40px; }
-    .cv-demo-container { max-width: 1000px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 40px; align-items: center; }
-    .cv-demo-texto h2 { font-size: 2rem; font-weight: 800; margin-bottom: 16px; line-height: 1.3; }
-    .cv-demo-texto p { color: #718096; line-height: 1.7; margin-bottom: 20px; }
-    .cv-feature { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 16px; }
+    body { font-family: 'Segoe UI', system-ui, sans-serif; background: white; color: #1a1a2e; }
+
+    /* NAV — claro y profesional */
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 14px 40px; display: flex; align-items: center; justify-content: space-between; background: white; border-bottom: 1px solid #e2e8f0; }
+    .nav-logo { font-size: 1.3rem; font-weight: 900; color: #1a1a2e; letter-spacing: -0.5px; }
+    .nav-logo span { color: #2563eb; }
+    .nav-cta { background: #2563eb; color: white; padding: 10px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
+    .nav-cta:hover { background: #1d4ed8; }
+
+    /* HERO — fondo blanco con acento azul */
+    .hero { background: white; padding: 120px 40px 80px; text-align: center; border-bottom: 1px solid #f0f4ff; }
+    .hero-content { max-width: 720px; margin: 0 auto; }
+    .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 24px; border: 1px solid #bfdbfe; }
+    .hero h1 { font-size: 3.2rem; font-weight: 900; color: #111827; line-height: 1.15; margin-bottom: 20px; letter-spacing: -1px; }
+    .hero h1 span { color: #2563eb; }
+    .hero-sub { font-size: 1.15rem; color: #6b7280; margin-bottom: 40px; line-height: 1.7; max-width: 560px; margin-left: auto; margin-right: auto; }
+    .hero-cta-sub { color: #9ca3af; font-size: 0.82rem; margin-top: 12px; }
+
+    /* TRUST BAR */
+    .trust-bar { background: #f9fafb; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; padding: 16px 40px; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
+    .trust-item { display: flex; align-items: center; gap: 8px; font-size: 0.82rem; color: #6b7280; font-weight: 500; }
+
+    /* SECCIONES */
+    .section { padding: 80px 40px; }
+    .section-label { font-size: 0.78rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; text-align: center; }
+    .section-title { font-size: 2rem; font-weight: 800; text-align: center; margin-bottom: 14px; color: #111827; letter-spacing: -0.5px; }
+    .section-sub { font-size: 0.95rem; color: #6b7280; text-align: center; margin-bottom: 56px; max-width: 480px; margin-left: auto; margin-right: auto; line-height: 1.7; }
+
+    /* PASOS */
+    .pasos { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 30px; max-width: 860px; margin: 0 auto; }
+    .paso { text-align: center; padding: 32px 24px; background: #f9fafb; border-radius: 16px; border: 1px solid #f0f0f0; }
+    .paso-num { width: 48px; height: 48px; background: #2563eb; color: white; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; font-weight: 900; margin: 0 auto 16px; }
+    .paso h3 { font-size: 1rem; font-weight: 700; margin-bottom: 8px; color: #111827; }
+    .paso p { font-size: 0.85rem; color: #6b7280; line-height: 1.6; }
+
+    /* CV DEMO */
+    .cv-demo-section { background: #f9fafb; padding: 80px 40px; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; }
+    .cv-demo-container { max-width: 960px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
+    .cv-demo-texto h2 { font-size: 1.8rem; font-weight: 800; margin-bottom: 14px; line-height: 1.3; color: #111827; letter-spacing: -0.5px; }
+    .cv-demo-texto p { color: #6b7280; line-height: 1.7; margin-bottom: 20px; font-size: 0.95rem; }
+    .cv-feature { display: flex; align-items: flex-start; gap: 12px; margin-bottom: 14px; }
     .cv-feature-icon { width: 32px; height: 32px; background: #eff6ff; border-radius: 8px; display: flex; align-items: center; justify-content: center; font-size: 1rem; flex-shrink: 0; }
-    .cv-feature-text { font-size: 0.9rem; color: #4a5568; line-height: 1.5; }
-    .cv-feature-text strong { color: #1a1a2e; display: block; margin-bottom: 2px; }
-    .cv-preview-mini { background: white; border-radius: 16px; box-shadow: 0 20px 60px rgba(0,0,0,0.12); overflow: hidden; }
-    .cv-mini-sidebar { background: #1a1a2e; padding: 20px; }
-    .cv-mini-foto { width: 60px; height: 60px; border-radius: 50%; background: #0f3460; margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
-    .cv-mini-nombre { color: white; font-weight: 700; font-size: 0.85rem; text-align: center; margin-bottom: 16px; }
-    .cv-mini-label { font-size: 0.6rem; color: #60a5fa; text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 8px; }
-    .cv-mini-contacto { font-size: 0.7rem; color: rgba(255,255,255,0.7); margin-bottom: 6px; }
-    .cv-mini-skill-tag { display: inline-block; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); padding: 3px 8px; border-radius: 10px; font-size: 0.65rem; margin: 2px 2px; }
-    .cv-mini-main { padding: 20px; }
-    .cv-mini-main-nombre { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
-    .cv-mini-divider { width: 30px; height: 3px; background: #0f3460; margin-bottom: 12px; }
-    .cv-mini-perfil { font-size: 0.72rem; color: #4a5568; line-height: 1.6; margin-bottom: 14px; }
-    .cv-mini-section-title { font-size: 0.6rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #0f3460; margin-bottom: 8px; padding-bottom: 4px; border-bottom: 1px solid #e2e8f0; }
-    .cv-mini-exp { margin-bottom: 10px; }
-    .cv-mini-cargo { font-size: 0.72rem; font-weight: 700; color: #1a1a2e; }
-    .cv-mini-empresa { font-size: 0.65rem; color: #0f3460; }
-    .cv-mini-logro { font-size: 0.65rem; color: #718096; margin-left: 8px; position: relative; }
-    .cv-mini-logro::before { content: '▸'; position: absolute; left: -8px; color: #0f3460; font-size: 0.55rem; }
-    .testimonios { padding: 100px 40px; background: white; }
-    .testimonios-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 1000px; margin: 0 auto; }
-    .testimonio { background: #f8faff; border-radius: 16px; padding: 28px; border: 1px solid #e2e8f0; }
-    .testimonio-estrellas { color: #f59e0b; font-size: 1rem; margin-bottom: 14px; }
-    .testimonio-texto { font-size: 0.9rem; color: #4a5568; line-height: 1.7; margin-bottom: 20px; font-style: italic; }
-    .testimonio-autor { display: flex; align-items: center; gap: 12px; }
-    .testimonio-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, #1a1a2e, #0f3460); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
-    .testimonio-nombre { font-weight: 700; font-size: 0.88rem; color: #1a1a2e; }
-    .testimonio-cargo { font-size: 0.78rem; color: #718096; }
-    .precios { padding: 100px 40px; background: #f8faff; }
-    .precios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; max-width: 640px; margin: 0 auto; }
-    .precio-card { background: white; border-radius: 20px; padding: 32px 24px; text-align: center; border: 2px solid #e2e8f0; position: relative; transition: transform 0.2s; }
-    .precio-card:hover { transform: translateY(-4px); }
-    .precio-card.popular { border-color: #0f3460; }
-    .precio-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #0f3460; color: white; padding: 3px 16px; border-radius: 20px; font-size: 0.72rem; font-weight: 700; white-space: nowrap; }
-    .precio-icono { font-size: 2rem; margin-bottom: 12px; }
-    .precio-nombre { font-size: 1.1rem; font-weight: 800; color: #1a1a2e; margin-bottom: 4px; }
-    .precio-desc { font-size: 0.8rem; color: #718096; margin-bottom: 16px; }
-    .precio-monto { font-size: 2.5rem; font-weight: 900; color: #0f3460; line-height: 1; margin-bottom: 4px; }
-    .precio-monto span { font-size: 1rem; font-weight: 600; vertical-align: super; }
-    .precio-ahorro { font-size: 0.8rem; color: #22c55e; font-weight: 700; margin-bottom: 24px; min-height: 1.2em; }
-    .precio-features { text-align: left; margin-bottom: 24px; }
-    .precio-feature { font-size: 0.85rem; color: #4a5568; margin-bottom: 10px; display: flex; align-items: center; gap: 8px; }
-    .precio-feature::before { content: '✓'; color: #22c55e; font-weight: 700; flex-shrink: 0; }
-    .precio-btn { display: block; background: linear-gradient(135deg, #1a1a2e, #0f3460); color: white; padding: 14px; border-radius: 12px; text-decoration: none; font-weight: 700; font-size: 0.95rem; transition: opacity 0.2s; }
-    .precio-btn:hover { opacity: 0.9; }
-    .cta-final { background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 100px 40px; text-align: center; }
-    .cta-final h2 { font-size: 2.5rem; font-weight: 900; color: white; margin-bottom: 16px; }
-    .cta-final p { color: rgba(255,255,255,0.75); font-size: 1.1rem; margin-bottom: 40px; }
-    .cta-final-btn { display: inline-flex; align-items: center; gap: 10px; background: white; color: #0f3460; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; transition: transform 0.2s; }
-    .cta-final-btn:hover { transform: translateY(-2px); }
-    footer { background: #1a1a2e; padding: 30px 40px; text-align: center; color: rgba(255,255,255,0.4); font-size: 0.82rem; }
-    /* ARTÍCULOS SEO */
-    .articulos { padding: 100px 40px; background: white; }
-    .articulos-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 28px; max-width: 1000px; margin: 0 auto; }
-    .articulo-card { border: 1px solid #e2e8f0; border-radius: 16px; overflow: hidden; transition: transform 0.2s, box-shadow 0.2s; text-decoration: none; color: inherit; display: block; }
-    .articulo-card:hover { transform: translateY(-4px); box-shadow: 0 12px 32px rgba(0,0,0,0.08); }
-    .articulo-img { background: linear-gradient(135deg, #1a1a2e, #0f3460); height: 140px; display: flex; align-items: center; justify-content: center; font-size: 3rem; }
-    .articulo-body { padding: 20px; }
-    .articulo-tag { font-size: 0.7rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 8px; }
-    .articulo-titulo { font-size: 1rem; font-weight: 700; color: #1a1a2e; margin-bottom: 8px; line-height: 1.4; }
-    .articulo-desc { font-size: 0.82rem; color: #718096; line-height: 1.6; margin-bottom: 14px; }
-    .articulo-meta { font-size: 0.72rem; color: #a0aec0; display: flex; align-items: center; gap: 8px; }
-    /* FAQ SEO */
-    .faq { padding: 100px 40px; background: #f8faff; }
-    .faq-lista { max-width: 700px; margin: 0 auto; }
-    .faq-item { border-bottom: 1px solid #e2e8f0; padding: 20px 0; cursor: pointer; }
+    .cv-feature-text { font-size: 0.88rem; color: #4b5563; line-height: 1.5; }
+    .cv-feature-text strong { color: #111827; display: block; margin-bottom: 2px; font-size: 0.9rem; }
+    .cv-preview-mini { background: white; border-radius: 12px; box-shadow: 0 4px 24px rgba(0,0,0,0.08); overflow: hidden; border: 1px solid #e5e7eb; }
+    .cv-mini-sidebar { background: #1e3a5f; padding: 20px; }
+    .cv-mini-foto { width: 56px; height: 56px; border-radius: 50%; background: rgba(255,255,255,0.15); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.4rem; }
+    .cv-mini-nombre { color: white; font-weight: 700; font-size: 0.82rem; text-align: center; margin-bottom: 14px; }
+    .cv-mini-label { font-size: 0.58rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 6px; }
+    .cv-mini-contacto { font-size: 0.68rem; color: rgba(255,255,255,0.7); margin-bottom: 5px; }
+    .cv-mini-skill-tag { display: inline-block; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); padding: 2px 7px; border-radius: 8px; font-size: 0.62rem; margin: 2px 1px; }
+    .cv-mini-main { padding: 18px; }
+    .cv-mini-main-nombre { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 4px; }
+    .cv-mini-divider { width: 28px; height: 3px; background: #1e3a5f; margin-bottom: 10px; border-radius: 2px; }
+    .cv-mini-perfil { font-size: 0.68rem; color: #6b7280; line-height: 1.6; margin-bottom: 12px; }
+    .cv-mini-section-title { font-size: 0.58rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1e3a5f; margin-bottom: 6px; padding-bottom: 3px; border-bottom: 1px solid #e5e7eb; }
+    .cv-mini-exp { margin-bottom: 8px; }
+    .cv-mini-cargo { font-size: 0.7rem; font-weight: 700; color: #111827; }
+    .cv-mini-empresa { font-size: 0.62rem; color: #1e3a5f; }
+    .cv-mini-logro { font-size: 0.62rem; color: #6b7280; margin-left: 8px; position: relative; }
+    .cv-mini-logro::before { content: '▸'; position: absolute; left: -8px; color: #1e3a5f; font-size: 0.52rem; }
+
+    /* DEMO */
+    .demo-box { background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 20px; max-width: 580px; margin: 0 auto 24px; text-align: left; }
+    .demo-header { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; }
+    .demo-dot { width: 8px; height: 8px; border-radius: 50%; }
+    .demo-cargo { font-size: 0.78rem; color: #6b7280; }
+    .demo-cargo span { color: #2563eb; font-weight: 700; }
+    .demo-texto { font-size: 0.92rem; color: #374151; line-height: 1.7; min-height: 56px; overflow: hidden; }
+
+    /* TESTIMONIOS */
+    .testimonios { padding: 80px 40px; background: white; }
+    .testimonios-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; max-width: 960px; margin: 0 auto; }
+    .testimonio { background: #f9fafb; border-radius: 12px; padding: 24px; border: 1px solid #e5e7eb; }
+    .testimonio-estrellas { color: #f59e0b; font-size: 0.9rem; margin-bottom: 12px; }
+    .testimonio-texto { font-size: 0.88rem; color: #4b5563; line-height: 1.7; margin-bottom: 18px; }
+    .testimonio-autor { display: flex; align-items: center; gap: 10px; }
+    .testimonio-avatar { width: 40px; height: 40px; border-radius: 50%; background: #1e3a5f; display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 0.9rem; flex-shrink: 0; }
+    .testimonio-nombre { font-weight: 700; font-size: 0.85rem; color: #111827; }
+    .testimonio-cargo { font-size: 0.75rem; color: #6b7280; }
+
+    /* PRECIOS */
+    .precios { padding: 80px 40px; background: #f9fafb; border-top: 1px solid #f0f0f0; }
+    .precios-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; max-width: 600px; margin: 0 auto; }
+    .precio-card { background: white; border-radius: 16px; padding: 28px 22px; text-align: center; border: 2px solid #e5e7eb; position: relative; }
+    .precio-card.popular { border-color: #2563eb; }
+    .precio-badge { position: absolute; top: -12px; left: 50%; transform: translateX(-50%); background: #2563eb; color: white; padding: 3px 14px; border-radius: 20px; font-size: 0.7rem; font-weight: 700; white-space: nowrap; }
+    .precio-icono { font-size: 1.8rem; margin-bottom: 10px; }
+    .precio-nombre { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 4px; }
+    .precio-desc { font-size: 0.78rem; color: #6b7280; margin-bottom: 14px; }
+    .precio-monto { font-size: 2.2rem; font-weight: 900; color: #111827; line-height: 1; margin-bottom: 4px; }
+    .precio-monto span { font-size: 0.95rem; font-weight: 600; vertical-align: super; }
+    .precio-ahorro { font-size: 0.78rem; color: #16a34a; font-weight: 700; margin-bottom: 20px; min-height: 1.2em; }
+    .precio-features { text-align: left; margin-bottom: 20px; }
+    .precio-feature { font-size: 0.82rem; color: #4b5563; margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+    .precio-feature::before { content: '✓'; color: #16a34a; font-weight: 700; flex-shrink: 0; }
+    .precio-btn { display: block; background: #111827; color: white; padding: 13px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.92rem; }
+    .precio-btn:hover { background: #1f2937; }
+
+    /* CTA FINAL */
+    .cta-final { background: #1e3a5f; padding: 80px 40px; text-align: center; }
+    .cta-final h2 { font-size: 2.2rem; font-weight: 900; color: white; margin-bottom: 14px; letter-spacing: -0.5px; }
+    .cta-final p { color: rgba(255,255,255,0.7); font-size: 1rem; margin-bottom: 36px; line-height: 1.7; }
+    .cta-final-btn { display: inline-flex; align-items: center; gap: 10px; background: white; color: #1e3a5f; padding: 16px 36px; border-radius: 10px; text-decoration: none; font-size: 1rem; font-weight: 800; }
+    .cta-final-btn:hover { opacity: 0.95; }
+
+    /* FOOTER */
+    footer { background: #111827; padding: 28px 40px; text-align: center; color: rgba(255,255,255,0.35); font-size: 0.8rem; }
+
+    /* ARTÍCULOS */
+    .articulos { padding: 80px 40px; background: white; }
+    .articulos-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 24px; max-width: 960px; margin: 0 auto; }
+    .articulo-card { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; text-decoration: none; color: inherit; display: block; }
+    .articulo-card:hover { box-shadow: 0 8px 24px rgba(0,0,0,0.06); }
+    .articulo-img { background: #1e3a5f; height: 120px; display: flex; align-items: center; justify-content: center; font-size: 2.5rem; }
+    .articulo-body { padding: 18px; }
+    .articulo-tag { font-size: 0.68rem; font-weight: 700; color: #2563eb; text-transform: uppercase; letter-spacing: 1px; margin-bottom: 6px; }
+    .articulo-titulo { font-size: 0.95rem; font-weight: 700; color: #111827; margin-bottom: 6px; line-height: 1.4; }
+    .articulo-desc { font-size: 0.8rem; color: #6b7280; line-height: 1.6; margin-bottom: 12px; }
+    .articulo-meta { font-size: 0.7rem; color: #9ca3af; display: flex; align-items: center; gap: 8px; }
+
+    /* FAQ */
+    .faq { padding: 80px 40px; background: #f9fafb; border-top: 1px solid #f0f0f0; }
+    .faq-lista { max-width: 680px; margin: 0 auto; }
+    .faq-item { border-bottom: 1px solid #e5e7eb; padding: 18px 0; cursor: pointer; }
     .faq-item:last-child { border-bottom: none; }
-    .faq-pregunta { font-size: 1rem; font-weight: 700; color: #1a1a2e; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
-    .faq-pregunta::after { content: '+'; font-size: 1.4rem; color: #0f3460; flex-shrink: 0; transition: transform 0.2s; }
+    .faq-pregunta { font-size: 0.95rem; font-weight: 700; color: #111827; display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+    .faq-pregunta::after { content: '+'; font-size: 1.3rem; color: #2563eb; flex-shrink: 0; transition: transform 0.2s; }
     .faq-item.abierto .faq-pregunta::after { transform: rotate(45deg); }
-    .faq-respuesta { font-size: 0.9rem; color: #4a5568; line-height: 1.7; margin-top: 12px; display: none; }
+    .faq-respuesta { font-size: 0.88rem; color: #6b7280; line-height: 1.7; margin-top: 10px; display: none; }
     .faq-item.abierto .faq-respuesta { display: block; }
+
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.2rem; }
+      .hero h1 { font-size: 2rem; }
       .pasos { grid-template-columns: 1fr; }
       .cv-demo-container { grid-template-columns: 1fr; }
       .testimonios-grid { grid-template-columns: 1fr; }
       .precios-grid { grid-template-columns: 1fr; }
       .articulos-grid { grid-template-columns: 1fr; }
-      nav { padding: 16px 20px; }
-      .section { padding: 60px 20px; }
-      .articulos { padding: 60px 20px; }
-      .faq { padding: 60px 20px; }
+      .trust-bar { gap: 20px; }
+      nav { padding: 14px 20px; }
+      .section { padding: 56px 20px; }
+      .hero { padding: 100px 20px 60px; }
+      .articulos { padding: 56px 20px; }
+      .faq { padding: 56px 20px; }
+      .cv-demo-section { padding: 56px 20px; }
+      .testimonios { padding: 56px 20px; }
+      .precios { padding: 56px 20px; }
     }
   </style>
 </head>
@@ -307,21 +336,22 @@
 
 <nav>
   <div class="nav-logo">Talent<span>IA</span></div>
+  <a href="/crear" class="nav-cta">Crear mi CV gratis →</a>
 </nav>
 
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge" style="cursor:default;">⚡ Tu CV profesional en minutos</div>
+    <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
     <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span><br>en un CV que impresiona.</h1>
     <p class="hero-sub">Tú escribes tu experiencia. La IA la transforma en un CV profesional listo para postular en Perú.</p>
     <div style="max-width:480px;margin:0 auto 16px;">
-      <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+      <div style="display:flex;gap:0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);border:2px solid #e5e7eb;">
         <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? Ej: Contador..." autocomplete="off"
-          style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
+          style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
           onkeydown="if(event.key==='Enter')irAlWizard()">
-        <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Crear mi CV →</button>
+        <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:16px 24px;background:#2563eb;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
       </div>
-      <p style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:10px;text-align:center;">Opcional — puedes dejarlo en blanco y continuar</p>
+      <p style="font-size:0.78rem;color:#9ca3af;margin-top:10px;text-align:center;">Opcional — puedes dejarlo en blanco y continuar</p>
       <datalist id="lista-puestos-hero">
         <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
         <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
@@ -342,23 +372,23 @@
         <option value="Cajero"><option value="Practicante profesional"><option value="Practicante pre-profesional">
       </datalist>
     </div>
-    <div class="hero-cta-sub">Tu CV profesional en minutos — listo para postular hoy</div>
-    <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
-      <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;display:flex;align-items:center;gap:6px;">⚡ <span>Listo en 5 minutos — sin diseñar, sin frustrarte</span></div>
-      <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;display:flex;align-items:center;gap:6px;">✅ <span>Diseño profesional que impresiona reclutadores</span></div>
-      <div style="color:rgba(255,255,255,0.6);font-size:0.82rem;display:flex;align-items:center;gap:6px;">🇵🇪 <span>Hecho para el mercado peruano</span></div>
-    </div>
-    <div class="demo-box" style="margin-top:28px;">
-      <div class="demo-header">
-        <div class="demo-dot" style="background:#ef4444;"></div>
-        <div class="demo-dot" style="background:#f59e0b;"></div>
-        <div class="demo-dot" style="background:#22c55e;"></div>
-        <div class="demo-cargo" style="margin-left:8px;">TalentIA generando CV para: <span id="demo-cargo-texto">Contador</span></div>
-      </div>
-      <div class="demo-texto" id="demo-texto"><span class="demo-cursor"></span></div>
+    <div class="hero-cta-sub">Pagas solo al descargar — pruébalo gratis ahora</div>
+    <div style="margin-top:24px;display:flex;align-items:center;justify-content:center;gap:20px;flex-wrap:wrap;">
+      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">⚡ <span>Listo en 5 minutos</span></div>
+      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">✅ <span>Diseño profesional</span></div>
+      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">🇵🇪 <span>Hecho para Perú</span></div>
+      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">🔒 <span>Pagas solo al descargar</span></div>
     </div>
   </div>
 </section>
+
+<!-- TRUST BAR -->
+<div class="trust-bar">
+  <div class="trust-item">⭐⭐⭐⭐⭐ <span>Usado en Lima, Trujillo y Arequipa</span></div>
+  <div class="trust-item">🛡️ <span>Garantía de 7 días</span></div>
+  <div class="trust-item">💳 <span>Pago seguro con Mercado Pago y Yape</span></div>
+  <div class="trust-item">📄 <span>Sin suscripción — pago único</span></div>
+</div>
 
 <section class="section">
   <div class="section-label">Proceso simple</div>
@@ -648,12 +678,12 @@
     { cargo: 'Ingeniero Civil', texto: 'Ingeniero Civil con experiencia en supervisión de obras, gestión de proyectos de infraestructura y control de calidad. Especializado en proyectos con presupuestos superiores a S/2M.' },
     { cargo: 'Docente', texto: 'Docente con vocación pedagógica y experiencia en educación secundaria y superior. Especializada en metodologías activas que aumentaron el rendimiento estudiantil en un 40%.' }
   ];
-  // Demo con fade in
   // Demo con fade in — muestra texto completo, no simula escritura
   let demoIdx = 0;
   function mostrarSiguienteDemo() {
     const el = document.getElementById('demo-texto');
     const cargoEl = document.getElementById('demo-cargo-texto');
+    if(!el||!cargoEl)return;
     const demo = demos[demoIdx];
     cargoEl.textContent = demo.cargo;
     el.style.opacity = '0';
