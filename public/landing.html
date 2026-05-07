@@ -504,6 +504,34 @@
             </div>
           </div>
         </div>
+
+        <!-- FASE 4: Recomendaciones desbloqueadas -->
+        <div id="demo-fase-4" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:18px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;">
+          <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
+            <div style="width:28px;height:28px;background:#22c55e;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;">✅</div>
+            <div>
+              <div style="font-size:0.78rem;font-weight:700;color:#111827;">Análisis completo desbloqueado</div>
+              <div style="font-size:0.65rem;color:#6b7280;">TalentIA Score 80/100 · Vendedor</div>
+            </div>
+            <div style="margin-left:auto;background:#f0fdf4;border:1px solid #86efac;border-radius:6px;padding:3px 10px;font-size:0.65rem;font-weight:700;color:#15803d;">👍 Buen perfil</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.72rem;font-weight:700;color:#15803d;margin-bottom:6px;">✅ Lo que tienes a favor:</div>
+            <div style="font-size:0.68rem;color:#374151;margin-bottom:3px;padding-left:8px;">• Experiencia directa en ventas retail</div>
+            <div style="font-size:0.68rem;color:#374151;padding-left:8px;">• Historial probado de cumplimiento de metas</div>
+          </div>
+          <div style="margin-bottom:12px;">
+            <div style="font-size:0.72rem;font-weight:700;color:#b91c1c;margin-bottom:6px;">⚠️ Lo que debes mejorar:</div>
+            <div style="font-size:0.68rem;color:#374151;margin-bottom:3px;padding-left:8px;">• Agregar habilidades técnicas: Excel, CRM, SAP</div>
+            <div style="font-size:0.68rem;color:#374151;padding-left:8px;">• Incluir logros con porcentajes en cada puesto</div>
+          </div>
+          <div style="background:#eff6ff;border-radius:8px;padding:10px;border:1px solid #bfdbfe;">
+            <div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:6px;">💡 Recomendaciones:</div>
+            <div style="font-size:0.68rem;color:#374151;margin-bottom:3px;padding-left:8px;">• Agrega "Manejo de objeciones" como habilidad blanda</div>
+            <div style="font-size:0.68rem;color:#374151;margin-bottom:3px;padding-left:8px;">• Menciona el número de tiendas o zonas que manejaste</div>
+            <div style="font-size:0.68rem;color:#374151;padding-left:8px;">• Usa palabras como "fidelización" y "ticket promedio"</div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -838,10 +866,10 @@
     mostrarSiguienteDemo();
   }
 
-  // Demo animada 3 fases — transición limpia
+  // Demo animada 4 fases — transición limpia
   (function(){
-    const fases = ['demo-fase-1','demo-fase-2','demo-fase-3'];
-    const tiempos = [3000, 4000, 4500];
+    const fases = ['demo-fase-1','demo-fase-2','demo-fase-3','demo-fase-4'];
+    const tiempos = [3000, 4000, 3500, 4500];
     let actual = 0;
 
     function mostrarFase(idx){
