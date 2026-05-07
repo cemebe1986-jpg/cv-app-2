@@ -369,35 +369,6 @@
       <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
       <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span> en un CV que impresiona.</h1>
       <p class="hero-sub">La IA transforma lo que escribes en un CV profesional listo para postular en Perú.</p>
-      <div style="margin-bottom:8px;">
-        <div style="display:flex;gap:0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);border:2px solid #e5e7eb;">
-          <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas?" autocomplete="off"
-            style="flex:1;padding:15px 18px;border:none;outline:none;font-size:0.95rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
-            onkeydown="if(event.key==='Enter')irAlWizard()">
-          <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:15px 22px;background:#2563eb;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
-        </div>
-        <p style="font-size:0.75rem;color:#9ca3af;margin-top:8px;">Opcional · Sin registrarte · Empieza en segundos</p>
-        <datalist id="lista-puestos-hero">
-          <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
-          <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
-          <option value="Asistente contable"><option value="Analista contable"><option value="Analista financiero">
-          <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
-          <option value="Asistente logístico"><option value="Analista de logística"><option value="Almacenero">
-          <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
-          <option value="Analista de marketing"><option value="Community manager"><option value="Analista de marketing digital">
-          <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Ingeniero de software">
-          <option value="Soporte técnico"><option value="Analista de datos">
-          <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
-          <option value="Enfermera"><option value="Técnico en enfermería"><option value="Médico general">
-          <option value="Docente de primaria"><option value="Docente de secundaria">
-          <option value="Abogado"><option value="Cajero"><option value="Practicante profesional">
-        </datalist>
-      </div>
-      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:16px;">
-        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">⚡ <span>Listo en 5 min</span></div>
-        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">✅ <span>Diseño profesional</span></div>
-        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🇵🇪 <span>Hecho para Perú</span></div>
-      </div>
     </div>
 
     <!-- Columna derecha: CV demo -->
@@ -534,6 +505,37 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- CTA centrado debajo de ambas columnas -->
+  <div style="max-width:600px;margin:48px auto 0;text-align:center;">
+    <div style="display:flex;gap:0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
+      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? Ej: Contador, Vendedor..." autocomplete="off"
+        style="flex:1;padding:17px 22px;border:none;outline:none;font-size:1rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
+        onkeydown="if(event.key==='Enter')irAlWizard()">
+      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:17px 28px;background:#2563eb;color:white;border:none;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
+    </div>
+    <p style="font-size:0.78rem;color:#9ca3af;margin-top:10px;">Opcional · Sin registrarte · Empieza en segundos</p>
+    <div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:12px;">
+      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">⚡ <span>Listo en 5 min</span></div>
+      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">✅ <span>Diseño profesional</span></div>
+      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🇵🇪 <span>Hecho para Perú</span></div>
+    </div>
+    <datalist id="lista-puestos-hero">
+      <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
+      <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
+      <option value="Asistente contable"><option value="Analista contable"><option value="Analista financiero">
+      <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
+      <option value="Asistente logístico"><option value="Analista de logística"><option value="Almacenero">
+      <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
+      <option value="Analista de marketing"><option value="Community manager"><option value="Analista de marketing digital">
+      <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Ingeniero de software">
+      <option value="Soporte técnico"><option value="Analista de datos">
+      <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
+      <option value="Enfermera"><option value="Técnico en enfermería"><option value="Médico general">
+      <option value="Docente de primaria"><option value="Docente de secundaria">
+      <option value="Abogado"><option value="Cajero"><option value="Practicante profesional">
+    </datalist>
   </div>
 </section>
 
