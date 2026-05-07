@@ -10,25 +10,7 @@
   <meta name="robots" content="index, follow">
   <link rel="canonical" href="https://talentia.com.pe/">
   <meta name="google-site-verification" content="3OqyLAeEe3kQI9_rtpF89LKXaINz_AXQOZDz3vE-aW8" />
-  <!-- Microsoft Clarity — defer para no bloquear render -->
-  <script>
-    window.addEventListener('load', function(){
-      (function(c,l,a,r,i,t,y){
-        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
-        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
-        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
-      })(window, document, "clarity", "script", "wgp1hkid1i");
-    });
-  </script>
-  <!-- Google Analytics GA4 — async -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB"></script>
-  <script>
-    window.dataLayer = window.dataLayer || [];
-    function gtag(){dataLayer.push(arguments);}
-    gtag('js', new Date());
-    gtag('config', 'G-7Z85X742GB');
-    gtag('config', 'AW-18098341981');
-  </script>
+  <!-- Scripts de analytics al final para no bloquear render -->
   <!-- Open Graph para WhatsApp, Facebook, LinkedIn -->
   <meta property="og:title" content="TalentIA — El CV que te consigue la entrevista">
   <meta property="og:description" content="Tu CV profesional listo en 5 minutos. Tú pones tu experiencia, nosotros la convertimos en un CV que impresiona en Perú.">
@@ -40,9 +22,11 @@
   <meta name="twitter:title" content="TalentIA — El CV que te consigue la entrevista">
   <meta name="twitter:description" content="Tu CV profesional listo en 5 minutos. Tú pones tu experiencia, la IA la convierte en un CV que impresiona en Perú.">
   <link rel="icon" type="image/x-icon" href="/favicon.ico">
+  <!-- Preconnect crítico -->
   <link rel="preconnect" href="https://www.googletagmanager.com">
   <link rel="preconnect" href="https://www.clarity.ms">
   <link rel="dns-prefetch" href="https://www.google-analytics.com">
+  <meta name="theme-color" content="#1a1a2e">
   <!-- Schema JSON-LD: Organización -->
   <script type="application/ld+json">
   {
@@ -197,13 +181,13 @@
   </script>
   <style>
     * { margin: 0; padding: 0; box-sizing: border-box; }
-    body { font-family: 'Segoe UI', sans-serif; background: white; color: #1a1a2e; }
-    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(26,26,46,0.95); backdrop-filter: blur(10px); }
+    body { font-family: 'Segoe UI', sans-serif; background: #1a1a2e; color: #1a1a2e; }
+    nav { position: fixed; top: 0; left: 0; right: 0; z-index: 100; padding: 16px 40px; display: flex; align-items: center; justify-content: space-between; background: rgba(26,26,46,0.97); border-bottom: 1px solid rgba(255,255,255,0.06); }
     .nav-logo { font-size: 1.3rem; font-weight: 900; color: white; letter-spacing: -0.5px; }
     .nav-logo span { color: #60a5fa; }
-    .nav-cta { background: linear-gradient(135deg, #60a5fa, #3b82f6); color: white; padding: 10px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.9rem; transition: opacity 0.2s; }
+    .nav-cta { background: #3b82f6; color: white; padding: 10px 24px; border-radius: 10px; text-decoration: none; font-weight: 700; font-size: 0.9rem; }
     .nav-cta:hover { opacity: 0.9; }
-    .hero { background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%); min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; }
+    .hero { background: #1a1a2e; min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 120px 40px 80px; text-align: center; }
     .hero-content { max-width: 800px; }
     .hero-badge { display: inline-block; background: rgba(96,165,250,0.2); color: #60a5fa; padding: 6px 16px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; margin-bottom: 24px; border: 1px solid rgba(96,165,250,0.3); }
     .hero h1 { font-size: 3.5rem; font-weight: 900; color: white; line-height: 1.15; margin-bottom: 20px; }
@@ -214,11 +198,9 @@
     .demo-dot { width: 10px; height: 10px; border-radius: 50%; }
     .demo-cargo { font-size: 0.8rem; color: rgba(255,255,255,0.5); }
     .demo-cargo span { color: #60a5fa; font-weight: 700; }
-    .demo-texto { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; height: 56px; overflow: hidden; }
-    .demo-cursor { display: inline-block; width: 2px; height: 1em; background: #60a5fa; margin-left: 2px; animation: blink 0.8s infinite; vertical-align: text-bottom; }
-    @keyframes blink { 0%, 100% { opacity: 1; } 50% { opacity: 0; } }
-    .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: linear-gradient(135deg, #3b82f6, #60a5fa); color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; transition: transform 0.2s, opacity 0.2s; margin-bottom: 16px; }
-    .hero-cta:hover { transform: translateY(-2px); opacity: 0.95; }
+    .demo-texto { font-size: 0.95rem; color: rgba(255,255,255,0.9); line-height: 1.7; min-height: 56px; overflow: hidden; }
+    .hero-cta { display: inline-flex; align-items: center; gap: 10px; background: #3b82f6; color: white; padding: 18px 40px; border-radius: 14px; text-decoration: none; font-size: 1.1rem; font-weight: 800; margin-bottom: 16px; }
+    .hero-cta:hover { opacity: 0.9; }
     .hero-cta-sub { color: rgba(255,255,255,0.6); font-size: 0.82rem; }
     .section { padding: 100px 40px; }
     .section-label { font-size: 0.82rem; font-weight: 700; color: #3b82f6; text-transform: uppercase; letter-spacing: 1.5px; margin-bottom: 12px; text-align: center; }
@@ -329,30 +311,17 @@
 
 <section class="hero">
   <div class="hero-content">
-    <div class="hero-badge" onclick="document.getElementById('btn-si-puesto').scrollIntoView({behavior:'smooth',block:'center'})" style="cursor:pointer;">⚡ Tu CV profesional en minutos</div>
+    <div class="hero-badge" style="cursor:default;">⚡ Tu CV profesional en minutos</div>
     <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span><br>en un CV que impresiona.</h1>
     <p class="hero-sub">La IA redacta tu perfil y tus logros — listo para postular hoy en Perú.</p>
     <div style="max-width:480px;margin:0 auto 16px;">
-      <p style="color:rgba(255,255,255,0.7);font-size:0.88rem;font-weight:600;margin-bottom:14px;text-align:center;">¿Ya sabes a qué puesto postulas?</p>
-      <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:12px;">
-        <button onclick="mostrarCampoCargoHero()" id="btn-si-puesto" style="padding:20px 16px;background:#3b82f6;border:none;border-radius:12px;color:white;font-size:0.88rem;font-weight:500;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;transition:all 0.2s;text-align:center;line-height:1.5;display:flex;flex-direction:column;align-items:center;gap:10px;" onmouseover="this.style.background='#2563eb'" onmouseout="if(!window.siPuestoActivo){this.style.background='#3b82f6'}">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
-          <span>Tengo una oferta<br>en mente</span>
-        </button>
-        <button onclick="irAlWizardGeneral()" style="padding:20px 16px;background:#3b82f6;border:none;border-radius:12px;color:white;font-size:0.88rem;font-weight:500;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;transition:all 0.2s;text-align:center;line-height:1.5;display:flex;flex-direction:column;align-items:center;gap:10px;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">
-          <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z"/></svg>
-          <span>No tengo una<br>oferta específica</span>
-        </button>
+      <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
+        <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? Ej: Contador..." autocomplete="off"
+          style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
+          onkeydown="if(event.key==='Enter')irAlWizard()">
+        <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Crear mi CV →</button>
       </div>
-      <div id="campo-cargo-hero" style="display:none;margin-top:4px;">
-        <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 8px 32px rgba(0,0,0,0.3);">
-          <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Contador, Vendedor, Enfermera..." autocomplete="off"
-            style="flex:1;padding:16px 20px;border:none;outline:none;font-size:0.95rem;color:#1a1a2e;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;background:transparent;"
-            onkeydown="if(event.key==='Enter'&&this.value.trim().length>1)irAlWizard()">
-          <button onclick="irAlWizard()" style="padding:16px 24px;background:#3b82f6;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;white-space:nowrap;transition:background 0.2s;" onmouseover="this.style.background='#2563eb'" onmouseout="this.style.background='#3b82f6'">Empecemos →</button>
-        </div>
-        <p style="font-size:0.75rem;color:rgba(255,255,255,0.4);margin-top:8px;text-align:center;">¿No ves tu puesto? Escríbelo igual, la IA lo entiende.</p>
-      </div>
+      <p style="font-size:0.75rem;color:rgba(255,255,255,0.5);margin-top:10px;text-align:center;">Opcional — puedes dejarlo en blanco y continuar</p>
       <datalist id="lista-puestos-hero">
         <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
         <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
@@ -365,10 +334,9 @@
         <option value="Soporte técnico"><option value="Analista de datos">
         <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
         <option value="Residente de obra"><option value="Supervisor de obra">
-        <option value="Médico general"><option value="Médico especialista"><option value="Doctor en medicina"><option value="Médico cirujano">
-        <option value="Enfermera"><option value="Técnico en enfermería"><option value="Obstetra">
-        <option value="Químico farmacéutico"><option value="Nutricionista"><option value="Psicólogo"><option value="Fisioterapeuta">
-        <option value="Odontólogo"><option value="Biólogo"><option value="Tecnólogo médico">
+        <option value="Médico general"><option value="Médico especialista"><option value="Enfermera"><option value="Técnico en enfermería">
+        <option value="Obstetra"><option value="Químico farmacéutico"><option value="Nutricionista"><option value="Psicólogo">
+        <option value="Odontólogo"><option value="Tecnólogo médico">
         <option value="Docente de primaria"><option value="Docente de secundaria"><option value="Profesor de inglés">
         <option value="Abogado"><option value="Asistente legal">
         <option value="Cajero"><option value="Practicante profesional"><option value="Practicante pre-profesional">
@@ -713,28 +681,34 @@
     mostrarSiguienteDemo();
   }
 
-  function mostrarCampoCargoHero(){
-    window.siPuestoActivo=true;
-    const campo=document.getElementById('campo-cargo-hero');
-    campo.style.display='block';
-    setTimeout(()=>document.getElementById('cargo-hero').focus(),100);
-    const btn=document.getElementById('btn-si-puesto');
-    btn.style.background='#2563eb';
-  }
-
-  function irAlWizardGeneral(){
-    window.location.href='/crear?skip=true';
-  }
-
   function irAlWizard(){
     const cargo=document.getElementById('cargo-hero').value.trim();
-    if(cargo.length<2){
-      // Sin cargo → va con oferta=si para mostrar el toggle
-      window.location.href='/crear?oferta=si';
-      return;
+    if(cargo.length>=2){
+      window.location.href='/crear?cargo='+encodeURIComponent(cargo);
+    } else {
+      window.location.href='/crear?skip=true';
     }
-    window.location.href='/crear?cargo='+encodeURIComponent(cargo);
   }
 </script>
+  <!-- Microsoft Clarity — carga después del contenido -->
+  <script>
+    window.addEventListener('load', function(){
+      (function(c,l,a,r,i,t,y){
+        c[a]=c[a]||function(){(c[a].q=c[a].q||[]).push(arguments)};
+        t=l.createElement(r);t.async=1;t.src="https://www.clarity.ms/tag/"+i;
+        y=l.getElementsByTagName(r)[0];y.parentNode.insertBefore(t,y);
+      })(window, document, "clarity", "script", "wgp1hkid1i");
+      // GA4
+      const s=document.createElement('script');
+      s.async=true;
+      s.src='https://www.googletagmanager.com/gtag/js?id=G-7Z85X742GB';
+      document.head.appendChild(s);
+    });
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+    gtag('config', 'G-7Z85X742GB');
+    gtag('config', 'AW-18098341981');
+  </script>
 </body>
 </html>

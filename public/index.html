@@ -571,11 +571,11 @@
           <h3 style="font-size:1rem;font-weight:800;color:white;margin-bottom:6px;">¿Quieres agregar tu foto?</h3>
           <p style="font-size:0.82rem;color:rgba(255,255,255,0.4);">Opcional. Fondo neutro · Máximo 2MB</p>
         </div>
-        <div id="foto-upload-zone" class="upload-zone" onclick="document.getElementById('foto').click()" style="margin-bottom:12px;">
+        <label for="foto" id="foto-upload-zone" class="upload-zone" style="margin-bottom:12px;cursor:pointer;display:block;">
           <div style="font-size:2rem;margin-bottom:8px;">🤳</div>
           <div style="font-weight:700;color:white;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu foto</div>
           <div style="font-size:0.78rem;color:rgba(255,255,255,0.4);">JPG, PNG · Fondo blanco o neutro recomendado</div>
-        </div>
+        </label>
         <input type="file" id="foto" accept="image/*" onchange="previewFoto(this)" style="display:none;">
         <div id="foto-nombre" style="display:none;text-align:center;font-size:0.82rem;color:#22c55e;font-weight:700;margin-bottom:8px;"></div>
         <img id="foto-preview" class="foto-preview" style="display:none;margin:0 auto 12px;">
@@ -1318,9 +1318,22 @@
   }
 
   function pasoSiguiente(){
-    if(!validarPaso())return;
-    if(pasoActual===PASOS.length-1)generarCV();
-    else{pasoActual++;mostrarPaso(pasoActual);}
+    const btn=document.getElementById('btn-next');
+    btn.disabled=true;
+    const textoOriginal=btn.textContent;
+    btn.textContent='Un momento...';
+    if(!validarPaso()){
+      btn.disabled=false;
+      btn.textContent=textoOriginal;
+      return;
+    }
+    if(pasoActual===PASOS.length-1){
+      generarCV();
+    } else {
+      pasoActual++;
+      mostrarPaso(pasoActual);
+      setTimeout(()=>{btn.disabled=false;btn.textContent=pasoActual===PASOS.length-1?'Ver mi CV →':'Siguiente →';},300);
+    }
   }
 
   function validarPaso(){
