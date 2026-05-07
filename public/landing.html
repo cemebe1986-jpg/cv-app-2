@@ -191,13 +191,32 @@
     .nav-cta:hover { background: #1d4ed8; }
 
     /* HERO — fondo blanco con acento azul */
-    .hero { background: white; padding: 110px 40px 80px; text-align: center; border-bottom: 1px solid #f0f4ff; }
-    .hero-content { max-width: 860px; margin: 0 auto; }
-    .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 24px; border: 1px solid #bfdbfe; }
-    .hero h1 { font-size: 4.8rem; font-weight: 900; color: #111827; line-height: 1.05; margin-bottom: 22px; letter-spacing: -2.5px; }
+    .hero { background: white; padding: 100px 60px 80px; border-bottom: 1px solid #f0f4ff; }
+    .hero-inner { max-width: 1100px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center; }
+    .hero-content { text-align: left; }
+    .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 20px; border: 1px solid #bfdbfe; }
+    .hero h1 { font-size: 3.2rem; font-weight: 900; color: #111827; line-height: 1.1; margin-bottom: 18px; letter-spacing: -1.5px; }
     .hero h1 span { color: #2563eb; }
-    .hero-sub { font-size: 1.2rem; color: #6b7280; margin-bottom: 40px; line-height: 1.65; max-width: 560px; margin-left: auto; margin-right: auto; }
-    .hero-cta-sub { color: #9ca3af; font-size: 0.8rem; margin-top: 10px; }
+    .hero-sub { font-size: 1.05rem; color: #6b7280; margin-bottom: 32px; line-height: 1.65; }
+    .hero-cta-sub { color: #9ca3af; font-size: 0.78rem; margin-top: 8px; }
+    .hero-visual { position: relative; }
+    .hero-cv-preview { background: white; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.12); overflow: hidden; border: 1px solid #e5e7eb; transform: perspective(1000px) rotateY(-3deg); }
+    .hero-cv-sidebar { background: #1e3a5f; padding: 20px 16px; }
+    .hero-cv-foto { width: 52px; height: 52px; border-radius: 50%; background: rgba(255,255,255,0.15); margin: 0 auto 10px; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
+    .hero-cv-nombre { color: white; font-weight: 700; font-size: 0.8rem; text-align: center; margin-bottom: 14px; }
+    .hero-cv-label { font-size: 0.55rem; color: rgba(255,255,255,0.5); text-transform: uppercase; letter-spacing: 1px; font-weight: 700; margin-bottom: 5px; }
+    .hero-cv-dato { font-size: 0.65rem; color: rgba(255,255,255,0.75); margin-bottom: 4px; }
+    .hero-cv-tag { display: inline-block; background: rgba(255,255,255,0.12); color: rgba(255,255,255,0.9); padding: 2px 7px; border-radius: 8px; font-size: 0.6rem; margin: 2px 1px; }
+    .hero-cv-main { padding: 18px 16px; background: #fafbff; }
+    .hero-cv-main-nombre { font-size: 1rem; font-weight: 800; color: #111827; margin-bottom: 3px; }
+    .hero-cv-divider { width: 28px; height: 3px; background: #1e3a5f; margin-bottom: 8px; border-radius: 2px; }
+    .hero-cv-perfil { font-size: 0.65rem; color: #6b7280; line-height: 1.6; margin-bottom: 10px; }
+    .hero-cv-section { font-size: 0.55rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: #1e3a5f; border-bottom: 1px solid #e5e7eb; padding-bottom: 3px; margin-bottom: 7px; }
+    .hero-cv-cargo { font-size: 0.7rem; font-weight: 700; color: #111827; }
+    .hero-cv-empresa { font-size: 0.62rem; color: #1e3a5f; margin-bottom: 3px; }
+    .hero-cv-logro { font-size: 0.6rem; color: #6b7280; margin-left: 8px; position: relative; margin-bottom: 2px; }
+    .hero-cv-logro::before { content: '▸'; position: absolute; left: -8px; color: #1e3a5f; font-size: 0.5rem; }
+    .hero-badge-float { position: absolute; top: -12px; right: -12px; background: #22c55e; color: white; padding: 8px 14px; border-radius: 10px; font-size: 0.75rem; font-weight: 700; box-shadow: 0 4px 12px rgba(34,197,94,0.3); white-space: nowrap; }
 
     /* TRUST BAR */
     .trust-bar { background: #f9fafb; border-top: 1px solid #f0f0f0; border-bottom: 1px solid #f0f0f0; padding: 16px 40px; display: flex; align-items: center; justify-content: center; gap: 40px; flex-wrap: wrap; }
@@ -313,8 +332,12 @@
     .faq-respuesta { font-size: 0.88rem; color: #6b7280; line-height: 1.7; margin-top: 10px; display: none; }
     .faq-item.abierto .faq-respuesta { display: block; }
 
+    @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
     @media (max-width: 768px) {
-      .hero h1 { font-size: 2.6rem; letter-spacing:-1.5px; }
+      .hero { padding: 80px 20px 48px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+      .hero h1 { font-size: 2.4rem; letter-spacing:-1px; }
+      .hero-visual { display: none; }
       .pasos { grid-template-columns: 1fr; }
       .cv-demo-container { grid-template-columns: 1fr; }
       .testimonios-grid { grid-template-columns: 1fr; }
@@ -340,43 +363,144 @@
 </nav>
 
 <section class="hero">
-  <div class="hero-content">
-    <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
-    <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span><br>en un CV que impresiona.</h1>
-    <p class="hero-sub">La IA transforma lo que escribes en un CV profesional listo para postular en Perú.</p>
-    <div style="max-width:600px;margin:0 auto 16px;">
-      <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 24px rgba(0,0,0,0.1);border:2px solid #e5e7eb;">
-        <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? Ej: Contador..." autocomplete="off"
-          style="flex:1;padding:18px 24px;border:none;outline:none;font-size:1rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
-          onkeydown="if(event.key==='Enter')irAlWizard()">
-        <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:18px 28px;background:#2563eb;color:white;border:none;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
+  <div class="hero-inner">
+    <!-- Columna izquierda -->
+    <div class="hero-content">
+      <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
+      <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span> en un CV que impresiona.</h1>
+      <p class="hero-sub">La IA transforma lo que escribes en un CV profesional listo para postular en Perú.</p>
+      <div style="margin-bottom:8px;">
+        <div style="display:flex;gap:0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 4px 20px rgba(0,0,0,0.1);border:2px solid #e5e7eb;">
+          <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas?" autocomplete="off"
+            style="flex:1;padding:15px 18px;border:none;outline:none;font-size:0.95rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
+            onkeydown="if(event.key==='Enter')irAlWizard()">
+          <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:15px 22px;background:#2563eb;color:white;border:none;font-size:0.95rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
+        </div>
+        <p style="font-size:0.75rem;color:#9ca3af;margin-top:8px;">Opcional · Sin registrarte · Empieza en segundos</p>
+        <datalist id="lista-puestos-hero">
+          <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
+          <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
+          <option value="Asistente contable"><option value="Analista contable"><option value="Analista financiero">
+          <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
+          <option value="Asistente logístico"><option value="Analista de logística"><option value="Almacenero">
+          <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
+          <option value="Analista de marketing"><option value="Community manager"><option value="Analista de marketing digital">
+          <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Ingeniero de software">
+          <option value="Soporte técnico"><option value="Analista de datos">
+          <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
+          <option value="Enfermera"><option value="Técnico en enfermería"><option value="Médico general">
+          <option value="Docente de primaria"><option value="Docente de secundaria">
+          <option value="Abogado"><option value="Cajero"><option value="Practicante profesional">
+        </datalist>
       </div>
-      <p style="font-size:0.78rem;color:#9ca3af;margin-top:10px;text-align:center;">Opcional — puedes dejarlo en blanco y continuar</p>
-      <datalist id="lista-puestos-hero">
-        <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
-        <option value="Secretaria ejecutiva"><option value="Recepcionista"><option value="Contador general">
-        <option value="Asistente contable"><option value="Analista contable"><option value="Analista financiero">
-        <option value="Analista de recursos humanos"><option value="Asistente de recursos humanos">
-        <option value="Asistente logístico"><option value="Analista de logística"><option value="Almacenero">
-        <option value="Ejecutivo de ventas"><option value="Asesor comercial"><option value="Vendedor">
-        <option value="Analista de marketing"><option value="Community manager"><option value="Analista de marketing digital">
-        <option value="Analista de sistemas"><option value="Desarrollador web"><option value="Ingeniero de software">
-        <option value="Soporte técnico"><option value="Analista de datos">
-        <option value="Ingeniero civil"><option value="Ingeniero industrial"><option value="Ingeniero de sistemas">
-        <option value="Residente de obra"><option value="Supervisor de obra">
-        <option value="Médico general"><option value="Médico especialista"><option value="Enfermera"><option value="Técnico en enfermería">
-        <option value="Obstetra"><option value="Químico farmacéutico"><option value="Nutricionista"><option value="Psicólogo">
-        <option value="Odontólogo"><option value="Tecnólogo médico">
-        <option value="Docente de primaria"><option value="Docente de secundaria"><option value="Profesor de inglés">
-        <option value="Abogado"><option value="Asistente legal">
-        <option value="Cajero"><option value="Practicante profesional"><option value="Practicante pre-profesional">
-      </datalist>
+      <div style="display:flex;align-items:center;gap:20px;flex-wrap:wrap;margin-top:16px;">
+        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">⚡ <span>Listo en 5 min</span></div>
+        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">✅ <span>Diseño profesional</span></div>
+        <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🇵🇪 <span>Hecho para Perú</span></div>
+      </div>
     </div>
-    <div class="hero-cta-sub">Sin registrarte — empieza en segundos</div>
-    <div style="margin-top:16px;display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;">
-      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">⚡ <span>Listo en 5 minutos</span></div>
-      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">✅ <span>Diseño profesional</span></div>
-      <div style="color:#6b7280;font-size:0.82rem;display:flex;align-items:center;gap:6px;">🇵🇪 <span>Hecho para Perú</span></div>
+
+    <!-- Columna derecha: CV demo -->
+    <div class="hero-visual">
+      <!-- FASE 1: Juan escribe -->
+      <div id="demo-fase-1" style="background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:20px;transition:opacity 0.5s;">
+        <div style="font-size:0.7rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Juan escribe sus datos</div>
+        <div style="background:#f9fafb;border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid #f0f0f0;">
+          <div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">Cargo</div>
+          <div style="font-size:0.85rem;color:#374151;">Vendedor en Saga Falabella</div>
+        </div>
+        <div style="background:#f9fafb;border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid #f0f0f0;">
+          <div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">Logros</div>
+          <div style="font-size:0.82rem;color:#6b7280;font-style:italic;line-height:1.5;">"atendía clientes, vendía ropa, llegaba a mi meta cada mes"</div>
+        </div>
+        <div style="background:#f9fafb;border-radius:8px;padding:12px;border:1px solid #f0f0f0;">
+          <div style="font-size:0.7rem;color:#9ca3af;margin-bottom:4px;">Educación</div>
+          <div style="font-size:0.85rem;color:#374151;">Administración — UPN</div>
+        </div>
+        <div style="margin-top:14px;display:flex;align-items:center;gap:8px;justify-content:center;">
+          <div style="width:8px;height:8px;border-radius:50%;background:#2563eb;animation:pulse 1s infinite;"></div>
+          <span style="font-size:0.75rem;color:#6b7280;">La IA está procesando...</span>
+        </div>
+      </div>
+
+      <!-- FASE 2: CV generado -->
+      <div id="demo-fase-2" style="display:none;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;overflow:hidden;opacity:0;transition:opacity 0.5s;">
+        <div style="display:grid;grid-template-columns:130px 1fr;">
+          <div class="hero-cv-sidebar">
+            <div class="hero-cv-foto">👤</div>
+            <div class="hero-cv-nombre">Carlos Mendoza</div>
+            <div class="hero-cv-label">Contacto</div>
+            <div class="hero-cv-dato">📧 carlos@gmail.com</div>
+            <div class="hero-cv-dato">📍 Lima, Perú</div>
+            <div class="hero-cv-label" style="margin-top:10px;">Habilidades</div>
+            <div><span class="hero-cv-tag">Ventas</span><span class="hero-cv-tag">CRM</span><span class="hero-cv-tag">Retail</span><span class="hero-cv-tag">Atención al cliente</span></div>
+          </div>
+          <div class="hero-cv-main">
+            <div class="hero-cv-main-nombre">Carlos Mendoza</div>
+            <div class="hero-cv-divider"></div>
+            <div class="hero-cv-perfil">Ejecutivo de ventas con experiencia en retail de moda. Orientado a resultados con sólidas habilidades de atención al cliente.</div>
+            <div class="hero-cv-section">Experiencia Laboral</div>
+            <div>
+              <div class="hero-cv-cargo">Ejecutivo de Ventas</div>
+              <div class="hero-cv-empresa">Saga Falabella · 2021 - Presente</div>
+              <div class="hero-cv-logro">Superé meta mensual en promedio 118%</div>
+              <div class="hero-cv-logro">Gestioné +80 clientes diarios</div>
+              <div class="hero-cv-logro">Optimicé tiempos en caja reduciendo espera</div>
+            </div>
+            <div class="hero-cv-section" style="margin-top:8px;">Educación</div>
+            <div class="hero-cv-cargo">Administración de Empresas</div>
+            <div class="hero-cv-empresa">UPN · En curso</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- FASE 3: Score -->
+      <div id="demo-fase-3" style="display:none;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:20px;opacity:0;transition:opacity 0.5s;">
+        <div style="display:grid;grid-template-columns:130px 1fr;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;margin-bottom:16px;">
+          <div style="background:#1e3a5f;padding:14px 10px;">
+            <div style="width:40px;height:40px;border-radius:50%;background:rgba(255,255,255,0.15);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1rem;">👤</div>
+            <div style="color:white;font-size:0.7rem;font-weight:700;text-align:center;margin-bottom:8px;">Carlos Mendoza</div>
+            <div style="background:rgba(255,255,255,0.1);border-radius:4px;padding:4px 6px;margin-bottom:4px;"><div style="font-size:0.55rem;color:rgba(255,255,255,0.5);">HABILIDADES</div><div style="display:flex;flex-wrap:wrap;gap:2px;margin-top:3px;"><span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);padding:1px 5px;border-radius:4px;font-size:0.55rem;">Ventas</span><span style="background:rgba(255,255,255,0.12);color:rgba(255,255,255,0.9);padding:1px 5px;border-radius:4px;font-size:0.55rem;">CRM</span></div></div>
+          </div>
+          <div style="padding:12px;background:#fafbff;">
+            <div style="font-size:0.85rem;font-weight:800;color:#111827;">Carlos Mendoza</div>
+            <div style="width:20px;height:2px;background:#1e3a5f;margin:4px 0 6px;"></div>
+            <div style="font-size:0.6rem;color:#6b7280;line-height:1.5;margin-bottom:6px;">Ejecutivo de ventas con experiencia en retail...</div>
+            <div style="font-size:0.55rem;font-weight:700;color:#1e3a5f;border-bottom:1px solid #e5e7eb;padding-bottom:2px;margin-bottom:4px;">EXPERIENCIA</div>
+            <div style="font-size:0.62rem;font-weight:700;color:#111827;">Ejecutivo de Ventas</div>
+            <div style="font-size:0.55rem;color:#1e3a5f;">Saga Falabella · 2021</div>
+            <div style="font-size:0.55rem;color:#6b7280;margin-left:6px;">▸ Superé meta mensual en 118%</div>
+          </div>
+        </div>
+        <!-- Score -->
+        <div style="background:#f0f7ff;border-radius:10px;padding:14px;border:1px solid #bfdbfe;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div style="position:relative;width:56px;height:56px;flex-shrink:0;">
+              <svg viewBox="0 0 56 56" style="width:56px;height:56px;transform:rotate(-90deg);">
+                <circle cx="28" cy="28" r="22" fill="none" stroke="#e5e7eb" stroke-width="5"/>
+                <circle cx="28" cy="28" r="22" fill="none" stroke="#2563eb" stroke-width="5" stroke-dasharray="138" stroke-dashoffset="28" stroke-linecap="round"/>
+              </svg>
+              <div style="position:absolute;top:50%;left:50%;transform:translate(-50%,-50%);text-align:center;">
+                <div style="font-size:1rem;font-weight:900;color:#111827;line-height:1;">80</div>
+                <div style="font-size:0.45rem;color:#9ca3af;">/100</div>
+              </div>
+            </div>
+            <div style="flex:1;">
+              <div style="font-size:0.8rem;font-weight:700;color:#111827;margin-bottom:4px;">TalentIA Score · Vendedor</div>
+              <div style="background:#e5e7eb;border-radius:4px;height:4px;margin-bottom:6px;"><div style="width:80%;height:100%;background:#2563eb;border-radius:4px;"></div></div>
+              <div style="font-size:0.7rem;color:#15803d;font-weight:600;">👍 Buen perfil para este puesto</div>
+            </div>
+          </div>
+          <div style="margin-top:10px;padding-top:10px;border-top:1px solid #bfdbfe;">
+            <div style="font-size:0.72rem;font-weight:700;color:#1e40af;margin-bottom:6px;">Lo que tienes a favor:</div>
+            <div style="font-size:0.7rem;color:#374151;margin-bottom:3px;">✅ Experiencia directa en ventas retail</div>
+            <div style="font-size:0.7rem;color:#374151;margin-bottom:3px;">✅ Historial de cumplimiento de metas</div>
+            <div style="background:#f0f4ff;border-radius:6px;padding:8px;margin-top:8px;text-align:center;border:1px dashed #bfdbfe;">
+              <div style="font-size:0.68rem;color:#6b7280;">🔒 Ver recomendaciones completas</div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   </div>
 </section>
@@ -709,6 +833,33 @@
   } else {
     mostrarSiguienteDemo();
   }
+
+  // Demo animada 3 fases
+  (function(){
+    const fases = ['demo-fase-1','demo-fase-2','demo-fase-3'];
+    let actual = 0;
+    function mostrarFase(idx){
+      fases.forEach((id,i)=>{
+        const el=document.getElementById(id);
+        if(!el)return;
+        if(i===idx){
+          el.style.display='block';
+          setTimeout(()=>el.style.opacity='1',50);
+        } else {
+          el.style.opacity='0';
+          setTimeout(()=>el.style.display='none',500);
+        }
+      });
+    }
+    function ciclo(){
+      actual=(actual+1)%fases.length;
+      mostrarFase(actual);
+      const tiempos=[3500,4000,4500];
+      setTimeout(ciclo,tiempos[actual]);
+    }
+    mostrarFase(0);
+    setTimeout(ciclo,3500);
+  })();
 
   function irAlWizard(){
     const cargo=document.getElementById('cargo-hero').value.trim();
