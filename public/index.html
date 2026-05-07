@@ -305,8 +305,8 @@
   </div>
   <div style="display:flex;align-items:center;gap:12px;">
     <div id="nav-usuario" style="display:none;align-items:center;gap:8px;">
-      <span id="nav-nombre-usuario" style="color:rgba(255,255,255,0.8);font-size:0.82rem;"></span>
-      <button onclick="cerrarSesion()" style="background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);color:white;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
+      <span id="nav-nombre-usuario" style="color:#374151;font-size:0.82rem;"></span>
+      <button onclick="cerrarSesion()" style="background:#f3f4f6;border:1px solid #e5e7eb;color:#374151;padding:6px 12px;border-radius:8px;font-size:0.78rem;cursor:pointer;">Salir</button>
     </div>
     <button style="color:white;font-size:0.82rem;font-weight:600;cursor:pointer;background:rgba(255,255,255,0.1);border:1px solid rgba(255,255,255,0.2);border-radius:8px;padding:6px 14px;display:none;" onclick="volverAlWizard()" id="nav-back">← Editar CV</button>
   </div>
@@ -340,17 +340,17 @@
       </div>
       <!-- PASO 0: INICIO -->
       <div class="step active" id="step-0">
-        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:rgba(255,255,255,0.55);text-decoration:none;margin-bottom:24px;">← Volver al inicio</a>
-        <p style="color:white;font-size:1.1rem;font-weight:700;margin-bottom:6px;text-align:center;">¡Hola! ¿Cómo te llamas?</p>
-        <p style="color:rgba(255,255,255,0.55);font-size:0.82rem;margin-bottom:20px;text-align:center;">Empieza escribiendo tu nombre y te guiamos paso a paso</p>
+        <a href="/" style="display:inline-flex;align-items:center;gap:4px;font-size:0.78rem;color:#9ca3af;text-decoration:none;margin-bottom:24px;">← Volver al inicio</a>
+        <p style="color:#111827;font-size:1.1rem;font-weight:700;margin-bottom:6px;text-align:center;">¡Hola! ¿Cómo te llamas?</p>
+        <p style="color:#6b7280;font-size:0.82rem;margin-bottom:20px;text-align:center;">Empieza escribiendo tu nombre y te guiamos paso a paso</p>
         <input type="text" id="nombre-inicio" placeholder="Ej: María García, Carlos Mendoza..." style="margin-bottom:8px;font-size:1rem;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
-        <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#3b82f6;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:20px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
+        <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;margin-bottom:20px;opacity:0.5;transition:opacity 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empecemos →</button>
         <div style="display:flex;align-items:center;gap:12px;margin-bottom:16px;">
-          <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
-          <span style="color:rgba(255,255,255,0.35);font-size:0.78rem;">o si ya tienes un CV</span>
-          <div style="flex:1;height:1px;background:rgba(255,255,255,0.1);"></div>
+          <div style="flex:1;height:1px;background:#e5e7eb;"></div>
+          <span style="color:#9ca3af;font-size:0.78rem;">o si ya tienes un CV</span>
+          <div style="flex:1;height:1px;background:#e5e7eb;"></div>
         </div>
-        <button onclick="document.getElementById('archivo-cv-inline').click()" style="width:100%;padding:12px;background:transparent;border:1.5px solid rgba(255,255,255,0.2);border-radius:10px;color:rgba(255,255,255,0.65);font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
+        <button onclick="document.getElementById('archivo-cv-inline').click()" style="width:100%;padding:12px;background:transparent;border:1.5px solid #e5e7eb;border-radius:10px;color:#6b7280;font-size:0.88rem;font-weight:600;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;display:flex;align-items:center;justify-content:center;gap:8px;">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
           Subir mi CV en PDF y la IA lo mejora
         </button>
@@ -393,7 +393,7 @@
       <!-- PASO PDF -->
       <div class="step" id="step-pdf">
         <input type="file" id="archivo-cv" accept=".pdf" style="display:none;" onchange="procesarCVSubido(this)">
-        <label style="font-size:0.88rem;font-weight:600;color:rgba(255,255,255,0.7);margin-bottom:8px;display:block;">Sube tu CV en PDF</label>
+        <label style="font-size:0.88rem;font-weight:600;color:#374151;margin-bottom:8px;display:block;">Sube tu CV en PDF</label>
         <div class="upload-zone" id="upload-zone-pdf" onclick="document.getElementById('archivo-cv').click()" style="margin-bottom:8px;">
           <div style="font-size:2rem;margin-bottom:8px;">📤</div>
           <div style="font-weight:700;color:white;font-size:0.9rem;margin-bottom:4px;">Haz clic para subir tu CV</div>
@@ -1338,8 +1338,8 @@
 
   function validarPaso(){
     if(pasoActual===0){if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(document.getElementById('email').value.trim())){mostrarError('Email inválido','Ingresa un email válido.');return false;}}
-    if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
-    if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
+    if(pasoActual===2&&modoExperiencia==='con'&&trabajosData.length>0&&trabajosData.some(t=>t.cargo.trim()||t.empresa.trim())&&!trabajosData.some(t=>t.cargo.trim()&&t.empresa.trim())){mostrarError('Trabajo incompleto','Completa el cargo y empresa, o elimínalo para continuar.');return false;}
+    if(pasoActual===2&&modoExperiencia==='sin'&&proyectosData.length>0&&proyectosData.some(p=>p.nombre.trim())&&!proyectosData.some(p=>p.nombre.trim())){mostrarError('Práctica incompleta','Complétala o elimínala para continuar.');return false;}
     // Educación es completamente opcional — no validar
     if(pasoActual===3&&habilidadesData.length===0){
       document.getElementById('error-toast-titulo').textContent='¿Continuar sin habilidades técnicas?';
