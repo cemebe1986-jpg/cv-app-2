@@ -192,14 +192,14 @@
 
     /* HERO — fondo blanco con acento azul */
     .hero { background: white; padding: 90px 60px 56px; border-bottom: 1px solid #f0f4ff; }
-    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
-    .hero-content { text-align: left; padding-top: 8px; }
-    .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 20px; border: 1px solid #bfdbfe; }
-    .hero h1 { font-size: 5rem; font-weight: 900; color: #111827; line-height: 1.02; margin-bottom: 16px; letter-spacing: -2.5px; }
+    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: stretch; }
+    .hero-content { text-align: left; display: flex; flex-direction: column; justify-content: center; }
+    .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 20px; border: 1px solid #bfdbfe; align-self: flex-start; }
+    .hero h1 { font-size: 5rem; font-weight: 900; color: #111827; line-height: 1.02; margin-bottom: 0; letter-spacing: -2.5px; flex: 1; }
     .hero h1 span { color: #2563eb; }
-    .hero-sub { font-size: 1rem; color: #6b7280; line-height: 1.65; }
+    .hero-sub { font-size: 1rem; color: #6b7280; line-height: 1.65; margin-top: 16px; }
     .hero-cta-sub { color: #9ca3af; font-size: 0.78rem; margin-top: 8px; }
-    .hero-visual { position: relative; }
+    .hero-visual { position: relative; display: flex; flex-direction: column; }
     .hero-cv-preview { background: white; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.12); overflow: hidden; border: 1px solid #e5e7eb; }
     .hero-cv-sidebar { background: #1e3a5f; padding: 24px 18px; }
     .hero-cv-foto { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.15); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
@@ -362,17 +362,20 @@
 </nav>
 
 <section class="hero">
+  <!-- Badge centrado arriba -->
+  <div style="max-width:1200px;margin:0 auto 24px;text-align:left;">
+    <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
+  </div>
+
   <div class="hero-inner">
     <!-- Columna izquierda -->
     <div class="hero-content">
-      <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
       <h1>Tú pones tu experiencia.<br><span>Nosotros la convertimos</span> en un CV que impresiona.</h1>
-      <p class="hero-sub">La IA transforma lo que escribes en un CV profesional listo para postular en Perú.</p>
     </div>
 
     <!-- Columna derecha: CV demo -->
     <div class="hero-visual">
-      <div style="position:relative;min-height:520px;">
+      <div style="position:relative;height:100%;min-height:480px;">
         <!-- FASE 1 -->
         <div id="demo-fase-1" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:20px;opacity:1;transition:opacity 0.4s ease;">
           <div style="font-size:0.7rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Juan escribe sus datos</div>
@@ -504,6 +507,11 @@
         </div>
       </div>
     </div>
+  </div>
+
+  <!-- Subtítulo centrado debajo de ambas columnas -->
+  <div style="max-width:1200px;margin:20px auto 0;text-align:center;">
+    <p style="font-size:1.05rem;color:#6b7280;line-height:1.65;">La IA transforma lo que escribes en un CV profesional listo para postular en Perú.</p>
   </div>
 
   <!-- CTA centrado debajo de ambas columnas -->
