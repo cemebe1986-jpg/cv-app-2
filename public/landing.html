@@ -192,7 +192,7 @@
 
     /* HERO — fondo blanco con acento azul */
     .hero { background: white; padding: 90px 60px 56px; border-bottom: 1px solid #f0f4ff; }
-    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: start; }
+    .hero-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: 1fr 1fr; gap: 48px; align-items: center; }
     .hero-content { text-align: left; padding-top: 8px; }
     .hero-badge { display: inline-block; background: #eff6ff; color: #2563eb; padding: 6px 16px; border-radius: 20px; font-size: 0.82rem; font-weight: 700; margin-bottom: 20px; border: 1px solid #bfdbfe; }
     .hero h1 { font-size: 5rem; font-weight: 900; color: #111827; line-height: 1.02; margin-bottom: 16px; letter-spacing: -2.5px; }
@@ -336,8 +336,7 @@
     @media (max-width: 768px) {
       .hero { padding: 80px 20px 48px; }
       .hero-inner { grid-template-columns: 1fr; gap: 32px; }
-      .hero h1 { font-size: 2.8rem; letter-spacing:-1.5px; }
-      .hero-visual { display: none; }
+      .hero h1 { font-size: 2.6rem; letter-spacing:-1.5px; }
       .pasos { grid-template-columns: 1fr; }
       .cv-demo-container { grid-template-columns: 1fr; }
       .testimonios-grid { grid-template-columns: 1fr; }
@@ -510,16 +509,16 @@
   <!-- CTA centrado debajo de ambas columnas -->
   <div style="max-width:760px;margin:40px auto 0;text-align:center;">
     <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
-      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? Ej: Contador, Analista de Marketing, Vendedor..." autocomplete="off"
+      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿A qué puesto postulas? (opcional)" autocomplete="off"
         style="flex:1;padding:20px 26px;border:none;outline:none;font-size:1.05rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
         onkeydown="if(event.key==='Enter')irAlWizard()">
-      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 32px;background:#2563eb;color:white;border:none;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
+      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 32px;background:#2563eb;color:white;border:none;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV gratis →</button>
     </div>
-    <p style="font-size:0.78rem;color:#9ca3af;margin-top:10px;">Opcional · Sin registrarte · Empieza en segundos</p>
-    <div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:12px;">
-      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">⚡ <span>Listo en 5 min</span></div>
-      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">✅ <span>Diseño profesional</span></div>
-      <div style="color:#6b7280;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🇵🇪 <span>Hecho para Perú</span></div>
+    <div style="display:flex;align-items:center;justify-content:center;gap:24px;flex-wrap:wrap;margin-top:14px;">
+      <div style="color:#9ca3af;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🔓 <span>Sin registrarte</span></div>
+      <div style="color:#9ca3af;font-size:0.8rem;display:flex;align-items:center;gap:5px;">⚡ <span>Listo en 5 min</span></div>
+      <div style="color:#9ca3af;font-size:0.8rem;display:flex;align-items:center;gap:5px;">✅ <span>Diseño profesional</span></div>
+      <div style="color:#9ca3af;font-size:0.8rem;display:flex;align-items:center;gap:5px;">🇵🇪 <span>Hecho para Perú</span></div>
     </div>
     <datalist id="lista-puestos-hero">
       <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
