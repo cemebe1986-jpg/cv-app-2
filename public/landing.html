@@ -199,7 +199,7 @@
     .hero h1 span { color: #2563eb; }
     .hero-sub { font-size: 1rem; color: #6b7280; line-height: 1.65; margin-top: 16px; }
     .hero-cta-sub { color: #9ca3af; font-size: 0.78rem; margin-top: 8px; }
-    .hero-visual { position: relative; display: flex; flex-direction: column; }
+    .hero-visual { position: relative; display: flex; flex-direction: column; min-height: 480px; }
     .hero-cv-preview { background: white; border-radius: 12px; box-shadow: 0 8px 40px rgba(0,0,0,0.12); overflow: hidden; border: 1px solid #e5e7eb; }
     .hero-cv-sidebar { background: #1e3a5f; padding: 24px 18px; }
     .hero-cv-foto { width: 60px; height: 60px; border-radius: 50%; background: rgba(255,255,255,0.15); margin: 0 auto 12px; display: flex; align-items: center; justify-content: center; font-size: 1.5rem; }
@@ -362,8 +362,8 @@
 </nav>
 
 <section class="hero">
-  <!-- Badge centrado arriba -->
-  <div style="max-width:1200px;margin:0 auto 24px;text-align:left;">
+  <!-- Badge centrado entre título y demo -->
+  <div style="max-width:1200px;margin:0 auto 24px;text-align:center;">
     <div class="hero-badge">⚡ Tu CV profesional en minutos</div>
   </div>
 
@@ -377,7 +377,7 @@
     <div class="hero-visual">
       <div style="position:relative;height:100%;min-height:480px;">
         <!-- FASE 1 -->
-        <div id="demo-fase-1" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:20px;opacity:1;transition:opacity 0.4s ease;">
+        <div id="demo-fase-1" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:20px;opacity:1;transition:opacity 0.4s ease;overflow:hidden;">
           <div style="font-size:0.7rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Juan escribe sus datos</div>
           <div style="background:#f9fafb;border-radius:8px;padding:12px;margin-bottom:8px;border:1px solid #f0f0f0;">
             <div style="font-size:0.68rem;color:#9ca3af;margin-bottom:3px;">Cargo</div>
@@ -398,7 +398,7 @@
         </div>
 
         <!-- FASE 2 -->
-        <div id="demo-fase-2" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;overflow:hidden;opacity:0;transition:opacity 0.4s ease;pointer-events:none;">
+        <div id="demo-fase-2" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;overflow:hidden;opacity:0;transition:opacity 0.4s ease;pointer-events:none;">
           <div style="display:grid;grid-template-columns:130px 1fr;">
             <div class="hero-cv-sidebar">
               <div class="hero-cv-foto">👤</div>
@@ -429,7 +429,7 @@
         </div>
 
         <!-- FASE 3 -->
-        <div id="demo-fase-3" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:18px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;">
+        <div id="demo-fase-3" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:18px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;overflow:auto;">
           <div style="display:grid;grid-template-columns:130px 1fr;gap:0;border-radius:8px;overflow:hidden;border:1px solid #e5e7eb;margin-bottom:14px;">
             <div style="background:#1e3a5f;padding:14px 10px;">
               <div style="width:36px;height:36px;border-radius:50%;background:rgba(255,255,255,0.15);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:1rem;">👤</div>
@@ -479,7 +479,7 @@
         </div>
 
         <!-- FASE 4: Recomendaciones desbloqueadas -->
-        <div id="demo-fase-4" style="position:absolute;top:0;left:0;right:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:18px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;">
+        <div id="demo-fase-4" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:18px;opacity:0;transition:opacity 0.4s ease;pointer-events:none;overflow:auto;">
           <div style="display:flex;align-items:center;gap:8px;margin-bottom:14px;padding-bottom:12px;border-bottom:1px solid #f0f0f0;">
             <div style="width:28px;height:28px;background:#22c55e;border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:0.85rem;flex-shrink:0;">✅</div>
             <div>
