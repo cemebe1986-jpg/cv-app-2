@@ -1086,8 +1086,9 @@
 
     // Si hay análisis de compatibilidad IA — mostrar justificación detallada
     const consejo = document.getElementById('score-consejo');
-    // Bloquear recomendaciones si no ha pagado — verificar en tiempo real
-    const haPagado = window._haPagado === true;
+    // Bloquear recomendaciones si no ha pagado
+    // IMPORTANTE: usar _cvActualPagado (pagó por este CV) no _haPagado (pagó alguna vez)
+    const haPagado = window._cvActualPagado === true;
     if(compIA && (compIA.fortalezas?.length || compIA.brechas?.length)){
       const fortalezas = (compIA.fortalezas||[]).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
       const brechas = (compIA.brechas||[]).map(b=>`<li style="margin-bottom:4px;">⚠️ ${b}</li>`).join('');
@@ -1906,6 +1907,7 @@
       }
 
       window._haPagado = data.pagado || false;
+      window._cvActualPagado = (data.pagado && data.cvActualPagado) || false;
       if(data.pagado&&data.tieneCv&&!paramPago){
         try{const cvR=await fetch(`/recuperar-cv?uid=${window.usuarioActual.uid}`);if(cvR.ok){cvGuardadoCache=await cvR.json();const sidebar=document.getElementById('sidebar-cv');if(sidebar){sidebar.style.display='block';document.getElementById('sidebar-nombre-cv').textContent=cvGuardadoCache?.cvData?.nombre||'Tu CV';document.getElementById('sidebar-plan-cv').textContent=`Plan ${data.plan||'Básico'} activo · Descarga sin marca de agua`;}}}catch(e){}
       }
