@@ -334,8 +334,14 @@
 
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
     @media (max-width: 768px) {
-      .hero { padding: 80px 20px 48px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 32px; }
+      .hero { padding: 72px 20px 40px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+      .hero-content { order: 1; }
+      .hero-visual { order: 2; height: auto !important; min-height: 300px; }
+      .hero-visual > div { position: relative !important; height: 320px !important; }
+      .nav-cta { padding: 8px 16px; font-size: 0.82rem; }
+      .hero { padding-bottom: 40px !important; }
+
       .hero h1 { font-size: 2.6rem; letter-spacing:-1.5px; }
       .pasos { grid-template-columns: 1fr; }
       .cv-demo-container { grid-template-columns: 1fr; }
@@ -364,7 +370,7 @@
 <section class="hero">
   <!-- Badge centrado entre título y demo -->
   <div style="max-width:1200px;margin:0 auto 24px;text-align:center;">
-    <div class="hero-badge">✍️ IA especializada en mejorar CVs</div>
+    <div class="hero-badge" style="font-size:0.75rem;padding:4px 14px;margin-bottom:0;">✍️ IA especializada en mejorar CVs</div>
   </div>
 
   <div class="hero-inner">
@@ -378,22 +384,21 @@
       <div style="position:relative;height:520px;">
         <!-- FASE 1 -->
         <div id="demo-fase-1" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:24px;opacity:1;transition:opacity 0.4s ease;overflow:hidden;display:flex;flex-direction:column;gap:10px;">
-          <div style="font-size:0.72rem;font-weight:700;color:#9ca3af;text-transform:uppercase;letter-spacing:0.5px;">Así funciona TalentIA</div>
+          <div style="font-size:0.72rem;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.5px;">Así funciona TalentIA</div>
 
           <!-- Antes -->
-          <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:14px;">
-            <div style="font-size:0.65rem;font-weight:700;color:#b91c1c;margin-bottom:8px;">❌ Lo que Juan escribe</div>
-            <div style="font-size:0.85rem;color:#6b7280;font-style:italic;line-height:1.6;">"atendía clientes, vendía ropa, llegaba a mi meta cada mes"</div>
+          <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;">
+            <div style="font-size:0.65rem;font-weight:700;color:#dc2626;margin-bottom:6px;">❌ Lo que Juan escribe</div>
+            <div style="font-size:0.82rem;color:#4b5563;font-style:italic;line-height:1.5;">"atendía clientes, vendía ropa, llegaba a mi meta"</div>
           </div>
 
-          <div style="text-align:center;font-size:1.2rem;color:#2563eb;font-weight:700;">↓ IA</div>
+          <div style="text-align:center;font-size:1rem;color:#2563eb;font-weight:700;padding:2px 0;">↓ IA especializada</div>
 
           <!-- Después -->
-          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;">
-            <div style="font-size:0.65rem;font-weight:700;color:#15803d;margin-bottom:8px;">✅ Lo que genera TalentIA</div>
-            <div style="font-size:0.85rem;color:#374151;line-height:1.7;font-weight:500;">Ejecutivo de Ventas · Saga Falabella</div>
-            <div style="font-size:0.82rem;color:#4b5563;line-height:1.7;margin-top:4px;">▸ Ejecuté ventas en piso retail cumpliendo metas mensuales</div>
-            <div style="font-size:0.82rem;color:#4b5563;line-height:1.7;">▸ Brindé atención al cliente en entorno de alto volumen</div>
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 14px;">
+            <div style="font-size:0.65rem;font-weight:700;color:#16a34a;margin-bottom:6px;">✅ TalentIA lo redacta</div>
+            <div style="font-size:0.82rem;color:#111827;line-height:1.6;font-weight:600;">Ejecutivo de Ventas · Saga Falabella</div>
+            <div style="font-size:0.8rem;color:#374151;line-height:1.6;margin-top:3px;">▸ Ejecuté ventas en piso retail cumpliendo metas mensuales</div>
           </div>
 
           <div style="flex:1;display:flex;align-items:flex-end;">
@@ -522,12 +527,12 @@
     </div>
   </div>
 
-  <!-- Subtítulo centrado debajo de ambas columnas -->
+  <!-- Subtítulo centrado debajo de ambas columnas (desktop) -->
   <div style="max-width:680px;margin:20px auto 0;text-align:center;">
     <p style="font-size:1.05rem;color:#4b5563;font-weight:500;line-height:1.65;">Tengas CV o no, la IA te ayuda a redactarlo profesionalmente en minutos.</p>
   </div>
 
-  <!-- CTA centrado debajo de ambas columnas -->
+  <!-- CTA centrado debajo de ambas columnas (desktop) -->
   <div style="max-width:760px;margin:40px auto 0;text-align:center;">
     <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
       <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="¿Qué puesto quieres conseguir? (opcional)" autocomplete="off"
@@ -555,18 +560,17 @@
 
 <!-- TRUST BAR -->
 <div class="trust-bar">
-  <div class="trust-item" style="font-weight:600;">👁️ <span>Previsualiza gratis — pagas solo si descargas</span></div>
+  <div class="trust-item">✅ <span>Previsualiza gratis</span></div>
   <div class="trust-item">⚡ <span>Listo en 5 minutos</span></div>
   <div class="trust-item">🇵🇪 <span>Formato para el mercado peruano</span></div>
   <div class="trust-item">✍️ <span>IA especializada en mejorar CVs</span></div>
-  <div class="trust-item">🔒 <span>Sin suscripción</span></div>
 </div>
 
 <!-- BLOQUE TRANSFORMACIÓN IA -->
 <section style="background:#f0f7ff;border-top:1px solid #dbeafe;border-bottom:1px solid #dbeafe;padding:48px 40px;">
   <div style="max-width:820px;margin:0 auto;">
     <div style="text-align:center;margin-bottom:28px;">
-      <div style="display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 18px;border-radius:20px;font-size:0.8rem;font-weight:800;border:1.5px solid #93c5fd;margin-bottom:12px;">Así mejora TalentIA tu experiencia</div>
+      <div style="display:inline-block;background:#dbeafe;color:#1d4ed8;padding:6px 18px;border-radius:20px;font-size:0.8rem;font-weight:800;border:1.5px solid #93c5fd;margin-bottom:14px;">Así mejora TalentIA tu experiencia</div>
       <h2 style="font-size:1.5rem;font-weight:800;color:#111827;letter-spacing:-0.3px;margin:0;">IA especializada en mejorar CVs — así transforma tu experiencia.</h2>
     </div>
 
@@ -606,7 +610,7 @@
 
     <div style="text-align:center;margin-top:24px;">
       <a href="/crear" style="display:inline-flex;align-items:center;gap:8px;background:#2563eb;color:white;padding:14px 32px;border-radius:10px;text-decoration:none;font-size:1rem;font-weight:700;">Mejorar mi experiencia →</a>
-      <p style="color:#6b7280;font-size:0.78rem;margin-top:10px;">Gratis hasta que decidas descargar · Sin suscripción · Sin sorpresas</p>
+
     </div>
   </div>
 </section>
