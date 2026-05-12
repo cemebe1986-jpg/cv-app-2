@@ -1336,6 +1336,11 @@
   function volverAlWizard(){
     document.getElementById('cv-preview').style.display='none';
     document.getElementById('wizard-box').style.display='block';
+    // Restaurar panel y layout
+    const panelElR=document.getElementById('wizard-panel');
+    if(panelElR) panelElR.style.display='';
+    const layoutElR=document.querySelector('.wizard-layout');
+    if(layoutElR){layoutElR.style.gridTemplateColumns='';layoutElR.style.maxWidth='';}
     pasoActual=PASOS.length-1;
     mostrarPaso(pasoActual);
     window.scrollTo({top:0,behavior:'smooth'});
@@ -2019,6 +2024,8 @@
       mostrarTalentiaScore(data.cv,habilidadesData,blandasData,fotoBase64,oferta);
       // Ocultar wizard y mostrar CV
       document.getElementById('wizard-box').style.display='none';
+      const panelEl=document.getElementById('wizard-panel');if(panelEl)panelEl.style.display='none';
+      const layoutEl=document.querySelector('.wizard-layout');if(layoutEl){layoutEl.style.gridTemplateColumns='1fr';layoutEl.style.maxWidth='1100px';}
       const cvRes=document.getElementById('cv-preview');if(cvRes)cvRes.style.display='block';
       setTimeout(ajustarEscalaCV,100);
       window.scrollTo({top:0,behavior:'smooth'});
