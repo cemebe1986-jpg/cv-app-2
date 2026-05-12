@@ -604,19 +604,30 @@
           <div id="chips-habilidades" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
           <button onclick="document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
         </div>
-        <label style="margin-top:8px;">Habilidades blandas</label>
-        <div style="display:flex;gap:10px;margin-bottom:12px;">
-          <input type="text" id="nueva-blanda" placeholder="Ej: Liderazgo, Trabajo en equipo..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarBlanda();}">
-          <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
-        </div>
-        <div id="lista-blandas" style="margin-bottom:12px;"></div>
-        <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
-          💡 Sugerir habilidades blandas con IA
-        </button>
-        <div id="blandas-ia-box" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:16px;">
-          <div style="font-size:0.78rem;font-weight:700;color:#2563eb;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
-          <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
-          <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
+        <!-- Habilidades blandas — collapsible -->
+        <div style="border:1px solid #e5e7eb;border-radius:12px;overflow:hidden;margin-top:8px;">
+          <div onclick="const b=document.getElementById('blandas-body');const open=b.style.display!=='none';b.style.display=open?'none':'block';this.querySelector('.blandas-arrow').textContent=open?'▼':'▲';" style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f9fafb;cursor:pointer;user-select:none;">
+            <div>
+              <span style="font-size:0.85rem;font-weight:700;color:#374151;">Habilidades blandas</span>
+              <span style="font-size:0.72rem;color:#9ca3af;margin-left:8px;">opcional</span>
+            </div>
+            <span class="blandas-arrow" style="color:#6b7280;font-size:0.8rem;">▼</span>
+          </div>
+          <div id="blandas-body" style="display:none;padding:14px 16px;border-top:1px solid #e5e7eb;">
+            <div style="display:flex;gap:10px;margin-bottom:12px;">
+              <input type="text" id="nueva-blanda" placeholder="Ej: Liderazgo, Trabajo en equipo..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarBlanda();}">
+              <button type="button" onclick="agregarBlanda()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
+            </div>
+            <div id="lista-blandas" style="margin-bottom:12px;"></div>
+            <button type="button" onclick="pedirIAConLogin(sugerirHabilidadesBlandas)" id="btn-sugerir-blandas" style="width:100%;padding:12px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:12px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
+              💡 Sugerir habilidades blandas con IA
+            </button>
+            <div id="blandas-ia-box" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:16px;margin-bottom:8px;">
+              <div style="font-size:0.78rem;font-weight:700;color:#2563eb;margin-bottom:10px;">💡 Toca para agregar — puedes elegir varias:</div>
+              <div id="chips-blandas" style="display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px;"></div>
+              <button onclick="document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';" style="padding:8px 16px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">✓ Listo, cerrar</button>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -1915,7 +1926,7 @@
     const btnAgregar=document.getElementById(`btn-sug-ia-${tid}`)?.previousElementSibling;
     if(btnAgregar)btnAgregar.parentElement.insertBefore(nuevoLogro,btnAgregar);
   }
-  function agregarBlanda(){const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
+  function agregarBlanda(){const body=document.getElementById('blandas-body');if(body&&body.style.display==='none'){body.style.display='block';const arrow=document.querySelector('.blandas-arrow');if(arrow)arrow.textContent='▲';}const input=document.getElementById('nueva-blanda'),n=input.value.trim();if(!n)return;if(!blandasData.find(b=>b.nombre===n))blandasData.push({nombre:n});input.value='';renderListaBlandas();input.focus();}
   function eliminarBlanda(i){blandasData.splice(i,1);renderListaBlandas();}
   function renderListaBlandas(){const el=document.getElementById('lista-blandas');if(!el)return;el.innerHTML=blandasData.map((b,i)=>`<div class="habilidad-item"><span class="habilidad-nombre">${b.nombre}</span><button class="habilidad-delete" onclick="eliminarBlanda(${i})">✕</button></div>`).join('');}
   function agregarHabilidad(){const input=document.getElementById('nueva-habilidad'),n=input.value.trim();if(!n)return;if(!habilidadesData.find(h=>h.nombre===n))habilidadesData.push({nombre:n});input.value='';renderListaHabilidades();input.focus();}
