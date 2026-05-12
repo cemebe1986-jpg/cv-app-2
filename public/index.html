@@ -885,23 +885,23 @@
       const valor = item.get();
       const hecho = !!valor;
       if(hecho) completados++;
-      const bgColor = hecho ? '#f0fdf4' : (item.optional && !hecho ? '#fafafa' : 'white');
-      const borderColor = hecho ? '#86efac' : (item.optional && !hecho ? '#f0f0f0' : '#e5e7eb');
-      const iconBg = hecho ? '#dcfce7' : '#f9fafb';
-      const iconBorder = hecho ? '#86efac' : '#e5e7eb';
-      const labelColor = hecho ? '#111827' : '#6b7280';
       const esOpcional = !!item.optional;
-      const badge = hecho ? '<span style="background:#dcfce7;color:#16a34a;font-size:0.65rem;font-weight:700;padding:2px 7px;border-radius:10px;">✓ listo</span>' : (esOpcional ? '<span style="color:#d1d5db;font-size:0.65rem;">opcional</span>' : '<span style="color:#9ca3af;font-size:0.65rem;">Por completar</span>');
+      const dot = hecho
+        ? '<span style="color:#16a34a;font-size:0.9rem;">✅</span>'
+        : (esOpcional
+            ? '<span style="color:#d1d5db;font-size:0.9rem;">⬜</span>'
+            : '<span style="color:#d1d5db;font-size:0.9rem;">⬜</span>');
+      const labelColor = hecho ? '#111827' : (esOpcional ? '#c4c4c4' : '#9ca3af');
+      const subtext = hecho && valor !== 'Lista'
+        ? '<div style="font-size:0.68rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">' + valor + '</div>'
+        : '';
 
-      return '<div style="display:flex;align-items:center;gap:10px;padding:9px 10px;background:' + bgColor + ';border:1px solid ' + borderColor + ';border-radius:10px;">' +
-        '<div style="width:26px;height:26px;border-radius:50%;background:' + iconBg + ';border:1.5px solid ' + iconBorder + ';display:flex;align-items:center;justify-content:center;font-size:0.75rem;flex-shrink:0;">' +
-          (hecho ? '✅' : item.icon) +
-        '</div>' +
+      return '<div style="display:flex;align-items:center;gap:8px;padding:6px 0;">' +
+        dot +
         '<div style="flex:1;min-width:0;">' +
-          '<div style="font-size:0.8rem;font-weight:' + (hecho?'700':'500') + ';color:' + labelColor + ';">' + item.label + '</div>' +
-          (hecho && valor !== 'Lista' ? '<div style="font-size:0.7rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + valor + '</div>' : '<div style="font-size:0.7rem;color:#9ca3af;">Por completar</div>') +
+          '<span style="font-size:0.8rem;font-weight:' + (hecho?'600':'400') + ';color:' + labelColor + ';">' + item.label + '</span>' +
+          subtext +
         '</div>' +
-        badge +
       '</div>';
     }).join('');
 
