@@ -322,7 +322,7 @@
   <div class="wizard" id="wizard-box">
     <div class="wizard-card">
       <div class="wizard-card-header" id="wizard-card-header">
-        <h2 id="wizard-titulo">IA especializada en mejorar CVs — tengas CV o no</h2>
+        <h2 id="wizard-titulo">Construyamos tu CV juntos — la IA mejora cada sección</h2>
         <div class="progress-bar" id="progress-bar-container" style="display:none;"><div class="progress-fill" id="progress-fill" style="width:0%"></div></div>
         <div class="progress-text" id="progress-text"></div>
       </div>
@@ -423,16 +423,19 @@
 
       <!-- PASO 1B: CONTACTO (primer paso del wizard) -->
       <div class="step" id="step-1b">
+        <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:10px;padding:10px 14px;margin-bottom:18px;font-size:0.8rem;color:#1e40af;font-weight:600;">
+          📄 Todo lo que completes aquí aparecerá en tu CV
+        </div>
         <label>Nombre completo *</label>
         <input type="text" id="nombre" placeholder="Juan Pérez García" onblur="validarCampoLive(this)" oninput="marcarProgreso(this)" style="font-size:1rem;margin-bottom:4px;">
         <div class="microcopy">Así aparecerá en tu CV profesional</div>
-        <label>Email *</label>
+        <label>Email * <span style="font-size:0.72rem;font-weight:400;color:#9ca3af;">— aparece en tu CV para que te contacten</span></label>
         <div style="position:relative;">
           <input type="email" id="email" placeholder="juan@gmail.com" onblur="validarCampoLive(this)" oninput="marcarProgreso(this);mostrarDominios(this)" onkeydown="navegarDominios(event)" autocomplete="off" style="margin-bottom:0;">
           <div id="email-dropdown" style="display:none;position:absolute;background:white;border:1.5px solid #e5e7eb;border-radius:12px;box-shadow:0 8px 24px rgba(0,0,0,0.1);z-index:9999;width:100%;top:calc(100% + 4px);left:0;overflow:hidden;"></div>
         </div>
         <div class="microcopy">📩 Para que los reclutadores te contacten</div>
-        <label>Teléfono</label>
+        <label>Teléfono <span style="font-size:0.72rem;font-weight:400;color:#9ca3af;">— aparece en tu CV</span></label>
         <div style="display:flex;gap:8px;margin-bottom:6px;">
           <select id="codigo-pais" onchange="detectarPaisPorCodigo()" style="width:140px;margin-bottom:0;flex-shrink:0;">
             <option value="+51">🇵🇪 +51</option><option value="+57">🇨🇴 +57</option><option value="+52">🇲🇽 +52</option><option value="+54">🇦🇷 +54</option><option value="+56">🇨🇱 +56</option><option value="+593">🇪🇨 +593</option><option value="+591">🇧🇴 +591</option>
@@ -444,7 +447,7 @@
         <select id="pais" onchange="actualizarCiudades()">
           <option value="PE">🇵🇪 Perú</option><option value="CO">🇨🇴 Colombia</option><option value="MX">🇲🇽 México</option><option value="AR">🇦🇷 Argentina</option><option value="CL">🇨🇱 Chile</option><option value="EC">🇪🇨 Ecuador</option><option value="BO">🇧🇴 Bolivia</option>
         </select>
-        <label>Ciudad</label>
+        <label>Ciudad <span style="font-size:0.72rem;font-weight:400;color:#9ca3af;">— aparece en tu CV</span></label>
         <select id="ciudad" style="margin-bottom:20px;"><option value="">Selecciona tu ciudad</option></select>
       </div>
       <!-- DATALISTS EDUCACIÓN -->
@@ -534,16 +537,16 @@
 
       <!-- PASO 3: EDUCACIÓN -->
       <div class="step" id="step-3">
-        <label>Educación *</label>
-        <p style="font-size:0.82rem;color:#6b7280;margin-bottom:16px;">Agrega cada estudio, curso o certificación.</p>
+        <label>¿Qué estudios van en tu CV? *</label>
+        <p style="font-size:0.82rem;color:#6b7280;margin-bottom:16px;">Agrega cada estudio, curso o certificación. Aparecerán en la sección de Educación de tu CV.</p>
         <div id="lista-educacion"></div>
         <button type="button" onclick="agregarEducacion()" style="width:100%;padding:12px;background:transparent;color:#2563eb;border:1.5px dashed #93c5fd;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar estudio o certificación</button>
       </div>
 
       <!-- PASO 4: HABILIDADES -->
       <div class="step" id="step-4">
-        <label>Habilidades técnicas *</label>
-        <p style="font-size:0.82rem;color:#6b7280;margin-bottom:12px;">Herramientas y tecnologías que dominas.</p>
+        <label>¿Qué habilidades destacas en tu CV? *</label>
+        <p style="font-size:0.82rem;color:#6b7280;margin-bottom:12px;">Herramientas y tecnologías que dominas. Aparecerán en tu CV como habilidades clave.</p>
         <div style="display:flex;gap:10px;margin-bottom:12px;">
           <input type="text" id="nueva-habilidad" list="lista-habilidades-tecnicas-sugeridas" placeholder="Ej: Excel, Python, SQL..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarHabilidad();}" autocomplete="off">
           <button type="button" onclick="agregarHabilidad()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
@@ -587,8 +590,8 @@
       <div class="step" id="step-5foto">
         <div style="text-align:center;margin-bottom:20px;">
           <div style="font-size:2rem;margin-bottom:8px;">📷</div>
-          <h3 style="font-size:1rem;font-weight:800;color:#111827;margin-bottom:6px;">¿Quieres agregar tu foto?</h3>
-          <p style="font-size:0.82rem;color:#6b7280;">Opcional. Fondo neutro · Máximo 2MB</p>
+          <h3 style="font-size:1rem;font-weight:800;color:#111827;margin-bottom:6px;">¿Con o sin foto en tu CV?</h3>
+          <p style="font-size:0.82rem;color:#6b7280;">Opcional pero recomendado en Perú. Fondo neutro · Máximo 2MB</p>
         </div>
         <label for="foto" id="foto-upload-zone" class="upload-zone" style="margin-bottom:12px;cursor:pointer;display:block;">
           <div style="font-size:2rem;margin-bottom:8px;">🤳</div>
@@ -741,7 +744,16 @@
     </div> <!-- cierre cv-scale-wrapper -->
 
           <div class="cv-actions">
-        <div id="estado-sin-login"><div style="text-align:center;padding:28px;background:#f0f7ff;border-radius:20px;border:2px solid #bfdbfe;"><div style="font-size:2.5rem;margin-bottom:10px;">🎉</div><h3 style="color:#1a1a2e;margin-bottom:8px;font-size:1.3rem;font-weight:800;">¡Tu CV está listo!</h3><p style="color:#0f3460;font-size:0.95rem;font-weight:700;margin-bottom:20px;">Inicia sesión para ver tus recomendaciones y descargarlo.</p><button onclick="abrirModalLogin()" style="background:#1e3a5f;color:white;border:none;padding:16px;border-radius:14px;font-size:1rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;"><img src="https://www.google.com/favicon.ico" style="width:18px;height:18px;"> Iniciar sesión con Google</button></div></div>
+        <div id="estado-sin-login"><div style="text-align:center;padding:24px;background:#f0f7ff;border-radius:20px;border:2px solid #bfdbfe;">
+  <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
+  <h3 style="color:#1a1a2e;margin-bottom:6px;font-size:1.1rem;font-weight:800;">¡Tu CV está listo!</h3>
+  <p style="color:#6b7280;font-size:0.82rem;margin-bottom:14px;">Inicia sesión para ver qué más encontró TalentIA en tu perfil</p>
+  <div style="background:white;border-radius:10px;padding:12px;margin-bottom:14px;text-align:left;">
+    <div style="font-size:0.72rem;font-weight:700;color:#2563eb;margin-bottom:8px;">Al iniciar sesión desbloqueas:</div>
+    <div style="font-size:0.78rem;color:#374151;line-height:2;">✅ Más fortalezas de tu perfil<br>🔒 Qué mejorar en tu CV<br>🔒 Recomendaciones específicas<br>🔒 Descarga sin marca de agua</div>
+  </div>
+  <button onclick="abrirModalLogin()" style="background:#2563eb;color:white;border:none;padding:14px;border-radius:12px;font-size:0.95rem;font-weight:700;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;gap:10px;width:100%;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;"><img src="https://www.google.com/favicon.ico" style="width:16px;height:16px;"> Ver qué encontró TalentIA →</button>
+</div></div>
         <div id="estado-con-login" style="display:none;">
           <div style="text-align:center;margin-bottom:16px;"><h3 style="color:#1a1a2e;font-size:1.1rem;font-weight:800;">¡Hola <span id="nombre-usuario-cv"></span>! Descarga tu CV sin marca de agua</h3></div>
           <div id="planes-pago" style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:15px;">
@@ -1101,7 +1113,10 @@
       consejo.style.borderLeft='3px solid #60a5fa';
       consejo.style.padding='16px';
 
+      const estaLogueado = !!window.usuarioActual;
+      // 3 estados: pagado / logueado sin pagar / sin login
       if(haPagado){
+        // ESTADO 3: PAGADO — todo visible
         consejo.innerHTML=`
           <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
             📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
@@ -1114,20 +1129,40 @@
           <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
             Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
           </div>`;
-      } else {
-        // Mostrar solo fortalezas — bloquear brechas y recomendaciones
+      } else if(estaLogueado){
+        // ESTADO 2: LOGUEADO SIN PAGAR — mostrar 2 fortalezas como teaser, bloquear resto
+        const fortalezasTeaser = (compIA.fortalezas||[]).slice(0,2).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
+        const totalBloqueado = (compIA.brechas||[]).length + (compIA.recomendaciones||[]).length;
         consejo.innerHTML=`
           <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
             📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
           </div>
-          ${fortalezas?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezas}</ul>`:''}
-          <div style="background:#f0f4ff;border:1.5px dashed #cbd5e0;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
-            <div style="font-size:1rem;margin-bottom:6px;">🔒</div>
-            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:8px;">¿Qué necesito mejorar?</div>
-            <button onclick="const logueado=document.getElementById('estado-con-login').style.display!=='none';document.getElementById(logueado?'planes-pago':'estado-sin-login').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#3b82f6;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Desbloquear análisis completo →</button>
+          ${fortalezasTeaser?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezasTeaser}</ul>`:''}
+          <div style="background:#fffbeb;border:1.5px dashed #f59e0b;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
+            <div style="font-size:1rem;margin-bottom:4px;">🔒</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">+${totalBloqueado} mejoras y recomendaciones esperándote</div>
+            <div style="font-size:0.75rem;color:#6b7280;margin-bottom:10px;">Desbloquea qué mejorar y cómo destacar más</div>
+            <button onclick="document.getElementById('planes-pago').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#f59e0b;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver análisis completo — S/4.90 →</button>
           </div>
           <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
             Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
+          </div>`;
+      } else {
+        // ESTADO 1: SIN LOGIN — mostrar 1 fortaleza, invitar a loguearse
+        const fortalezaPreview = (compIA.fortalezas||[]).slice(0,1).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
+        consejo.innerHTML=`
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
+            📊 TalentIA analizó tu CV
+          </div>
+          ${fortalezaPreview?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Una fortaleza que encontramos:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezaPreview}</ul>`:''}
+          <div style="background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
+            <div style="font-size:1rem;margin-bottom:4px;">✨</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">TalentIA encontró más fortalezas y mejoras en tu CV</div>
+            <div style="font-size:0.75rem;color:#6b7280;margin-bottom:10px;">Inicia sesión para ver qué encontró la IA</div>
+            <button onclick="abrirModalLogin()" style="padding:8px 20px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver qué encontró la IA →</button>
+          </div>
+          <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
+            Calidad del CV: ${scoreCalidad}/100
           </div>`;
       }
     } else {
