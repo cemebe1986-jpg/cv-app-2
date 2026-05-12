@@ -49,7 +49,12 @@
   .nav-paso{width:8px;height:8px;border-radius:50%;background:#e5e7eb;transition:all 0.3s;}
   .nav-paso.activo{background:#2563eb;width:24px;border-radius:4px;}
   .page{padding:80px 20px 40px;min-height:100vh;}
-  .wizard{max-width:560px;margin:0 auto;}
+  .wizard-layout{max-width:1100px;margin:0 auto;display:grid;grid-template-columns:1fr 560px;gap:40px;align-items:start;}
+  .wizard-panel{display:none;}
+  .wizard{max-width:560px;width:100%;}
+  @media(min-width:900px){
+    .wizard-panel{display:block;position:sticky;top:80px;}
+  }
   .wizard-card{background:white;border-radius:16px;border:1px solid #e5e7eb;box-shadow:0 1px 8px rgba(0,0,0,0.06);}
   .wizard-card-header{background:white;padding:24px 32px 18px;border-radius:16px 16px 0 0;border-bottom:1px solid #f0f0f0;}
   .wizard-card-header h2{font-size:1.05rem;font-weight:700;color:#111827;margin-bottom:12px;letter-spacing:-0.2px;}
@@ -319,7 +324,43 @@
 </div>
 
 <div class="page">
-  <div class="wizard" id="wizard-box">
+  <div class="wizard-layout">
+    <!-- PANEL IZQUIERDO — solo desktop -->
+    <div class="wizard-panel" id="wizard-panel">
+      <div style="background:white;border-radius:16px;border:1px solid #e5e7eb;box-shadow:0 1px 8px rgba(0,0,0,0.06);overflow:hidden;">
+        <!-- Header panel -->
+        <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:20px 24px;">
+          <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.6);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">Tu CV en progreso</div>
+          <div id="panel-nombre" style="font-size:1.1rem;font-weight:800;color:white;min-height:28px;">—</div>
+          <!-- Barra de progreso -->
+          <div style="margin-top:12px;">
+            <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px;">
+              <span style="font-size:0.72rem;color:rgba(255,255,255,0.6);">Completado</span>
+              <span id="panel-pct" style="font-size:0.72rem;font-weight:700;color:white;">0%</span>
+            </div>
+            <div style="background:rgba(255,255,255,0.2);border-radius:10px;height:6px;">
+              <div id="panel-progress-bar" style="background:#60a5fa;border-radius:10px;height:100%;width:0%;transition:width 0.4s ease;"></div>
+            </div>
+          </div>
+        </div>
+        <!-- Checklist -->
+        <div style="padding:20px 24px;">
+          <div style="font-size:0.72rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;margin-bottom:14px;">Secciones de tu CV</div>
+          <div id="panel-checklist" style="display:flex;flex-direction:column;gap:10px;">
+            <!-- Items se generan dinámicamente -->
+          </div>
+        </div>
+        <!-- Footer IA -->
+        <div id="panel-ia-msg" style="display:none;border-top:1px solid #e5e7eb;padding:14px 24px;background:#f0f7ff;">
+          <div style="font-size:0.78rem;color:#1d4ed8;font-weight:600;display:flex;align-items:center;gap:6px;">
+            <span>✨</span>
+            <span id="panel-ia-texto">TalentIA está mejorando tu experiencia</span>
+          </div>
+        </div>
+      </div>
+    </div>
+    <!-- WIZARD -->
+    <div class="wizard" id="wizard-box">
     <div class="wizard-card">
       <div class="wizard-card-header" id="wizard-card-header">
         <h2 id="wizard-titulo">Construyamos tu CV juntos — la IA mejora cada sección</h2>
@@ -811,8 +852,9 @@
           </div>
         </div>
     </div>
-  </div>
-</div>
+  </div><!-- end wizard -->
+  </div><!-- end wizard-layout -->
+</div><!-- end page -->
 <script>
   // Google Ads
   window.dataLayer = window.dataLayer || [];
@@ -821,6 +863,70 @@
   let fotoBase64=null,habilidadesData=[],blandasData=[],trabajosData=[],educacionData=[],proyectosData=[],pasoActual=0,camino='',emailOpcionActiva=-1,modoExperiencia='con';
   let cvGeneradoData=null,estiloActual='clasico',cvCiudad='',cvPais='';
   let historialEntrevista=[],entrevistaActiva=false;
+
+  // ── PANEL IZQUIERDO DESKTOP ──────────────────────────────────────────────
+  const PANEL_ITEMS = [
+    { id:'panel-nombre-item',   label:'Nombre',       icon:'👤', get: ()=> (document.getElementById('nombre')?.value||window._nombreDesdeCV||'').trim() },
+    { id:'panel-contacto-item', label:'Contacto',     icon:'📧', get: ()=> (document.getElementById('email')?.value||'').trim() },
+    { id:'panel-exp-item',      label:'Experiencia',  icon:'💼', get: ()=> trabajosData.length > 0 && trabajosData[0].cargo.trim() ? trabajosData.map(t=>t.cargo).join(', ') : '' },
+    { id:'panel-edu-item',      label:'Educación',    icon:'🎓', get: ()=> educacionData.length > 0 && educacionData[0].titulo.trim() ? educacionData[0].titulo : '' },
+    { id:'panel-hab-item',      label:'Habilidades',  icon:'⚡', get: ()=> habilidadesData.length > 0 ? habilidadesData.length + ' habilidades' : '' },
+    { id:'panel-foto-item',     label:'Foto',         icon:'📷', get: ()=> fotoBase64 ? 'Lista' : '' },
+  ];
+
+  function actualizarPanel(){
+    const panel = document.getElementById('wizard-panel');
+    if(!panel || getComputedStyle(panel).display === 'none') return;
+
+    // Nombre en header
+    const nombre = (document.getElementById('nombre')?.value || window._nombreDesdeCV || '').trim();
+    const panelNombre = document.getElementById('panel-nombre');
+    if(panelNombre) panelNombre.textContent = nombre || '—';
+
+    // Checklist
+    const checklist = document.getElementById('panel-checklist');
+    if(!checklist) return;
+
+    let completados = 0;
+    checklist.innerHTML = PANEL_ITEMS.map(item => {
+      const valor = item.get();
+      const hecho = !!valor;
+      if(hecho) completados++;
+      return '<div style="display:flex;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #f0f0f0;">' +
+        '<div style="width:22px;height:22px;border-radius:50%;background:' + (hecho?'#dcfce7':'#f3f4f6') + ';border:1.5px solid ' + (hecho?'#86efac':'#e5e7eb') + ';display:flex;align-items:center;justify-content:center;font-size:0.7rem;flex-shrink:0;">' +
+          (hecho ? '✓' : item.icon) +
+        '</div>' +
+        '<div style="flex:1;min-width:0;">' +
+          '<div style="font-size:0.78rem;font-weight:600;color:' + (hecho?'#111827':'#9ca3af') + ';">' + item.label + '</div>' +
+          (hecho && valor !== 'Lista' ? '<div style="font-size:0.7rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + valor + '</div>' : '') +
+        '</div>' +
+        (hecho ? '<span style="color:#16a34a;font-size:0.75rem;font-weight:700;">✅</span>' : '<span style="color:#d1d5db;font-size:0.72rem;">⬜</span>') +
+      '</div>';
+    }).join('');
+
+    // Progreso
+    const pct = Math.round((completados / PANEL_ITEMS.length) * 100);
+    const bar = document.getElementById('panel-progress-bar');
+    const pctEl = document.getElementById('panel-pct');
+    if(bar) bar.style.width = pct + '%';
+    if(pctEl) pctEl.textContent = pct + '%';
+
+    // Mensaje IA contextual
+    const iaMsg = document.getElementById('panel-ia-msg');
+    const iaTexto = document.getElementById('panel-ia-texto');
+    if(iaMsg && iaTexto){
+      if(trabajosData.length > 0 && trabajosData[0].cargo.trim()){
+        const logrosCount = trabajosData.reduce((acc,t)=>acc+t.logros.filter(l=>l.trim()).length,0);
+        iaMsg.style.display = 'block';
+        iaTexto.textContent = logrosCount > 0
+          ? 'TalentIA puede mejorar tus ' + logrosCount + ' logro' + (logrosCount!==1?'s':'')
+          : 'Escribe tus logros y la IA los mejora';
+      } else {
+        iaMsg.style.display = 'none';
+      }
+    }
+  }
+  // ── FIN PANEL ────────────────────────────────────────────────────────────
 
   async function iniciarEntrevista(){
     document.getElementById('entrevista-container').style.display='block';
@@ -1280,6 +1386,7 @@
     const nombre=document.getElementById('nombre-inicio')?.value.trim();
     if(nombre) window._nombreDesdeCV=nombre; // guardar globalmente
     elegirCamino('manual');
+    setTimeout(actualizarPanel,200);
     setTimeout(()=>{
       // Pre-llenar nombre en step-1b
       if(nombre&&nombre.length>=2){
@@ -1314,7 +1421,7 @@
     }
   }
 
-  function mostrarPaso(idx){
+  function mostrarPaso(idx){actualizarPanel();
     cerrarError();
     const activo=document.querySelector('.step.active');
     if(activo){activo.classList.add('saliendo');setTimeout(()=>{activo.classList.remove('active','saliendo');activarPaso(idx);},220);}
@@ -1570,7 +1677,7 @@
 
   function agregarTrabajo(){const newId=Date.now();if(!window._acordeonTrabajo)window._acordeonTrabajo={};trabajosData.forEach(t=>{window._acordeonTrabajo[t.id]=false;});trabajosData.push({id:newId,cargo:'',empresa:'',desde:'',hasta:'',logros:['']});window._acordeonTrabajo[newId]=true;renderTrabajoss();}
   function eliminarTrabajo(id){trabajosData=trabajosData.filter(t=>t.id!==id);renderTrabajoss();}
-  function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
+  function actualizarTrabajo(id,campo,valor){setTimeout(actualizarPanel,100);const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
   function eliminarLogro(id,idx){const t=trabajosData.find(t=>t.id===id);if(t&&t.logros.length>1){t.logros.splice(idx,1);renderTrabajoss();}}
