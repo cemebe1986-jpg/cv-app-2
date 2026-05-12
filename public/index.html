@@ -514,8 +514,8 @@
         <!-- CON EXPERIENCIA — visible por defecto -->
         <div id="bloque-con-experiencia">
           <div style="background:#eff6ff;border:1px solid #bfdbfe;border-radius:12px;padding:14px;margin-bottom:16px;">
-            <div style="font-size:0.82rem;font-weight:700;color:#1e40af;margin-bottom:4px;">✨ La IA te ayuda a redactar mejor</div>
-            <div style="font-size:0.78rem;color:#374151;line-height:1.5;">Escribe tus logros como los recuerdas — aunque sean simples. La IA los convierte en texto profesional con impacto.</div>
+            <div style="font-size:0.82rem;font-weight:700;color:#1e40af;margin-bottom:4px;">✨ IA especializada en mejorar CVs</div>
+            <div style="font-size:0.78rem;color:#374151;line-height:1.5;">Escribe tus tareas como las recuerdas. La IA las convierte en experiencia profesional.</div>
           </div>
           <div id="lista-trabajos"></div>
           <button type="button" onclick="agregarTrabajo()" style="width:100%;padding:12px;background:transparent;color:#2563eb;border:1.5px dashed #93c5fd;border-radius:12px;font-weight:700;cursor:pointer;font-size:0.88rem;margin-bottom:16px;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar trabajo</button>
@@ -1634,7 +1634,9 @@
 
     // Header
     const header = document.createElement('div');
-    header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:' + headerBg + ';cursor:pointer;gap:10px;';
+    header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:' + headerBg + ';cursor:pointer;gap:10px;transition:background 0.15s;user-select:none;';
+    header.onmouseenter = function(){ this.style.background = estaAbierto ? '#dbeafe' : '#f0f4ff'; };
+    header.onmouseleave = function(){ this.style.background = headerBg; };
     header.onclick = function(){ toggleAcordeonTrabajo(t.id); };
     header.innerHTML =
       '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">' +
@@ -1652,7 +1654,9 @@
     // Botón eliminar separado para evitar propagación
     const btnElim = document.createElement('button');
     btnElim.textContent = '✕';
-    btnElim.style.cssText = 'background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;padding:2px 6px;';
+    btnElim.style.cssText = 'background:none;border:none;color:#cbd5e0;cursor:pointer;font-size:0.8rem;padding:2px 6px;transition:color 0.15s;';
+    btnElim.onmouseenter = function(){ this.style.color='#e53e3e'; };
+    btnElim.onmouseleave = function(){ this.style.color='#cbd5e0'; };
     btnElim.onclick = function(e){ e.stopPropagation(); eliminarTrabajo(t.id); };
     header.querySelector('div[style*="flex-shrink"]').appendChild(btnElim);
     div.appendChild(header);
@@ -1684,9 +1688,12 @@
         '<label style="margin-bottom:6px;">Logros</label>' +
         '<div id="logros-list-' + t.id + '">' +
           t.logros.map(function(l, i){
-            return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">' +
-              '<textarea id="logro-' + t.id + '-' + i + '" placeholder="Ej: Gestioné atención al cliente..." style="margin-bottom:0;flex:1;height:64px;resize:none;">' + l + '</textarea>' +
-              '<button data-tid="' + t.id + '" data-idx="' + i + '" class="btn-elim-logro" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button>' +
+            return '<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:10px;padding:10px 12px;margin-bottom:8px;">' +
+              '<div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:6px;">' +
+                '<span style="font-size:0.68rem;font-weight:700;color:#6b7280;text-transform:uppercase;letter-spacing:0.5px;">📝 Logro ' + (i+1) + '</span>' +
+                '<button data-tid="' + t.id + '" data-idx="' + i + '" class="btn-elim-logro" style="background:none;border:none;color:#cbd5e0;cursor:pointer;font-size:0.78rem;padding:0;line-height:1;">✕ quitar</button>' +
+              '</div>' +
+              '<textarea id="logro-' + t.id + '-' + i + '" placeholder="Ej: Gestioné atención al cliente en entorno de alto volumen..." style="margin-bottom:0;width:100%;height:60px;resize:none;background:white;border:1px solid #e5e7eb;border-radius:8px;padding:8px;font-size:0.85rem;">' + l + '</textarea>' +
             '</div>';
           }).join('') +
         '</div>' +
