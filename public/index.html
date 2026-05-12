@@ -1568,7 +1568,7 @@
   function navegarDominios(e){const dd=document.getElementById('email-dropdown');if(dd.style.display==='none')return;const ops=dd.querySelectorAll('div');if(!ops.length)return;if(e.key==='ArrowDown'){e.preventDefault();if(emailOpcionActiva>=0)ops[emailOpcionActiva].style.background='white';emailOpcionActiva=Math.min(emailOpcionActiva+1,ops.length-1);ops[emailOpcionActiva].style.background='#f0f4ff';}else if(e.key==='ArrowUp'){e.preventDefault();if(emailOpcionActiva>=0)ops[emailOpcionActiva].style.background='white';emailOpcionActiva=Math.max(emailOpcionActiva-1,0);ops[emailOpcionActiva].style.background='#f0f4ff';}else if(e.key==='Enter'&&emailOpcionActiva>=0){e.preventDefault();ops[emailOpcionActiva].click();emailOpcionActiva=-1;}else if(e.key==='Escape'){dd.style.display='none';emailOpcionActiva=-1;}}
   document.addEventListener('click',e=>{if(!e.target.closest('#email')&&!e.target.closest('#email-dropdown')){const dd=document.getElementById('email-dropdown');if(dd)dd.style.display='none';}});
 
-  function agregarTrabajo(){trabajosData.push({id:Date.now(),cargo:'',empresa:'',desde:'',hasta:'',logros:['']});renderTrabajoss();}
+  function agregarTrabajo(){const newId=Date.now();if(!window._acordeonTrabajo)window._acordeonTrabajo={};trabajosData.forEach(t=>{window._acordeonTrabajo[t.id]=false;});trabajosData.push({id:newId,cargo:'',empresa:'',desde:'',hasta:'',logros:['']});window._acordeonTrabajo[newId]=true;renderTrabajoss();}
   function eliminarTrabajo(id){trabajosData=trabajosData.filter(t=>t.id!==id);renderTrabajoss();}
   function actualizarTrabajo(id,campo,valor){const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
@@ -1606,12 +1606,153 @@
 
   function mostrarBotonSugerenciasIA(tid,cargo){const btn=document.getElementById(`btn-sug-ia-${tid}`);if(!btn)return;btn.style.display=cargo.trim()?'block':'none';}
 
-  function renderTrabajoss(){
-    const c=document.getElementById('lista-trabajos');if(!c)return;if(!trabajosData.length){c.innerHTML='';return;}
-    const tl={trabajo:'Trabajo',practica:'Práctica',freelance:'Freelance',negocio:'Negocio'};
-    c.innerHTML=trabajosData.map((t,idx)=>`<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#2563eb;">${tl[t.tipo||'trabajo']||'Experiencia'} ${idx+1}</span><button onclick="eliminarTrabajo(${t.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarTrabajo(${t.id},'tipo',this.value);renderTrabajoss()" style="margin-bottom:12px;"><option value="trabajo" ${(t.tipo||'trabajo')==='trabajo'?'selected':''}>💼 Trabajo</option><option value="practica" ${t.tipo==='practica'?'selected':''}>📋 Práctica pre-profesional</option><option value="freelance" ${t.tipo==='freelance'?'selected':''}>💻 Freelance</option><option value="negocio" ${t.tipo==='negocio'?'selected':''}>🏪 Negocio propio</option></select><label style="margin-bottom:6px;">Empresa *</label><input type="text" placeholder="Ej: BCP, Alicorp..." value="${t.empresa}" oninput="actualizarTrabajo(${t.id},'empresa',this.value)" style="margin-bottom:12px;"><div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2020" value="${t.desde}" oninput="actualizarTrabajo(${t.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta</label><input type="text" placeholder="2024 o Actualidad" value="${t.hasta}" oninput="actualizarTrabajo(${t.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">Cargo *</label><input type="text" list="lista-puestos-peru" placeholder="Ej: Analista de Marketing..." value="${t.cargo}" oninput="actualizarTrabajo(${t.id},'cargo',this.value);mostrarBotonSugerenciasIA(${t.id},this.value)" style="margin-bottom:12px;" autocomplete="off"><label style="margin-bottom:6px;">Logros</label>${t.logros.map((l,i)=>`<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;"><textarea placeholder="Ej: Reduje costos en 20%..." oninput="actualizarLogro(${t.id},${i},this.value)" style="margin-bottom:0;flex:1;height:64px;resize:none;">${l}</textarea><button onclick="eliminarLogro(${t.id},${i})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button></div>`).join('')}<button onclick="agregarLogro(${t.id})" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button><div id="btn-sug-ia-${t.id}" style="display:${t.cargo.trim()?'block':'none'};margin-top:4px;"><button onclick="pedirIAConLogin(()=>generarSugerenciasLogrosIA(${t.id}))" style="width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button></div><div id="sug-ia-box-${t.id}" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"><div id="sug-ia-titulo-${t.id}" style="font-size:0.78rem;font-weight:700;color:#2563eb;margin-bottom:10px;">✨ Toca para agregar — puedes elegir varios:</div><div id="chips-ia-${t.id}" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div><button onclick="document.getElementById('sug-ia-box-${t.id}').style.display='none';document.getElementById('btn-sug-ia-${t.id}').style.display='block';" style="padding:6px 12px;background:transparent;color:#9ca3af;border:1px solid #e5e7eb;border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Listo, cerrar</button></div></div>`).join('');
+  // Estado de acordeón para trabajos
+  if(!window._acordeonTrabajo) window._acordeonTrabajo = {};
+
+  function toggleAcordeonTrabajo(id){
+    window._acordeonTrabajo[id] = !window._acordeonTrabajo[id];
+    renderTrabajoss();
   }
 
+  function buildTrabajoCard(t, estaAbierto){
+    const iconoTipo = {trabajo:'💼',practica:'📋',freelance:'💻',negocio:'🏪'};
+    const tieneLogros = t.logros.some(l => l.trim());
+    const completo = t.cargo.trim() && t.empresa.trim() && tieneLogros;
+    const estadoIcon = completo ? '✅' : '🟡';
+    const cargoResumen = t.cargo.trim() || 'Sin cargo aún';
+    const empresaResumen = t.empresa.trim() || 'Sin empresa';
+    const periodoResumen = t.desde ? t.desde + '–' + (t.hasta || 'Actualidad') : '';
+    const logrosCount = t.logros.filter(l => l.trim()).length;
+    const borderColor = estaAbierto ? '#bfdbfe' : '#e5e7eb';
+    const headerBg = estaAbierto ? '#eff6ff' : '#f9fafb';
+    const flecha = estaAbierto ? '▲' : '▼';
+    const icono = iconoTipo[t.tipo || 'trabajo'] || '💼';
+    const resumenSub = [empresaResumen, periodoResumen, logrosCount ? logrosCount + ' logro' + (logrosCount !== 1 ? 's' : '') : ''].filter(Boolean).join(' · ');
+
+    const div = document.createElement('div');
+    div.style.cssText = 'border:1px solid ' + borderColor + ';border-radius:14px;margin-bottom:10px;overflow:hidden;';
+
+    // Header
+    const header = document.createElement('div');
+    header.style.cssText = 'display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:' + headerBg + ';cursor:pointer;gap:10px;';
+    header.onclick = function(){ toggleAcordeonTrabajo(t.id); };
+    header.innerHTML =
+      '<div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">' +
+        '<span style="font-size:1rem;">' + icono + '</span>' +
+        '<div style="min-width:0;">' +
+          '<div style="font-size:0.85rem;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + cargoResumen + '</div>' +
+          '<div style="font-size:0.72rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">' + resumenSub + '</div>' +
+        '</div>' +
+      '</div>' +
+      '<div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">' +
+        '<span>' + estadoIcon + '</span>' +
+        '<span style="color:#6b7280;font-size:0.8rem;">' + flecha + '</span>' +
+      '</div>';
+
+    // Botón eliminar separado para evitar propagación
+    const btnElim = document.createElement('button');
+    btnElim.textContent = '✕';
+    btnElim.style.cssText = 'background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;padding:2px 6px;';
+    btnElim.onclick = function(e){ e.stopPropagation(); eliminarTrabajo(t.id); };
+    header.querySelector('div[style*="flex-shrink"]').appendChild(btnElim);
+    div.appendChild(header);
+
+    // Contenido expandido
+    if(estaAbierto){
+      const body = document.createElement('div');
+      body.style.cssText = 'padding:16px;background:white;border-top:1px solid #e5e7eb;';
+
+      // Tipo select
+      body.innerHTML +=
+        '<label style="margin-bottom:6px;">Tipo</label>' +
+        '<select id="sel-tipo-' + t.id + '" style="margin-bottom:12px;">' +
+          '<option value="trabajo"' + ((t.tipo||'trabajo')==='trabajo'?' selected':'') + '>💼 Trabajo</option>' +
+          '<option value="practica"' + (t.tipo==='practica'?' selected':'') + '>📋 Práctica pre-profesional</option>' +
+          '<option value="freelance"' + (t.tipo==='freelance'?' selected':'') + '>💻 Freelance</option>' +
+          '<option value="negocio"' + (t.tipo==='negocio'?' selected':'') + '>🏪 Negocio propio</option>' +
+        '</select>';
+
+      body.innerHTML +=
+        '<label style="margin-bottom:6px;">Empresa *</label>' +
+        '<input type="text" id="inp-empresa-' + t.id + '" placeholder="Ej: BCP, Alicorp..." value="' + (t.empresa||'') + '" style="margin-bottom:12px;">' +
+        '<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">' +
+          '<div><label style="margin-bottom:6px;">Desde</label><input type="text" id="inp-desde-' + t.id + '" placeholder="2020" value="' + (t.desde||'') + '" style="margin-bottom:0;"></div>' +
+          '<div><label style="margin-bottom:6px;">Hasta</label><input type="text" id="inp-hasta-' + t.id + '" placeholder="2024 o Actualidad" value="' + (t.hasta||'') + '" style="margin-bottom:0;"></div>' +
+        '</div>' +
+        '<label style="margin-bottom:6px;">Cargo *</label>' +
+        '<input type="text" id="inp-cargo-' + t.id + '" list="lista-puestos-peru" placeholder="Ej: Analista de Marketing..." value="' + (t.cargo||'') + '" style="margin-bottom:12px;" autocomplete="off">' +
+        '<label style="margin-bottom:6px;">Logros</label>' +
+        '<div id="logros-list-' + t.id + '">' +
+          t.logros.map(function(l, i){
+            return '<div style="display:flex;gap:8px;align-items:flex-start;margin-bottom:8px;">' +
+              '<textarea id="logro-' + t.id + '-' + i + '" placeholder="Ej: Gestioné atención al cliente..." style="margin-bottom:0;flex:1;height:64px;resize:none;">' + l + '</textarea>' +
+              '<button data-tid="' + t.id + '" data-idx="' + i + '" class="btn-elim-logro" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:1rem;flex-shrink:0;padding:4px;margin-top:12px;">✕</button>' +
+            '</div>';
+          }).join('') +
+        '</div>' +
+        '<button id="btn-add-logro-' + t.id + '" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button>' +
+        '<div id="btn-sug-ia-' + t.id + '" style="display:' + (t.cargo.trim()?'block':'none') + ';margin-top:4px;">' +
+          '<button id="btn-pedir-ia-' + t.id + '" style="width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button>' +
+        '</div>' +
+        '<div id="sug-ia-box-' + t.id + '" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;">' +
+          '<div id="sug-ia-titulo-' + t.id + '" style="font-size:0.78rem;font-weight:700;color:#2563eb;margin-bottom:10px;">✨ Toca para agregar — puedes elegir varios:</div>' +
+          '<div id="chips-ia-' + t.id + '" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div>' +
+          '<button id="btn-cerrar-ia-' + t.id + '" style="padding:6px 12px;background:transparent;color:#9ca3af;border:1px solid #e5e7eb;border-radius:8px;font-size:0.78rem;cursor:pointer;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">Listo, cerrar</button>' +
+        '</div>';
+
+      div.appendChild(body);
+
+      // Event listeners para los inputs
+      setTimeout(function(){
+        var sel = document.getElementById('sel-tipo-' + t.id);
+        if(sel) sel.onchange = function(){ actualizarTrabajo(t.id, 'tipo', this.value); renderTrabajoss(); };
+        var emp = document.getElementById('inp-empresa-' + t.id);
+        if(emp) emp.oninput = function(){ actualizarTrabajo(t.id, 'empresa', this.value); };
+        var desde = document.getElementById('inp-desde-' + t.id);
+        if(desde) desde.oninput = function(){ actualizarTrabajo(t.id, 'desde', this.value); };
+        var hasta = document.getElementById('inp-hasta-' + t.id);
+        if(hasta) hasta.oninput = function(){ actualizarTrabajo(t.id, 'hasta', this.value); };
+        var cargo = document.getElementById('inp-cargo-' + t.id);
+        if(cargo) cargo.oninput = function(){ actualizarTrabajo(t.id, 'cargo', this.value); mostrarBotonSugerenciasIA(t.id, this.value); };
+        // Logros
+        t.logros.forEach(function(l, i){
+          var ta = document.getElementById('logro-' + t.id + '-' + i);
+          if(ta) ta.oninput = function(){ actualizarLogro(t.id, i, this.value); };
+        });
+        // Eliminar logros
+        document.querySelectorAll('.btn-elim-logro[data-tid="' + t.id + '"]').forEach(function(btn){
+          btn.onclick = function(){ eliminarLogro(t.id, parseInt(this.getAttribute('data-idx'))); };
+        });
+        // Agregar logro
+        var btnAdd = document.getElementById('btn-add-logro-' + t.id);
+        if(btnAdd) btnAdd.onclick = function(){ agregarLogro(t.id); };
+        // Pedir IA
+        var btnIA = document.getElementById('btn-pedir-ia-' + t.id);
+        if(btnIA) btnIA.onclick = function(){ pedirIAConLogin(function(){ generarSugerenciasLogrosIA(t.id); }); };
+        // Cerrar IA
+        var btnCerrar = document.getElementById('btn-cerrar-ia-' + t.id);
+        if(btnCerrar) btnCerrar.onclick = function(){
+          document.getElementById('sug-ia-box-' + t.id).style.display = 'none';
+          document.getElementById('btn-sug-ia-' + t.id).style.display = 'block';
+        };
+      }, 0);
+    }
+
+    return div;
+  }
+
+  function renderTrabajoss(){
+    const c = document.getElementById('lista-trabajos');
+    if(!c) return;
+    if(!trabajosData.length){ c.innerHTML = ''; return; }
+    const ultimoId = trabajosData[trabajosData.length - 1].id;
+    c.innerHTML = '';
+    trabajosData.forEach(function(t){
+      const estaAbierto = window._acordeonTrabajo[t.id] !== false &&
+        (t.id === ultimoId || window._acordeonTrabajo[t.id] === true);
+      c.appendChild(buildTrabajoCard(t, estaAbierto));
+    });
+  }
   async function generarSugerenciasLogrosIA(tid){
     if(!verificarLimiteIA())return;
     const t=trabajosData.find(t=>t.id===tid);if(!t||!t.cargo.trim())return;
@@ -1839,7 +1980,7 @@
   }
   function cerrarError(){document.getElementById('error-toast').classList.remove('visible');}
 
-  function agregarEducacion(){educacionData.push({id:Date.now(),tipo:'universitaria',titulo:'',institucion:'',desde:'',hasta:''});renderEducacion();}
+  function agregarEducacion(){const newId=Date.now();if(!window._acordeonEducacion)window._acordeonEducacion={};educacionData.forEach(e=>{window._acordeonEducacion[e.id]=false;});educacionData.push({id:newId,tipo:'universitaria',titulo:'',institucion:'',desde:'',hasta:''});window._acordeonEducacion[newId]=true;renderEducacion();}
   function eliminarEducacion(id){educacionData=educacionData.filter(e=>e.id!==id);renderEducacion();}
   function actualizarEducacion(id,campo,valor){
     const e=educacionData.find(e=>e.id===id);
@@ -1851,9 +1992,20 @@
     }
     e[campo]=valor;
   }
+  // Estado acordeón educación
+  if(!window._acordeonEducacion) window._acordeonEducacion = {};
+
+  function toggleAcordeonEducacion(id){
+    window._acordeonEducacion[id] = !window._acordeonEducacion[id];
+    renderEducacion();
+  }
+
   function renderEducacion(){
     const c=document.getElementById('lista-educacion');if(!c)return;if(!educacionData.length){c.innerHTML='';return;}
+    const iconoTipo={universitaria:'🎓',tecnica:'🔧',maestria:'📚',certificacion:'📜',curso:'💻',colegio:'🏫',otro:'📋'};
+    const ultimoId = educacionData[educacionData.length-1].id;
     c.innerHTML=educacionData.map((e,idx)=>{
+      const estaAbierto = window._acordeonEducacion[e.id] !== false && (e.id === ultimoId || window._acordeonEducacion[e.id] === true);
       const esCertificacion=e.tipo==='certificacion';
       const esCurso=e.tipo==='curso';
       const esColegio=e.tipo==='colegio';
@@ -1875,9 +2027,48 @@
         ? `<option value="" ${!e.estado?'selected':''}>Selecciona...</option><option value="Graduado" ${e.estado==='Graduado'?'selected':''}>🎓 Graduado</option><option value="En curso" ${e.estado==='En curso'?'selected':''}>📚 En curso</option>`
         : '';
       const estadoUniversitario=esUniversitaria||e.tipo==='colegio'?`<label style="margin-bottom:6px;">Estado</label><select onchange="actualizarEducacion(${e.id},'estado',this.value)" style="margin-bottom:12px;">${opcionesEstado}</select>`:'';
-      const camposExtra=esCertificacion?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">ID de certificación</label><input type="text" placeholder="Ej: 694275" value="${e.certId||''}" oninput="actualizarEducacion(${e.id},'certId',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Año</label><input type="text" placeholder="2024" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">URL de verificación</label><input type="text" placeholder="Ej: https://credly.com/badges/..." value="${e.certUrl||''}" oninput="actualizarEducacion(${e.id},'certUrl',this.value)" style="margin-bottom:12px;">`:esCurso?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Año</label><input type="text" placeholder="2024" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">URL del certificado</label><input type="text" placeholder="Opcional" value="${e.certUrl||''}" oninput="actualizarEducacion(${e.id},'certUrl',this.value)" style="margin-bottom:0;"></div></div>`:esColegio?`<label style="margin-bottom:6px;">Año de egreso</label><input type="text" placeholder="2018" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:12px;">`:esOtro?`<input type="text" placeholder="¿Qué tipo de estudio?" value="${e.tipoCustom||''}" oninput="actualizarEducacion(${e.id},'tipoCustom',this.value)" style="margin-bottom:12px;">`:
-      `${estadoUniversitario}<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2018" value="${e.desde||''}" oninput="actualizarEducacion(${e.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta / Año</label><input type="text" placeholder="2022 o En curso" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div></div>`;
-      return `<div style="background:#f9fafb;border:1px solid #e5e7eb;border-radius:14px;padding:20px;margin-bottom:14px;"><div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:14px;"><span style="font-size:0.82rem;font-weight:700;color:#2563eb;">Estudio ${idx+1}</span><button onclick="eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.82rem;font-weight:700;">✕ Eliminar</button></div><label style="margin-bottom:6px;">Tipo</label><select onchange="actualizarEducacion(${e.id},'tipo',this.value);renderEducacion()" style="margin-bottom:12px;"><option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option><option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica / Instituto</option><option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría / Posgrado</option><option value="certificacion" ${e.tipo==='certificacion'?'selected':''}>📜 Certificación profesional</option><option value="curso" ${e.tipo==='curso'?'selected':''}>💻 Curso online</option><option value="colegio" ${e.tipo==='colegio'?'selected':''}>🏫 Colegio</option><option value="otro" ${e.tipo==='otro'?'selected':''}>📋 Otro</option></select><label style="margin-bottom:6px;">${labelTitulo}</label><input type="text" placeholder="${placeholderTitulo}" value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" ${listaTitulo} style="margin-bottom:12px;" autocomplete="off">${!esColegio?`<label style="margin-bottom:6px;">${labelInstitucion}</label><input type="text" placeholder="${placeholderInstitucion}" value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" ${listaInstitucion} style="margin-bottom:12px;" autocomplete="off">`:''}${camposExtra}</div>`;
+      const camposExtra=esCertificacion?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">ID de certificación</label><input type="text" placeholder="Ej: 694275" value="${e.certId||''}" oninput="actualizarEducacion(${e.id},'certId',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Año</label><input type="text" placeholder="2024" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div></div><label style="margin-bottom:6px;">URL de verificación</label><input type="text" placeholder="Ej: https://credly.com/badges/..." value="${e.certUrl||''}" oninput="actualizarEducacion(${e.id},'certUrl',this.value)" style="margin-bottom:12px;">`:esCurso?`<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Año</label><input type="text" placeholder="2024" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">URL del certificado</label><input type="text" placeholder="Opcional" value="${e.certUrl||''}" oninput="actualizarEducacion(${e.id},'certUrl',this.value)" style="margin-bottom:0;"></div></div>`:esColegio?`<label style="margin-bottom:6px;">Año de egreso</label><input type="text" placeholder="2018" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:12px;">`:esOtro?`<input type="text" placeholder="¿Qué tipo de estudio?" value="${e.tipoCustom||''}" oninput="actualizarEducacion(${e.id},'tipoCustom',this.value)" style="margin-bottom:12px;">`:`${estadoUniversitario}<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;"><div><label style="margin-bottom:6px;">Desde</label><input type="text" placeholder="2018" value="${e.desde||''}" oninput="actualizarEducacion(${e.id},'desde',this.value)" style="margin-bottom:0;"></div><div><label style="margin-bottom:6px;">Hasta / Año</label><input type="text" placeholder="2022 o En curso" value="${e.hasta||''}" oninput="actualizarEducacion(${e.id},'hasta',this.value)" style="margin-bottom:0;"></div></div>`;
+
+      // Estado visual
+      const completo = e.titulo.trim() && (esColegio || e.institucion.trim());
+      const estadoIcon = completo ? '✅' : '🟡';
+      const tipoLabel = {universitaria:'🎓 Universitaria',tecnica:'🔧 Técnica',maestria:'📚 Maestría',certificacion:'📜 Certificación',curso:'💻 Curso',colegio:'🏫 Colegio',otro:'📋 Otro'};
+      const tituloResumen = e.titulo.trim() || 'Sin título aún';
+      const instResumen = esColegio ? '' : (e.institucion.trim() || '');
+      const yearResumen = e.hasta ? e.hasta : '';
+
+      return `<div style="border:1px solid ${estaAbierto?'#bfdbfe':'#e5e7eb'};border-radius:14px;margin-bottom:10px;overflow:hidden;">
+        <div onclick="toggleAcordeonEducacion(${e.id})" style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;background:${estaAbierto?'#eff6ff':'#f9fafb'};cursor:pointer;gap:10px;">
+          <div style="display:flex;align-items:center;gap:10px;flex:1;min-width:0;">
+            <span style="font-size:1rem;">${iconoTipo[e.tipo||'universitaria']}</span>
+            <div style="min-width:0;">
+              <div style="font-size:0.85rem;font-weight:700;color:#111827;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${tituloResumen}</div>
+              <div style="font-size:0.72rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${instResumen}${yearResumen?' · '+yearResumen:''}</div>
+            </div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;flex-shrink:0;">
+            <span>${estadoIcon}</span>
+            <span style="color:#6b7280;font-size:0.8rem;">${estaAbierto?'▲':'▼'}</span>
+            <button onclick="event.stopPropagation();eliminarEducacion(${e.id})" style="background:none;border:none;color:#e53e3e;cursor:pointer;font-size:0.8rem;font-weight:700;padding:2px 6px;">✕</button>
+          </div>
+        </div>
+        <div style="display:${estaAbierto?'block':'none'};padding:16px;background:white;border-top:1px solid #e5e7eb;">
+          <label style="margin-bottom:6px;">Tipo</label>
+          <select onchange="actualizarEducacion(${e.id},'tipo',this.value);renderEducacion()" style="margin-bottom:12px;">
+            <option value="universitaria" ${e.tipo==='universitaria'?'selected':''}>🎓 Universitaria</option>
+            <option value="tecnica" ${e.tipo==='tecnica'?'selected':''}>🔧 Técnica / Instituto</option>
+            <option value="maestria" ${e.tipo==='maestria'?'selected':''}>📚 Maestría / Posgrado</option>
+            <option value="certificacion" ${e.tipo==='certificacion'?'selected':''}>📜 Certificación profesional</option>
+            <option value="curso" ${e.tipo==='curso'?'selected':''}>💻 Curso online</option>
+            <option value="colegio" ${e.tipo==='colegio'?'selected':''}>🏫 Colegio</option>
+            <option value="otro" ${e.tipo==='otro'?'selected':''}>📋 Otro</option>
+          </select>
+          <label style="margin-bottom:6px;">${labelTitulo}</label>
+          <input type="text" placeholder="${placeholderTitulo}" value="${e.titulo}" oninput="actualizarEducacion(${e.id},'titulo',this.value)" ${listaTitulo} style="margin-bottom:12px;" autocomplete="off">
+          ${!esColegio?`<label style="margin-bottom:6px;">${labelInstitucion}</label><input type="text" placeholder="${placeholderInstitucion}" value="${e.institucion}" oninput="actualizarEducacion(${e.id},'institucion',this.value)" ${listaInstitucion} style="margin-bottom:12px;" autocomplete="off">`:''}
+          ${camposExtra}
+        </div>
+      </div>`;
     }).join('');
   }
 
