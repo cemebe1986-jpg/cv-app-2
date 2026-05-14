@@ -1365,6 +1365,9 @@
     if(nav)nav.style.display='none';
     if(pb)pb.style.display='none';
     if(np)np.style.display='none';
+    // Ocultar panel izquierdo y ajustar layout al mostrar CV
+    const panelEl=document.getElementById('wizard-panel');if(panelEl)panelEl.style.display='none';
+    const layoutEl=document.querySelector('.wizard-layout');if(layoutEl){layoutEl.style.gridTemplateColumns='1fr';layoutEl.style.maxWidth='1100px';}
   }
 
 
