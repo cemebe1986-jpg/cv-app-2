@@ -120,6 +120,9 @@
   .estilo-btn{flex:1;padding:10px 14px;border:1.5px solid #e5e7eb;border-radius:10px;background:white;font-size:0.82rem;font-weight:700;color:#6b7280;cursor:pointer;transition:all 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;}
   .estilo-btn:hover{border-color:#2563eb;color:#2563eb;}
   .estilo-btn.activo{border-color:#2563eb;background:#eff6ff;color:#2563eb;}
+  .estilo-btn.estilo-premium{color:#c4c4c4;border-color:#f0f0f0;background:#fafafa;}
+  .estilo-btn.estilo-premium:hover{border-color:#f59e0b;color:#f59e0b;}
+  .estilo-btn.estilo-premium.desbloqueado{color:#6b7280;border-color:#e5e7eb;background:white;}
   .cv-preview{display:none;max-width:800px;margin:24px auto 0;background:white;border-radius:12px;overflow:hidden;box-shadow:0 2px 16px rgba(0,0,0,0.08);border:1px solid #e5e7eb;}
   .cv-document{display:grid;grid-template-columns:280px 1fr;min-height:900px;position:relative;}
   .cv-sidebar{background:#1a1a2e;color:white;padding:40px 25px;}
@@ -736,11 +739,14 @@
     <div class="estilos-selector">
       <div class="estilos-selector-titulo">🎨 Elige el estilo de tu CV</div>
       <div class="estilos-grid">
+        <!-- Clásico: siempre libre -->
         <button class="estilo-btn activo" onclick="cambiarEstiloCV('clasico')" id="estilo-btn-clasico"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#1a1a2e;margin-right:6px;vertical-align:middle;"></span>Clásico</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('minimal')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('moderno2')" id="estilo-btn-moderno2"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#2563eb;margin-right:6px;vertical-align:middle;"></span>Moderno</button>
-        <button class="estilo-btn" onclick="cambiarEstiloCV('cronologico')" id="estilo-btn-cronologico"><span style="display:inline-block;width:12px;height:12px;border-radius:0;background:#374151;margin-right:6px;vertical-align:middle;"></span>Cronológico</button>
+        <!-- Ejecutivo: requiere login -->
+        <button class="estilo-btn" onclick="seleccionarEstiloConNivel('moderno','login')" id="estilo-btn-moderno"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo</button>
+        <!-- Minimalista, Moderno, Cronológico: requieren pago -->
+        <button class="estilo-btn estilo-premium" onclick="seleccionarEstiloConNivel('minimal','pago')" id="estilo-btn-minimal"><span style="display:inline-block;width:12px;height:12px;border-radius:50%;background:#718096;margin-right:6px;vertical-align:middle;"></span>Minimalista 🔒</button>
+        <button class="estilo-btn estilo-premium" onclick="seleccionarEstiloConNivel('moderno2','pago')" id="estilo-btn-moderno2"><span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#2563eb;margin-right:6px;vertical-align:middle;"></span>Moderno 🔒</button>
+        <button class="estilo-btn estilo-premium" onclick="seleccionarEstiloConNivel('cronologico','pago')" id="estilo-btn-cronologico"><span style="display:inline-block;width:12px;height:12px;border-radius:0;background:#374151;margin-right:6px;vertical-align:middle;"></span>Cronológico 🔒</button>
       </div>
     </div>
 
@@ -759,11 +765,11 @@
         </div>
       </div>
       <!-- DEGRADADO — visible solo para no pagados -->
-      <div id="cv-degradado" style="display:block;position:absolute;bottom:0;left:0;width:100%;height:35%;pointer-events:none;z-index:11;">
-        <div style="width:100%;height:100%;background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.95) 50%, rgba(255,255,255,1) 100%);"></div>
+      <div id="cv-degradado" style="display:block;position:absolute;bottom:0;left:0;width:100%;height:55%;pointer-events:none;z-index:11;">
+        <div style="width:100%;height:100%;background:linear-gradient(to bottom, rgba(255,255,255,0) 0%, rgba(255,255,255,0.7) 30%, rgba(255,255,255,0.97) 60%, rgba(255,255,255,1) 100%);"></div>
         <div style="position:absolute;bottom:24px;left:0;width:100%;text-align:center;pointer-events:all;">
-          <p style="font-size:0.82rem;color:#718096;margin-bottom:10px;">Tu CV completo está listo</p>
-          <button onclick="const logueado=document.getElementById('estado-con-login').style.display!=='none';document.getElementById(logueado?'planes-pago':'estado-sin-login').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:12px 28px;background:#0f3460;color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;box-shadow:0 4px 16px rgba(15,52,96,0.3);">🔓 Ver CV completo →</button>
+          <p style="font-size:0.82rem;color:#374151;font-weight:600;margin-bottom:10px;">🔒 Desbloquea tu CV profesional final</p>
+          <button onclick="const logueado=document.getElementById('estado-con-login').style.display!=='none';document.getElementById(logueado?'planes-pago':'estado-sin-login').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:12px 28px;background:#0f3460;color:white;border:none;border-radius:10px;font-size:0.92rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;box-shadow:0 4px 16px rgba(15,52,96,0.3);">🔓 Desbloquear versión final →</button>
         </div>
       </div>
       <div class="cv-sidebar">
@@ -791,7 +797,7 @@
           <div class="cv-actions">
         <div id="estado-sin-login"><div style="text-align:center;padding:24px;background:#f0f7ff;border-radius:20px;border:2px solid #bfdbfe;">
   <div style="font-size:2rem;margin-bottom:8px;">🎉</div>
-  <h3 style="color:#1a1a2e;margin-bottom:6px;font-size:1.1rem;font-weight:800;">¡Tu CV está listo!</h3>
+  <h3 style="color:#1a1a2e;margin-bottom:6px;font-size:1.1rem;font-weight:800;">✨ Vista previa generada</h3>
   <p style="color:#6b7280;font-size:0.82rem;margin-bottom:14px;">Inicia sesión para ver qué más encontró TalentIA en tu perfil</p>
   <div style="background:white;border-radius:10px;padding:12px;margin-bottom:14px;text-align:left;">
     <div style="font-size:0.72rem;font-weight:700;color:#2563eb;margin-bottom:8px;">Al iniciar sesión desbloqueas:</div>
@@ -1058,6 +1064,44 @@
   const TITULOS=['Tus datos de contacto','Tu experiencia','Tu educación','Tus habilidades','Tu foto'];
   const LIMITE_IA=10;
   const ciudadesPorPais={PE:['Lima','Arequipa','Trujillo','Chiclayo','Piura','Iquitos','Cusco','Huancayo','Tacna','Juliaca','Ica','Pucallpa','Ayacucho','Cajamarca','Tarapoto','Puno','Tumbes','Huaraz','Huánuco'],CO:['Bogotá','Medellín','Cali','Barranquilla','Cartagena','Cúcuta','Bucaramanga','Pereira','Manizales','Santa Marta'],MX:['Ciudad de México','Guadalajara','Monterrey','Puebla','Tijuana','León','Mérida','Cancún','Querétaro'],AR:['Buenos Aires','Córdoba','Rosario','Mendoza','Tucumán','La Plata','Mar del Plata','Salta'],CL:['Santiago','Valparaíso','Concepción','La Serena','Antofagasta','Temuco','Rancagua','Talca'],EC:['Quito','Guayaquil','Cuenca','Ambato','Machala','Manta','Loja','Esmeraldas'],BO:['La Paz','Santa Cruz','Cochabamba','Sucre','Oruro','Potosí','Tarija']};
+
+  function seleccionarEstiloConNivel(estilo, nivel){
+    const estaLogueado = !!window.usuarioActual;
+    const haPagado = window._cvActualPagado === true;
+    if(nivel === 'login' && !estaLogueado){
+      // Mostrar modal de login con mensaje específico
+      document.getElementById('modal-titulo').textContent = 'Desbloquea más estilos';
+      document.getElementById('modal-subtitulo').textContent = 'Inicia sesión para acceder al estilo Ejecutivo y más';
+      abrirModalLogin();
+      return;
+    }
+    if(nivel === 'pago' && !haPagado){
+      // Scroll al panel de pago
+      const logueado = !!window.usuarioActual;
+      document.getElementById(logueado ? 'planes-pago' : 'estado-sin-login').scrollIntoView({behavior:'smooth', block:'center'});
+      // Mostrar toast
+      mostrarError('Estilo Premium 🔒', 'Desbloquea Moderno, Minimalista y Cronológico con el plan de descarga.');
+      return;
+    }
+    // Tiene el nivel requerido — cambiar estilo
+    cambiarEstiloCV(estilo);
+  }
+
+  function actualizarBotonesEstilo(){
+    const estaLogueado = !!window.usuarioActual;
+    const haPagado = window._cvActualPagado === true;
+    // Ejecutivo — requiere login
+    const btnEjec = document.getElementById('estilo-btn-moderno');
+    if(btnEjec){
+      if(estaLogueado){ btnEjec.classList.add('desbloqueado'); btnEjec.textContent = ''; btnEjec.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo'; btnEjec.onclick = ()=>cambiarEstiloCV("moderno"); }
+      else { btnEjec.innerHTML = '<span style="display:inline-block;width:12px;height:12px;border-radius:2px;background:#1a1a2e;margin-right:6px;vertical-align:middle;border:1px solid #cbd5e0;"></span>Ejecutivo 🔑'; }
+    }
+    // Premium — requieren pago
+    ['estilo-btn-minimal','estilo-btn-moderno2','estilo-btn-cronologico'].forEach(id => {
+      const btn = document.getElementById(id);
+      if(btn && haPagado){ btn.classList.add('desbloqueado'); btn.innerHTML = btn.innerHTML.replace(' 🔒',''); btn.onclick = ()=>cambiarEstiloCV(id==='estilo-btn-minimal'?'minimal':id==='estilo-btn-moderno2'?'moderno2':'cronologico'); }
+    });
+  }
 
   function cambiarEstiloCV(estilo){estiloActual=estilo;const doc=document.getElementById('cv-document');doc.className='cv-document';if(estilo!=='clasico')doc.classList.add(`cv-estilo-${estilo}`);['clasico','moderno','minimal','moderno2','cronologico'].forEach(e=>{const btn=document.getElementById(`estilo-btn-${e}`);if(btn)btn.classList.toggle('activo',e===estilo);});const desc=document.getElementById('estilo-descripcion');if(desc){const textos={clasico:'Sidebar azul con foto — ideal para perfiles corporativos, contadores, administradores e ingenieros.',moderno:'Una columna centrada, estilo Harvard — perfecto para gerencia, liderazgo o perfiles con mucha experiencia.',minimal:'Diseño limpio sin colores — listo para postular al máximo, ideal para tecnología, startups o CVs simples.',moderno2:'Dos columnas con acento azul — moderno y llamativo, ideal para marketing, ventas y perfiles creativos.',cronologico:'Una columna simple y directa — ideal para técnicos, egresados de institutos y primer empleo.'};desc.textContent=textos[estilo]||'';}const nombreSidebar=document.getElementById('cv-nombre-sidebar');if(estilo==='minimal'||estilo==='moderno'||estilo==='cronologico')nombreSidebar.style.display='none';else nombreSidebar.style.display='block';setTimeout(ajustarEscalaCV,50);}
   function getLlamadasIA(){try{return parseInt(sessionStorage.getItem('talentia_ia_calls_session')||'0');}catch(e){return 0;}}
@@ -2085,7 +2129,7 @@
     document.getElementById('cv-preview').scrollIntoView({behavior:'smooth'});
   }
 
-  function mostrarEstadoLogin(user){const nu=document.getElementById('nav-usuario'),nn=document.getElementById('nav-nombre-usuario');if(user){document.getElementById('estado-sin-login').style.display='none';document.getElementById('estado-con-login').style.display='block';document.getElementById('nombre-usuario-cv').textContent=user.displayName?.split(' ')[0]||'usuario';if(nu)nu.style.display='flex';if(nn)nn.textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';}else{document.getElementById('estado-sin-login').style.display='block';document.getElementById('estado-con-login').style.display='none';if(nu)nu.style.display='none';}}
+  function mostrarEstadoLogin(user){actualizarBotonesEstilo();const nu=document.getElementById('nav-usuario'),nn=document.getElementById('nav-nombre-usuario');if(user){document.getElementById('estado-sin-login').style.display='none';document.getElementById('estado-con-login').style.display='block';document.getElementById('nombre-usuario-cv').textContent=user.displayName?.split(' ')[0]||'usuario';if(nu)nu.style.display='flex';if(nn)nn.textContent=user.displayName?.split(' ')[0]||user.email?.split('@')[0]||'';}else{document.getElementById('estado-sin-login').style.display='block';document.getElementById('estado-con-login').style.display='none';if(nu)nu.style.display='none';}}
 
   function guardarProgreso(){try{localStorage.setItem('talentia_progreso',JSON.stringify({nombre:document.getElementById('nombre').value,email:document.getElementById('email').value,telefono:document.getElementById('telefono').value,pais:document.getElementById('pais').value,ciudad:document.getElementById('ciudad').value,oferta:document.getElementById('oferta').value,habilidadesData,blandasData,trabajosData,educacionData}));}catch(e){}}
   function cargarProgreso(){
