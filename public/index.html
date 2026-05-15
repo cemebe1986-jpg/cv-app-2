@@ -1338,6 +1338,20 @@
         consejo.style.display='block';
         consejo.innerHTML = `<strong>💡 Para subir tu score:</strong> ${mejorar[0].texto}.`;
       }
+      // Bloque upgrade — análisis específico por puesto
+      consejo.style.display='block';
+      const upgradeHtml = `
+        <div style="margin-top:12px;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:10px;padding:14px;">
+          <div style="font-size:0.78rem;font-weight:700;color:#1e40af;margin-bottom:6px;">✨ Descubre qué tan fuerte es tu perfil para el puesto que buscas</div>
+          <div style="font-size:0.75rem;color:#4b5563;margin-bottom:10px;line-height:1.5;">Agrega el puesto al que postulas y la IA analizará tu compatibilidad — fortalezas, brechas y keywords específicas.</div>
+          <input type="text" id="puesto-upgrade" placeholder="Ej: Analista de Marketing, Cajero, Asistente..." 
+            style="margin-bottom:8px;font-size:0.85rem;padding:10px 12px;border:1.5px solid #bfdbfe;border-radius:8px;width:100%;background:white;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
+          <button onclick="const p=document.getElementById('puesto-upgrade').value.trim();if(!p)return;window._cargoInicial=p;mostrarError('Regenerando análisis...','Esto tomará unos segundos');setTimeout(()=>generarCV(),500);" 
+            style="width:100%;padding:10px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.85rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
+            Analizar mi compatibilidad →
+          </button>
+        </div>`;
+      consejo.innerHTML += upgradeHtml;
     }
   }
 
@@ -1657,7 +1671,7 @@
             Así quedará <strong style="color:#111827;">tu</strong> experiencia cuando generemos el CV.
           </div>
           <!-- Botón -->
-          <button onclick="document.getElementById('micro-recompensa-overlay').remove();(${onContinuar.toString()})()" 
+          <button id="btn-micro-continuar"
             style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
             Continuar con mi CV →
           </button>
@@ -1666,13 +1680,11 @@
     `;
 
     document.body.appendChild(overlay);
-    // Cerrar con click fuera
-    overlay.addEventListener('click', e => {
-      if (e.target === overlay) {
-        overlay.remove();
-        onContinuar();
-      }
-    });
+
+    // addEventListener evita el problema de scope con btn
+    const continuar = () => { overlay.remove(); onContinuar(); };
+    document.getElementById('btn-micro-continuar').addEventListener('click', continuar);
+    overlay.addEventListener('click', e => { if (e.target === overlay) continuar(); });
   }
   // ── FIN MICRO-RECOMPENSA ─────────────────────────────────────────────────
 
