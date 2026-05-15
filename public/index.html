@@ -2057,13 +2057,18 @@
         console.error('PDF.js error:',pdfErr);
         document.getElementById('estado-subida').style.display='none';
         document.getElementById('upload-zone-pdf').style.opacity='1';
-        mostrarError('No pudimos leer el PDF','El PDF puede estar protegido o escaneado. Intenta con otro archivo o usa la opción "Crear desde cero".');
+        mostrarError('No pudimos leer este PDF','El archivo puede estar protegido o escaneado. Prueba con otro PDF o haz clic en "Empecemos →" para ingresar tus datos manualmente.');
         return;
       }
       if(!texto.trim()||texto.trim().length<50){
         document.getElementById('estado-subida').style.display='none';
         document.getElementById('upload-zone-pdf').style.opacity='1';
-        mostrarError('PDF sin texto legible','El PDF parece ser una imagen escaneada. Usa la opción "Crear desde cero" e ingresa tus datos manualmente.');
+        mostrarError('Tu PDF es una imagen escaneada','No podemos leer el texto automáticamente. Haz clic en "Empecemos →" para ingresar tus datos manualmente — solo toma 5 minutos.');
+        // Hacer scroll al botón principal para guiar al usuario
+        setTimeout(()=>{
+          const btnEmpezar = document.getElementById('btn-empezar');
+          if(btnEmpezar) btnEmpezar.scrollIntoView({behavior:'smooth', block:'center'});
+        }, 1500);
         return;
       }
       const r=await fetch('/extraer-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({textoCV:texto})});
