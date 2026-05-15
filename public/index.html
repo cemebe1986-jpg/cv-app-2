@@ -1290,39 +1290,65 @@
             Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
           </div>`;
       } else if(estaLogueado){
-        // ESTADO 2: LOGUEADO SIN PAGAR — mostrar 2 fortalezas como teaser, bloquear resto
-        const fortalezasTeaser = (compIA.fortalezas||[]).slice(0,2).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
+        // ESTADO 2: LOGUEADO SIN PAGAR — ambos scores + 1 fortaleza + bloqueo
+        const fortalezaTeaser = (compIA.fortalezas||[]).slice(0,1).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
         const totalBloqueado = (compIA.brechas||[]).length + (compIA.recomendaciones||[]).length;
+        const insightLogueado = compIA.score >= 70
+          ? 'Tu CV encaja bien con este puesto. Desbloquea las recomendaciones para destacar aún más.'
+          : compIA.score >= 50
+          ? 'Tu perfil tiene potencial para este puesto. Hay mejoras específicas que pueden subir tu score.'
+          : 'Tu CV necesita ajustes clave para este puesto. El análisis completo te dice exactamente qué cambiar.';
         consejo.innerHTML=`
-          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
-            📊 Análisis de compatibilidad ${compIA.puesto_analizado==='oferta específica'?'con la oferta':'para '+compIA.puesto_analizado}
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:12px;">📊 Tu análisis TalentIA</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:0.65rem;font-weight:700;color:#15803d;margin-bottom:4px;">CALIDAD DEL CV</div>
+              <div style="font-size:1.4rem;font-weight:900;color:#15803d;">${scoreCalidad}<span style="font-size:0.8rem;font-weight:500;">/100</span></div>
+              <div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">${scoreCalidad>=80?'✅ Muy buena':scoreCalidad>=60?'⚡ Buena':'⚠️ Mejorable'}</div>
+            </div>
+            <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:0.65rem;font-weight:700;color:#92400e;margin-bottom:4px;">COMPATIBILIDAD</div>
+              <div style="font-size:1.4rem;font-weight:900;color:${compIA.score>=70?'#15803d':compIA.score>=50?'#92400e':'#b91c1c'};">${compIA.score}<span style="font-size:0.8rem;font-weight:500;">/100</span></div>
+              <div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">${compIA.score>=70?'✅ Buena':compIA.score>=50?'⚡ Regular':'⚠️ Baja'}</div>
+            </div>
           </div>
-          ${fortalezasTeaser?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezasTeaser}</ul>`:''}
-          <div style="background:#fffbeb;border:1.5px dashed #f59e0b;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
-            <div style="font-size:1rem;margin-bottom:4px;">🔒</div>
-            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">+${totalBloqueado} mejoras y recomendaciones esperándote</div>
-            <div style="font-size:0.75rem;color:#6b7280;margin-bottom:10px;">Desbloquea qué mejorar y cómo destacar más</div>
-            <button onclick="document.getElementById('planes-pago').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#f59e0b;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver análisis completo — S/4.90 →</button>
+          ${fortalezaTeaser?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Lo que tienes a favor:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezaTeaser}</ul>`:''}
+          <div style="font-size:0.78rem;color:#4b5563;background:#f9fafb;border-radius:8px;padding:10px;margin-bottom:12px;line-height:1.5;">
+            💡 ${insightLogueado}
           </div>
-          <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
-            Calidad del CV: ${scoreCalidad}/100 · Compatibilidad con el puesto: ${compIA.score}/100
+          <div style="background:#fffbeb;border:1.5px dashed #f59e0b;border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">🔒 +${totalBloqueado} recomendaciones esperándote</div>
+            <div style="font-size:0.72rem;color:#6b7280;margin-bottom:10px;">Keywords faltantes · Cómo subir tu score · Brechas específicas</div>
+            <button onclick="document.getElementById('planes-pago').scrollIntoView({behavior:'smooth',block:'center'})" style="padding:8px 20px;background:#f59e0b;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Desbloquear análisis completo — S/4.90 →</button>
           </div>`;
       } else {
-        // ESTADO 1: SIN LOGIN — mostrar 1 fortaleza, invitar a loguearse
-        const fortalezaPreview = (compIA.fortalezas||[]).slice(0,1).map(f=>`<li style="margin-bottom:4px;">✅ ${f}</li>`).join('');
+        // ESTADO 1: SIN LOGIN — ambos scores + insight + bloqueo
+        const insightGeneral = compIA.score >= 70
+          ? 'Tu CV se ve profesional y tiene buena estructura.'
+          : compIA.score >= 50
+          ? 'Tu perfil puede alinearse mejor al puesto que buscas.'
+          : 'Tu CV necesita ajustes para encajar mejor con este puesto.';
         consejo.innerHTML=`
-          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:10px;">
-            📊 TalentIA analizó tu CV
+          <div style="font-size:0.78rem;font-weight:700;color:#0f3460;margin-bottom:12px;">📊 Tu análisis TalentIA</div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+            <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:0.65rem;font-weight:700;color:#15803d;margin-bottom:4px;">CALIDAD DEL CV</div>
+              <div style="font-size:1.4rem;font-weight:900;color:#15803d;">${scoreCalidad}<span style="font-size:0.8rem;font-weight:500;">/100</span></div>
+              <div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">${scoreCalidad>=80?'✅ Muy buena':scoreCalidad>=60?'⚡ Buena':'⚠️ Mejorable'}</div>
+            </div>
+            <div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:10px;padding:12px;text-align:center;">
+              <div style="font-size:0.65rem;font-weight:700;color:#92400e;margin-bottom:4px;">COMPATIBILIDAD</div>
+              <div style="font-size:1.4rem;font-weight:900;color:${compIA.score>=70?'#15803d':compIA.score>=50?'#92400e':'#b91c1c'};">${compIA.score}<span style="font-size:0.8rem;font-weight:500;">/100</span></div>
+              <div style="font-size:0.65rem;color:#6b7280;margin-top:2px;">${compIA.score>=70?'✅ Buena':compIA.score>=50?'⚡ Regular':'⚠️ Baja'}</div>
+            </div>
           </div>
-          ${fortalezaPreview?`<div style="font-size:0.75rem;font-weight:700;color:#15803d;margin-bottom:4px;">Una fortaleza que encontramos:</div><ul style="margin:0 0 10px 14px;font-size:0.75rem;color:#4a5568;">${fortalezaPreview}</ul>`:''}
-          <div style="background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:10px;padding:14px;text-align:center;margin-top:8px;">
-            <div style="font-size:1rem;margin-bottom:4px;">✨</div>
-            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">TalentIA encontró más fortalezas y mejoras en tu CV</div>
-            <div style="font-size:0.75rem;color:#6b7280;margin-bottom:10px;">Inicia sesión para ver qué encontró la IA</div>
-            <button onclick="abrirModalLogin()" style="padding:8px 20px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver qué encontró la IA →</button>
+          <div style="font-size:0.78rem;color:#4b5563;background:#f9fafb;border-radius:8px;padding:10px;margin-bottom:12px;line-height:1.5;">
+            💡 ${insightGeneral}
           </div>
-          <div style="font-size:0.72rem;color:#a0aec0;margin-top:8px;border-top:1px solid #e2e8f0;padding-top:8px;">
-            Calidad del CV: ${scoreCalidad}/100
+          <div style="background:#f0f7ff;border:1.5px dashed #93c5fd;border-radius:10px;padding:14px;text-align:center;">
+            <div style="font-size:0.82rem;font-weight:700;color:#1a1a2e;margin-bottom:4px;">🔒 Desbloquea el análisis completo</div>
+            <div style="font-size:0.72rem;color:#6b7280;margin-bottom:10px;">Keywords faltantes · Cómo subir tu score · Recomendaciones específicas</div>
+            <button onclick="abrirModalLogin()" style="padding:8px 20px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Ver análisis completo →</button>
           </div>`;
       }
     } else {
