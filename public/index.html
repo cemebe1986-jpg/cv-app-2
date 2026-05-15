@@ -1656,61 +1656,39 @@
   }
 
   function mostrarMicroRecompensa(ejemplo, onContinuar) {
-    // Eliminar si ya existe
-    document.getElementById('micro-recompensa-overlay')?.remove();
+    // Versión inline — no bloquea, aparece debajo del wizard y avanza automáticamente
+    document.getElementById('micro-recompensa-inline')?.remove();
 
-    const overlay = document.createElement('div');
-    overlay.id = 'micro-recompensa-overlay';
-    overlay.style.cssText = `
-      position:fixed;inset:0;background:rgba(0,0,0,0.55);z-index:9999;
-      display:flex;align-items:center;justify-content:center;padding:20px;
-      animation:fadeInOverlay 0.2s ease;
-    `;
-
-    overlay.innerHTML = `
-      <style>
-        @keyframes fadeInOverlay{from{opacity:0}to{opacity:1}}
-        @keyframes slideUpCard{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
-      </style>
-      <div style="background:white;border-radius:18px;max-width:440px;width:100%;box-shadow:0 20px 60px rgba(0,0,0,0.25);animation:slideUpCard 0.25s ease;overflow:hidden;">
-        <!-- Header -->
-        <div style="background:linear-gradient(135deg,#1e3a5f,#2563eb);padding:20px 24px;">
-          <div style="font-size:0.7rem;font-weight:700;color:rgba(255,255,255,0.7);text-transform:uppercase;letter-spacing:1px;margin-bottom:6px;">✨ IA especializada en mejorar CVs</div>
-          <div style="font-size:1rem;font-weight:700;color:white;line-height:1.4;">Tu experiencia, redactada de forma profesional</div>
+    const container = document.createElement('div');
+    container.id = 'micro-recompensa-inline';
+    container.style.cssText = 'padding:0 32px 20px;animation:mrSlide 0.2s ease;';
+    container.innerHTML = `
+      <style>@keyframes mrSlide{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:translateY(0)}}</style>
+      <div style="background:#f0f7ff;border:1.5px solid #2563eb;border-radius:12px;padding:14px 16px;">
+        <div style="font-size:0.65rem;font-weight:700;color:#1d4ed8;margin-bottom:10px;text-transform:uppercase;letter-spacing:0.5px;">✨ Así mejorará la IA tu experiencia</div>
+        <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center;">
+          <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:8px;padding:8px 10px;">
+            <div style="font-size:0.6rem;font-weight:700;color:#dc2626;margin-bottom:4px;">Tú escribes</div>
+            <div style="font-size:0.78rem;color:#6b7280;font-style:italic;line-height:1.4;">"${ejemplo.antes}"</div>
+          </div>
+          <div style="color:#2563eb;font-weight:700;font-size:1rem;text-align:center;">→</div>
+          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 10px;">
+            <div style="font-size:0.6rem;font-weight:700;color:#16a34a;margin-bottom:4px;">TalentIA redacta</div>
+            <div style="font-size:0.78rem;color:#111827;font-weight:500;line-height:1.4;">${ejemplo.despues}</div>
+          </div>
         </div>
-        <!-- Contenido -->
-        <div style="padding:20px 24px;">
-          <!-- Antes -->
-          <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:14px;margin-bottom:12px;">
-            <div style="font-size:0.62rem;font-weight:700;color:#b91c1c;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">❌ Cómo lo describirías normalmente</div>
-            <div style="font-size:0.88rem;color:#6b7280;font-style:italic;">"${ejemplo.antes}"</div>
-          </div>
-          <!-- Flecha -->
-          <div style="text-align:center;font-size:1.3rem;color:#2563eb;margin-bottom:12px;">↓</div>
-          <!-- Después -->
-          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:14px;margin-bottom:20px;">
-            <div style="font-size:0.62rem;font-weight:700;color:#15803d;margin-bottom:6px;text-transform:uppercase;letter-spacing:0.5px;">✅ Cómo lo redacta TalentIA</div>
-            <div style="font-size:0.92rem;color:#1a1a1a;font-weight:500;line-height:1.6;">"${ejemplo.despues}"</div>
-          </div>
-          <!-- Mensaje -->
-          <div style="text-align:center;color:#6b7280;font-size:0.82rem;margin-bottom:18px;">
-            Así quedará <strong style="color:#111827;">tu</strong> experiencia cuando generemos el CV.
-          </div>
-          <!-- Botón -->
-          <button id="btn-micro-continuar"
-            style="width:100%;padding:14px;background:#2563eb;color:white;border:none;border-radius:10px;font-size:1rem;font-weight:700;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">
-            Continuar con mi CV →
-          </button>
-        </div>
-      </div>
-    `;
+      </div>`;
 
-    document.body.appendChild(overlay);
+    // Insertar al final del wizard-card
+    const wizardCard = document.querySelector('.wizard-card');
+    if(wizardCard) wizardCard.appendChild(container);
 
-    // addEventListener evita el problema de scope con btn
-    const continuar = () => { overlay.remove(); onContinuar(); };
-    document.getElementById('btn-micro-continuar').addEventListener('click', continuar);
-    overlay.addEventListener('click', e => { if (e.target === overlay) continuar(); });
+    // Avanzar automáticamente a los 2.5s — sin acción requerida del usuario
+    setTimeout(()=>{
+      container.style.opacity = '0';
+      container.style.transition = 'opacity 0.3s';
+      setTimeout(()=>{ container.remove(); onContinuar(); }, 300);
+    }, 2500);
   }
   // ── FIN MICRO-RECOMPENSA ─────────────────────────────────────────────────
 
