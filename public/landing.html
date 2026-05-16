@@ -538,9 +538,9 @@
 
   <!-- CTA centrado debajo de ambas columnas (desktop) -->
   <div style="max-width:760px;margin:32px auto 0;text-align:center;">
-    <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
+    <div class="hero-cta-input-wrap" style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
       <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Analista, Cajero, Asistente..." autocomplete="off"
-        style="flex:1;padding:20px 26px;border:none;outline:none;font-size:1.05rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
+        style="flex:1;padding:20px 26px;border:none;outline:none;font-size:1.05rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;min-width:0;"
         onkeydown="if(event.key==='Enter')irAlWizard()">
       <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 24px;background:#2563eb;color:white;border:none;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;flex-shrink:0;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
     </div>
