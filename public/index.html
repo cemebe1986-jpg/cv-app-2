@@ -1824,8 +1824,8 @@
     const tieneLogros = t.logros.some(l => l.trim());
     const completo = t.cargo.trim() && t.empresa.trim() && tieneLogros;
     const estadoIcon = completo ? '✅' : '🟡';
-    const cargoResumen = t.cargo.trim() || 'Sin cargo aún';
-    const empresaResumen = t.empresa.trim() || 'Sin empresa';
+    const cargoResumen = t.cargo.trim() || 'Nuevo trabajo';
+    const empresaResumen = t.empresa.trim() || '';
     const periodoResumen = t.desde ? t.desde + '–' + (t.hasta || 'Actualidad') : '';
     const logrosCount = t.logros.filter(l => l.trim()).length;
     const borderColor = estaAbierto ? '#bfdbfe' : '#e5e7eb';
