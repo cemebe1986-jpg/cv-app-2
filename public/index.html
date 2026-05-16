@@ -366,7 +366,7 @@
         <!-- Mensaje IA -->
         <div id="panel-ia-msg" style="border-top:1px solid #e5e7eb;padding:12px 20px;background:#f0f7ff;">
           <div style="font-size:0.78rem;color:#1d4ed8;font-weight:600;display:flex;align-items:center;gap:6px;">
-            <span>✨</span>
+            <span style="color:#2563eb;font-size:0.9rem;">★</span>
             <span id="panel-ia-texto">TalentIA mejorará cada sección automáticamente</span>
           </div>
         </div>
@@ -926,8 +926,8 @@
       const dot = hecho
         ? '<span style="color:#16a34a;font-size:0.9rem;">✅</span>'
         : (esOpcional
-            ? '<span style="color:#d1d5db;font-size:0.9rem;">⬜</span>'
-            : '<span style="color:#d1d5db;font-size:0.9rem;">⬜</span>');
+            ? '<span style="display:inline-block;width:10px;height:10px;border:1.5px solid #d1d5db;border-radius:2px;vertical-align:middle;"></span>'
+            : '<span style="display:inline-block;width:10px;height:10px;border:1.5px solid #d1d5db;border-radius:2px;vertical-align:middle;"></span>');
       const labelColor = hecho ? '#111827' : (esOpcional ? '#c4c4c4' : '#9ca3af');
       const subtext = hecho && valor !== 'Lista'
         ? '<div style="font-size:0.68rem;color:#6b7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;margin-top:1px;">' + valor + '</div>'
