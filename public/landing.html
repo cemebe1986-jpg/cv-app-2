@@ -334,15 +334,19 @@
 
     @keyframes pulse { 0%,100%{opacity:1;} 50%{opacity:0.3;} }
     @media (max-width: 768px) {
-      .hero { padding: 72px 20px 40px; }
-      .hero-inner { grid-template-columns: 1fr; gap: 24px; }
+      .hero { padding: 64px 20px 32px; }
+      .hero-inner { grid-template-columns: 1fr; gap: 16px; }
       .hero-content { order: 1; }
-      .hero-visual { order: 2; height: auto !important; min-height: 300px; }
-      .hero-visual > div { position: relative !important; height: 320px !important; }
-      .nav-cta { padding: 8px 16px; font-size: 0.82rem; }
-      .hero { padding-bottom: 40px !important; }
+      .hero-visual { order: 2; height: 260px !important; min-height: 260px; max-height: 260px; overflow: hidden; }
+      .hero-visual > div { position: relative !important; height: 260px !important; }
+      .nav-cta { padding: 8px 12px; font-size: 0.75rem; white-space: nowrap; }
+      .hero { padding-bottom: 32px !important; }
 
       .hero h1 { font-size: 2.6rem; letter-spacing:-1.5px; }
+      #btn-si-puesto { width: 100%; padding: 16px 20px !important; font-size: 0.95rem !important; }
+      .hero-cta-input-wrap { flex-direction: column !important; border-radius: 14px !important; }
+      .hero-cta-input-wrap input { border-radius: 10px 10px 0 0 !important; }
+      .hero-cta-input-wrap button { border-radius: 0 0 10px 10px !important; width: 100% !important; }
       .pasos { grid-template-columns: 1fr; }
       .cv-demo-container { grid-template-columns: 1fr; }
       .testimonios-grid { grid-template-columns: 1fr; }
@@ -364,7 +368,7 @@
 
 <nav>
   <div class="nav-logo">Talent<span>IA</span></div>
-  <a href="/crear" class="nav-cta">Crear o mejorar mi CV →</a>
+  <a href="/crear" class="nav-cta" style="white-space:nowrap;font-size:0.82rem;padding:8px 14px;">Crear mi CV →</a>
 </nav>
 
 <section class="hero">
@@ -533,12 +537,12 @@
   </div>
 
   <!-- CTA centrado debajo de ambas columnas (desktop) -->
-  <div style="max-width:760px;margin:40px auto 0;text-align:center;">
+  <div style="max-width:760px;margin:32px auto 0;text-align:center;">
     <div style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
-      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Analista de Marketing, Cajero..." autocomplete="off"
+      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Analista, Cajero, Asistente..." autocomplete="off"
         style="flex:1;padding:20px 26px;border:none;outline:none;font-size:1.05rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;"
         onkeydown="if(event.key==='Enter')irAlWizard()">
-      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 32px;background:#2563eb;color:white;border:none;font-size:1.05rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear o mejorar mi CV →</button>
+      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 24px;background:#2563eb;color:white;border:none;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;flex-shrink:0;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
     </div>
     <datalist id="lista-puestos-hero">
       <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">

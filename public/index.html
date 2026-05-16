@@ -425,7 +425,7 @@
         </div>
 
         <!-- Opción 2: Empezar desde cero -->
-        <p style="color:#6b7280;font-size:0.82rem;margin-bottom:8px;text-align:center;">¿Cómo te llamas?</p>
+        <p style="color:#111827;font-size:0.9rem;font-weight:700;margin-bottom:6px;">¿Cómo te llamas?</p>
         <input type="text" id="nombre-inicio" placeholder="Ej: María García, Carlos Mendoza..." style="margin-bottom:8px;font-size:1rem;" oninput="const btn=document.getElementById('btn-empezar');btn.disabled=this.value.trim().length<2;btn.style.opacity=this.value.trim().length>=2?'1':'0.5';" autocomplete="off">
         <button id="btn-empezar" onclick="iniciarDesdeInicio()" disabled style="width:100%;padding:12px;background:#f3f4f6;color:#6b7280;border:none;border-radius:10px;font-size:0.95rem;font-weight:600;cursor:pointer;opacity:0.5;transition:all 0.2s;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">Empezar desde cero →</button>
         <input type="file" id="archivo-cv-inline" accept=".pdf" style="display:none;" onchange="procesarCVSubidoInline(this)">
