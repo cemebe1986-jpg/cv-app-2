@@ -261,24 +261,24 @@
   @media(max-width:600px){
     nav{padding:14px 20px;}
     .choice-cards{grid-template-columns:1fr;}
-    .cv-document{grid-template-columns:140px 1fr;}
-    .cv-sidebar{padding:16px 12px;min-height:auto;}
+    .cv-document{grid-template-columns:280px 1fr;min-height:900px;}
+    .cv-sidebar{padding:40px 25px;min-height:auto;}
     .cv-foto-container{margin-bottom:8px;}
-    .cv-foto{width:60px;height:60px;font-size:20px;}
-    .cv-nombre-sidebar{font-size:0.85rem;margin-bottom:6px;}
-    .cv-section-title{font-size:0.55rem;margin-top:10px;}
-    .cv-main{padding:16px 14px;}
-    .cv-main-nombre{font-size:1.2rem;}
-    .cv-cargo-principal{font-size:0.68rem;}
-    .cv-preview-container{padding:0 8px 20px;}
+    .cv-foto{width:70px;height:70px;font-size:22px;}
+    .cv-nombre-sidebar{font-size:1.1rem;margin-bottom:8px;}
+    .cv-section-title{font-size:0.6rem;margin-top:10px;}
+    .cv-main{padding:28px 32px;}
+    .cv-main-nombre{font-size:1.6rem;}
+    .cv-cargo-principal{font-size:0.82rem;}
+    .cv-preview-container{padding:0 8px 20px;overflow-x:hidden;}
     .cv-actions{padding:16px;}
     .step{padding:20px;}
     .wizard-nav{padding:16px 20px;}
     .wizard-card-header{padding:18px 20px 14px;}
     .estilos-grid{gap:8px;}
-    .cv-estilo-moderno2 .cv-document{grid-template-columns:120px 1fr;}
-    .cv-estilo-moderno2 .cv-sidebar{padding:16px 12px;}
-    .cv-estilo-cronologico .cv-sidebar{flex-direction:column;align-items:flex-start;padding:14px 16px;}
+    .cv-estilo-moderno2 .cv-document{grid-template-columns:200px 1fr;}
+    .cv-estilo-moderno2 .cv-sidebar{padding:28px 20px;}
+    .cv-estilo-cronologico .cv-sidebar{flex-direction:column;align-items:flex-start;padding:16px 24px;}
   }
 </style>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
@@ -1437,17 +1437,22 @@
     const doc=document.getElementById('cv-document');
     const wrapper=document.getElementById('cv-scale-wrapper');
     if(!doc||!wrapper)return;
-    const anchoWrapper=wrapper.offsetWidth-16;
-    const anchoCV=doc.scrollWidth||820;
-    if(anchoWrapper<anchoCV){
-      const escala=anchoWrapper/anchoCV;
-      doc.style.transform=`scale(${escala})`;
-      doc.style.width=(anchoCV)+'px';
-      wrapper.style.height=(doc.scrollHeight*escala)+'px';
+    // En mobile forzar el ancho real del CV (820px) sin adaptar el layout
+    const anchoReal = 820;
+    const anchoWrapper = wrapper.offsetWidth - 8;
+    if(anchoWrapper < anchoReal){
+      const escala = anchoWrapper / anchoReal;
+      doc.style.transform = `scale(${escala})`;
+      doc.style.transformOrigin = 'top left';
+      doc.style.width = anchoReal + 'px';
+      wrapper.style.height = (doc.scrollHeight * escala) + 'px';
+      wrapper.style.overflow = 'hidden';
     } else {
-      doc.style.transform='';
-      doc.style.width='';
-      wrapper.style.height='';
+      doc.style.transform = '';
+      doc.style.width = '';
+      doc.style.transformOrigin = '';
+      wrapper.style.height = '';
+      wrapper.style.overflow = '';
     }
   }
 
