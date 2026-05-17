@@ -374,13 +374,13 @@
 <section class="hero">
   <!-- Badge centrado entre título y demo -->
   <div style="max-width:1200px;margin:0 auto 24px;text-align:center;">
-    <a href="/crear" class="hero-badge" style="font-size:0.75rem;padding:4px 14px;margin-bottom:0;text-decoration:none;cursor:pointer;">✨ Crea o mejora tu CV gratis →</a>
+    <a href="/crear" class="hero-badge" style="font-size:0.75rem;padding:4px 14px;margin-bottom:0;text-decoration:none;cursor:pointer;">✨ Gratis hasta que descargues →</a>
   </div>
 
   <div class="hero-inner">
     <!-- Columna izquierda -->
     <div class="hero-content">
-      <h1>Crea o mejora<br>tu CV con<br><span>IA en minutos.</span></h1>
+      <h1>Haz que tu CV<br>se vea profesional<br><span>aunque no sepas redactarlo.</span></h1>
     </div>
 
     <!-- Columna derecha: CV demo -->
@@ -390,19 +390,23 @@
         <div id="demo-fase-1" style="position:absolute;top:0;left:0;right:0;bottom:0;background:white;border-radius:12px;box-shadow:0 8px 40px rgba(0,0,0,0.1);border:1px solid #e5e7eb;padding:24px;opacity:1;transition:opacity 0.4s ease;overflow:hidden;display:flex;flex-direction:column;gap:10px;">
           <div style="font-size:0.72rem;font-weight:700;color:#4b5563;text-transform:uppercase;letter-spacing:0.5px;">Así funciona TalentIA</div>
 
-          <!-- Antes -->
-          <div style="background:#fff5f5;border:1px solid #fecaca;border-radius:10px;padding:10px 14px;">
-            <div style="font-size:0.65rem;font-weight:700;color:#dc2626;margin-bottom:6px;">❌ Lo que Juan escribe</div>
-            <div style="font-size:0.82rem;color:#4b5563;font-style:italic;line-height:1.5;">"atendía clientes, vendía ropa, llegaba a mi meta"</div>
+          <!-- Antes — estilo editorial -->
+          <div style="padding:10px 0 8px;">
+            <div style="font-size:0.6rem;font-weight:600;color:#9ca3af;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">Lo que escribes</div>
+            <div style="font-size:0.88rem;color:#6b7280;font-style:italic;line-height:1.5;padding-left:12px;border-left:2px solid #e5e7eb;">"atendía clientes, vendía ropa, llegaba a mi meta"</div>
           </div>
 
-          <div style="text-align:center;font-size:1rem;color:#2563eb;font-weight:700;padding:2px 0;">↓ IA especializada</div>
+          <div style="display:flex;align-items:center;gap:8px;padding:4px 0;">
+            <div style="flex:1;height:1px;background:#e5e7eb;"></div>
+            <span style="font-size:0.72rem;color:#2563eb;font-weight:600;">✨ TalentIA lo transforma en</span>
+            <div style="flex:1;height:1px;background:#e5e7eb;"></div>
+          </div>
 
-          <!-- Después -->
-          <div style="background:#f0fdf4;border:1px solid #86efac;border-radius:10px;padding:10px 14px;">
-            <div style="font-size:0.65rem;font-weight:700;color:#16a34a;margin-bottom:6px;">✅ TalentIA lo redacta</div>
-            <div style="font-size:0.82rem;color:#111827;line-height:1.6;font-weight:600;">Ejecutivo de Ventas · Saga Falabella</div>
-            <div style="font-size:0.8rem;color:#374151;line-height:1.6;margin-top:3px;">▸ Ejecuté ventas en piso retail cumpliendo metas mensuales</div>
+          <!-- Después — limpio y premium -->
+          <div style="padding:10px 0 8px;">
+            <div style="font-size:0.6rem;font-weight:600;color:#2563eb;text-transform:uppercase;letter-spacing:0.8px;margin-bottom:6px;">Resultado profesional</div>
+            <div style="font-size:0.88rem;color:#111827;font-weight:600;margin-bottom:4px;">Ejecutivo de Ventas · Saga Falabella</div>
+            <div style="font-size:0.82rem;color:#374151;padding-left:12px;border-left:2px solid #2563eb;line-height:1.6;">Ejecuté ventas en piso retail cumpliendo metas mensuales de forma consistente.</div>
           </div>
 
           <div style="flex:1;display:flex;align-items:flex-end;">
@@ -532,17 +536,15 @@
   </div>
 
   <!-- Subtítulo centrado debajo de ambas columnas (desktop) -->
-  <div style="max-width:680px;margin:20px auto 0;text-align:center;">
-    <p style="font-size:1.05rem;color:#4b5563;font-weight:500;line-height:1.65;">Crea tu CV desde cero o mejora uno existente — la IA lo hace profesional.</p>
+  <div style="max-width:680px;margin:12px auto 0;text-align:center;">
+    <p style="font-size:1.05rem;color:#4b5563;font-weight:500;line-height:1.65;">Tu experiencia ya vale. TalentIA te ayuda a redactarla para conseguir más entrevistas.</p>
   </div>
 
   <!-- CTA centrado debajo de ambas columnas (desktop) -->
-  <div style="max-width:760px;margin:32px auto 0;text-align:center;">
-    <div class="hero-cta-input-wrap" style="display:flex;gap:0;background:white;border-radius:14px;overflow:hidden;box-shadow:0 4px 28px rgba(0,0,0,0.12);border:2px solid #e5e7eb;">
-      <input type="text" id="cargo-hero" list="lista-puestos-hero" placeholder="Ej: Analista, Cajero, Asistente..." autocomplete="off"
-        style="flex:1;padding:20px 26px;border:none;outline:none;font-size:1.05rem;color:#111827;font-family:'Segoe UI',sans-serif;background:transparent;min-width:0;"
-        onkeydown="if(event.key==='Enter')irAlWizard()">
-      <button onclick="irAlWizard()" id="btn-si-puesto" style="padding:20px 24px;background:#2563eb;color:white;border:none;font-size:1rem;font-weight:800;cursor:pointer;font-family:'Segoe UI',sans-serif;white-space:nowrap;flex-shrink:0;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV →</button>
+  <div style="max-width:760px;margin:20px auto 0;text-align:center;">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:12px;">
+      <a href="/crear" style="display:inline-block;padding:18px 48px;background:#2563eb;color:white;border-radius:14px;font-size:1.1rem;font-weight:800;text-decoration:none;box-shadow:0 4px 20px rgba(37,99,235,0.35);letter-spacing:-0.3px;transition:background 0.15s;" onmouseover="this.style.background='#1d4ed8'" onmouseout="this.style.background='#2563eb'">Crear mi CV gratis →</a>
+      <p style="font-size:0.82rem;color:#9ca3af;margin:0;">Gratis hasta que descargues · Sin suscripción</p>
     </div>
     <datalist id="lista-puestos-hero">
       <option value="Asistente administrativo"><option value="Auxiliar administrativo"><option value="Analista administrativo">
@@ -971,7 +973,7 @@
   })();
 
   function irAlWizard(){
-    const cargo=document.getElementById('cargo-hero').value.trim();
+    const cargo='';
     if(cargo.length>=2){
       window.location.href='/crear?cargo='+encodeURIComponent(cargo);
     } else {

@@ -673,8 +673,23 @@
         <button id="btn-cambiar-foto" onclick="document.getElementById('foto').click()" style="display:none;width:100%;padding:10px;background:transparent;color:rgba(255,255,255,0.5);border:1px solid rgba(255,255,255,0.15);border-radius:8px;font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;margin-top:4px;">🔄 Cambiar foto</button>
       </div>
 
-      <!-- PASO 6: OFERTA LABORAL OPCIONAL -->
+      <!-- PASO 5: PUESTO OBJETIVO OPCIONAL -->
       <div class="step" id="step-5" style="display:none;">
+        <div style="text-align:center;margin-bottom:20px;">
+          <div style="font-size:2rem;margin-bottom:8px;">🎯</div>
+          <h3 style="font-size:1rem;font-weight:800;color:#111827;margin-bottom:6px;">¿A qué puesto postulas?</h3>
+          <p style="font-size:0.82rem;color:#6b7280;margin-bottom:0;">Opcional — pero si lo agregas, TalentIA calculará qué tan compatible es tu CV con ese puesto.</p>
+        </div>
+        <div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:10px;padding:14px;margin-bottom:16px;">
+          <div style="font-size:0.78rem;color:#1e40af;font-weight:600;margin-bottom:6px;">✨ Con el puesto obtienes:</div>
+          <div style="font-size:0.75rem;color:#374151;line-height:1.8;">
+            📊 Score de compatibilidad específico<br>
+            🔑 Keywords que tienes y te faltan<br>
+            💡 Recomendaciones para ese cargo
+          </div>
+        </div>
+        <input type="text" id="cargo-wizard" list="lista-puestos-peru" placeholder="Ej: Analista Administrativo, Cajero, Enfermera..." autocomplete="off" style="margin-bottom:8px;" oninput="window._cargoInicial=this.value.trim()">
+        <p style="font-size:0.75rem;color:#9ca3af;text-align:center;">Si postulas a varios cargos o no tienes claro aún, puedes dejarlo en blanco.</p>
       </div>
 
       <div class="error-toast" id="error-toast">
