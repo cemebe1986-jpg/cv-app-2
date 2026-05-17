@@ -582,7 +582,7 @@
         <div id="bloque-sin-experiencia" style="display:none;">
           <div style="background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:14px;padding:16px;margin-bottom:20px;">
             <div style="font-size:0.85rem;font-weight:700;color:#2563eb;margin-bottom:4px;">💡 Sin experiencia no es problema</div>
-            <div style="font-size:0.8rem;color:rgba(255,255,255,0.5);">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
+            <div style="font-size:0.78rem;color:#6b7280;margin-top:6px;">Agrega prácticas, proyectos universitarios, voluntariados o trabajos informales. La IA los presentará profesionalmente.</div>
           </div>
           <label>Prácticas / Proyectos / Voluntariados</label>
           <p style="font-size:0.82rem;color:#6b7280;margin-bottom:16px;">Agrega cualquier experiencia relevante aunque no sea trabajo formal.</p>
@@ -2056,14 +2056,14 @@
             '</div>';
           }).join('') +
         '</div>' +
-        '<p style="font-size:0.72rem;color:#9ca3af;margin:-2px 0 8px;">💡 Agregar números o resultados mejora tu CV</p>' +
-        '<button id="btn-add-logro-' + t.id + '" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button>' +
-        '<div id="btn-sug-ia-' + t.id + '" style="display:' + (t.cargo.trim()?'block':'none') + ';margin-top:4px;">' +
-          '<button id="btn-pedir-ia-' + t.id + '" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:0.78rem;padding:4px 0;text-decoration:underline;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">+ Sugerir más logros con IA</button>' +
+        '<button id="btn-add-logro-' + t.id + '" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:8px;">+ Agregar otro logro</button>' +
+        '<p style="font-size:0.72rem;color:#9ca3af;margin:0 0 10px;">💡 TalentIA puede convertir tus tareas en logros profesionales</p>' +
+        '<div id="btn-sug-ia-' + t.id + '" style="display:none;">' +
+          '' +
         '</div>' +
         (t.fromPdf && t.logros.some(function(l){return l.trim();}) ?
           '<div style="margin-top:8px;">' +
-            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar esta experiencia con IA</button>' +
+            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.88rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar esta experiencia con IA</button>' +
             '<div id="box-mejora-ia-' + t.id + '" style="display:none;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"></div>' +
           '</div>'
         : '') +
