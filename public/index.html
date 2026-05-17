@@ -2061,7 +2061,7 @@
         '<div id="btn-sug-ia-' + t.id + '" style="display:none;">' +
           '' +
         '</div>' +
-        (t.fromPdf && t.logros.some(function(l){return l.trim();}) ?
+        (t.logros.some(function(l){return l.trim();}) ?
           '<div style="margin-top:8px;">' +
             '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:12px;background:#2563eb;color:white;border:none;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.88rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar esta experiencia con IA</button>' +
             '<div id="box-mejora-ia-' + t.id + '" style="display:none;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"></div>' +

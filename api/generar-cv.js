@@ -133,7 +133,7 @@ ${experiencia}
 
 INSTRUCCIONES ESTRICTAS:
 - Mantén cargos, empresas y fechas exactas — NUNCA los cambies
-- Reescribe logros con verbos de acción: gestioné, implementé, coordiné, optimicé, desarrollé, lideré
+- Reescribe logros en PRIMERA PERSONA SINGULAR con verbos de acción: Evalué, Gestioné, Implementé, Coordiné, Optimicé, Desarrollé, Lideré, Identifiqué, Recomendé, Ejecuté
 - NUNCA inventes números, porcentajes, soles ni métricas que el candidato no mencionó
 - NUNCA inventes tecnologías, herramientas ni sistemas que no aparecen en el original
 - Si el logro original no tiene métricas: mejora solo la redacción y el impacto cualitativo
@@ -186,7 +186,7 @@ INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
 - NUNCA inventes números, porcentajes, métricas ni tecnologías que el candidato no mencionó
 - Perfil: 3 líneas impactantes basadas en la experiencia real, orientadas al cargo deseado
-- Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
+- Mejora la redacción de logros en PRIMERA PERSONA SINGULAR (Gestioné, Implementé, Evalué...) pero mantén cargos/empresas/fechas exactas
 ${instruccionCompatibilidad}
 - Responde SOLO con JSON válido sin markdown
 
