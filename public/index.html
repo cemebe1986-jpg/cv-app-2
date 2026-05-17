@@ -1552,18 +1552,41 @@
   function mostrarPaso(idx){actualizarPanel();
     // Adaptar step-4 según origen del flujo
     if(PASOS[idx]==='step-4'){
-      const esPDF = trabajosData.some(t=>t.fromPdf) || habilidadesData.length>0;
+      const tieneTrabajosPDF = trabajosData.some(t=>t.fromPdf);
+      const tieneHabilidades = habilidadesData.length>0;
+      const esPDF = tieneTrabajosPDF || tieneHabilidades;
       const label = document.getElementById('hab-label');
       const sub = document.getElementById('hab-sub');
       const btnTexto = document.getElementById('btn-sugerir-hab-texto');
-      if(esPDF){
+      const btn = document.getElementById('btn-sugerir-habilidades');
+      let banner = document.getElementById('hab-context-banner');
+      if(!banner){
+        banner = document.createElement('div');
+        banner.id = 'hab-context-banner';
+        const inputHab = document.getElementById('nueva-habilidad');
+        if(inputHab && inputHab.parentNode) inputHab.parentNode.insertBefore(banner, inputHab);
+      }
+      if(esPDF && tieneHabilidades){
+        // PDF con habilidades — mejorar lo que tiene
         if(label) label.textContent = 'Habilidades de tu CV';
-        if(sub) sub.textContent = 'Organizamos las habilidades de tu CV. ¿Te faltan más?';
-        if(btnTexto) btnTexto.textContent = '¿Te faltan más habilidades? Sugerir con IA';
+        if(sub) sub.textContent = 'Organizamos las habilidades de tu CV. Puedes agregar más o mejorarlas.';
+        if(btnTexto) btnTexto.textContent = '✨ Mejorar habilidades con IA';
+        if(btn){ btn.style.background='#f0fdf4'; btn.style.color='#15803d'; btn.style.borderColor='#86efac'; }
+        banner.innerHTML = '<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:#1e40af;">✨ TalentIA detectó habilidades en tu CV — puedes mejorarlas o agregar más</div>';
+      } else if(esPDF && !tieneHabilidades){
+        // PDF sin habilidades — sugerir basado en su experiencia
+        if(label) label.textContent = 'Habilidades técnicas';
+        if(sub) sub.textContent = 'No detectamos habilidades en tu CV. La IA puede sugerirte según tu experiencia.';
+        if(btnTexto) btnTexto.textContent = '✨ Sugerir habilidades según mi experiencia';
+        if(btn){ btn.style.background='#eff6ff'; btn.style.color='#2563eb'; btn.style.borderColor='#93c5fd'; }
+        banner.innerHTML = '<div style="background:#fffbeb;border:1px solid #fcd34d;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:#92400e;">💡 Tu CV no tenía habilidades — la IA las sugiere según tu experiencia laboral</div>';
       } else {
+        // Desde cero — sugerir
         if(label) label.textContent = '¿Qué habilidades destacas en tu CV? *';
         if(sub) sub.textContent = 'Herramientas y tecnologías que dominas. Aparecerán en tu CV.';
-        if(btnTexto) btnTexto.textContent = 'Sugerir habilidades técnicas con IA';
+        if(btnTexto) btnTexto.textContent = '✨ Sugerir habilidades con IA';
+        if(btn){ btn.style.background='#eff6ff'; btn.style.color='#2563eb'; btn.style.borderColor='#93c5fd'; }
+        banner.innerHTML = '<div style="background:#f0f7ff;border:1px solid #bfdbfe;border-radius:8px;padding:10px 14px;margin-bottom:12px;font-size:0.78rem;color:#1e40af;">✨ TalentIA puede sugerirte habilidades según tu perfil y cargo</div>';
       }
     }
     cerrarError();
