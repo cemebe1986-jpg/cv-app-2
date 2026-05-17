@@ -1782,6 +1782,67 @@
   function eliminarTrabajo(id){trabajosData=trabajosData.filter(t=>t.id!==id);renderTrabajoss();}
   function actualizarTrabajo(id,campo,valor){setTimeout(actualizarPanel,100);const t=trabajosData.find(t=>t.id===id);if(t)t[campo]=valor;}
   function actualizarLogro(id,idx,valor){const t=trabajosData.find(t=>t.id===id);if(t)t.logros[idx]=valor;}
+  async function mejorarLogrosIA(tid){
+    const t = trabajosData.find(t => t.id === tid);
+    if(!t || !t.logros.some(l => l.trim())) return;
+
+    // Mostrar loading
+    const btnMejorar = document.getElementById('btn-mejorar-ia-' + tid);
+    const boxMejora = document.getElementById('box-mejora-ia-' + tid);
+    if(btnMejorar) { btnMejorar.textContent = '⏳ Mejorando...'; btnMejorar.disabled = true; }
+
+    try {
+      const logrosOriginales = t.logros.filter(l => l.trim());
+      const prompt = `Eres experto en CVs peruanos. Mejora la redacción de estos logros laborales para el cargo "${t.cargo}" en "${t.empresa}".
+REGLAS:
+- Usa verbos de acción: gestioné, implementé, coordiné, optimicé, desarrollé
+- Mantén el significado original — NO inventes datos ni métricas
+- Máximo 15 palabras por logro
+- Lenguaje profesional peruano
+- Responde SOLO con JSON: {"logros": ["logro mejorado 1", "logro mejorado 2"]}
+
+LOGROS ORIGINALES:
+${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
+
+      const resp = await fetch('/generar-cv', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({mejorarExperiencia: true, experiencia: JSON.stringify([{cargo: t.cargo, empresa: t.empresa, logros: logrosOriginales}])})
+      });
+      const data = await resp.json();
+      const mejorados = data?.cv?.experiencia?.[0]?.logros || [];
+
+      if(mejorados.length && boxMejora){
+        // Mostrar antes/después
+        boxMejora.style.display = 'block';
+        boxMejora.innerHTML =
+          '<div style="font-size:0.72rem;font-weight:700;color:#1d4ed8;margin-bottom:10px;">✨ Así quedarían tus logros mejorados — toca para aplicar</div>' +
+          mejorados.map((m, i) => {
+            const original = logrosOriginales[i] || '';
+            return '<div style="background:white;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;" onclick="aplicarLogroMejorado(' + tid + ',' + i + ',\`' + m.replace(/`/g,'\\`') + '\`);this.style.background=\'#f0fdf4\';this.style.borderColor=\'#86efac\';">' +
+              '<div style="font-size:0.65rem;color:#9ca3af;margin-bottom:4px;">Original: ' + original + '</div>' +
+              '<div style="font-size:0.82rem;color:#111827;font-weight:500;">→ ' + m + '</div>' +
+            '</div>';
+          }).join('') +
+          '<button onclick="aplicarTodosLogrosMejorados(' + tid + ',[' + mejorados.map(m => '\`' + m.replace(/`/g,'\\`') + '\`').join(',') + '])" style="width:100%;padding:8px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:4px;">✅ Aplicar todos</button>';
+      }
+    } catch(e) {
+      console.error('Error mejorando logros:', e);
+    } finally {
+      if(btnMejorar) { btnMejorar.textContent = '✨ Mejorar logros con IA'; btnMejorar.disabled = false; }
+    }
+  }
+
+  function aplicarLogroMejorado(tid, idx, texto){
+    const t = trabajosData.find(t => t.id === tid);
+    if(t && t.logros[idx] !== undefined) { t.logros[idx] = texto; renderTrabajoss(); }
+  }
+
+  function aplicarTodosLogrosMejorados(tid, textos){
+    const t = trabajosData.find(t => t.id === tid);
+    if(t){ t.logros = textos; t.fromPdf = false; renderTrabajoss(); }
+  }
+
   function agregarLogro(id){const t=trabajosData.find(t=>t.id===id);if(t){t.logros.push('');renderTrabajoss();}}
   function eliminarLogro(id,idx){const t=trabajosData.find(t=>t.id===id);if(t&&t.logros.length>1){t.logros.splice(idx,1);renderTrabajoss();}}
   function setModoExperiencia(modo){
@@ -1912,6 +1973,12 @@
         '<div id="btn-sug-ia-' + t.id + '" style="display:' + (t.cargo.trim()?'block':'none') + ';margin-top:4px;">' +
           '<button id="btn-pedir-ia-' + t.id + '" style="width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button>' +
         '</div>' +
+        (t.fromPdf && t.logros.some(function(l){return l.trim();}) ?
+          '<div style="margin-top:8px;">' +
+            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#f0fdf4;color:#15803d;border:1.5px solid #86efac;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar estos logros con IA</button>' +
+            '<div id="box-mejora-ia-' + t.id + '" style="display:none;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"></div>' +
+          '</div>'
+        : '') +
         '<div id="sug-ia-box-' + t.id + '" style="display:none;background:#eff6ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;">' +
           '<div id="sug-ia-titulo-' + t.id + '" style="font-size:0.78rem;font-weight:700;color:#2563eb;margin-bottom:10px;">✨ Toca para agregar — puedes elegir varios:</div>' +
           '<div id="chips-ia-' + t.id + '" style="display:flex;flex-direction:column;gap:6px;margin-bottom:10px;"></div>' +
@@ -2089,7 +2156,7 @@
       if(d.telefono&&campoTel)campoTel.value=d.telefono;
       if(d.habilidades_blandas){try{blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}catch(e){console.warn('Error blandas:',e);}}
       let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;try{renderListaHabilidades();}catch(e){console.warn('Error habilidades:',e);}}
-      if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:['']}));try{setModoExperiencia('con');renderTrabajoss();}catch(e){console.warn('Error trabajos:',e);}}
+      if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:[''],fromPdf:true}));try{setModoExperiencia('con');renderTrabajoss();}catch(e){console.warn('Error trabajos:',e);}}
       if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));try{renderEducacion();}catch(e){console.warn('Error educacion:',e);}}
       document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
       if(typeof gtag!=='undefined')gtag('event','pdf_cargado');
