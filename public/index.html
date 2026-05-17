@@ -1872,24 +1872,12 @@
     const t = trabajosData.find(t => t.id === tid);
     if(!t || !t.logros.some(l => l.trim())) return;
 
-    // Mostrar loading
     const btnMejorar = document.getElementById('btn-mejorar-ia-' + tid);
     const boxMejora = document.getElementById('box-mejora-ia-' + tid);
-    if(btnMejorar) { btnMejorar.textContent = '✨ TalentIA está mejorando tus logros...'; btnMejorar.disabled = true; btnMejorar.style.background='#dbeafe'; }
+    if(btnMejorar){ btnMejorar.textContent = '✨ TalentIA está mejorando tu experiencia...'; btnMejorar.disabled = true; btnMejorar.style.background='#dbeafe'; }
 
     try {
       const logrosOriginales = t.logros.filter(l => l.trim());
-      const prompt = `Eres experto en CVs peruanos. Mejora la redacción de estos logros laborales para el cargo "${t.cargo}" en "${t.empresa}".
-REGLAS:
-- Usa verbos de acción: gestioné, implementé, coordiné, optimicé, desarrollé
-- Mantén el significado original — NO inventes datos ni métricas
-- Máximo 15 palabras por logro
-- Lenguaje profesional peruano
-- Responde SOLO con JSON: {"logros": ["logro mejorado 1", "logro mejorado 2"]}
-
-LOGROS ORIGINALES:
-${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
-
       const resp = await fetch('/generar-cv', {
         method: 'POST',
         headers: {'Content-Type': 'application/json'},
@@ -1898,24 +1886,38 @@ ${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
       const data = await resp.json();
       const mejorados = data?.cv?.experiencia?.[0]?.logros || [];
 
-      if(mejorados.length && boxMejora){
-        // Mostrar antes/después
-        boxMejora.style.display = 'block';
-        boxMejora.innerHTML =
-          '<div style="font-size:0.72rem;font-weight:700;color:#1d4ed8;margin-bottom:10px;">✨ Así quedarían tus logros mejorados — toca para aplicar</div>' +
-          mejorados.map((m, i) => {
-            const original = logrosOriginales[i] || '';
-            return '<div style="background:white;border:1px solid #e5e7eb;border-radius:8px;padding:10px 12px;margin-bottom:8px;cursor:pointer;" onclick="aplicarLogroMejorado(' + tid + ',' + i + ',\`' + m.replace(/`/g,'\\`') + '\`);this.style.background=\'#f0fdf4\';this.style.borderColor=\'#86efac\';">' +
-              '<div style="font-size:0.65rem;color:#9ca3af;margin-bottom:4px;">Original: ' + original + '</div>' +
-              '<div style="font-size:0.82rem;color:#111827;font-weight:500;">→ ' + m + '</div>' +
+      if(mejorados.length){
+        const logrosBackup = [...t.logros];
+        t.logros = mejorados;
+        t.fromPdf = false;
+        renderTrabajoss();
+        if(boxMejora){
+          boxMejora.style.display = 'block';
+          const undoData = JSON.stringify(logrosBackup);
+          boxMejora.innerHTML =
+            '<div style="display:flex;align-items:center;justify-content:space-between;gap:8px;">' +
+              '<span style="font-size:0.78rem;color:#15803d;font-weight:600;">✅ ' + mejorados.length + ' logro' + (mejorados.length!==1?'s':'') + ' mejorado' + (mejorados.length!==1?'s':'') + ' por TalentIA</span>' +
+              '<button onclick="deshacerMejora(' + tid + ',this)" style="background:none;border:none;color:#9ca3af;font-size:0.72rem;cursor:pointer;text-decoration:underline;padding:0;">Deshacer</button>' +
             '</div>';
-          }).join('') +
-          '<button onclick="aplicarTodosLogrosMejorados(' + tid + ',[' + mejorados.map(m => '\`' + m.replace(/`/g,'\\`') + '\`').join(',') + '])" style="width:100%;padding:8px;background:#2563eb;color:white;border:none;border-radius:8px;font-size:0.82rem;font-weight:700;cursor:pointer;margin-top:4px;">✅ Aplicar todos</button>';
+          boxMejora.dataset.backup = undoData;
+          setTimeout(()=>{ if(boxMejora) boxMejora.style.display='none'; }, 5000);
+        }
       }
     } catch(e) {
       console.error('Error mejorando logros:', e);
+      mostrarError('Error', 'No pudimos mejorar los logros. Intenta de nuevo.');
     } finally {
-      if(btnMejorar) { btnMejorar.textContent = '✨ Mejorar logros con IA'; btnMejorar.disabled = false; }
+      if(btnMejorar){ btnMejorar.textContent = '✨ Mejorar esta experiencia con IA'; btnMejorar.disabled = false; btnMejorar.style.background='#eff6ff'; }
+    }
+  }
+
+  function deshacerMejora(tid, btn){
+    const t = trabajosData.find(t => t.id === tid);
+    const box = document.getElementById('box-mejora-ia-' + tid);
+    if(t && box && box.dataset.backup){
+      t.logros = JSON.parse(box.dataset.backup);
+      t.fromPdf = true;
+      renderTrabajoss();
     }
   }
 
@@ -2061,7 +2063,7 @@ ${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
         '</div>' +
         (t.fromPdf && t.logros.some(function(l){return l.trim();}) ?
           '<div style="margin-top:8px;">' +
-            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ TalentIA puede mejorar la redacción de estos logros</button>' +
+            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar esta experiencia con IA</button>' +
             '<div id="box-mejora-ia-' + t.id + '" style="display:none;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"></div>' +
           '</div>'
         : '') +
