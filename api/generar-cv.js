@@ -126,16 +126,19 @@ REGLAS:
     // MEJORAR EXPERIENCIA
     if (mejorarExperiencia) {
       const prompt = `Eres un experto en CVs profesionales para el mercado peruano.
-Mejora esta experiencia laboral con lenguaje profesional e impactante.
+Mejora la redacción de esta experiencia laboral con lenguaje profesional.
 
 EXPERIENCIA:
 ${experiencia}
 
-INSTRUCCIONES:
-- Mantén cargos, empresas y fechas exactas
-- Reescribe logros con verbos de acción: gestioné, implementé, reduje, aumenté, lideré
-- Agrega impacto medible (%, números, soles) cuando sea posible
-- Mínimo 3 logros por trabajo
+INSTRUCCIONES ESTRICTAS:
+- Mantén cargos, empresas y fechas exactas — NUNCA los cambies
+- Reescribe logros con verbos de acción: gestioné, implementé, coordiné, optimicé, desarrollé, lideré
+- NUNCA inventes números, porcentajes, soles ni métricas que el candidato no mencionó
+- NUNCA inventes tecnologías, herramientas ni sistemas que no aparecen en el original
+- Si el logro original no tiene métricas: mejora solo la redacción y el impacto cualitativo
+- Si el logro original SÍ tiene métricas: mantenlas exactamente como están
+- Máximo 15 palabras por logro
 - Responde SOLO con JSON sin markdown
 
 {"experiencia": [{"cargo": "...", "empresa": "...", "periodo": "...", "logros": ["...", "...", "..."]}]}`;
@@ -181,6 +184,7 @@ ${tieneOferta ? `\nOFERTA DE TRABAJO A LA QUE POSTULA:\n${oferta}` : ''}
 
 INSTRUCCIONES:
 - Usa EXACTAMENTE los datos del candidato, NO inventes nada
+- NUNCA inventes números, porcentajes, métricas ni tecnologías que el candidato no mencionó
 - Perfil: 3 líneas impactantes basadas en la experiencia real, orientadas al cargo deseado
 - Mejora la redacción de logros pero mantén cargos/empresas/fechas exactas
 ${instruccionCompatibilidad}
