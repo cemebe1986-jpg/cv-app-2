@@ -1875,7 +1875,7 @@
     // Mostrar loading
     const btnMejorar = document.getElementById('btn-mejorar-ia-' + tid);
     const boxMejora = document.getElementById('box-mejora-ia-' + tid);
-    if(btnMejorar) { btnMejorar.textContent = '⏳ Mejorando...'; btnMejorar.disabled = true; }
+    if(btnMejorar) { btnMejorar.textContent = '✨ TalentIA está mejorando tus logros...'; btnMejorar.disabled = true; btnMejorar.style.background='#dbeafe'; }
 
     try {
       const logrosOriginales = t.logros.filter(l => l.trim());
@@ -2054,14 +2054,14 @@ ${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
             '</div>';
           }).join('') +
         '</div>' +
-        '<p style="font-size:0.72rem;color:#9ca3af;margin:-2px 0 8px;line-height:1.5;">💡 Si recuerdas resultados agrégalos: % mejora, ventas, clientes, tiempo ahorrado</p>' +
+        '<p style="font-size:0.72rem;color:#9ca3af;margin:-2px 0 8px;">💡 Agregar números o resultados mejora tu CV</p>' +
         '<button id="btn-add-logro-' + t.id + '" style="background:none;border:none;color:#2563eb;cursor:pointer;font-size:0.82rem;font-weight:700;padding:0;margin-bottom:12px;">+ Agregar otro logro</button>' +
         '<div id="btn-sug-ia-' + t.id + '" style="display:' + (t.cargo.trim()?'block':'none') + ';margin-top:4px;">' +
-          '<button id="btn-pedir-ia-' + t.id + '" style="width:100%;padding:10px;background:#eff6ff;color:#2563eb;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">💡 ¿No sabes qué poner? La IA sugiere tus logros</button>' +
+          '<button id="btn-pedir-ia-' + t.id + '" style="background:none;border:none;color:#6b7280;cursor:pointer;font-size:0.78rem;padding:4px 0;text-decoration:underline;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">+ Sugerir más logros con IA</button>' +
         '</div>' +
         (t.fromPdf && t.logros.some(function(l){return l.trim();}) ?
           '<div style="margin-top:8px;">' +
-            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#f0fdf4;color:#15803d;border:1.5px solid #86efac;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ Mejorar estos logros con IA</button>' +
+            '<button id="btn-mejorar-ia-' + t.id + '" onclick="pedirIAConLogin(function(){mejorarLogrosIA(' + t.id + ')})" style="width:100%;padding:10px;background:#eff6ff;color:#1d4ed8;border:1.5px solid #93c5fd;border-radius:10px;font-weight:700;cursor:pointer;font-size:0.82rem;font-family:\'Plus Jakarta Sans\',\'Segoe UI\',sans-serif;">✨ TalentIA puede mejorar la redacción de estos logros</button>' +
             '<div id="box-mejora-ia-' + t.id + '" style="display:none;background:#f0f7ff;border:1.5px solid #bfdbfe;border-radius:12px;padding:14px;margin-top:8px;"></div>' +
           '</div>'
         : '') +
