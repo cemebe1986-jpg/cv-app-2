@@ -602,8 +602,9 @@
 
       <!-- PASO 4: HABILIDADES -->
       <div class="step" id="step-4">
-        <label>¿Qué habilidades destacas en tu CV? *</label>
-        <p style="font-size:0.82rem;color:#6b7280;margin-bottom:12px;">Herramientas y tecnologías que dominas. Aparecerán en tu CV como habilidades clave.</p>
+        <div id="hab-pdf-feedback" style="display:none;background:#f0fdf4;border:1px solid #86efac;border-radius:8px;padding:8px 12px;margin-bottom:10px;font-size:0.8rem;font-weight:600;color:#15803d;transition:opacity 0.5s;"></div>
+        <label id="hab-label">¿Qué habilidades destacas en tu CV? *</label>
+        <p id="hab-sub" style="font-size:0.82rem;color:#6b7280;margin-bottom:12px;">Herramientas y tecnologías que dominas. Aparecerán en tu CV como habilidades clave.</p>
         <div style="display:flex;gap:10px;margin-bottom:12px;">
           <input type="text" id="nueva-habilidad" enterkeyhint="done" list="lista-habilidades-tecnicas-sugeridas" placeholder="Ej: Excel, Python, SQL..." style="margin-bottom:0;" onkeydown="if(event.key==='Enter'){event.preventDefault();agregarHabilidad();}" autocomplete="off">
           <button type="button" onclick="agregarHabilidad()" style="padding:12px 20px;background:#3b82f6;color:white;border:none;border-radius:12px;cursor:pointer;font-weight:700;white-space:nowrap;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;">+ Agregar</button>
@@ -1549,6 +1550,22 @@
   }
 
   function mostrarPaso(idx){actualizarPanel();
+    // Adaptar step-4 según origen del flujo
+    if(PASOS[idx]==='step-4'){
+      const esPDF = trabajosData.some(t=>t.fromPdf) || habilidadesData.length>0;
+      const label = document.getElementById('hab-label');
+      const sub = document.getElementById('hab-sub');
+      const btnTexto = document.getElementById('btn-sugerir-hab-texto');
+      if(esPDF){
+        if(label) label.textContent = 'Habilidades de tu CV';
+        if(sub) sub.textContent = 'Organizamos las habilidades de tu CV. ¿Te faltan más?';
+        if(btnTexto) btnTexto.textContent = '¿Te faltan más habilidades? Sugerir con IA';
+      } else {
+        if(label) label.textContent = '¿Qué habilidades destacas en tu CV? *';
+        if(sub) sub.textContent = 'Herramientas y tecnologías que dominas. Aparecerán en tu CV.';
+        if(btnTexto) btnTexto.textContent = 'Sugerir habilidades técnicas con IA';
+      }
+    }
     cerrarError();
     const activo=document.querySelector('.step.active');
     if(activo){activo.classList.add('saliendo');setTimeout(()=>{activo.classList.remove('active','saliendo');activarPaso(idx);},220);}
@@ -1715,7 +1732,53 @@
       setTimeout(()=>{ container.remove(); onContinuar(); }, 300);
     }, 2500);
   }
-  // ── FIN MICRO-RECOMPENSA ─────────────────────────────────────────────────
+  // ── FIN MICRO-RECOMPENSA
+  // ── NORMALIZACIÓN DE HABILIDADES (sin IA) ────────────────────────────────
+  const MAPA_HABILIDADES = {
+    'excel': 'Microsoft Excel', 'excel avanzado': 'Microsoft Excel avanzado',
+    'word': 'Microsoft Word', 'powerpoint': 'Microsoft PowerPoint',
+    'office': 'Microsoft Office', 'ms office': 'Microsoft Office',
+    'sap': 'SAP ERP', 'sap erp': 'SAP ERP', 'sap r3': 'SAP R/3',
+    'oracle': 'Oracle Database', 'sql': 'SQL', 'mysql': 'MySQL',
+    'python': 'Python', 'javascript': 'JavaScript', 'java': 'Java',
+    'atencion cliente': 'Atención al cliente', 'atención cliente': 'Atención al cliente',
+    'atencion al cliente': 'Atención al cliente', 'servicio al cliente': 'Servicio al cliente',
+    'trabajo equipo': 'Trabajo en equipo', 'trabajo en equipo': 'Trabajo en equipo',
+    'liderazgo': 'Liderazgo', 'comunicacion': 'Comunicación efectiva',
+    'comunicación': 'Comunicación efectiva', 'ventas': 'Gestión de ventas',
+    'contabilidad': 'Contabilidad general', 'facturacion': 'Facturación',
+    'facturación': 'Facturación', 'inventario': 'Control de inventarios',
+    'almacen': 'Gestión de almacén', 'almacén': 'Gestión de almacén',
+    'logistica': 'Logística y distribución', 'logística': 'Logística y distribución',
+    'rrhh': 'Recursos Humanos', 'recursos humanos': 'Recursos Humanos',
+    'marketing': 'Marketing digital', 'redes sociales': 'Redes sociales',
+    'photoshop': 'Adobe Photoshop', 'illustrator': 'Adobe Illustrator',
+    'autocad': 'AutoCAD', 'project': 'Microsoft Project',
+    'tableau': 'Tableau', 'power bi': 'Power BI', 'powerbi': 'Power BI',
+    'crm': 'CRM', 'erp': 'ERP', 'scrum': 'Metodología Scrum', 'agile': 'Metodología Agile',
+  };
+
+  function normalizarHabilidad(h) {
+    const key = h.toLowerCase().trim();
+    if (MAPA_HABILIDADES[key]) return MAPA_HABILIDADES[key];
+    // Capitalizar primera letra si no está en el mapa
+    return h.charAt(0).toUpperCase() + h.slice(1).trim();
+  }
+
+  function normalizarHabilidadesPDF() {
+    if (!habilidadesData.length) return;
+    const originales = habilidadesData.map(h => h.nombre);
+    habilidadesData = habilidadesData.map(h => ({...h, nombre: normalizarHabilidad(h.nombre)}));
+    renderListaHabilidades();
+    // Mostrar feedback visual
+    const feedbackEl = document.getElementById('hab-pdf-feedback');
+    if (feedbackEl) {
+      feedbackEl.style.display = 'block';
+      feedbackEl.innerHTML = '✨ Organizamos tus habilidades profesionalmente — <span style="color:#6b7280;font-size:0.72rem;">' + habilidadesData.length + ' habilidades del CV</span>';
+      setTimeout(() => { feedbackEl.style.opacity = '0.6'; }, 2000);
+    }
+  }
+  // ── FIN NORMALIZACION ──────────────────────────────────────────────────────
 
   function pasoSiguiente(){
     const btn=document.getElementById('btn-next');
@@ -2065,7 +2128,7 @@ ${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
     try{const r=await fetch('/generar-cv',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({sugerenciasBlandas:true,cargo,oferta,usuarioId:window.usuarioActual?.uid||null})});const data=await r.json();const b=data.sugerencias||[];incrementarLlamadasIA();btn.style.display='none';document.getElementById('chips-blandas').innerHTML=b.map((s,i)=>`<button id="chip-bland-${i}" onclick="agregarBlandaDirecta('${s.replace(/'/g,"\\'")}');this.style.background='rgba(96,165,250,0.2)';this.style.borderColor='#2563eb';this.style.color='#2563eb';this.disabled=true;" style="padding:7px 14px;border:1.5px solid #e5e7eb;border-radius:20px;background:white;color:#374151;font-size:0.82rem;cursor:pointer;font-family:'Plus Jakarta Sans','Segoe UI',sans-serif;transition:all 0.2s;">${s}</button>`).join('');document.getElementById('blandas-ia-box').style.display='block';}
     catch(e){mostrarError('Error','No se pudieron generar sugerencias.');btn.textContent='💡 Sugerir habilidades blandas con IA';btn.disabled=false;}
   }
-  function agregarHabilidadesSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(h=>{if(!habilidadesData.find(x=>x.nombre===h))habilidadesData.push({nombre:h});});renderListaHabilidades();document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';document.getElementById('btn-sugerir-habilidades').textContent='💡 Sugerir habilidades para mi cargo con IA';document.getElementById('btn-sugerir-habilidades').disabled=false;}
+  function agregarHabilidadesSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-hab-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(h=>{if(!habilidadesData.find(x=>x.nombre===h))habilidadesData.push({nombre:h});});renderListaHabilidades();document.getElementById('habilidades-ia-box').style.display='none';document.getElementById('btn-sugerir-habilidades').style.display='block';const _habTexto=document.getElementById('btn-sugerir-hab-texto');if(_habTexto)_habTexto.textContent=habilidadesData.length>0?'¿Te faltan más habilidades? Sugerir con IA':'Sugerir habilidades técnicas con IA';document.getElementById('btn-sugerir-habilidades').disabled=false;}
   function agregarBlandasSeleccionadas(){const sel=[];document.querySelectorAll('[id^="chip-bland-"].seleccionado').forEach(btn=>sel.push(btn.textContent.trim()));if(!sel.length)return;sel.forEach(b=>{if(!blandasData.find(x=>x.nombre===b))blandasData.push({nombre:b});});renderListaBlandas();document.getElementById('blandas-ia-box').style.display='none';document.getElementById('btn-sugerir-blandas').style.display='block';document.getElementById('btn-sugerir-blandas').textContent='💡 Sugerir habilidades blandas con IA';document.getElementById('btn-sugerir-blandas').disabled=false;}
   function agregarBlandaDirecta(nombre){if(!blandasData.find(b=>b.nombre===nombre))blandasData.push({nombre});renderListaBlandas();}
   function agregarHabilidadDirecta(nombre){if(!habilidadesData.find(h=>h.nombre===nombre))habilidadesData.push({nombre});renderListaHabilidades();}
@@ -2155,7 +2218,7 @@ ${logrosOriginales.map((l,i) => `${i+1}. ${l}`).join('\n')}`;
       if(d.email&&campoEmail)campoEmail.value=d.email;
       if(d.telefono&&campoTel)campoTel.value=d.telefono;
       if(d.habilidades_blandas){try{blandasData=d.habilidades_blandas.split(',').map(s=>s.trim()).filter(Boolean).map(s=>({nombre:s}));renderListaBlandas();}catch(e){console.warn('Error blandas:',e);}}
-      let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;try{renderListaHabilidades();}catch(e){console.warn('Error habilidades:',e);}}
+      let habs=[];if(d.habilidades_tecnicas?.length)habs=d.habilidades_tecnicas.map(h=>({nombre:h}));if(d.certificaciones?.length)habs=[...habs,...d.certificaciones.map(c=>({nombre:c}))];if(habs.length){habilidadesData=habs;try{renderListaHabilidades();setTimeout(normalizarHabilidadesPDF,500);}catch(e){console.warn('Error habilidades:',e);}}
       if(d.trabajos?.length){trabajosData=d.trabajos.map((t,i)=>({id:Date.now()+i,cargo:t.cargo||'',empresa:t.empresa||'',desde:t.desde||'',hasta:t.hasta||'',logros:Array.isArray(t.logros)&&t.logros.length?t.logros:[''],fromPdf:true}));try{setModoExperiencia('con');renderTrabajoss();}catch(e){console.warn('Error trabajos:',e);}}
       if(d.educacion?.length){educacionData=d.educacion.map((e,i)=>({id:Date.now()+1000+i,tipo:e.tipo||'universitaria',titulo:e.titulo||'',institucion:e.institucion||'',desde:e.desde||'',hasta:e.hasta||''}));try{renderEducacion();}catch(e){console.warn('Error educacion:',e);}}
       document.getElementById('estado-subida').style.display='none';document.getElementById('upload-zone-pdf').style.opacity='1';
